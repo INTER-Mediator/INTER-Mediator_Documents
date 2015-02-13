@@ -34,7 +34,7 @@ class PageFragments extends DB_UseSharedObjects
             $dom->recover = true;
             $dom->strictErrorChecking = false;
             libxml_use_internal_errors(true);
-            $dom->loadHTML(mb_convert_encoding(file_get_contents("http://inter-mediator.com/{$lang}/news.html"), 'HTML-ENTITIES', 'UTF-8'));
+            $dom->loadHTML(mb_convert_encoding(file_get_contents(../../Files/news/{$lang}/news.html"), 'HTML-ENTITIES', 'UTF-8'));
             $result = $dom->getElementsByTagName("div");
             for ($i = 0; $i < $result->length; $i++) {
                 $node = $result->item($i);
