@@ -60,6 +60,8 @@ class PageFragments extends DB_UseSharedObjects
     function fileContents($filename)
     {
         $dom = new DOMDocument;
+        $dom->recover = true;
+        $dom->strictErrorChecking = false;
         $dom->loadHTML(mb_convert_encoding(file_get_contents($filename), 'HTML-ENTITIES', 'UTF-8'));
         $result = $dom->getElementsByTagName("body");
         $nodeList = $result->item(0)->childNodes;
