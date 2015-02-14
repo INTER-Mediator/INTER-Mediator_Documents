@@ -396,3 +396,14 @@ span.datestring {
     padding: 0 0 0 20px;
     background-color: #cac690;
 }
+
+.doctitleblock  {
+    border: solid 2px #4444BB;
+    margin: 8px 300px 14px 40px;
+    padding-bottom: 10px
+}
+
+.doctitleblock h1   {
+    border:none;
+    font-size:16pt;
+}
