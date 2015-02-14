@@ -280,3 +280,14 @@ div.ad {
     font-weight: bold;
     padding: 0 12px 0 0;
 }
+
+.doctitleblock  {
+    border: solid 2px #4444BB;
+    margin: 8px 300px 14px 40px;
+    padding-bottom: 10px
+}
+
+.doctitleblock h1   {
+    border:none;
+    font-size:16pt;
+}
