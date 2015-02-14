@@ -26,7 +26,7 @@
 <article>
 <div style="border: solid 2px #4444BB;margin: 8px 300px 14px 40px;padding-bottom: 10px">
         <h1 style="border:none;font-size:16pt;">INTER-Mediatorがインストールされた動くサーバのVirtual Machine</h1>
-        <p>INTER-Mediatorの試用や学習用に、即座にサーバとして利用できるVirtual Machineについての情報をこの文書に記載します。VMを自分で作成するか、あるいはすでに作成されているVMをダウンロードするかして利用できます。</p>
+        <p>INTER-Mediatorの試用や学習用に、即座にサーバとして利用できるVirtual Machine（VM）についての情報をこの文書に記載します。VMを自分で作成するか、あるいはすでに作成されているVMをダウンロードするかして利用できます。</p>
     </div>
 
     <h2>使用までの準備</h2>
@@ -35,7 +35,7 @@
 <h3>VirtualBoxのインストール</h3>
 <p>Windows、Mac、Linux、Solarisで利用できるVirtual Machine実行環境の「VirtualBox」は、Oracle社が開発してフリーで配布しているものです。<a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">こちらのページ</a>より、ご利用のホストコンピュータに対応したVirtualBoxをダウンロードしてご利用ください。</p>
 
-    <h2>VMをの準備</h2>
+    <h2>VMの準備</h2>
     <p>VMをINTER-Mediatorに含まれているスクリプト等を利用して自分で生成する方法を「VMを自分で作成して起動する」に、一方、すでに誰かが作ったVMを利用する方法を「VMをダウンロードして利用する」に解説します。もちろん、いずれか一方の作業を行うことで、VMを利用することができるので、状況に応じて使い分けてください。</p>
     <h3>VMを自分で作成して起動する</h3>
 <p>INTER-Mediatorの配布ファイルの中には、VMを生成するためのスクリプト等が含まれています。最新のINTER-Mediatorが組み込まれたVMを作成するには、この方法が最適です。なお、この方法は、OS Xでのみ利用できます。WindowsではVagrantをインストールしても、スクリプトは稼働しませんので、ご注意ください。</p>
@@ -43,7 +43,7 @@
 <li>Vagrantをインストールします。<a href="https://www.vagrantup.com/" target="_blank">こちら</a>のページに移動して、使用するOSに対応したアプリケーションをダウンロードしてインストールします。単にインストールするだけで大丈夫です。</li>
 <li>INTER-Mediatorの最新版をcloneします。<a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">こちら</a>のページににある「Clone in Desktop」ボタンを利用するのが手軽な方法です。</li>
 <li>OS XであればTerminalを起動し、cloneしたINTER-Mediatorフォルダ内のdist-docs/vm-for-trialフォルダに移動します。</li>
-<li>Terminalで「vagrant up」というコマンドをを実行します。ダウンロードや作成処理に時間がかかります。概ね20分程度です。「INTER-Mediator-Server is ready.」と表示されたら準備完了です。</li>
+<li>Terminalで「vagrant up」というコマンドを実行します。ダウンロードや作成処理に時間がかかります。概ね20分程度です。「INTER-Mediator-Server is ready.」と表示されたら準備完了です。</li>
 </ol>
 
     <h3>VMをダウンロードして利用する</h3>
@@ -66,10 +66,10 @@
 </li></ul>
 
 <h4>ダウンロードした.ovaファイルの読み込み</h4>
-    <p>WindowsおよびMacのいずれの場合でも、「ファイル」メニューから「仮想アプライアンスのインポート」を選択してください。そして、ダウンロードしたファイルを指定して読み込み、「VirtualBoxマーネージャ」の画面の左側に新しい項目ができていることを確認します。</p>
+    <p>WindowsおよびMacのいずれの場合でも、「ファイル」メニューから「仮想アプライアンスのインポート」を選択してください。そして、ダウンロードしたファイルを指定して読み込み、「VirtualBox マネージャー」の画面の左側に新しい項目ができていることを確認します。</p>
 
 <h4>INTER-Mediator-Serverのネットワーク設定</h4>
-<p>「VirtualBoxマーネージャ」で、読み込んだINTER-Mediator-Serverの項目を選択します。そして、ツールバーの「設定」アイコンをクリックします。すると、そのVirtual Machineの設定が画面が表示されます。</p>
+<p>「VirtualBox マネージャー」で、読み込んだINTER-Mediator-Serverの項目を選択します。そして、ツールバーの「設定」アイコンをクリックします。すると、そのVirtual Machineの設定が画面が表示されます。</p>
 <p>Windowsでは、画面左側のリストで「ネットワーク」を選択します。右側で「アダプター1」が選択されていることを確認します。そして、「割り当て」のポップアップメニューで「ホストオンリーアダプター」を選択します。すると、「名前」のところは、自動的に、「ホストオンリーネットワーク」に定義された名前が見えています。そこまでを確認して、OKボタンをクリックします。</p>
 <div class="picture">
     <img class="picture-small picture-dummy" src="../images/shot9517.png">
@@ -81,7 +81,7 @@
 
 <h2>INTER-Mediator-Serverの利用</h2>
 <p style="background-color: #FFBBBB">作成したVirtual Machineは、特定のホスト内でのみ利用することを想定して、ログインアカウントなどを見える場所に記載しています。Virtual Machineとして配布している「INTER-Mediator-Server」は、そのままインターネットに公開することは、絶対に行わないでください。</p>
-<p>以上の準備ができれば、VirtualBoxマネージャーでINTER-Mediator-Serverの項目を選択して「起動」ボタンをクリックします。黒いコンソール画面に文字が流れて起動します。ログインプロンプトが表示されます。Webブラウザから「<a href="http://192.168.56.101" target="_blank">http://192.168.56.101</a>」に接続してください。すると、このINTER-Mediator-Serverで利用出来る機能などなどが見えるページがあります。</p>
+<p>以上の準備ができれば、VirtualBox マネージャーでINTER-Mediator-Serverの項目を選択して「起動」ボタンをクリックします。黒いコンソール画面に文字が流れて起動します。ログインプロンプトが表示されます。Webブラウザから「<a href="http://192.168.56.101" target="_blank">http://192.168.56.101</a>」に接続してください。すると、このINTER-Mediator-Serverで利用出来る機能などなどが見えるページがあります。</p>
 <p>「サンプルプログラム」のリンクからは、INTER-MediatorのSamplesフォルダの内容を即座に稼働させることができます。ホスト側でFileMaker Serverが稼働している場合、INTER-Mediatorのディストリビューションの中にあるdist-docs/TestDB.fmp12をサーバに登録してXML共有ができる状態になっていれば、ゲストからホストに接続して動作するので、FileMaker Serverのサンプルも試せます。FileMaker Serverが稼働していない場合には、FileMaker Serverのサンプルはエラーが出ます。</p>
     <div class="picture">
         <img class="picture-small picture-dummy" src="../images/shot9633.png">
@@ -101,7 +101,7 @@
 </ul>
 
     <h3>自分で作ったファイルを運用する</h3>
-    <p>「http://192.168.56.101」に接続したページに、ログイン可能なアカウントが末尾に書かれています。それをご利用ください。SFTPでファイルの転送をするのが手軽かと思われます。また、INTER-MEdiator-Server自体にログインをして、独自のデータベーススキーマを読み込ませるなどしてください。データベースの管理アカウントも、「http://192.168.56.101」に接続したページに記載しています。</p>
+    <p>「http://192.168.56.101」に接続したページに、ログイン可能なアカウントが末尾に書かれています。それをご利用ください。SFTPでファイルの転送をするのが手軽かと思われます。また、INTER-Mediator-Server自体にログインをして、独自のデータベーススキーマを読み込ませるなどしてください。データベースの管理アカウントも、「http://192.168.56.101」に接続したページに記載しています。</p>
 
     <div></div>
     <div></div>
