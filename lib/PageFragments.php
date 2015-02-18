@@ -19,6 +19,9 @@ class PageFragments extends DB_UseSharedObjects
     function doAfterGetFromDB($dataSourceName, $result)
     {
         $lang = $this->dbSettings->getCriteriaValue("language");
+        if ($lang !== 'ja') {
+            $lang = 'en';
+        }
         if ($dataSourceName == "pagebuilder") {
             return array(
                 array(
@@ -47,11 +50,7 @@ class PageFragments extends DB_UseSharedObjects
             curl_close($handle);
             $dom->loadHTML($response);
             libxml_clear_errors();
-            if ($lang === 'en') {
-                $result = $dom->getElementsByTagName('div');
-            } else {
-                $result = $dom->getElementsByTagName('li');
-            }
+            $result = $dom->getElementsByTagName('li');
             for ($i = 0; $i < $result->length; $i++) {
                 $node = $result->item($i);
                 $newDom = new DOMDocument;
