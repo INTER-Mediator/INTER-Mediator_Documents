@@ -351,6 +351,19 @@ nav._im_pb_PageNavigation div {
     margin: 0;
 }
 
+nav._im_pb_PageNavigation li.top3 {
+    display: block;
+    font-size: 10pt;
+    margin: 4px 0 8px 0;
+}
+
+nav._im_pb_PageNavigation li.top3 span {
+    margin: 0 10px 0 0;
+    font-weight: bold;
+    font-size: 14pt;
+    color: #666666;
+}
+
 nav._im_pb_PageNavigation div.top3 {
     display: block;
     font-size: 10pt;
