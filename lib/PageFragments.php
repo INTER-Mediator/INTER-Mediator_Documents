@@ -34,8 +34,20 @@ class PageFragments extends DB_UseSharedObjects
             $dom->recover = true;
             $dom->strictErrorChecking = false;
             libxml_use_internal_errors(true);
-            $dom->loadHTML(mb_convert_encoding(file_get_contents("../../Files/news/{$lang}/news.html"), 'HTML-ENTITIES', 'UTF-8'));
-            $result = $dom->getElementsByTagName("div");
+            $handle = curl_init();
+            if ($lang === 'en') {
+                curl_setopt($handle, CURLOPT_URL, 'http://inter-mediator.com/en/news.html');
+            } else {
+                curl_setopt($handle, CURLOPT_URL, 'http://inter-mediator.com/ja/news.html');
+            }
+            $response = curl_exec($handle);
+            curl_close($handle);
+            $dom->loadHTML(mb_convert_encoding($response, 'HTML-ENTITIES', 'UTF-8'));
+            if ($lang === 'en') {
+                $result = $dom->getElementsByTagName('div');
+            } else {
+                $result = $dom->getElementsByTagName('ul');
+            }
             for ($i = 0; $i < $result->length; $i++) {
                 $node = $result->item($i);
                 $newDom = new DOMDocument;
