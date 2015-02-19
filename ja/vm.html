@@ -28,6 +28,7 @@
         <h1 style="border:none;font-size:16pt;">INTER-Mediatorがインストールされた動くサーバのVirtual Machine</h1>
         <p>INTER-Mediatorの試用や学習用に、即座にサーバとして利用できるVirtual Machine（VM）についての情報をこの文書に記載します。VMを自分で作成するか、あるいはすでに作成されているVMをダウンロードするかして利用できます。</p>
     </div>
+    <p style="background-color: #FFBBBB">このVirtual Machineは、特定のホスト内でのみ利用することを想定して、ログインアカウントなどを見える場所に記載しています。学習用に定義ファイルとページファイルをブラウザーで編集できる状態にしているため、Virtual Machineとして配布している「INTER-Mediator-Server」をそのままインターネットに公開することは絶対に行わないでください。</p>
 
     <h2>使用までの準備</h2>
     <p>VMは、VirtualBox用を提供します。アプリケーション形式のVirtualBoxを以下の方法で、ご自分のパソコンにインストールしておいてください。</p>
@@ -81,7 +82,6 @@
 </div>
 
 <h2>INTER-Mediator-Serverの利用</h2>
-<p style="background-color: #FFBBBB">作成したVirtual Machineは、特定のホスト内でのみ利用することを想定して、ログインアカウントなどを見える場所に記載しています。Virtual Machineとして配布している「INTER-Mediator-Server」は、そのままインターネットに公開することは、絶対に行わないでください。</p>
 <p>以上の準備ができれば、VirtualBox マネージャーでINTER-Mediator-Serverの項目を選択して「起動」ボタンをクリックします。黒いコンソール画面に文字が流れて起動します。ログインプロンプトが表示されます。Webブラウザから「<a href="http://192.168.56.101" target="_blank">http://192.168.56.101</a>」に接続してください。すると、このINTER-Mediator-Serverで利用出来る機能などなどが見えるページがあります。</p>
 <p>「サンプルプログラム」のリンクからは、INTER-MediatorのSamplesフォルダの内容を即座に稼働させることができます。ホスト側でFileMaker Serverが稼働している場合、INTER-Mediatorのディストリビューションの中にあるdist-docs/TestDB.fmp12をサーバに登録してXML共有ができる状態になっていれば、ゲストからホストに接続して動作するので、FileMaker Serverのサンプルも試せます。FileMaker Serverが稼働していない場合には、FileMaker Serverのサンプルはエラーが出ます。</p>
     <div class="picture">
