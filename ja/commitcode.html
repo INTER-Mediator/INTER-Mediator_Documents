@@ -88,13 +88,40 @@
 
     <div class="picture"><img style="width: 75%" src="../images/git-fig6.png"/></div>
 
-<p>自分のローカルのレポジトリを、Forkした元のマスターレポジトリと同じ状態にするには、GitHubアプリケーションの右上にある「Sync」ボタンをクリックします。これだけの作業で、Fork元の変更結果をすべて取り込みます。さらに、もう一度Syncを行うことで、自分のアカウントのGitHub側のレポジトリがローカルと同じ状態になります。ようするに、ともかくローカルにあるレポジトリをGitHubアプリケーションで選択して、Syncするだけです。</p>
+<p>一時期はGitHubアプリケーションの右上にある「Sync」ボタンをクリックするだけで、自分のローカルのレポジトリを、Forkした元のマスターレポジトリと同じ状態にできましたが、これは「バグ」だったようで、その後にこの作業は自動的にできなくなっています。Syncは、ローカルとその元になっているレポジトリの間だけの同期です。</p>
+<p>Forkした元のレポジトリの更新結果を受け入れるには、以下のようにコマンドラインで作業をします。コマンドは、カレントディレクトリが、ローカルレポジトリのフォルダのルートになっている状態で入力します。最初のgit remote -vを見ると、自分自身のGitHub上のレポジトリに対してorignという名前が付けられ、加えて、Fork元のレポジトリは、「INTER-Mediator」という名前が付けられています。よくある作業例ではupstremという名前付けが一般的ですが、この「INTER-Mediator」は、GitHubアプリケーションが自動的に定義を加えています。そして、fetchでFork元のレポジトリを取り込んで、現在のブランチ（ここでは、ローカルレポジトリのmasterが選択されているとする）に、Fork元のレポジトリのmasterブランチの更新結果をマージします。</p>
 
+<!--
     <div class="picture"><img style="" src="../images/shot9857.png"/></div>
     <div class="picture"><img style="" src="../images/shot9858.png"/></div>
+-->
+
+<div class="code"><pre><code>$ <strong>git remote -v</strong>
+INTER-Mediator	https://github.com/INTER-Mediator/INTER-Mediator.git (fetch)
+INTER-Mediator	https://github.com/INTER-Mediator/INTER-Mediator.git (push)
+origin	https://github.com/msyk/INTER-Mediator.git (fetch)
+origin	https://github.com/msyk/INTER-Mediator.git (push)
+$ <strong>git fetch INTER-Mediator</strong>
+$ <strong>git merge INTER-Mediator/master</strong>
+Updating 757ee4a..e41aabd
+Fast-forward
+ INTER-Mediator-UnitTest/sha1-test.js |  10 +++++
+ LICENSE                              |   4 ++
+ dist-docs/License.txt                |  29 ++++++++++++++
+ dist-docs/buildup.sh                 |   2 +-
+ dist-docs/change_log.txt             |   2 +
+ dist-docs/readme.txt                 |   4 +-
+ dist-docs/vm-for-trial/index.html    |   8 ++--
+ lib/js_lib/sha1.js                   | 185 ----------------------------------------------------------------------------------------
+ lib/js_lib/tinySHA1.js               |   1 +
+ 9 files changed, 53 insertions(+), 192 deletions(-)
+ create mode 100644 INTER-Mediator-UnitTest/sha1-test.js
+ create mode 100644 LICENSE
+ delete mode 100644 lib/js_lib/sha1.js
+ create mode 100644 lib/js_lib/tinySHA1.js</code></pre></div>
 
     <h2>GitHubのWebサイトからPull Requestを送る</h2>
-<p>ここまでに説明した方法で、投稿からさらに更新結果の受け入れまでが可能ですが、GitHubアプリケーションを使う手法です。これらの作業をGitHubアプリケーションを使わないで行う方法を説明します。</p>
+<p>ここまでにGitHubアプリケーションを使用した方法で、投稿から更新結果の受け取りまでを説明しました。ここからは、これらの作業をGitHubアプリケーションを使わないで行う方法を説明します。</p>
 
     <h3>変更結果を自分のレポジトリにpush</h3>
 
