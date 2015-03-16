@@ -1,38 +1,193 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body>
-    <div style="background-color: black; height:32px">
-        <div class="otheritem" style="text-align: right; color: white;">INTER-Mediator Site:
-        </div>
-        <div class="otheritem" style="background-color: #c4b9dd;"
-             onclick="location.href='http://inter-mediator.com';">Product
-            Information
-        </div>
-        <div class="otheritem" style="background-color: #ddda9f;"
-             onclick="location.href='http://inter-mediator.info';">Product
-            Manual
-        </div>
-        <div class="otheritem" style="background-color: #c8dd72;"
-             onclick="location.href='http://github.com/INTER-Mediator/INTER-Mediator';">GitHub Repository
-        </div>
-        <div class="otheritem" style="background-color: #94aedd;"
-            onclick="location.href='http://www.facebook.com/groups/233378356708157/';">Facebook Group (Japanese)
-        </div>
-        <div class="otheritem" style="background-color: #ddaf93;"
-            onclick="location.href='http://www.facebook.com/groups/254446237922985/';">Facebook Group (English)
-        </div>
-        <div class="otheritem" style="background-color: #DDDDDD;"
-             onclick="location.href='http://lab.inter-mediator.org';">Laboratory</div>
-    </div>
-    <div class="header-title">
-        <img style="height: 28px;margin-right: 10px" src="../images/im-icon.png"/>INTER-Mediator: Documentation</div>
 
-    <div align="right">
-        <p style="font-size: 75%">Updated at <span id="updatedate"></span></p>
-    </div>
+<body>
+    <header>
+        <nav id="fpNavbar">
+            <ul class="nav-left fp-navbar _im_ignore_enc_rep">
+                <li class="brand" style="width: 165px;">
+                    <div class="icon">
+                        <img src="../images/im-logo-big.png" alt="アイコン" title="INTER-Mediator">
+                    </div>
+                    <a href="http://inter-mediator.org/" title="INTER-Mediator">INTER-Mediator</a>
+                </li>
+                <li class="pc-nav active"><a href="http://inter-mediator.com/" title="Information">Information</a>
+                </li>
+                <li class="pc-nav"><a href="http://inter-mediator.info/" title="Manual">Manual</a>
+                </li>
+                <li class="pc-nav dropdown active">
+                    <a title="GitHub Repository">GitHub Repository</a>
+                    <ul class="_im_ignore_enc_rep">
+                        <li>
+                            <a target="_blank" href="https://github.com/INTER-Mediator/INTER-Mediator" title="ソースコードのリポジトリ">ソースコードのリポジトリ</a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/dist-docs/change_log.txt" title="変更履歴,将来計画（英語）">変更履歴,将来計画（英語）</a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://github.com/INTER-Mediator/INTER-Mediator_WebSite" title="Webサイト(.com)">Webサイト(.com)</a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://github.com/INTER-Mediator/INTER-Mediator_Documents" title="Webサイト(.info)">Webサイト(.info)</a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://github.com/INTER-Mediator/inter-mediator.github.io" title="Webサイト(.org)">Webサイト(.org)</a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://github.com/matsuo/IMCake" title="IMCake (CakePHP+INTER-Mediator)">IMCake (CakePHP+INTER-Mediator)</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="pc-nav dropdown"><a title="Community">Community</a>
+                    <ul class="_im_ignore_enc_rep">
+                        <li>
+                            <a href="https://www.facebook.com/groups/233378356708157/" title="Facebook (Japanese)" target="_blank">Facebook (Japanese)</a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com/groups/254446237922985/" title="Facebook (English)" target="_blank">Facebook (English)</a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/search?q=%23INTERMediator&amp;src=hash" title="Twitter Search" target="_blank">Twitter #INTERMediator</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="pc-nav dropdown"><a title="Others">Others</a>
+                    <ul class="_im_ignore_enc_rep">
+                        <li>
+                            <a href="http://edu.msyk.net/" title="e-Learning" target="_blank">e-Learning</a>
+                        </li>
+                        <li>
+                            <a href="http://lab.inter-mediator.org/" title="Lab" target="_blank">Lab</a>
+                        </li>
+                        <li><a href="http://www.cafepress.com/intermediator" title="Shop" target="_blank">Shop</a>
+                        </li>
+                    </ul>
+                    <li class="mobile-nav dropdown align-right">
+                        <a><span></span></a>
+                        <ul class="_im_ignore_enc_rep">
+                            <li><a title="Product Information" href="http://inter-mediator.com/">Product Information</a>
+                            </li>
+                            <li><a title="Product Manual" href="http://inter-mediator.info/">Product Manual</a>
+                            </li>
+                            <li class="dropdown">
+                                <a title="GitHub Repository">GitHub Repository</a>
+                                <ul class="_im_ignore_enc_rep">
+                                    <li>
+                                        <a title="ソースコードのリポジトリ" href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">ソースコードのリポジトリ</a>
+                                    </li>
+                                    <li>
+                                        <a title="変更履歴,将来計画（英語）" href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/dist-docs/change_log.txt" target="_blank">変更履歴,将来計画（英語）</a>
+                                    </li>
+                                    <li>
+                                        <a title="Webサイト(.com)" href="https://github.com/INTER-Mediator/INTER-Mediator_WebSite" target="_blank">Webサイト(.com)</a>
+                                    </li>
+                                    <li>
+                                        <a title="Webサイト(.info)" href="https://github.com/INTER-Mediator/INTER-Mediator_Documents" target="_blank">Webサイト(.info)</a>
+                                    </li>
+                                    <li>
+                                        <a title="Webサイト(.org)" href="https://github.com/INTER-Mediator/inter-mediator.github.io" target="_blank">Webサイト(.org)</a>
+                                    </li>
+                                    <li>
+                                        <a title="IMCake (CakePHP+INTER-Mediator)" href="https://github.com/matsuo/IMCake" target="_blank">IMCake (CakePHP+INTER-Mediator)</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a title="Community">Community</a>
+                                <ul class="_im_ignore_enc_rep">
+                                    <li>
+                                        <a href="https://www.facebook.com/groups/233378356708157/" title="Facebook (Japanese)" target="_blank">Facebook (Japanese)</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.facebook.com/groups/254446237922985/" title="Facebook (English)" target="_blank">Facebook (English)</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://twitter.com/search?q=%23INTERMediator&amp;src=hash" title="Twitter Search" target="_blank">Twitter #INTERMediator</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a title="Others">Others</a>
+                                <ul class="_im_ignore_enc_rep">
+                                    <li>
+                                        <a target="_blank" title="e-Learning" href="http://edu.msyk.net/">e-Learning</a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" title="Lab" href="http://lab.inter-mediator.org/">Lab</a>
+                                    </li>
+                                    <li><a target="_blank" title="Shop" href="http://www.cafepress.com/intermediator">Shop</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </li>
+            </ul>
+        </nav>
+        <nav class="local-nav">
+            <ul class="_im_ignore_enc_rep">
+                <li class="dropdown"><a href="#">これから使う方々向け</a>
+                    <ul class="_im_ignore_enc_rep">
+                        <li><a href="#">インストールと稼働用システム</a>
+                        </li>
+                        <li><a href="#">仮想マシン</a>
+                        </li>
+                        <li><a href="#">スタートアップガイド</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#">プラクティス</a>
+                    <ul class="_im_ignore_enc_rep">
+                        <li><a href="#">検索と一覧（プログラムなし版）</a>
+                        </li>
+                        <li><a href="#">検索と一覧（JavaScript版）</a>
+                        </li>
+                        <li><a href="#">一覧と詳細</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#">一般開発者向け</a>
+                    <ul class="_im_ignore_enc_rep">
+                        <li><a href="migration.html">移行マニュアル</a>
+                        </li>
+                        <li><a href="manual.html">リファレンスマニュアル</a>
+                        </li>
+                        <li><a href="reference.html">定義ファイルの記述方法</a>
+                        </li>
+                        <li><a href="db.html">データベースごとの固有の事情</a>
+                        </li>
+                        <li><a href="exp.html">計算式</a>
+                        </li>
+                        <li><a href="sendmail.html">メールの送信方法</a>
+                        </li>
+                        <li><a href="samples.html">サンプルファイルについて</a>
+                        </li>
+                        <li><a href="bindingfunc.html">検索ページを作成するための機能</a>
+                        </li>
+                        <li><a href="sharing.html">変更結果の即時更新をマルチクライアントで実現する</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="プログラマ向け">プログラマ向け</a>
+                    <ul class="_im_ignore_enc_rep">
+                        <li><a href="api.html">JavaScriptのインタフェース</a>
+                        </li>
+                        <li><a href="jscomponent.html">JavaScriptコンポーネントの使い方</a>
+                        </li>
+                        <li><a href="commitcode.html">ソースコードの投稿</a>
+                        </li>
+                        <li><a href="media.html">MediaAccessクラスとその拡張点</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
 </body>
+
 </html>
