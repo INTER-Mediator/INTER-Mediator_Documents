@@ -24,47 +24,74 @@
 </head>
 <body>
 <article>
-<h2>Documents of INTER-Mediator</h2>
+<h1>Documents of INTER-Mediator</h1>
+    <h2>Reference Manual</h2>
     <div class="docblock">
-        <h3><a href="/ja/manual.html">Reference Manual</a></h3>
-        <p>
-            This document contains how to describe the Definition File and the Page File and API and so on.
-            This is written by Japanese.
-        </p>
-        <h4><a href="/ja/startup.html">Startup Guide</a></h4>
-        <p>This is the guidance for new comers and explains from the fundamental of database to the development procedure within the declarative descriptions. The Page File and Definition File are basic idea of INTER-Medaitor, and this contains how to describe these. This doesn't contain about any database engine. This is written by Japanese.</p>
-        <h4><a href="deploy.html">INTER-Mediator: Download, Installation and the Deployment System</a></h4>
+        <h3>For INTER-Mediator novices</h3>
+        <h4><a href="deploy.html">Download, Installation and the Deployment System</a></h4>
         <p>This includes about downloading, installation on the development system and how to make a deployment system.</p>
-        <h4><a href="/ja/exp.html">Expression</a></h4>
-        <p>This document describes about the expression in the calculation field and the validation. This is written by Japanese.
-        </p>
-        <h4><a href="/ja/sendmail.html">Sending mail</a></h4>
-        <p>INTER-Mediator can send a email on the database operations. This is written by Japanese.</p>
+        <h4><a href="/ja/vm.html">Virtual Machine works as the INTER-Mediator installed server</a> (Japanese)</h4>
+        <p>The Virtual Machine is available. The VM works on the VirtualBox application. It can use for evaluation, study and so on.</p>
+        <h4><a href="/ja/startup.html">Startup Guide</a> (Japanese)</h4>
+        <p>This is the guidance for new comers and explains from the fundamental of database to the development procedure within the declarative descriptions. The Page File and Definition File are basic idea of INTER-Medaitor, and this contains how to describe these. This doesn't contain about any database engine.</p>
     </div>
     <div class="docblock">
-        <h3><a href="/ja/startup.html">Startup Guide</a></h3>
-        <p>
-            This document is for novices about INTER-Mediator, and intend to learn how to describe in the declarative descriptions.
-            This is written by Japanese.
-        </p>
+        <h3>Practices</h3>
+        <p>&ldquo;Practices&rdquo; means a simple sample web page just like requirements in real development circumstance. You can learn how to realize each features with having experience to let it work and read code. It's similar to &ldquo;Cookbook.&rdquo;</p>
+        <h4><a href="practice-searchnp.html">Search and Listing (without programming)</a></h4>
+        <h4><a href="practice-search.html">Search and Listing (with JavaScript)</a> (Japanese)</h4>
+        <p>Search and Listing is a typical behavior of web application. You can learn how to search with criteria followed by listing.</p>
+        <h4><a href="practice-masterdetail.html">Master/Detail</a> (Japanese)</h4>
+        <p>Master/Detail style UI is showing a list, and if user select on in the list, the detal information is going to be shown. It's common UI technique. INTER-Mediator realizes it with just adding keywords in the definition file. Two contexts behave Master and Detail for each.</p>
+    </div>
+    <div class="docblock">
+        <h3>For developers</h3>
+        <h4><a href="migration.html">Migration</a> (Japanese)</h4>
+        <p>This document clarify the big modification that should be modified applications for any versions.</p>
+        <h4><a href="/ja/manual.html">Reference Manual</a> (Japanese)</h4>
+        <p>This document contains how to describe the Definition File and the Page File and API and so on.</p>
+        <h4><a href="db.html">Database engine specific information</a> (Japanese)</h4>
+        <p>What's the difference between db-engines, ex. FileMaker Server, PostgreSQL.</p>
+        <h4><a href="/ja/exp.html">Expression</a> (Japanese)</h4>
+        <p>This document describes about the expression in the calculation field and the validation.</p>
+        <h4><a href="/ja/sendmail.html">Sending mail</a> (Japanese)</h4>
+        <p>INTER-Mediator can send a email on the database operations. This is written by Japanese.</p>
+        <h4><a href="samples.html">About Samples</a> (Japanese)</h4>
+        <p>This explains the each sample in the Samples directory.</p>
+        <h4><a href="bindingfunc.html">The feature to make search page</a> (Japanese)</h4>
+        <p>This exploans how to work the local context features to be able to build without JavaScript.</p>
+        <h4><a href="sharing.html">Multi-clients real-time updating</a> (Japanese)</h4>
+        <p>If the same entity shows multiple clients simultaneously, the modification by one user can be affected to other clients within small perild.</p>
+    </div>
+    <div class="docblock">
+        <h3>For Programmers</h3>
+        <h4><a href="api.html">JavaScript API</a> (Japanese)</h4>
+        <p>This explains the API in JavaScript.</p>
+        <h4><a href="jscomponent.html">How to use JavaScript components</a> (Japanese)</h4>
+        <p>File uploading component is included in INTER-Mediator. Also INTER-Mediator can integrate the JavaScript component which is alreay existing. This document shows how to integrate JS-based components. The TinyMCE and CodeMirror are already integrated.</p>
+        <h4><a href="commitcode.html">Submit your code</a> (Japanese)</h4>
+        <p>This explains how to submit your code with GitHub's Pull Request method.</p>
+        <h4><a href="media.html">MediaAccess class</a> (Japanese)</h4>
+        <p>The external data ex. pictures, pdfs and so on are supplied, and this document explains how to involve them from a simple case to authentication/authorization require application.</p>
+    </div>
+    <h2>Developers Blog</h2>
+    <div class="Siteblock">
+        <h3><a href="http://blog.msyk.net/?cat=17">Founder Masayuki Nii's blog</a> (Japanese)</h3>
+        <p>Masayuki Nii's blog; the document list categorized to INTER-Mediator. This is written by Japanese.</p>
     </div>
     <div class="Siteblock">
-        <h3><a href="http://blog.msyk.net/?cat=17">Founder Masayuki Nii's blog</a></h3>
-        <p>
-            Masayuki Nii's blog;  the document list categorized to INTER-Mediator. This is written by Japanese.
-        </p>
+        <h3><a href="http://www.famlog.jp/category/inter-mediator">FAMLog: INTER-Mediator</a> (Japanese)</h3>
+        <p>Atsushi Matsuo's blog; the document list categorized to INTER-Mediator. He is a committer of INTER-Mediator and working for Emic Corporation providing the FileMaker hosting service FMPress. This is written by Japanese.</p>
     </div>
     <div class="Siteblock">
-        <h3><a href="http://www.famlog.jp/category/inter-mediator">FAMLog: INTER-Mediator</a></h3>
-        <p>
-            Atsushi Matsuo's blog; the document list categorized to INTER-Mediator. He is a committer of INTER-Mediator and working for Emic Corporation providing the FileMaker hosting service FMPress. This is written by Japanese.
-        </p>
-    </div>
-    <div class="Siteblock">
-        <h3><a href="http://agilmente.com/">伊藤清徳の垂直落下式ムーンサルトプレス</a></h3>
-        <p>
-            Kiyonori Ito's blog, and he got success to integrate INTER-Mediator to other PHP-based frameworks. This is written by Japanese.
-        </p>
+        <h3><a href="http://agilmente.com/">伊藤清徳の垂直落下式ムーンサルトプレス</a> (of course, Japanese)</h3>
+        <p>Mr. Kiyonori Ito succeeded to integrate INTER-Mediator with other frameworks, such as CodeIgniter and Yii. The INTER-Mediator specific documents are following.</p>
+        <ul>
+            <li><a href="http://agilmente.com/blog/2013/12/25/yi_inter_mediator/">YiiでInter-Mediatorを使ってみる</a></li>
+            <li><a href="http://agilmente.com/blog/2013/08/07/im_validation/">INTER-Mediatorのバリデーションを構築するクラスをつくったった</a></li>
+            <li><a href="http://agilmente.com/blog/2013/08/04/inter-mediator_pagenation_1/">INTER-Mediatorのページネーション機能を少し便利に – 1</a></li>
+            <li><a href="http://agilmente.com/blog/2013/07/22/inter-mediator_with_codeigniter/">Inter-MediatorをCodeigniterから使ってみる</a></li>
+        </ul>
     </div>
 </article>
 </body>
