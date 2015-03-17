@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>INTER-Mediator</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
+    <link rel="icon" href="../images/im-icon.png" type="image/png">
+    <script src="../../lib/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1>検索ページを作成するための機能</h1>
+        </div>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>はじめに</h1>
+                <p class="lead">データベースの内容を一覧するときに、検索結果を適用するという仕組みを一切プログラムを書かずに実現するために、ボタンやテキストフィールド、あるいは一般的なノードに対して機能を割り当てるという考え方を導入しました。要素のdata-im属性を利用して、ローカルコンテキスト（名前は「_」）に特別なキー名でバインドすることで、機能が割り当てられます。今の所、検索ページを作るための以下のものが利用できます。抽象的に記述してもわかりにくいと思いますので、具体的なタグのテキストともに紹介します。</p>
+            </section>
+            <section>
+                <h1>検索条件の付加</h1>
+                <p>テキストフィールドを「_@condition:....」のローカルコンテキストへバインドさせると、そのテキストフィールドに入れた文字列が検索条件になります。また、Enterキーで、コンテキストの更新が実行されます。</p>
+                <div class="code"><pre><code>&lt;input type="text" data-im="_@condition:postalcode:f3,f7,f8,f9:*match*"&gt;</code></pre>
+                </div>
+                <p>@以降は、コロン（:）で4つのセクションに分かれます。</p>
+                <ul>
+                    <li>第1セクション（例：condition）：この文字列</li>
+                    <li>第2セクション（例：postalcode）：コンテキスト名</li>
+                    <li>第3セクション（例：f3,f7）：フィールド名。複数の指定も可能</li>
+                    <li>第4セクション（例：*match*）：演算子</li>
+                </ul>
+                <p>最初の2つはいいとして、3つ目のフィールドは複数指定も可能です。複数指定をすると、それぞれのフィールドに対して同じ値の検索条件をORで与えます。演算子は、一般的なものに加えて「*match」「match*」「*match*」の3つが用意されています。データベースエンジンに関わらずに、部分一致や前方一致などをこの演算子で記述します。</p>
+
+                <p>上記のテキストフィールドに、例えば「新宿」と入れてEnterキーを押すと、以下の検索条件がコンテキストに付加されて、再度検索を行い、そのコンテキストのエンクロージャー内が更新されます。</p>
+                <div class="code"><pre><code>(f3 LIKE '%新宿%' OR f7 LIKE '%新宿%' OR f8 LIKE '%新宿%' OR f9 LIKE '%新宿%')</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>表示件数の制御</h1>
+                <p>以下のポップアップメニューを選択すると、レコードの表示件数をポップアップの選択肢で指定でき、選択と同時にコンテキストが更新されます。「limitnumber」が決められた名前で、コロンより後にはコンテキスト名を記述します。changeイベントにより、コンテキストの更新します。</p>
+                <div class="code"><pre><code>&lt;select type="text" data-im="_@limitnumber:postalcode"&gt;...&lt;/select&gt;</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>コンテキストの更新ボタン（検索ボタン）</h1>
+                <p>以下のボタンをクリックすると、指定したコンテキストが更新されます。つまり、「検索」ボタンとして機能するということです。「update」が決められた名前で、コロンより後にはコンテキスト名を記述します。clickイベントにより、コンテキストの更新します。</p>
+                <div class="code"><pre><code>&lt;button data-im="_@update:postalcode"&gt;search&lt;/button&gt;</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>並べ替えフィールドの指定</h1>
+                <p>以下のSPANタグ内の▲をクリックすると、f3フィールドの昇順で並べ替えを行います。同一のコンテキストに対する「addorder」の機能を持った要素は連動します。たとえば「f3で昇順」の後に「f9の降順」を選択すると、「f9の降順」を最優先とし、続くキーとして「f3で昇順」を設定します。最後に設定した条件が最優先になるようになっています。このバインドはclickイベントに対応しており、クリックすれば指定したコンテキストが更新されます。</p>
+                <div class="code"><pre><code>&lt;span style="cursor: pointer" data-im="_@addorder:postalcode:f3:asc"&gt;▲&lt;/span&gt;</code></pre>
+                </div>
+                <p>@以降は、コロン（:）で4つのセクションに分かれます。</p>
+                <ul>
+                    <li>第1セクション（例：addorder）：この文字列</li>
+                    <li>第2セクション（例：postalcode）：コンテキスト名</li>
+                    <li>第3セクション（例：f3）：フィールド名。1つのみ</li>
+                    <li>第4セクション（例：asc）：昇順ならasc、降順ならdesc</li>
+                </ul>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>

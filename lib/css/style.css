@@ -81,6 +81,10 @@ p {
     margin: 0 40px 20px 0;
     float: left
 }
+.lead,
+.bold {
+    font-weight: bold;
+}
 .article-date {
     text-align: right
 }
@@ -175,6 +179,11 @@ footer .signature {
 .infobox.gray {
     background-color: #e0e3e5
 }
+.infobox.red {
+    color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+}
 body.docs section {
     width: calc(100% - 340px);
     float: right;
@@ -190,6 +199,12 @@ body.docs .docs-sidebar {
 body.docs .docs-sidebar nav li {
     line-height: 1.4;
     font-size: .9em
+}
+body.docs .picture {
+    margin: 2em 0;
+}
+body.docs .picture img {
+    width: 100%;
 }
 table {
     width: 100%;

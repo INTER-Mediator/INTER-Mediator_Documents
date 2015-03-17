@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>INTER-Mediator</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
+    <link rel="icon" href="../images/im-icon.png" type="image/png">
+    <script src="../../lib/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1>検索をしてその結果を一覧表示する（プログラムなし版）</h1>
+        </div>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>はじめに</h1>
+                <p class="lead">検索結果を一覧するというユーザーインタフェースはWebアプリケーションでは一般的に見られる仕組みです。その仕組みを、宣言的な記述のみで構築できるようになっています。</p>
+                <h3>前提知識</h3>
+                <p>INTER-Mediatorに関して、以下の内容をすでに知っている事を前提とします。</p>
+                <ul>
+                    <li>data-im属性への記述によりフィールドの内容が表示されること</li>
+                    <li>TABLEタグを使った表の中で、複数のレコードが繰り返し表示されるようになっていること</li>
+                    <li>一定数ごとのレコードを表示する仕組みと、表示範囲を切り替えるページネーションの仕組みがあること</li>
+                    <li>定義ファイルのコンテキストには、検索条件が指定できること</li>
+                </ul>
+            </section>
+            <section>
+                <h1>作成例について</h1>
+                <p>利用するデータベースは、郵便番号と地名が含まれているもので、サンプルのデータベースにあるpostalcodeという名称のものです。レポジトリ内では、Samples/Practices/search_page1.htmlを開く事で、実際に稼働させることができます。Samples/index.htmlにあるサンプルの一覧では「Practices」にある「search」の「search(no JavaScript)」のリンクをクリックして表示できます。</p>
+                <p>まず、どのような動作になるのかを見て行くことにしましょう。最初にページを開くと、郵便番号と地名がともかく一覧されています。サンプルのデータベースには、ある時期の東京都のデータのみを収録しています。検索条件は何もなく、おそらく全てのデータがリストされていると想定されます。ここで、ページネーション（ページ移動）の「&gt;」ボタンをクリックすると、次々と10件ずつレコードが表示されます。また、何件目のデータを現在表示しているのかという情報も見えています。</p>
+
+                <div class="picture"><img class="picture-small" src="/images/shot9902.png" />
+                </div>
+
+                <p>ここで、「検索条件」に適当な地名（ここでは「市谷」）を入力してReturnキーを押します（「Search」ボタンをクリックしてもかまいません）。すると、一覧表には、「市谷」を含む地名やビル名のものだけに絞り込まれました。全部で68件の地名があることが分かります。「&gt;」ボタンでページ移動ができますが、ページ移動後にも、検索条件はそのまま見えていることにも注意を払いましょう。</p>
+
+                <div class="picture"><img class="picture-small" src="/images/shot9904.png" />
+                </div>
+
+                <p>「表示件数」のポップアップメニューから「4」を選択すると、これまで10件ごとに表示されていた一覧表が、4件ごとの表示に切り替わります。切り替えると、以後、ずっと4件ずつ表示されるようになります。</p>
+
+                <div class="picture"><img class="picture-small" src="/images/shot9906.png" />
+                </div>
+
+                <p>検索条件に「171」と入力してReturnキーを押しました。すると、郵便番号に171が含まれる地名だけが絞り込まれています。また、ここで、「郵便番号」と書かれた右側の▼をクリックすると、郵便番号の逆順で表示されるようになりました。つまり、一覧表示が「郵便番号」の逆順にソートされて表示されるようになっています。「&lt;&lt;」ボタンを押して最初のページを表示すると、いちばん大きな数値になる郵便番号の地名が、リストの最初の行に見えています。</p>
+
+                <div class="picture"><img class="picture-small" src="/images/shot9908.png" />
+                </div>
+
+                <p>検索条件に、「市ヶ谷」という文字列を指定して検索してみます。検索結果が0件のときに表示する行が見えています。なお、東京には、市ヶ谷という駅はありますが、地名では「市谷」と記述しており、この名前の地名がないこともわかります。</p>
+
+                <div class="picture"><img class="picture-small" src="/images/shot9910.png" />
+                </div>
+            </section>
+            <section>
+                <h1>定義ファイル</h1>
+                <p>定義ファイルのSamples/Practices/search_def.phpの内容は以下の通りです。コンテキストは、postalcodeという名前のものが1つだけあり、これはテーブル名と同様なので、tableやviewキーの値は指定していません。1ページあたりのレコード数は20で、後からの変更をしても30より多くの数を一度にページに出す事はできません。そして、pagingキーがtrueなので、ページネーションのコントロールがページ上に表示されます。</p>
+                <p>データベースはMySQLを使うのでdb-classは「PDO」を指定していますが、FileMaker Server向けには設定が変わります。それ以外の接続情報、アカウント、パスワードは、INTER-Mediator/params.phpファイルにあるものをそのまま使います。</p>
+                <div class="code">
+                    <pre><code>require_once(dirname(__FILE__) . '/../../INTER-Mediator.php');
+
+IM_Entry(
+array(
+    array(
+        'name' =&gt; 'postalcode',
+        'records' =&gt; 20,
+        'maxrecords' =&gt; 30,
+        'paging' =&gt; true,
+    ),
+),
+null,
+array('db-class' =&gt; 'PDO'),
+    false
+);</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>ページファイル</h1>
+                <p>ページファイルについては、ボディ部のみを示します。もちろん、ヘッダ部で、前述の定義ファイルSCRIPTタグで読み込んだ状態になっています。このほかに何も読み込みは行っていません。つまり、このページは、プログラムとしては、BODYタグ要素のonload属性にあるINTERMediatorを動作させる1行だけなのです。</p>
+
+                <div class="code">
+                    <pre><code>&lt;body onload="INTERMediator.construct()"&gt;
+&lt;div&gt;
+    検索条件:
+    &lt;input type="text" data-im="_@condition:postalcode:f3,f7,f8,f9:*match*"&gt;
+    表示件数：
+    &lt;select type="text" data-im="_@limitnumber:postalcode"&gt;
+        &lt;option value="4"&gt;4&lt;/option&gt;
+        &lt;option value="10"&gt;10&lt;/option&gt;
+        &lt;option value="20" selected&gt;20&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;button data-im="_@update:postalcode"&gt;search&lt;/button&gt;
+&lt;/div&gt;
+&lt;div id="IM_NAVIGATOR"&gt;Navigation Controls by INTER-Mediator&lt;/div&gt;
+&lt;table border="1" id="resultTable"&gt;
+    &lt;thead&gt;
+    &lt;tr&gt;
+        &lt;th&gt;郵便番号
+            &lt;span style="cursor: pointer" data-im="_@addorder:postalcode:f3:asc"&gt;▲&lt;/span&gt;
+            &lt;span style="cursor: pointer" data-im="_@addorder:postalcode:f3:desc"&gt;▼&lt;/span&gt;
+        &lt;/th&gt;
+        &lt;th&gt;都道府県&lt;/th&gt;
+        &lt;th&gt;市区町村&lt;/th&gt;
+        &lt;th&gt;町域名
+            &lt;span style="cursor: pointer" data-im="_@addorder:postalcode:f9:asc"&gt;▲&lt;/span&gt;
+            &lt;span style="cursor: pointer" data-im="_@addorder:postalcode:f9:desc"&gt;▼&lt;/span&gt;
+        &lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td&gt;&lt;div data-im="postalcode@f3"&gt;&lt;/div&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;div data-im="postalcode@f7"&gt;&lt;/div&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;div data-im="postalcode@f8"&gt;&lt;/div&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;div data-im="postalcode@f9"&gt;&lt;/div&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr data-im-control="noresult"&gt;
+        &lt;td colspan="4"&gt;検索結果はありません。あるいは検索前です。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;/body&gt;</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>それぞれの動作の実現</h1>
+                <h3>一覧表示の実現</h3>
+                <p>postalcodeテーブルでは、f3フィールドに郵便番号、f7〜f9フィールドに都道府県、市区町村、町域名が収められています。ページファイル内のTABLE要素によるテーブル部分で、その一覧表示を行っています。TBODYタグ要素の中には2つのTR要素があり、その最初の方の要素の子要素にTDがいくつかあり、そこにf3、f7〜f9のそれぞれのフィールドを示すターゲット指定がdata-im属性に設定されています。</p>
+                <p>postalcodeコンテキストに対して検索して得られた郵便番号と地名の情報に対して、TBODYの最初のTR要素がレコードの数だけ繰り返されて、そしてそれぞれDIVタグ要素のテキストとしてフィールドの値が設定されて表示されます。初期状態では、定義ファイルのコンテキストにあるrecordsキーの値に応じて最大10レコードまでとなります。この仕組みによって、一覧表が作成されています。</p>
+                <h4>検索結果が0のときの一覧表</h4>
+                <p>TBODYの内容を解析して、このTBODYがエンクロージャーとして機能します。そして、postalcodeコンテキストに対して検索処理を行います。このとき、検索結果が0件の場合、data-im-control属性が「noresult」のものを残して、エンクロージャー内の他のリピーターは削除され、その結果を表示します。また、一方で、検索結果が0件でない場合、data-im-control属性が「noresult」のものを削除して残った結果をリピーターとして識別して、そのリピーターをレコードの数だけ複製してページを表示します。</p>
+                <h4>ページネーションのコントロールの表示</h4>
+                <p>postalcodeコンテキストでは、pagingキーの値がtrueなのでページネーションコントロールによるページ切り替えが可能です。そして、ページネーションのコントロールを表示するためには、id属性が「IM_NAVIGATOR」の要素を配置しておく必要があります。TABLEタグのすぐ上にその要素が見えており、この場所にページネーションコントロールを自動的に構築します。</p>
+                <h3>検索のユーザインタフェース</h3>
+                <p>ページファイルの最初の方に、検索条件を指定するINPUTタグ要素があります。この要素はデータベースとは関係なく、ページ上で存在するものです。そのため、id属性（値はcondition）を設定していますが、加えて、data-im属性にローカルコンテキストを示す「_@condition:postalcode:f3,f7,f8,f9:*match*」という記述があります。この属性名を持つテキストフィールドは、コロンで区切られていて、最初の「condition」は決められたキーワードです。次の「postalcode」はどのコンテキストに対して検索をかけるのかということを指定しています。3つ目は検索対象のフィールドをカンマで書き並べると、それぞれのフィールドに対するOR検索が行われます。4つ目の「*match*」は、テキストフィールドに入力した文字列がどこかに含まれるという条件で検索することを示しています。このようなdata-im属性の指定により、ユーザーインタフェース上のテキストフィールドの値がコンテキストのデータベースへのクエリーに条件として付加され、検索結果が一覧されます。</p>
+                <p>このテキストフィールドに文字カーソルがある状態でReturnキーなどを押すと、コンテキストへの更新処理とみなして再度検索し、テーブルの一覧を作り直します。ユーザーは「検索によって更新された」ように見えるということです。</p>
+                <h3>Searchボタンをクリックして検索する</h3>
+                <p>ページファイルでは、BUTTONタグを使って「Search」ボタンを作成しています。ボタンのdata-im属性に「_@update:postalcode」と指定されています。この記述により、ボタンをクリックすると、postalcodeコンテキストに対する更新を行うので、現状の設定での検索がその場で行われます。</p>
+                <h3>フィールド名の横の▲▼をクリックして、そのフィールドで並べ替える</h3>
+                <p>例えば、郵便番号の▲ボタンは、spanタグ要素として記述して、data-im属性値は「_@addorder:postalcode:f3:asc」となっています。この記述があると、要素をクリックしたときにpostalcodeコンテキストに対する更新を行うと同時に、その後の記述から明らかなように、f3フィールドの昇順で並べ替えるという条件を付加します。</p>
+            </section>
+            <section>
+                <h1>まとめ</h1>
+                <p>検索して一覧するというユーザーインタフェースは当たり前のように作成されていますが、INTER-Mediatorはこのように、手続き的なプログラミングをまったくしなくても、ある程度仕組みのページを作成できるようになりました。AND条件で検索したいときには、テキストフィールドを並べます。そのとき、空白のフィールドは検索条件として含めないといった動作も、一切のプログラミングなく動作します。なお、これ以上の複雑な検索条件指定が必要な場合には、『<a href="practice-search.html">プラクティス：検索をしてその結果を一覧表示する（JavaScript版）</a>』の記事を参照してください。</p>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>

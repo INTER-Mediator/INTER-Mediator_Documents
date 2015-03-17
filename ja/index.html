@@ -28,103 +28,23 @@
 <body>
     <div class="container">
         <div class="page-title">
-            <h1>Documents of INTER-Mediator</h1>
+            <h1>詳細マニュアル</h1>
         </div>
         <article>
             <section class="clearfix">
-                <h2>INTER-Mediatorをこれから使う方々向け</h2>
-                <h4><a href="deploy.html">インストールと稼働用システム</a></h4>
-                <p>INTER-Mediatorの入手方法、開発時の利用法、運用時の利用方法をまとめました。</p>
-                <h4><a href="vm.html">INTER-Mediatorがインストールされた動くサーバのVirtual Machine</a></h4>
-                <p>INTER-Mediatorの試用や学習用に、即座にサーバとして利用できるVirtual Machineを作成しました。VirtualBoxでご利用ください。</p>
-                <h4><a href="startup.html">スタートアップガイド</a></h4>
-                <p>
-                    データベースの基本から、宣言的な記述で可能な範囲での開発手法をまとめた文書です。 データベースエンジンに絡む設定については解説はしていませんが、 ページファイルや定義ファイルをどのように記述すればいいのかということを実例とともに概念を含めた説明をしています。 2013年にINTER-Mediatorの学習可能性を調査したときに使ったテキストを加筆訂正したものです。
-                </p>
-            </section>
-        </article>
-        <article>
-            <section>
-                <h2>プラクティス</h2>
-                <p>「プラクティス」とは、実際の開発時に発生するニーズに近い形式のテーマをもとにしてサンプルプログムを作成し、その動作をみながら個別の機能をどのように実現しているかを示すものです。書籍で言えば「クックブック」といった名称で紹介されるような内容です。順次、充実させる予定です。</p>
-                <h4><a href="practice-searchnp.html">検索をしてその結果を一覧表示する（プログラムなし版）</a></h4>
-                <h4><a href="practice-search.html">検索をしてその結果を一覧表示する（JavaScript版）</a></h4>
-                <p>
-                    検索条件を与えて一覧に表示するという仕組みは多くのアプリケーションで見られます。 一覧と検索を連動させる手法を解説します。いちばん手軽に実装できるのは、プログラムなし版の方です。 もし、細かなユーザーインタフェースの機能の組み込みが必要なら、同様なページをJavaScriptで実装することもできます。
-                </p>
-                <h4><a href="practice-masterdetail.html">一覧と詳細</a></h4>
-                <p>
-                    一覧を表示し、その中の選択した項目の詳細情報を表示したり編集ページを表示するという手法はよく利用されます。「マスター/ディテール」方式とも呼ばれます。 INTER-Mediatorでは定義ファイルにキーワードで指定するだけで、2つのコンテキストの一方をマスター、もう一方をディテール領域として稼働できます。
-                </p>
-            </section>
-        </article>
-        <article>
-            <section>
-                <h2>一般開発者向け</h2>
-                <h4><a href="migration.html">移行マニュアル</a></h4>
-                <p>大きな変更点、つまりアプリケーション側を書き換えないといけないような変更をここにまとめておきます。</p>
-                <h4><a href="manual.html">リファレンスマニュアル</a></h4>
-                <p>定義ファイルやページファイルの作成方法に加えて、以下の文書に含まれていないことがこちらにあります。</p>
-                <h4><a href="reference.html">定義ファイルの記述方法</a></h4>
-                <p>定義ファイルの記述で利用するキーワードと設定値を原則としてこのページですべて説明しています。</p>
-                <h4><a href="db.html">データベースごとの固有の事情</a></h4>
-                <p>FileMaker ServerやPostgreSQLでの特有の情報についてまとめてあります。</p>
-                <h4><a href="exp.html">計算式</a></h4>
-                <p>計算式の記述方法をまとめてあります。</p>
-                <h4><a href="sendmail.html">メールの送信方法</a></h4>
-                <p>データベース処理を行ったときにメールを送る事ができます。</p>
-                <h4><a href="samples.html">サンプルファイルについて</a></h4>
-                <p>配布ファイルに含まれているサンプルファイルについて説明します。</p>
-                <h4><a href="bindingfunc.html">検索ページを作成するための機能</a></h4>
-                <p>検索ページを一切JavaScriptのプログラムを書かないでもできる手法を説明します。</p>
-                <h4><a href="sharing.html">変更結果の即時更新をマルチクライアントで実現する</a></h4>
-                <p>同一のエンティティを複数のクライアントで開いたとき、あるユーザの変更結果を即時に他のクライアントに反映する仕組みです。</p>
-            </section>
-        </article>
-        <article>
-            <section>
-                <h2>プログラマ向け</h2>
-                <h4><a href="api.html">JavaScriptのインタフェース</a></h4>
-                <p>JavaScript向けのAPIを紹介します。</p>
-                <h4><a href="jscomponent.html">JavaScriptコンポーネントの使い方</a></h4>
-                <p>ファイルのアップロード用コンポーネントの使用方法と、既存のJavaScriptのライブラリを元にして、INTER-Mediatorでのバインドが可能なコンポーネントを作る方法を説明します。TinyMCEとCodeMirrorについてはすでに使える状態になっています。</p>
-                <h4><a href="commitcode.html">ソースコードの投稿</a></h4>
-                <p>ソースコードを投稿する方法を説明しています。GitHubでのPull Requestを利用します。</p>
-                <h4><a href="media.html">MediaAccessクラスとその拡張点</a></h4>
-                <p>画像やPDF生成などのHTMLの外部にデータがある場合の処理について説明しています。</p>
-            </section>
-        </article>
-        <article>
-            <section>
-                <h2>開発者によるブログ</h2>
-                <div class="Siteblock">
-                    <h3><a href="http://blog.msyk.net/?cat=17">開発者：新居雅行によるブログ</a></h3>
-                    <p>
-                        INTER-Mediatorの開発者である新居雅行のブログのうち、INTER-Mediatorのカテゴリのものです。 一部はそのまま本サイトのドキュメントとして流用しています。
-                    </p>
-                </div>
-                <div class="Siteblock">
-                    <h3><a href="http://www.famlog.jp/category/inter-mediator">FAMLog: INTER-Mediator</a></h3>
-                    <p>
-                        INTER-Mediatorのコミッターであり、FMPressを提供しているエミックの松尾篤氏によるブログで、INTER-Mediatorのカテゴリの文書です。
-                    </p>
-                </div>
-                <div class="Siteblock">
-                    <h3><a href="http://agilmente.com/">伊藤清徳の垂直落下式ムーンサルトプレス</a></h3>
-                    <p>
-                        INTER-Mediatorと他のフレームワーク統合をいくつか行っている伊藤清徳氏によるブログで、INTER-Mediatorに関する文書です。
-                    </p>
-                    <ul>
-                        <li><a href="http://agilmente.com/blog/2013/12/25/yi_inter_mediator/">YiiでInter-Mediatorを使ってみる</a>
-                        </li>
-                        <li><a href="http://agilmente.com/blog/2013/08/07/im_validation/">INTER-Mediatorのバリデーションを構築するクラスをつくったった</a>
-                        </li>
-                        <li><a href="http://agilmente.com/blog/2013/08/04/inter-mediator_pagenation_1/">INTER-Mediatorのページネーション機能を少し便利に – 1</a>
-                        </li>
-                        <li><a href="http://agilmente.com/blog/2013/07/22/inter-mediator_with_codeigniter/">Inter-MediatorをCodeigniterから使ってみる</a>
-                        </li>
-                    </ul>
-                </div>
+            <ul class="_im_ignore_enc_rep">
+                <h2>トップページ</h2>
+                <li><a href="for-beginners" title="初心者（これから使う方々）向け">初心者（これから使う方々）向け</a>
+                </li>
+                <li><a href="practices" title="プラクティス">プラクティス</a>
+                </li>
+                <li><a href="for-developers" title="一般開発者向け">一般開発者向け</a>
+                </li>
+                <li><a href="for-programmers" title="プログラマ向け">プログラマ向け</a>
+                </li>
+                <li><a href="blogs-by-developers" title="開発者によるブログ">開発者によるブログ</a>
+                </li>
+            </ul>
             </section>
         </article>
     </div>
