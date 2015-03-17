@@ -89,36 +89,16 @@
     <div class="picture"><img style="width: 75%" src="../images/git-fig6.png"/></div>
 
 <p>一時期はGitHubアプリケーションの右上にある「Sync」ボタンをクリックするだけで、自分のローカルのレポジトリを、Forkした元のマスターレポジトリと同じ状態にできましたが、これは「バグ」だったようで、その後にこの作業は自動的にできなくなっています。Syncは、ローカルとその元になっているレポジトリの間だけの同期です。</p>
-<p>Forkした元のレポジトリの更新結果を受け入れるには、以下のようにコマンドラインで作業をします。コマンドは、カレントディレクトリが、ローカルレポジトリのフォルダのルートになっている状態で入力します。最初のgit remote -vを見ると、自分自身のGitHub上のレポジトリに対してorignという名前が付けられ、加えて、Fork元のレポジトリは、「INTER-Mediator」という名前が付けられています。よくある作業例ではupstremという名前付けが一般的ですが、この「INTER-Mediator」は、GitHubアプリケーションが自動的に定義を加えています。そして、fetchでFork元のレポジトリを取り込んで、現在のブランチ（ここでは、ローカルレポジトリのmasterが選択されているとする）に、Fork元のレポジトリのmasterブランチの更新結果をマージします。</p>
 
-<!--
-    <div class="picture"><img style="" src="../images/shot9857.png"/></div>
-    <div class="picture"><img style="" src="../images/shot9858.png"/></div>
--->
+<p>Forkした元のレポジトリの更新結果を受け入れるには、GitHubアプリケーションを使って行えます。まず、受け入れを行うブランチを選択します。ツールバーにあるブランチ名が見えている部分をクリックすると表示されるポップオーバーで、ブランチを選択します。</p>
 
-<div class="code"><pre><code>$ <strong>git remote -v</strong>
-INTER-Mediator	https://github.com/INTER-Mediator/INTER-Mediator.git (fetch)
-INTER-Mediator	https://github.com/INTER-Mediator/INTER-Mediator.git (push)
-origin	https://github.com/msyk/INTER-Mediator.git (fetch)
-origin	https://github.com/msyk/INTER-Mediator.git (push)
-$ <strong>git fetch INTER-Mediator</strong>
-$ <strong>git merge INTER-Mediator/master</strong>
-Updating 757ee4a..e41aabd
-Fast-forward
- INTER-Mediator-UnitTest/sha1-test.js |  10 +++++
- LICENSE                              |   4 ++
- dist-docs/License.txt                |  29 ++++++++++++++
- dist-docs/buildup.sh                 |   2 +-
- dist-docs/change_log.txt             |   2 +
- dist-docs/readme.txt                 |   4 +-
- dist-docs/vm-for-trial/index.html    |   8 ++--
- lib/js_lib/sha1.js                   | 185 ----------------------------------------------------------------------------------------
- lib/js_lib/tinySHA1.js               |   1 +
- 9 files changed, 53 insertions(+), 192 deletions(-)
- create mode 100644 INTER-Mediator-UnitTest/sha1-test.js
- create mode 100644 LICENSE
- delete mode 100644 lib/js_lib/sha1.js
- create mode 100644 lib/js_lib/tinySHA1.js</code></pre></div>
+<div class="picture"><img style="" src="../images/shot0005.png"/></div>
+
+<p>そして、GitHubアプリケーションのBranchメニューからMerge into ...メニューを選択します。その後に、マージする元のブランチを選択するシートが表示されます。Fromのポップアップ部分をクリックして、取り込む元のブランチを選択します。このとき、ローカルにクローンしているレポジトリのフォーク元のレポジトリ（一覧では「INTER-Mediator/*」で表示）も見えています。フォーク元の取り込みたいブランチを選択して、Merge into ...ボタンをクリックすると、フォーク元の更新結果を任意のブランチに取り込むことができます。なお、フォークしたレポジトリのクローンを作ってすぐの段階では、フォーク元のブランチは見えませんが、少し待てば表示されるはずです。</p>
+
+<div class="picture"><img style="" src="../images/shot0006.png"/></div>
+<div class="picture"><img style="" src="../images/shot0007.png"/></div>
+
 
     <h2>GitHubのWebサイトからPull Requestを送る</h2>
 <p>ここまでにGitHubアプリケーションを使用した方法で、投稿から更新結果の受け取りまでを説明しました。ここからは、これらの作業をGitHubアプリケーションを使わないで行う方法を説明します。</p>
@@ -159,7 +139,38 @@ Fast-forward
 
     <h2>マスターレポジトリからの部分的な受け入れ</h2>
         
-    <p>GitHubアプリケーションを使えばSyncによりマスターレジストリの内容を即座にローカルに取り込むことができます。その作業をコマンドだけで行う方法を、以下に記述します。ローカルレポジトリをマスターとは異なる状態で保持する必要がある場合などには、この方法を応用して、必要な更新だけを取り込むようにします。以下、青色で太字が入力するコマンドで、#で始まるグレーの文字は説明です。</p>
+<p>Forkした元のレポジトリの更新結果を受け入れるには、以下のように、コマンドラインで作業をすることもできます。コマンドは、カレントディレクトリが、ローカルレポジトリのフォルダのルートになっている状態で入力します。最初のgit remote -vを見ると、自分自身のGitHub上のレポジトリに対してorignという名前が付けられ、加えて、Fork元のレポジトリは、「INTER-Mediator」という名前が付けられています。よくある作業例ではupstremという名前付けが一般的ですが、この「INTER-Mediator」は、GitHubアプリケーションが自動的に定義を加えています。従って、コマンドだけの作業ではこのリモート接続は設定されていないので、この後に説明する方法でマージをします。fetchでFork元のレポジトリを取り込んで、現在のブランチ（ここでは、ローカルレポジトリのmasterが選択されているとする）に、Fork元のレポジトリのmasterブランチの更新結果をマージします。以下、青色で太字が入力するコマンドで、#で始まるグレーの文字は説明です。</p>
+
+<!--
+    <div class="picture"><img style="" src="../images/shot9857.png"/></div>
+    <div class="picture"><img style="" src="../images/shot9858.png"/></div>
+-->
+
+<div class="code"><pre><code>$ <strong>git remote -v</strong>
+INTER-Mediator	https://github.com/INTER-Mediator/INTER-Mediator.git (fetch)
+INTER-Mediator	https://github.com/INTER-Mediator/INTER-Mediator.git (push)
+origin	https://github.com/msyk/INTER-Mediator.git (fetch)
+origin	https://github.com/msyk/INTER-Mediator.git (push)
+$ <strong>git fetch INTER-Mediator</strong>
+$ <strong>git merge INTER-Mediator/master</strong>
+Updating 757ee4a..e41aabd
+Fast-forward
+ INTER-Mediator-UnitTest/sha1-test.js |  10 +++++
+ LICENSE                              |   4 ++
+ dist-docs/License.txt                |  29 ++++++++++++++
+ dist-docs/buildup.sh                 |   2 +-
+ dist-docs/change_log.txt             |   2 +
+ dist-docs/readme.txt                 |   4 +-
+ dist-docs/vm-for-trial/index.html    |   8 ++--
+ lib/js_lib/sha1.js                   | 185 --------------------------------------
+ lib/js_lib/tinySHA1.js               |   1 +
+ 9 files changed, 53 insertions(+), 192 deletions(-)
+ create mode 100644 INTER-Mediator-UnitTest/sha1-test.js
+ create mode 100644 LICENSE
+ delete mode 100644 lib/js_lib/sha1.js
+ create mode 100644 lib/js_lib/tinySHA1.js</code></pre></div>
+
+<p>マスターレジストリの内容をローカルに取り込む一般的な手法を、以下に記述します。ローカルレポジトリをマスターとは異なる状態で保持する必要がある場合などには、この方法を応用して、必要な更新だけを取り込むようにします。</p>
 
 <div class="code"><pre><code><span style="color:gray"># Forkした自分のレポジトリをローカル側にクローンを作る（すでに作成済みなら不要）</span>
 $ <strong>git clone https://github.com/msayukinii/INTER-Mediator.git</strong>
