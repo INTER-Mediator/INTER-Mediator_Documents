@@ -74,8 +74,9 @@
 }
 #fpNavbar li a:hover,
 #fpNavbar li a:focus,
-#fpNavbar li.active:hover,
-#fpNavbar li.active:focus {
+#fpNavbar li.current a,
+#fpNavbar li.current:hover a,
+#fpNavbar li.current:focus a {
     color: #333;
     background-color: #eee;
 }

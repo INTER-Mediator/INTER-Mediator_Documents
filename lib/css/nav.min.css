@@ -2,7 +2,7 @@
 .fp-navbar{display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-justify-content:center;justify-content:center}#fpNavbar ul,#fpNavbar ul li,#fpNavbar ul li a{height:inherit;line-height:44px;font-size:14px;background-color:#f8f8f8}
 #fpNavbar ul li a,#fpNavbar ul li span{display:block;padding:0 15px;width:inherit}#fpNavbar ul li.dropdown a,#fpNavbar ul li.dropdown span{padding-right:25px}
 #fpNavbar ul li .icon+a{display:block;text-align:left;text-indent:10px}#fpNavbar ul li span.fp-icon{font-size:27px;cursor:pointer}#fpNavbar ul li a,#fpNavbar li.active{color:#666;cursor:pointer}
-#fpNavbar .divider{padding:0;border-left:1px solid #ddd;min-width:1px}#fpNavbar li a:hover,#fpNavbar li a:focus,#fpNavbar li.active:hover,#fpNavbar li.active:focus{color:#333;background-color:#eee}
+#fpNavbar .divider{padding:0;border-left:1px solid #ddd;min-width:1px}#fpNavbar li a:hover,#fpNavbar li a:focus,#fpNavbar li.current a,#fpNavbar li.current:hover a,#fpNavbar li.current:focus a{color:#333;background-color:#eee}
 #fpNavbar ul .layout-menu li.disabled{color:#ccc}#fpNavbar ul .layout-menu li.disabled:active,#fpNavbar ul .layout-menu li.disabled:hover{cursor:default;background-color:#f8f8f8}
 #fpNavbar ul li.layout-menu,#fpNavbar li.user-info{width:45px}#fpNavbar ul li.layout-menu span{text-align:left;text-indent:10px}.align-right{margin-left:auto}
 .align-right ul{margin-left:-190px}#fpNavbar>ul>li.mobile-nav.dropdown.align-right>ul>li.dropdown>ul{margin-top:0;left:calc(100% - 150px)}#fpNavbar>ul>li.mobile-nav.dropdown.align-right li.dropdown>a:after{right:10px}
