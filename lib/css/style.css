@@ -1,3 +1,5 @@
+/* Elements
+--------------------------------------------------------- */
 html, body {
     font-family: "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
     font-size: 17px;
@@ -46,6 +48,9 @@ p {
     font-size: 1em;
     line-height: 1.7
 }
+
+/* Classes
+--------------------------------------------------------- */
 .clearfix:after {
     content: ".";
     display: block;
@@ -106,7 +111,10 @@ p {
     text-align: center;
     width: 65px
 }
-.local-nav {
+
+/* Local nav
+--------------------------------------------------------- */
+nav.local-nav {
     height: 38px;
     margin-top: 46px;
     min-width: 768px;
@@ -114,24 +122,27 @@ p {
     width: 100%;
     border-bottom: 1px solid #efefef
 }
-.local-nav ul {
+nav.local-nav ul {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     -webkit-justify-content: center;
     justify-content: center;
 }
-.local-nav li.active a,
-.local-nav li.current a,
-.local-nav li:hover a {
+nav.local-nav li.active a,
+nav.local-nav li.current a,
+nav.local-nav li:hover a {
     background-color: #efefef;
 }
-.local-nav li a {
+nav.local-nav li a {
     display: block;
     margin: 7px 3px 6px;
     padding: 2px 10px 0;
     font-size: 14px;
 }
+
+/* Hero unit
+--------------------------------------------------------- */
 .hero-unit h2 {
     font-size: 28px;
     line-height: 1.7;
@@ -141,16 +152,30 @@ p {
     padding: 68px 100px 40px;
     background-color: #efefef
 }
+
+/* Container
+--------------------------------------------------------- */
 .container {
     padding: 45px 60px
 }
 .container ul li {
     line-height: 1.6em
 }
+.container ul li {
+    line-height: 1.7;
+    margin-bottom: .6em;
+    list-style-position: inside
+}
+
+/* Page title
+--------------------------------------------------------- */
 .page-title {
     padding: 0 0 50px;
     border-bottom: 1px solid #efefef
 }
+
+/* Footer
+--------------------------------------------------------- */
 footer {
     background-color: #efefef
 }
@@ -161,11 +186,9 @@ footer .signature {
     text-align: right;
     font-size: 85%
 }
-.container ul li {
-    line-height: 1.7;
-    margin-bottom: .6em;
-    list-style-position: inside
-}
+
+/* Article list
+--------------------------------------------------------- */
 .article-list li {
     line-height: 1.7;
     margin-bottom: 1em;
@@ -175,6 +198,9 @@ footer .signature {
     font-weight: bold;
     padding-right: .5em
 }
+
+/* Infobox
+--------------------------------------------------------- */
 .infobox {
     padding: 20px
 }
@@ -186,6 +212,9 @@ footer .signature {
     background-color: #f2dede;
     border: 1px solid #ebccd1;
 }
+
+/* Documents
+--------------------------------------------------------- */
 body.docs section {
     width: calc(100% - 340px);
     float: right;
@@ -212,6 +241,9 @@ body.docs .picture {
 body.docs .picture img {
     width: 100%;
 }
+
+/* Table
+--------------------------------------------------------- */
 .table {
     overflow: scroll;
 }
@@ -241,13 +273,18 @@ table td {
     border-width: 0 0 1px 1px
 }
 
+/* Video
+--------------------------------------------------------- */
+video {
+    width: 100%;
+}
+
 /* Fonts
 --------------------------------------------------------- */
 @font-face {
     font-family: "FMPress-Publisher-icons";
     src: url("../fonts/FMPress-Publisher-icons.eot");
 }
-
 @font-face {
     font-family: "FMPress-Publisher-icons";
     src: url("../fonts/FMPress-Publisher-icons.woff") format('woff');
@@ -319,12 +356,12 @@ table td {
     }
 }
 @media only screen and (max-width: 768px) and (min-width: 414px) {
-    .local-nav {
+    nav.local-nav {
         max-width: 768px;
         min-width: 414px;
         padding: 0;
     }
-    .local-nav li a {
+    nav.local-nav li a {
         margin: 7px 1px 6px;
         padding: 2px 4px 0;
         letter-spacing: -1px;
@@ -335,34 +372,34 @@ table td {
     }
 }
 @media only screen and (max-width: 413px) and (min-width: 375px) {
-    .local-nav {
+    nav.local-nav {
         max-width: 413px;
         min-width: 375px;
         padding: 0;
     }
-    .local-nav li a {
+    nav.local-nav li a {
         margin: 7px 1px 6px;
         padding: 2px 1px 0;
         letter-spacing: -1px;
         font-size: 11px;
     }
     .dropdown ul li, .dropdown ul li a {
-        width: auto;
+        /*width: auto;*/
     }
 }
 @media only screen and (max-width: 374px) {
-    .local-nav {
+    nav.local-nav {
         max-width: 374px;
         min-width: 320px;
         padding: 0;
     }
-    .local-nav li a {
+    nav.local-nav li a {
         margin: 7px 1px 6px;
         padding: 2px 1px 0;
         letter-spacing: -2px;
         font-size: 11px;
     }
     .dropdown ul li, .dropdown ul li a {
-        width: auto;
+        /*width: auto;*/
     }
 }
