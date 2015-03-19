@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>一覧と詳細 - Product Manual - INTER-Mediator</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
+    <link rel="icon" href="../images/im-icon.png" type="image/png">
+    <script src="../../lib/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="practices">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1>一覧と詳細</h1>
+        </div>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>前提知識</h1>
+                <p>INTER-Mediatorに関して、以下の内容をすでに知っている事を前提とします。</p>
+                <ul>
+                    <li>data-im属性への記述によりフィールドの内容が表示されること</li>
+                    <li>TABLEタグを使った表の中で、複数のレコードが繰り返し表示されるようになっていること</li>
+                    <li>一定数ごとのレコードを表示する仕組みと、表示範囲を切り替えるページネーションの仕組みがあること</li>
+                    <li>定義ファイルのコンテキストには、検索条件が指定できること</li>
+                </ul>
+            </section>
+            <section>
+                <h1>作成例について</h1>
+                <p>たくさんのレコード、そしてたくさんのフィールドがある場合、そのデータの一覧を表示して、ボタンをクリックするなどして移動したページで詳細を表示したり編集したりするような作りのユーザーインタフェースはよく利用されます。この種のユーザーインタフェースをマスター/ディテール、あるいは一覧と詳細といった呼び方をします。</p>
+                <p>サンプルデータベースには、商品マスターのテーブルがあります。その内容を一覧と詳細形式で表示したいとします。一般的なWebアプリケーションだと、それぞれ異なるページを用意して、ページ移動などの必要な機能を実装するということになります。一方、INTER-Mediatorでは、そうしたユーザーインタフェースを作りやすくした仕組みを組み込んでいます。一覧も詳細も、同一のページに表示して、必要に応じて表示と非表示を行うことで、一覧と詳細の動作を行っています。</p>
+                <p>サンプルの一覧のページからは「Practices」の「Master/Detail」にある「alternative navigation」をクリックすると、以下のようなページが表示されます。最初は、商品マスターの商品名と単価が見えている一覧が表示されています。ここで、「詳細」ボタンをクリックすると、クリックした商品に関する他のフィールドを、そのレコードだけ表示します。「一覧表示」ボタンをクリックすると、元の一覧のページが表示されます。</p>
+
+                <div class="picture"><img class="frame" src="/images/shot9912.png">
+                </div>
+
+                <p>サンプルの一覧のページからは「Practices」の「Master/Detail」にある「split master/detail」をクリックすると、以下のようなページが表示されます。一覧と詳細が同時に表示されています。CSSの仕組みを利用して、それぞれのテーブルを左右に並ぶように配置しています。</p>
+
+                <div class="picture"><img class="frame" src="/images/shot9913.png">
+                </div>
+
+                <p>左側の一覧で「詳細」ボタンをクリックすると、該当するレコードが右側に表示されます。つまり、右側は、左側のリストでクリックしたレコードの情報に逐次切り替わります。</p>
+
+                <div class="picture"><img class="frame" src="/images/shot9914.png">
+                </div>
+
+                <p>ここで、右側の詳細表示の方が、テキストフィールドになっています。たとえば、単価を1200に修正したとします。修正をしてTabキーを押すなどすると、このレコードのunitpriceフィールドの値は1200に更新されます。</p>
+                <div class="picture"><img class="frame" src="/images/shot9915.png">
+                </div>
+
+                <p>テキストフィールドからフォーカスが外れると同時に、左側の対応するフィールドも値が置き換わっています。このように、同一のフィールドがページ内の複数の箇所に見えている場合には、1つの修正が他の要素へ自動的に反映されるようになっています。（書式の反映に関しては、Ver.5.0より後に修正をおこなう予定です。）</p>
+
+                <div class="picture"><img class="frame" src="/images/shot9916.png">
+                </div>
+            </section>
+            <section>
+                <h1>定義ファイル</h1>
+                <p>定義ファイルのSamples/Practices/nav1.phpの内容は以下の通りです。一覧と詳細が切り替わるnavi1.phpと、左右に表示されるnavi2.phpの2つの定義ファイルがありますが、1箇所の設定を除いて同一のものです。</p>
+                <p>まず、一覧と詳細は、基本的には同一のテーブルがデータソースになるはずです。しかしながら、INTER-Mediatorでは、それぞれ、異なるコンテキストして定義します。productテーブルをもとに、一覧用のproductlistコンテキストと、詳細用のproductdetailコンテキストを用意します。いずれも、viewキーの値がproductとなっており、同じproductテーブルから得られるコンテキストであることがわかります。一覧と詳細を構成するには、それぞれのコンテキストにnavi-controlキーに値を指定します。一覧側は「master」、詳細側は「detail」と指定するのが基本です。masterだけだと、一覧と詳細は同時に表示され、詳細側にはマスターに切り替わるボタンは表示されません。master-hideだと、一覧と詳細が切り替わり、詳細側に一覧を表示するボタンが追加されます。detail、あるいはdetail-downなら詳細の末尾に、detail-topなら詳細の冒頭に、一覧に移動するボタンを表示します。なお、master側のコンテキストでは、必ず「詳細」ボタンが追加されます。</p>
+                <p>データベースはMySQLを使うのでdb-classは「PDO」を指定します。それ以外の接続情報、アカウント、パスワードは、INTER-Mediator/params.phpファイルにあるものをそのまま使います。INTER-Mediatorのサンプルファイルをそのまま参照できる状態であれば、特に変更する必要はありません。</p>
+                <div class="code">
+                    <pre><code>require_once(dirname(__FILE__) . '/../../INTER-Mediator.php');
+
+IM_Entry(
+    array(
+        array(
+            'records' =&gt; 10,
+            'name' =&gt; 'productlist',
+            'view' =&gt; 'product',
+            'key' =&gt; 'id',
+            'sort' =&gt; array(array('field' =&gt; 'name', 'direction' =&gt; 'ASC'),),
+            'navi-control' =&gt; 'master-hide',
+        ),
+        array(
+            'records' =&gt; 1,
+            'name' =&gt; 'productdetail',
+            'view' =&gt; 'product',
+            'table' =&gt; 'product',
+            'key' =&gt; 'id',
+            'navi-control' =&gt; 'detail-top',
+        ),
+    ),
+    array(
+        'formatter' =&gt; array(
+            array('field' =&gt; 'product@unitprice', 'converter-class' =&gt; 'Number', 'parameter' =&gt; '0'),
+        ),
+    ),
+    array('db-class' =&gt; 'PDO'),
+    false
+);</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>ページファイル</h1>
+                <p>ページファイルについては、ボディ部のみを示します。もちろん、ヘッダ部で、前述の定義ファイルSCRIPTタグで読み込んだ状態になっています。一覧を表示するTABLEと詳細を表示するTABLEが定義されているだけです。左右のレイアウトをしやすいように、それぞれDIVタグ要素に含めてあります。それぞれのTABLEタグ要素内では、productlistコンテキストと、productdetailコンテキストを利用したターゲット指定があるだけで、特に何も特別な記述はありません。</p>
+
+                <div class="code">
+                    <pre><code>&lt;body onload="INTERMediator.construct(true);"&gt;
+&lt;!-- Table for the list view --&gt;
+&lt;div id="listarea" style="float:left; margin-right: 24px;"&gt;
+    &lt;table border="1"&gt;
+        &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;&lt;/th&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;unitprice&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td data-im="productlist@name"&gt;&lt;/td&gt;
+            &lt;td class="price" data-im="productlist@unitprice"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+&lt;!-- Table for the detail view --&gt;
+&lt;div id="detailarea"&gt;
+    &lt;table border="1"&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;th&gt;id&lt;/th&gt;
+            &lt;td data-im="productdetail@id"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;name&lt;/th&gt;
+            &lt;td&gt;&lt;input type="text" size="60" data-im="productdetail@name"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;unitprice&lt;/th&gt;
+            &lt;td&gt;&lt;input type="text" size="60" data-im="productdetail@unitprice"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;photofile&lt;/th&gt;
+            &lt;td&gt;&lt;input type="text" size="60" data-im="productdetail@photofile"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;acknowledgement&lt;/th&gt;
+            &lt;td&gt;&lt;input type="text" size="60" data-im="productdetail@acknowledgement"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;ack_link&lt;/th&gt;
+            &lt;td&gt;&lt;input type="text" size="60" data-im="productdetail@ack_link"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;photofile&lt;/th&gt;
+            &lt;td&gt;&lt;img src="../Sample_products/images/" data-im="productdetail@photofile@#src"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+&lt;div style="clear: both"/&gt;
+&lt;/body&gt;</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>まとめ</h1>
+                <p>一覧と詳細を実装するときには、それぞれを異なるコンテキストで1ページ内に配置します。そして、コンテキストにnavi-controlキーの値を指定することで、それぞれが連携して、一覧と詳細の動作を行うようになります。そのように動作させるためにプログラムを記述する必要はまったくありません。</p>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>
