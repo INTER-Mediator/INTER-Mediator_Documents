@@ -291,7 +291,7 @@
 
 <ol>
 	<li>VMのホームで、「def021.phpを編集」をクリックするか、すでに開いている定義ファイルエディタのページを参照します。</li>
-	<li>pageに「true」、repeat-controlに「delete-confirm insert-confirm」と入力します。</li>
+	<li>pageに「true」、repeat-controlに「confirm-insert confirm-delete」と入力します。</li>
 	<li>VMのホームで、「page02.htmlを編集」をクリックするか、あるいはすでに開いているページファイルエディタを表示して。以下のソースコードを入力します。「名前」の列はテキストフィールドにします。</li>
 </ol>
 
@@ -482,14 +482,14 @@
 <pre><code>name: invoice
 key: id
 paging: true
-repeat-control: insert-confirm delete-confirm
+repeat-control: confirm-insert confirm-delete
 records: 1
 maxrecords: 100
 Calculation: [field: total_calc, expression: format(sum(item@amount_calc))]
 
 name: item
 key: id
-repeat-control: insert-confirm delete-confirm
+repeat-control: confirm-insert confirm-delete
 records: 100
 maxrecords: 100
 Relationship: [foreign-key: invoice_id, join-field: id, operator: eq]
