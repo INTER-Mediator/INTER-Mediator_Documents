@@ -343,7 +343,7 @@
 	<li>Sortの下にある行の右側の「削除」をクリックして、Sortの下に行がないようにします。</li>
 	<li>
 <ol type="a">
-	<li><span class="platform">[FileMaker Server]</span> nameに「person_list」、tableを「person_layout」、viewに「person_layout」、keyに「id」、pagingに「true」、repeat-controlに「insert」、recordsに「10」、maxrecordsに「100」と入力します。他は空白にします。</li>
+	<li><span class="platform">[FileMaker Server]</span> nameに「person_list」、tableを「person_layout」、viewに「person_layout」、keyに「-recid」、pagingに「true」、repeat-controlに「insert」、recordsに「10」、maxrecordsに「100」と入力します。他は空白にします。</li>
 	<li><span class="platform">[MySQL]</span> nameに「person_list」、keyに「id」、viewに「person」、pagingに「true」、repeat-controlに「insert」、recordsに「10」、maxrecordsに「100」と入力します。他は空白にします。</li>
 </ol>
 </li>
@@ -396,7 +396,7 @@
 	<li>Contextsの下の「追加」ボタンをクリックします。nameが「= new context =」の項目が増えました。</li>
 	<li>
 <ol>
-	<li><span class="platform">[FileMaker Server]</span> 増えた項目で、nameを「person_detail」、tableを「person_layout」、viewを「person_layout」、keyを「id」、recordsを「1」、maxrecordsを「100」として、あとは空白のままにします。</li>
+	<li><span class="platform">[FileMaker Server]</span> 増えた項目で、nameを「person_detail」、tableを「person_layout」、viewを「person_layout」、keyを「-recid」、recordsを「1」、maxrecordsを「100」として、あとは空白のままにします。</li>
 	<li><span class="platform">[MySQL]</span> 増えた項目で、nameを「person_detail」、viewを「person」、keyを「id」、recordsを「1」、maxrecordsを「100」として、あとは空白のままにします。</li>
 </ol>
 </li>
