@@ -2,13 +2,13 @@
 <!--
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
- *
- *   This project started at the end of 2009.
+ * 
+ *   Copyright (c) 2010-2015 INTER-Mediator Directive Committee, All rights reserved.
+ * 
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
  */
--->
+ -->
 <html lang="ja">
 
 <head>
@@ -98,6 +98,13 @@ conditions["acontext"].push({field: "afield", operator: "=", value: "1001"});
 INTERMediator.additionalCondition = conditions</code></pre>
                 </div>
             </section>
+
+            <section>
+                <h1>Ver.4.5での変更</h1>
+                <h4>valueChangeメソッド</h4>
+                <p>INTERMediator.valueChange(idValue)はIMLibUI.valueChange(idValue)に変更されました。もしもJavaScriptのプログラム内でvalueChangeメソッドを使用している場合には書き換えが必要です。</p>
+            </section>
+
             <section>
                 <h1>Ver.4.1 (2014/2/7) での変更</h1>
                 <p>ターゲット指定をclass属性に独自の記述方法で書いていましたが、Ver.4.1より、HTML5のdata属性での記述に移行しました。なお、従来の記述も基本的にはそのまま利用できるはずですが、大した手間にならないので、書き直すのがいいかと思います。</p>
