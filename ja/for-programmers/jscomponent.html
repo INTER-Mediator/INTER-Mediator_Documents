@@ -112,7 +112,7 @@
         Self;
         Let([
             fileName = GetValue(Self; 1);
-            content = Substitute(Self; fileName & ¶; "")
+            content = Substitute(Self; fileName &amp; ¶; "")
         ];
         Base64Decode(content; fileName)
     )
