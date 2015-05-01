@@ -2,10 +2,10 @@
 <!--
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
- *
- *   This project started at the end of 2009.
+ * 
+ *   Copyright (c) 2010-2015 INTER-Mediator Directive Committee, All rights reserved.
+ * 
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
  */
 -->
@@ -101,7 +101,7 @@
             <section>
                 <h1>FileMakerのオブジェクトフィールドを参照する</h1>
                 <p>オブジェクトフィールドはデータベースごとに扱いが異なり、統一的にはやりにくい処理ではあります。MediaAccessクラスでは、FileMaker Serverをターゲットにオブジェクトフィールドに対応する機能を作成しました。</p>
-                <p>FIleMakerはFXを経由し、XML共有の仕組みを使います。テキスト型や数値型は、基本的にテキストでフィールドにあるデータが得られます。一方、オブジェクトフィールドはオブジェクトそのもののデータではなく、フィールドのデータに応じた以下のような「テキスト」が得られます。</p>
+                <p>FileMakerはFXを経由し、XML共有の仕組みを使います。テキスト型や数値型は、基本的にテキストでフィールドにあるデータが得られます。一方、オブジェクトフィールドはオブジェクトそのもののデータではなく、フィールドのデータに応じた以下のような「テキスト」が得られます。</p>
 
                 <div class="code">
                     <pre><code>/fmi/xml/cnt/photo.jpg
@@ -110,7 +110,8 @@ http://server:16000/&#8230;</code></pre>
 
                 <p>PDFは完全なURLで、FileMaker Serverに16000ポートで接続して取り出すことが可能です。JPEGなどの画像の場合は、URLのパスに相当するものが得られますが、たとえばIMGタグのSRC属性にそのまま指定が可能な文字列になります。</p>
                 <p>いずれにしても、両方ともURLであると解釈すればいいわけです。この仕組みはFileMaker Serverに限らず、一般的なアクセスにも使えます。つまり、media=URLと指定をした場合は、そのURLにアクセスしたデータをMediaAccessクラスが取得し、さらにクラスを呼び出した元にそのデータを返します。/fmi/xml/cntで始まる物だけは特別にURLであるという処理が組み込まれています。また、URLかどうかはそれ以外には、httpあるいはhttpsで開始するものかどうかで判定しています。</p>
-
+            </section>
+            <section>
                 <h1>MediaAccessでのアクセス権</h1>
                 <p>認証が成立したらすべて参照可能となり、成立しなければ参照不可という単純なものなら非常に話が早く、前に説明したmedia-tokenの仕組みで事は足りるのです。なお、データはCRUDの4つの側面がありますが、メディアに関しては「編集」というのはWeb世界ではかなり難易度が高い世界であり、MediaAccessクラスはほぼ参照のみのサポートになっています。</p>
                 <p>ここで、メディアそのものがログインしたユーザごとのアクセス権を持たせたい場合が出てきます。レコードについては、特定のフィールドにユーザ名やグループ名を入力することで、そのユーザやグループに所属したユーザでないと参照や更新ができない仕組みを持っています。フィールドのデータはそれでいいのですが、メディアは実体はレコードと別に有ります。ここで、個々のメディアをコンテキストのレコードと結合させ、レコードごとのアクセス権をメディアにまで及ぼす仕組みを組み込みました。</p>

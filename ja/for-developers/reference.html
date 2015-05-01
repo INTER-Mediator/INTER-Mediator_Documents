@@ -2,10 +2,10 @@
 <!--
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
- *
- *   This project started at the end of 2009.
+ * 
+ *   Copyright (c) 2010-2015 INTER-Mediator Directive Committee, All rights reserved.
+ * 
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
  */
 -->
@@ -591,7 +591,7 @@
                         </tr>
                         <tr>
                             <td>
-                                extending-class
+                                'extending-class'
                             </td>
                             <td>
                             </td>
@@ -603,7 +603,7 @@
                         </tr>
                         <tr>
                             <td>
-                                protect-writing
+                                'protect-writing'
                             </td>
                             <td>
                             </td>
@@ -615,7 +615,7 @@
                         </tr>
                         <tr>
                             <td>
-                                protect-reading
+                                'protect-reading'
                             </td>
                             <td>
                             </td>
@@ -626,14 +626,19 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="2">file-upload</td>
-                            <td rowspan="2">（なし）</td>
+                            <td rowspan="3">'file-upload'</td>
+                            <td rowspan="3">（なし）</td>
                             <td>field</td>
                             <td>コンテキスト内のここで指定したフィールドに対してファイルアップロードのコンポーネントが設定されている場合</td>
                         </tr>
                         <tr>
                             <td>context</td>
                             <td>この指定があると、指定したコンテキストのpathフィールドにファイルパスを値として指定する新規レコードを作成する。こちらのコンテキストとのリレーションが設定されていれば正しく外部キーが設定される</td>
+                        </tr>
+                        <tr>
+                            <td>container</td>
+                            <td>この指定があると、オブジェクトフィールドにファイルを格納する（FileMaker Serverのみ）。ただし、FileMaker Serverのバージョン13が必要、かつデータベースのフィールドオプションにおいて［入力値の自動化］オプションをあらかじめ設定しておく必要があります。詳細は<a href="/ja/for-programmers/jscomponent.html">
+ファイルのアップロードコンポーネント</a>の「FileMakerのオブジェクトフィールドにファイルをアップロードする」を参照</td>
                         </tr>
                         <tr>
                             <td>

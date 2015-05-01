@@ -2,10 +2,10 @@
 <!--
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
- *
- *   This project started at the end of 2009.
+ * 
+ *   Copyright (c) 2010-2015 INTER-Mediator Directive Committee, All rights reserved.
+ * 
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
  */
 -->
@@ -104,6 +104,24 @@
                 <div class="code">
                     <pre><code>IMParts_Catalog.fileupload.forceOldStyleForm = true;</code></pre>
                 </div>
+
+                <h3>FileMakerのオブジェクトフィールドにファイルをアップロードする</h3>
+                <p>INTER-Mediator 5.1以降を使用している場合、FileMakerのオブジェクトフィールドに直接ファイルをアップロードできます（2015年4月現在、バージョン5.1はリリースされていません）。ただし、FileMaker Serverのバージョン13が必要、かつあらかじめデータベースのフィールドオプションにおいて［入力値の自動化］オプションの［計算値］に下記を設定しておく必要があります。</p>
+                <div class="code"><pre><code>If ( 
+    GetContainerAttribute(Self; "filename") ≠ ""; 
+        Self;
+        Let([
+            fileName = GetValue(Self; 1);
+            content = Substitute(Self; fileName & ¶; "")
+        ];
+        Base64Decode(content; fileName)
+    )
+)</code></pre></div>
+                <p>定義ファイルでは、'file-upload'キーおよび下位のキーとして'field'キーと'container'キーを下記のように指定します。'field'キーの値はオブジェクトフィールドの名称です（下記の例ではvc1）。</p>
+                <div class="code"><pre><code>'file-upload' => array(
+    array('field'=>'vc1', 'container' => true)
+),
+</code></pre></div>
 
             </section>
             <section>
