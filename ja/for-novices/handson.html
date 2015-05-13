@@ -498,7 +498,8 @@ key: id
 repeat-control: confirm-insert confirm-delete
 records: 100
 maxrecords: 100
-Relationship: [foreign-key: invoice_id, join-field: id, operator: eq]
+Relationship: [foreign-key: invoice_id, join-field: id, operator: =]    ←[MySQL]の場合
+Relationship: [foreign-key: invoice_id, join-field: id, operator: eq]    ←[FileMaker Server]の場合
 Calculation: [field: amount_calc, expression: format(qty * product@unitprice)]
 
 name: product
