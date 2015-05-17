@@ -66,14 +66,6 @@
             <section>
                 <h1>VMの準備</h1>
                 <p>VMをINTER-Mediatorに含まれているスクリプト等を利用して自分で生成する方法を「VMを自分で作成して起動する」に、一方、すでに誰かが作ったVMを利用する方法を「VMをダウンロードして利用する」に解説します。もちろん、いずれか一方の作業を行うことで、VMを利用することができるので、状況に応じて使い分けてください。</p>
-                <h3>VMを自分で作成して起動する</h3>
-                <p>INTER-Mediatorの配布ファイルの中には、VMを生成するためのスクリプト等が含まれています。最新のINTER-Mediatorが組み込まれたVMを作成するには、この方法が最適です。なお、この方法は、OS Xでのみ利用できます。WindowsではVagrantをインストールしても、スクリプトは稼働しませんので、ご注意ください。</p>
-                <ol>
-                    <li>Vagrantをインストールします。<a href="https://www.vagrantup.com/" target="_blank">こちら</a>のページに移動して、使用するOSに対応したアプリケーションをダウンロードしてインストールします。単にインストールするだけで大丈夫です。</li>
-                    <li>INTER-Mediatorの最新版をcloneします。<a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">こちら</a>のページににある「Clone in Desktop」ボタンを利用するのが手軽な方法です。</li>
-                    <li>OS XであればTerminalを起動し、cloneしたINTER-Mediatorフォルダ内のdist-docs/vm-for-trialフォルダに移動します。</li>
-                    <li>Terminalで「vagrant up」というコマンドを実行します。ダウンロードや作成処理に時間がかかります。概ね20分程度です。「INTER-Mediator-Server is ready.」と表示されたら準備完了です。</li>
-                </ol>
 
                 <h3>VMをダウンロードして利用する</h3>
                 <p>以下の手順は、VirtualBoxの初期状態を仮定しています。他の利用などでさまざまな設定がある場合には、手順が異なるかもしれませんが、原則として、ホストオンリーネットワークを用意して、そのネットワークを使用してVMが起動するようにセットアップされていればOKです。ダウンロードしたVMは、OS XでもWindowsでも、プラットフォームに関係なく利用できます。ただし、FileMaker Serverの場合には、VMとホスト側のIPアドレスが以下で行われる設定と同一である必要があります。</p>
@@ -127,6 +119,14 @@
                 <h3>自分で作ったファイルを運用する</h3>
                 <p>「http://192.168.56.101」に接続したページに、ログイン可能なアカウントが末尾に書かれています。それをご利用ください。SFTPでファイルの転送をするのが手軽かと思われます。また、INTER-Mediator-Server自体にログインをして、独自のデータベーススキーマを読み込ませるなどしてください。データベースの管理アカウントも、「http://192.168.56.101」に接続したページに記載しています。</p>
 
+                <h1>（参考）VMを自分で作成して起動する</h1>
+                <p>INTER-Mediatorの配布ファイルの中には、VMを生成するためのスクリプト等が含まれています。最新のINTER-Mediatorが組み込まれたVMを作成するには、この方法が最適です。なお、この方法は、OS Xでのみ利用できます。WindowsではVagrantをインストールしても、スクリプトは稼働しませんので、ご注意ください。</p>
+                <ol>
+                    <li>Vagrantをインストールします。<a href="https://www.vagrantup.com/" target="_blank">こちら</a>のページに移動して、使用するOSに対応したアプリケーションをダウンロードしてインストールします。単にインストールするだけで大丈夫です。</li>
+                    <li>INTER-Mediatorの最新版をcloneします。<a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">こちら</a>のページににある「Clone in Desktop」ボタンを利用するのが手軽な方法です。</li>
+                    <li>OS XであればTerminalを起動し、cloneしたINTER-Mediatorフォルダ内のdist-docs/vm-for-trialフォルダに移動します。</li>
+                    <li>Terminalで「vagrant up」というコマンドを実行します。ダウンロードや作成処理に時間がかかります。概ね20分程度です。「INTER-Mediator-Server is ready.」と表示されたら準備完了です。</li>
+                </ol>
             </section>
         </article>
     </div>
