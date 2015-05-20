@@ -73,10 +73,10 @@
 
                 <div class="code">
                     <pre><code>cd ~/Documents/mywebapp  # Webアプリケーションのフォルダをカレントにする
-git clone https://github.com/INTER-Mediator/INTER-Mediator.git  # サーバからレポジトリを複製する</code></pre>
+git clone https://github.com/INTER-Mediator/INTER-Mediator.git  # サーバーからレポジトリを複製する</code></pre>
                 </div>
 
-                <p>これだけでOKです。すると、mywebappフォルダに、INTER-Mediatorフォルダが作られます。このINTER-Mediatorフォルダがフレームワーク本体となります。この階層に、たとえば、index.htmlファイルやら、アプリケーションのhtml/phpファイルを作って行けばOKです。後はこれをサーバにコピーして稼働を確認します。</p>
+                <p>これだけでOKです。すると、mywebappフォルダに、INTER-Mediatorフォルダが作られます。このINTER-Mediatorフォルダがフレームワーク本体となります。この階層に、たとえば、index.htmlファイルやら、アプリケーションのhtml/phpファイルを作って行けばOKです。後はこれをサーバーにコピーして稼働を確認します。</p>
 
                 <div class="picture"><img src="/images/doc-deploy-fig3.png">
                 </div>
@@ -108,7 +108,7 @@ git pull</code></pre>
                 <h1>OS XでGitHubアプリケーションを使う場合</h1>
                 <p>コマンドラインがどうしても苦手だという方は、GitHubのアプリケーションを入手してインストールをしてください。そして、セットアップを一通りすませます。GitHubへのログインが必要なのですが、通常はアカウントを持っていると思われるので、そのアカウントでログインをしておきます。</p>
 
-                <p>GitHubのページには、「Clone in Desktop」というボタンがあるので、それをクリックするとGitHubアプリケーションが起動して、いきなりINTER-Mediatorフォルダを作る場所を聞いてきます。そこで、配置した場所を選択してCloneボタンを押せばOKです。その後は、GitHubアプリケーションで、レポジトリのChangeのボタンを左側で選び、右上のSyncボタンをクリックすれば、サーバにある最新のレポジトリの内容をダウンロードしてアップデートします。</p>
+                <p>GitHubのページには、「Clone in Desktop」というボタンがあるので、それをクリックするとGitHubアプリケーションが起動して、いきなりINTER-Mediatorフォルダを作る場所を聞いてきます。そこで、配置した場所を選択してCloneボタンを押せばOKです。その後は、GitHubアプリケーションで、レポジトリのChangeのボタンを左側で選び、右上のSyncボタンをクリックすれば、サーバーにある最新のレポジトリの内容をダウンロードしてアップデートします。</p>
 
                 <div class="picture"><img src="/images/doc-deploy-fig9.png">
                 </div>
@@ -177,7 +177,7 @@ Type 1, 2 or 3, and then type return----></code></pre>
 
                 <p>その後、メッセージ通り、INTER-Mediatorフォルダと同じ階層に、「im_build」フォルダが作られ、その中に、INTER-Mediatorフォルダがあります。こちらのファイルの中は、動作実行上必要なものだけに絞られています。また、それぞれのファイルや、あるいはページの下部のバーなどに、バージョン番号とビルド日が追加されるようになります。このim_build/INTER-Mediatorフォルダを、現状のINTER-Mediatorフォルダと置き換えればOKです。</p>
 
-                <p>ただし、1点注意があります。ビルドしたINTER-Mediatorは、すべてのJavaScriptのプログラムを、INTER-Mediator.jsファイルにまとめて、その他のjsファイルは削除されています。そのままFTPでアップロードすると、消えたはずのその他のjsファイルが残ったままになります。なので、サーバ側にあるINTER-Mediatorフォルダもいったん消した上で、アップロードするのが確実です。動作がおかしいと思ったときには、INTER-Mediator.js以外のJavaScriptファイルがサーバ上で存在していないかを確認してください。</p>
+                <p>ただし、1点注意があります。ビルドしたINTER-Mediatorは、すべてのJavaScriptのプログラムを、INTER-Mediator.jsファイルにまとめて、その他のjsファイルは削除されています。そのままFTPでアップロードすると、消えたはずのその他のjsファイルが残ったままになります。なので、サーバー側にあるINTER-Mediatorフォルダもいったん消した上で、アップロードするのが確実です。動作がおかしいと思ったときには、INTER-Mediator.js以外のJavaScriptファイルがサーバー上で存在していないかを確認してください。</p>
 
                 <p>バージョン番号については、buildup.shファイルの最初の方に記述があるので、それを変更して利用してください。なお、バージョンのルールは次のようにします。</p>
 
