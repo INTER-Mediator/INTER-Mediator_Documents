@@ -105,8 +105,8 @@
                     <pre><code>IMParts_Catalog.fileupload.forceOldStyleForm = true;</code></pre>
                 </div>
 
-                <h3>FileMakerのオブジェクトフィールドにファイルをアップロードする</h3>
-                <p>INTER-Mediator 5.1以降を使用している場合、FileMakerのオブジェクトフィールドに直接ファイルをアップロードできます（2015年5月現在、バージョン5.1はリリースされていません）。ただし、FileMaker Serverのバージョン13あるいはバージョン14が必要、かつあらかじめデータベースのフィールドオプションにおいて［入力値の自動化］オプションの［計算値］に下記を設定しておく必要があります。</p>
+                <h3>Uploading a file to FileMaker's container field</h3>
+                <p>INTER-Mediator 5.1以降を使用している場合、FileMakerのオブジェクトフィールドに直接ファイルをアップロードできます。ただし、FileMaker Serverのバージョン13あるいはバージョン14が必要、かつあらかじめデータベースのフィールドオプションにおいて［入力値の自動化］オプションの［計算値］に下記を設定しておく必要があります。</p>
                 <div class="code"><pre><code>If (
     GetContainerAttribute(Self; "filename") ≠ "";
         Self;
