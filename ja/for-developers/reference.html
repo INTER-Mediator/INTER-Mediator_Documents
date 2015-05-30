@@ -389,8 +389,31 @@
                             </td>
                             <td>
                             </td>
-                            <td>2つのコンテキストを利用して、マスター/ディテール形式のユーザインタフェースを構築する。2つのコンテキストは、原則として同一のテーブルを元にした異なるコンテキストである必要がある。マスター側のコンテキストに指定できるのは「master」ないしは「master-hide」で、通常、こちらのコンテキストは複数のレコードを表示する。マスター側には詳細を表示するボタンが追加される。ディテール側のコンテキストは「detail」を指定して、1レコードを表示する。「master」だと、2つのコンテキストによる展開結果は常に見えている。「master-hide」にするといずれか一方のみ表示し、masterに戻るボタンがディテール側に追加される。「detail-bottom」ないしは「detail-top」でボタンの位置を指定できるが、「detail」は「detail-top」と同等である。なお、FileMaker Serverを利用する時には、detailを指定したコンテキストのidキーの値は「-recid」にする必要がある。
+                            <td>2つのコンテキストを利用して、マスター/ディテール形式のユーザインタフェースを構築する。2つのコンテキストは、原則として同一のテーブルを元にした異なるコンテキストである必要がある。マスター側のコンテキストに指定できるのは「master」ないしは「master-hide」で、通常、こちらのコンテキストは複数のレコードを表示する。マスター側には詳細を表示するボタンが追加される。ディテール側のコンテキストは「detail」を指定して、1レコードを表示する。「master」だと、2つのコンテキストによる展開結果は常に見えている。「master-hide」にするといずれか一方のみ表示し、masterに戻るボタンがディテール側に追加される。「detail-bottom」ないしは「detail-top」でボタンの位置を指定できるが、「detail」は「detail-top」と同等である。「detail-update」により、ディテールからマスターに表示するとき、マスター側の更新を行う。なお、FileMaker Serverを利用する時には、detailを指定したコンテキストのidキーの値は「-recid」にする必要がある。
                             </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">
+                                'button-names'
+                            </td>
+                            <td>'insert'</td>
+                            <td></td>
+                            <td>repeat-controlに「insert」を指定したときに追加されるボタンのボタン名</td>
+                        </tr>
+                        <tr>
+                            <td>'delete'</td>
+                            <td></td>
+                            <td>repeat-controlに「delete」を指定したときに追加されるボタンのボタン名</td>
+                        </tr>
+                        <tr>
+                            <td>'navi-detail'</td>
+                            <td></td>
+                            <td>navi-controlに「master」を指定したときに追加されるボタンのボタン名。マスター側に追加されるディテール側へ移動するボタンの名前</td>
+                        </tr>
+                        <tr>
+                            <td>'navi-back'</td>
+                            <td></td>
+                            <td>navi-controlに「detail」を指定したときに追加されるボタンのボタン名。ディテール側に追加されるマスター側へ移動するボタンの名前</td>
                         </tr>
                         <tr>
                             <td rowspan="4">
@@ -760,6 +783,82 @@
                                 [FileMaker_FX]このコンテキストで使うサーバーがサポートするデータ形式（例：FMPro7）
                             </td>
                         </tr>
+                        <tr>
+                            <td rowspan="19">'send-mail'</td>
+                            <td rowspan="16">'load'<br/><br/>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
+                            <td>'from'</td>
+                            <td>送信者名や送信者アドレスが含まれるフィールド名</td>
+                        </tr>
+                        <tr>
+                            <td>'to'</td>
+                            <td>送信先が含まれるフィールド名</td>
+                        </tr>
+                        <tr>
+                            <td>'cc'</td>
+                            <td>Cc先が含まれるフィールド名</td>
+                        </tr>
+                        <tr>
+                            <td>'bcc'</td>
+                            <td>Bcc先が含まれるフィールド名</td>
+                        </tr>
+                        <tr>
+                            <td>'subject'</td>
+                            <td>件名が含まれるフィールド名</td>
+                        </tr>
+                        <tr>
+                            <td>'body'</td>
+                            <td>メール本文が含まれるフィールド名</td>
+                        </tr>
+                        <tr>
+                            <td>'from-constant'</td>
+                            <td>送信者やアドレスを文字列で指定</td>
+                        </tr>
+                        <tr>
+                            <td>'to-constant'</td>
+                            <td>送信先を文字列で指定</td>
+                        </tr>
+                        <tr>
+                            <td>'cc-constant'</td>
+                            <td>Cc先を文字列で指定</td>
+                        </tr>
+                        <tr>
+                            <td>'bcc-constant'</td>
+                            <td>Bcc先を文字列で指定</td>
+                        </tr>
+                        <tr>
+                            <td>'subject-constant'</td>
+                            <td>件名を文字列で指定</td>
+                        </tr>
+                        <tr>
+                            <td>'body-constant'</td>
+                            <td>本文を文字列で指定</td>
+                        </tr>
+                        <tr>
+                            <td>'body-template'</td>
+                            <td>本文のテンプレートとなるファイルのファイル名</td>
+                        </tr>
+                        <tr>
+                            <td>'body-fields'</td>
+                            <td>テンプレートに差し込むフィールドの順序をカンマで区切る</td>
+                        </tr>
+                        <tr>
+                            <td>'f-option'</td>
+                            <td>UNIXでSMTPサーバを経由しない場合にtrueを指定すると、fromの指定が有効</td>
+                        </tr>
+                        <tr>
+                            <td>'body-wrap'</td>
+                            <td>右端の折り返しのバイト数</td>
+                        </tr>
+                        <tr>
+                            <td>'edit'</td>
+                            <td></td>
+                            <td>コンテキストに対してレコードの更新処理を行った後にメールを送信する。第3次元については、loadと同様。</td>
+                        </tr>
+                        <tr>
+                            <td>'new'</td>
+							<td></td>
+                            <td>コンテキストに対して新たなレコードを作るアクションを起こした後にメールを送信する。第3次元については、loadと同様。</td>
+                        </tr>
                     </table>
                 </div>
                 <p>
@@ -1044,6 +1143,27 @@
                             <td>secret</td>
                             <td></td>
                             <td>Pusherで定義したAppのsecret</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">'smtp'</td>
+                            <td>'server'</td>
+                            <td></td>
+                            <td>メール送信時に使用するサーバのホスト</td>
+                        </tr>
+                        <tr>
+                            <td>'port'</td>
+                            <td></td>
+                            <td>メール送信時に使用するサーバのポート</td>
+                        </tr>
+                        <tr>
+                            <td>'username'</td>
+                            <td></td>
+                            <td>メール送信時に認証で使用するユーザー名</td>
+                        </tr>
+                        <tr>
+                            <td>'password'</td>
+                            <td></td>
+                            <td>メール送信時に認証で使用するパスワード</td>
                         </tr>
                     </table>
                 </div>
