@@ -697,16 +697,16 @@ validation:
     [field: user, rule: value !=  '', message: 入力してください。]
     [field: message, rule: value !=  '', message: 入力してください。]
 
-nam:comment
+name:comment
 table: chat
 view: chat
 key: id
-relation:
+relationship:
     [foreign-key: groupname, join-field: id, operator: =]　// ←[MySQL]の場合
     [foreign-key: groupname, join-field: id, operator: eq]　// ←[FileMaker Server]の場合
 post-reconstruct: true
 post-dismiss-message: 投稿しました
-sort:
+sorting:
     [field: postdt, direction: desc]
 validation: 
     [field: user, rule: value !=  '', message: 入力してください。]
@@ -716,7 +716,7 @@ validation:
 	<li value="2">定義ファイルで開いたdef05.phpに対して、以下のようにOptionsの設定を行います。</li>
 </ol>
 <div class="code">
-<pre><code>formatter:
+<pre><code>formatters:
    [field: chat@message, converter-class: HTMLString]</code></pre>
 </div>
 <ol>
@@ -858,7 +858,7 @@ validation:
 	<li>ページの最初のテキスト領域を利用して、メッセージを3つほど入力します。メッセージは、日付の逆順に表示されています。</li>
 	<li>2つ目のメッセージの直後にも、Formとメッセージの記入部分があります。こちらにも入力をして「投稿」ボタンをクリックします。こちらは、該当メッセージへのコメントになります。いくつかコメントを追加してください。コメントも、日付が自動的に設定され、日付の逆順で表示されます。異なるルートメセージにコメントを記入し、正しいメッセージの後に付随していることを確認します。</li>
 	<li>メッセージはテキストエリアです。改行を含むメッセージを入力してみてください。正しく、改行も表示されています。</li>
-	<li>メッセージにJavaScriptのプログラムを、たとえば「&lt;script&gt;alert(9)&lt;/script&gt;」のように記述して投稿ししてみます。タグはHTMLのタグとして解釈はされず、記述した通りの文字列で表示されます。</li>
+	<li>メッセージにJavaScriptのプログラムを、たとえば「&lt;script&gt;alert(9)&lt;/script&gt;」のように記述して投稿してみます。タグはHTMLのタグとして解釈はされず、記述した通りの文字列で表示されます。</li>
 	<li>ページファイルには少し長いプログラムが入力されています。INTERMediatorOnPage.processingBeforePostOnlyContextは、「投稿」ボタンを押した直後で、データベース処理を行う前に呼び出されます。何をしているのかを以下の手がかりをもとに検討してみましょう。	
 	<ul>
 		<li>INTERMediatorLib.dateTimeStringISO()、INTERMediatorLib.dateTimeStringFileMaker()：現在の日時を返す</li>
