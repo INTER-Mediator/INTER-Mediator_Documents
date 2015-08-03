@@ -200,6 +200,16 @@ INTERMediator.additionalSortKey = sortKeys;</code></pre>
 
             <section>
 
+                <h1>日付自国のデータから文字列を生成</h1>
+                <h4>INTERMediatorLib.dateTimeStringISO( dt );</h4>
+                <p>引数のDateクラスの値を、ISO8601形式（2015-06-21 00:00:00）に変換する。引数を省略すると、現在の日付を得る。日時はブラウザのローカル時刻。</p>
+                <h4>INTERMediatorLib.dateTimeStringFileMaker( dt );</h4>
+                <p>引数のDateクラスの値を、FileMaker Serverが受け付ける形式（06/21/2015 00:00:00）に変換する。引数を省略すると、現在の日付を得る。日時はブラウザのローカル時刻。</p>
+
+            </section>
+
+            <section>
+
                 <h1>要素の値を更新する</h1>
                 <h4>IMLibUI.valueChange(idValue)</h4>
                 <p>引数にINTER-Mediatorによって展開されたノードのid属性値を指定すると、現在の値をもってデータベース側に更新を行う。INTER-Mediatorによる自動更新をしない場合に利用するかもしれない。</p>
@@ -250,6 +260,17 @@ INTERMediator.additionalSortKey = sortKeys;</code></pre>
                 <h4>INTERMediatorOnPage.doAfterValidationFailure(target,linkInfo)</h4>
                 <p>バリデーションの設定がされていて、ルールの結果がfalseとなった直後に呼び出される。引数targetは調べたノードへの参照、linkInfoは対照となったリンク定義の文字列が得られる。テキストフィールドの値をもとにして計算処理をしている場合、間違えた値で再計算をしてしまっているかもしれないが、この関数は、元の値に戻された後に呼び出されるので、さらに再計算などを組み込むことができる。</p>
 
+            </section>
+            <section>
+                <h1>マスター/ディテール形式のユーザーインタフェース処理前後</h1>
+                <h4>INTERMediatorOnPage.naviBeforeMoveToDetail(masterContext, detailContext)</h4>
+                <p>マスター表示からディテール表示への切り替え前に呼び出される。引数はマスターおよびディテールのコンテキストオブジェクト。</p>
+                <h4>INTERMediatorOnPage.naviAfterMoveToDetail(masterContext, detailContext)</h4>
+                <p>マスター表示からディテール表示への切り替え後に呼び出される。引数はマスターおよびディテールのコンテキストオブジェクト。</p>
+                <h4>INTERMediatorOnPage.navibeforeMoveToMaster(masterContext, detailContext)</h4>
+                <p>ディテール表示からマスター表示への切り替え前に呼び出される。引数はマスターおよびディテールのコンテキストオブジェクト。</p>
+                <h4>INTERMediatorOnPage.naviAfterMoveToMaster(masterContext, detailContext)</h4>
+                <p>ディテール表示からマスター表示への切り替え後に呼び出される。引数はマスターおよびディテールのコンテキストオブジェクト。</p>
             </section>
 
             <section>
