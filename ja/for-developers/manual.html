@@ -1,10 +1,33 @@
-<!DOCTYPE html><!--/* * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@ * *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved. * *   This project started at the end of 2009. *   INTER-Mediator is supplied under MIT License. */--><html lang="ja"><head><meta charset="UTF-8"><title>INTER-MediatorによるWebアプリケーションの概要 - Product Manual - INTER-Mediator</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen"><link href="../../lib/css/style.min.css" rel="stylesheet" media="screen"><link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen"><link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css"><link rel="shortcut icon" href="../images/im-icon.png" type="image/png"><link rel="icon" href="../images/im-icon.png" type="image/png"><script src="../../lib/pagebuilder-r2.js"></script>
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   Copyright (c) 2010-2015 INTER-Mediator Directive Committee, All rights reserved.
+ *
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja"><head><meta charset="UTF-8">
+	<title>INTER-MediatorによるWebアプリケーションの概要 - Product Manual - INTER-Mediator</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
+    <link rel="icon" href="../images/im-icon.png" type="image/png">
+    <script src="../../lib/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad()</script>
 </head>
-<body class="docs" data-page-title="for-developers"><div class="container clearfix"><div class="page-title"><h1>INTER-MediatorによるWebアプリケーションの概要</h1>
+<body class="docs" data-page-title="for-developers">
+<div class="container clearfix">
+<div class="page-title">
+<h1>INTER-MediatorによるWebアプリケーションの概要</h1>
 </div>
     <div class="docs-sidebar sticky clearfix"><nav><ul id="pageIndex"></ul>
     </nav>
@@ -400,353 +423,6 @@ INTERMediatorOnPage.processingAfterPostOnlyContext = function(node){
 &lt;/html&gt;</code>
 </pre>
             </div>
-        </section>
-        <section><h1>データコンバータクラスの利用方法</h1>
-            <p>IM_Entry関数の第2引数で、'formatter'を利用して、特定のコンテキストのフィールドに対して、データベースの読み書き前後にフィルタを設定することができます。このときに使うクラスをデータコンバータクラスと呼びます。自分で作成もできますが、以下のものが最初から組み込まれています。自分で作成する場合はDataConverter_template.phpを参照してください</p>
-            <div class="table"><table><tr><td>DataConverter_AppendPrefix.php</td>
-                <td>parameterに指定した文字列を前につける</td>
-            </tr>
-                <tr><td>DataConverter_AppendSuffix.php</td>
-                    <td>parameterに指定した文字列を後につける</td>
-                </tr>
-                <tr><td>DataConverter_Currency.php</td>
-                    <td>parameterに指定した小数以下の桁数で、数値を通貨で表示する</td>
-                </tr>
-                <tr><td>DataConverter_FMDateTime.php</td>
-                    <td>FileMaker Serverの出力する「月/日/年」形式の日付や時刻を整える</td>
-                </tr>
-                <tr><td>DataConverter_HTMLString.php</td>
-                    <td>改行をBRタグ要素、そして&lt;や&gt;や&amp;を参照形式に変換する。parameterにautolinkと指定するとURLにAタグ要素を付加してリンクに変換する。バージョン4.2以降においてparameterにnoescapeと指定すると参照形式への変換を無効にする。データベースへの書き込み時はそのままの文字列</td>
-                </tr>
-                <tr><td>DataConverter_MySQLDateTime.php</td>
-                    <td>MySQLの出力する「年-月-日」形式の日付や時刻を整える</td>
-                </tr>
-                <tr><td>DataConverter_Number.php</td>
-                    <td>parameterに指定した小数以下の桁数で、数値をカンマ付きで表示する</td>
-                </tr>
-                <tr><td>DataConverter_NumberBase.php</td>
-                    <td>NumberやCurrencyの基底クラス</td>
-                </tr>
-                <tr><td>DataConverter_NullZeroString.php</td>
-                    <td>書き込み時にデータが''ならNULLとする、読み込み時は逆変換</td>
-                </tr>
-                <tr><td>DataConverter_template.php</td>
-                    <td>データコンバータのクラスのテンプレート</td>
-                </tr>
-            </table>
-            </div>
-        </section>
-        <section><h1>データベースクラスを自作する</h1>
-            <p>データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-MediatorのDB_PDO.php、FileMaer                Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。</p>
-            <div class="code"><pre><code>require_once( "INTER-Mediator/DB_PDO.php" );
-class DB_MyOriginalDB extends DB_PDO.php {
-	function getFromDB($dataSourceName) {
-		/* ここにプログラムを追加できる */
-		$result = super::getFromDB($dataSourceName);
-		/* ここにプログラムを追加できる */
-		$this->mainTableCount = count( $result ); //レコード数
-		return $result;
-	}
-	
-	function setToDB($dataSourceName) {
-		/* ここにプログラムを追加できる */
-		super::setToDB($dataSourceName);
-		/* ここにプログラムを追加できる */
-	}
-	
-	function newToDB($dataSourceName) {
-		/* ここにプログラムを追加できる */
-		$lastKeyValue = super::newToDB($dataSourceName);
-		/* ここにプログラムを追加できる */
-	    return $lastKeyValue;
-	}
-	
-	function deleteFromDB($dataSourceName) {
-		/* ここにプログラムを追加できる */
-	    $result = super::deleteFromDB($dataSourceName);
-		/* ここにプログラムを追加できる */
-	}
-}</code></pre></div>
-            <p>自分で作るクラスでは、要はCRUDに対応した4つのメソッドをオーバーライドすることによって、独自の仕組みを組み込むことができます。また、4つのうち、特にプログラムの追加がない場合には、定義する必要はありません。いずれの関数も、コンテキスト名を引数に取ります。そして、現在処理しているコンテキスト名が設定されてこれらのメソッドを呼び出します。</p>
-            <p>getFromDBメソッドは、データベースからデータを取り出します。取り出し結果は連想配列の配列です。連想配列のキーがフィールド名になっています。そこから、特定のフィールドの値を元に集計をしたり、あるいは必要な値だけに取り除くなどの処理を、親クラスのgetFromDBメソッドを呼び出す後に入れればいいでしょう。リクエスト時と同じフィールド名を返す必要はなく（つまりINTER-Mediatorはそのチェックをしていない）、自由に連想配列の配列を作ります。そして、ページファイルの方で適切なフィールド名を指定すれば、集計結果が表示されます。なお、ページファイルで、一定レコード数ごとのページングをしているときには、mainTableCountメンバ変数にレコード数、つまり返す配列の要素数も指定します。何か問題が発生したのなら、array()                を返します。以下のプログラムは売り上げのテーブルから集計を行う例です。</p>
-            <div class="code"><pre><code>$result = super::getFromDB($dataSourceName);
-if ( $dataSourceName == 'ItemsInvoice' ) {
-	$summary = array();
-	foreach( $returnValue as $record ) {
-		$summary[ $record[ 'itemNo' ]] += $record[ 'qty' ] * $record[ 'unitPrice' ];
-		}
-	return array( $summary );
-}</code>
-</pre>
-            </div>
-            <p>getFromDBメソッドを呼び出す前は、検索条件の追加なども可能です。たとえば、IM_Entry関数の第一引数に指定している配列が、$this->dataSourceで得られます。また、現在のコンテキストが$this->dataSourceで得られる配列の何番目かが$this->getIndexOfDataSource($dataSourceName)で得られます。例えば特定の名前のフィールドがあれば、それをFileMaker Serverのグローバルフィールドに設定して、検索条件から取り除くといったことも行えます。</p>
-            <div class="code"><pre><code>$this->dataSource[$this->getIndexOfDataSource($dataSourceName)]['global'] = array(...);</code>
-</pre>
-            </div>
-            <p>setToDBとdeleteFromDBメソッドは、いずれも値の更新や削除のときに呼び出されるメソッドです。返り値は論理値で、処理が成功すればtrueで失敗ならfalseです。</p>
-            <p>newToDBは新規レコードの作成です。メソッドの返り値は、新たに作ったレコードのキーフィールドの値である必要があります。問題があれば返り値をfalseにします。</p>
-            <h3>データベースクラス内で便利なメソッド</h3>
-            <p>現状、未整理です。DB_Base.phpに多くは定義されています。以下は抜粋です。</p>
-            <div class="table"><table><tr><th>メンバ変数／メソッド</th>
-                <th>役割</th>
-            </tr>
-                <tr><td>$this->dataSource</td>
-                    <td>IM_Entry関数の第1引数の配列</td>
-                </tr>
-                <tr><td>$this->currentUser</td>
-                    <td>ログインしたユーザ名</td>
-                </tr>
-                <tr><td>$this->setDebugMessage($str)</td>
-                    <td>デバッグメッセージに追加する</td>
-                </tr>
-                <tr><td>$this->setErrorMessage($str)</td>
-                    <td>エラーメッセージに追加する</td>
-                </tr>
-                <tr><td>$this->setExtraCriteria($field, $operator, $value)</td>
-                    <td>検索条件の追加</td>
-                </tr>
-                <tr><td>$this->setExtraSortKey($field, $direction)</td>
-                    <td>ソート条件の追加</td>
-                </tr>
-            </table>
-            </div>
-        </section>
-        <section><h1>データベースアクセス処理の拡張クラスを定義する</h1>
-            <p>データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「拡張処理クラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「拡張処理クラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。</p>
-            <p>IM_Entry関数の第一引数、つまりコンテキストの中に「extending-class」でクラス名を指定します。ここで指定したクラス名は任意のものでかまいませんが、そのクラスをPHPが認識できる場所に記述しておく必要があります。クラスは以下のようなインタフェースをインプリメントする必要があります。つまり、CRUDに対応する4種類のデータアクセス処理の前後にメソッドを含めることができるのです。</p>
-            <div class="code"><pre><code>interface Extending_Interface_BeforeGet {
-	function doBeforeGetFromDB($dataSourceName);
-}
-interface Extending_Interface_AfterGet {
-	function doAfterGetFromDB($dataSourceName, $result);
-	// function countQueryResult($dataSourceName);
-}                        
-interface Extending_Interface_BeforeSet {
-	function doBeforeSetToDB($dataSourceName);
-}                        
-interface Extending_Interface_AfterSet {
-	function doAfterSetToDB($dataSourceName, $result);
-}                        
-interface Extending_Interface_BeforeNew {
-	function doBeforeNewToDB($dataSourceName);
-}                        
-interface Extending_Interface_AfterNew {
-	function doAfterNewToDB($dataSourceName, $result);
-}                        
-interface Extending_Interface_BeforeDelete {
-	function doBeforeDeleteFromDB($dataSourceName);
-}                        
-interface Extending_Interface_AfterDelete {
-	function doAfterDeleteFromDB($dataSourceName, $result);
-}</code>
-</pre>
-            </div>
-            <p>以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。引数$resultにはデータベースからの取得した結果が、連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。たとえば集計処理などを行い、同様に連想配列の配列にして結果を返します。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。PHPではoptionのメソッドの定義をインタフェースできないので、定義上はコメントでこのメソッドを記載しています。</p>
-            <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterGet {
-	function doAfterGetFromDB($dataSourceName, $result) {
-		foreach( $result as $record ) {
-			foreach( $record as $field =&gt; $value ) {
-				:
-			}
-		}
-		return $result;
-	}
-}</code>
-</pre>
-            </div>
-            <p>countQueryResultメソッドを記述する場合の例を以下に示します。countQueryResultはdoAfterGetFromDBよりも後に呼び出されます。countQueryResultによって返されるのは、実際のレコード数ではなく、検索条件に合ったレコード数です。つまり、1万個のレコードのうち40個を表示している場合には、1万という数値を返す必要があります。doAfterGetFromDBで集計処理などをすると、1万レコードを取得して、それが20個などになると思います。その場合は20個を返さないといけません。この場合、自分でメンバ変数（dataCount）を定義して、そこに値を残しておくのが分かりやすい方法でしょう。</p>
-            <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterGet {
-	var $dataCount;
-	
-	function doAfterGetFromDB($dataSourceName, $result) {
-			:
-		$thisthis-&gt;dataCount = count( $result );
-		$return result;
-	}
-	
-	function countQueryResult($dataSourceName) {
-		$return $thisthis-&gt;dataCount;
-	}
-}</code>
-</pre>
-            </div>
-            <p>それぞれのメソッドの$dataSourceNameはコンテキスト名の文字列が入っています。2つのコンテキストでクラスを共有するような場合には分岐のための手がかりになります。doAfterNewToDBの2つ目の引数$resultは、新たに作成したレコードのキーフィールドの値が設定されています。この値はdoAfterNewToDBメソッドでの返り値にしなければなりません。doAfterDeleteFromDBとdoAfterSetToDBメソッドの2つ目の引数はデータベース処理が失敗したかどうかをbooleanで示され、trueなら処理が成功です。これらのメソッドでもやはり引数で得られた値を返さないといけません。</p>
-            <p>開発者が作成するクラスで「DB_UseSharedObjects」クラスの子クラスにした場合は、他のオブジェクトへの参照が得られます。メソッドが呼び出された段階で、メンバ変数はオブジェクトを参照した状態になります。</p>
-            <div class="table"><div class="caption">DB_UseSharedObjectsを継承したときに利用できるメンバ変数</div>
-                <table><tr><th>メンバ変数</th>
-                    <th>参照するもの</th>
-                </tr>
-                    <tr><td>$this-&gt;dbSettings</td>
-                        <td>DB_Settingsクラスのインスタンス</td>
-                    </tr>
-                    <tr><td>$this-&gt;logger</td>
-                        <td>DB_Loggerクラスのインスタンス</td>
-                    </tr>
-                    <tr><td>$this-&gt;authCommon</td>
-                        <td>DB_AuthCommonクラスのインスタンス</td>
-                    </tr>
-                    <tr><td>$this-&gt;formatter</td>
-                        <td>DB_Formattersクラスのインスタンス</td>
-                    </tr>
-                </table>
-            </div>
-        </section>
-        <section><h1>ユーザ認証とアクセス権の動作について</h1>
-            <p>ユーザ認証とアクセス権の設定をサポートします。INTER-Mediator自身がデータベースを利用して、ユーザーやグループを管理する手法を「ビルトイン認証」、データベースエンジン側に登録したユーザーを利用する認証を「ネイティブ認証」、LDAPサーバのユーザーを利用した認証を「LDAP認証」と呼びます。</p>
-            <h2>認証動作に必要なテーブル</h2>
-            <h3>チャレンジ等を記録するテーブル</h3>
-            <p>ユーザ認証ではセキュリティを高めるために、サーバーからクライアントに「チャレンジ」を送り、その値を利用して認証情報を作ります。そのため、サーバー側にチャレンジを残しておく必要があり、テーブルの定義が必要です。そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで読み書きの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（issuedhash）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
-            <div class="table"><div class="caption">チャレンジのテーブルに必要なフィールド</div>
-                <table><tr><th>フィールド名</th>
-                    <th>型の例</th>
-                    <th>説明</th>
-                </tr>
-                    <tr><td>user_id</td>
-                        <td>INT,</td>
-                        <td>ユーザテーブルのキーフィールドとなるid値（ユーザをデータベース内のテーブルで管理する場合に利用）</td>
-                    </tr>
-                    <tr><td>username</td>
-                        <td>VARCHAR(48),</td>
-                        <td>ユーザテーブルのキーフィールドとなるid値（ユーザをデータベースエンジンが提供するもので運用する場合に利用）</td>
-                    </tr>
-                    <tr><td>clienthost</td>
-                        <td>VARCHAR(48),</td>
-                        <td>クライアントを識別するもの。Ver.1.0.5の実装では、クライアントのIPアドレスのみを記録している</td>
-                    </tr>
-                    <tr><td>hash</td>
-                        <td>VARCHAR(48),</td>
-                        <td>チャレンジに使うハッシュ値。実際には24バイトの16進数文字列。</td>
-                    </tr>
-                    <tr><td>expired</td>
-                        <td>DateTime,</td>
-                        <td>チャレンジの有効期限を示すタイムスタンプ値</td>
-                    </tr>
-                </table>
-            </div>
-            <p>なお、このテーブルへの検索では、user_idとclienthostあるいはusernameとclienthostの2つのフィールドに対してAND演算での検索条件が与えられます。従って、高速化するためには、この2つのフィールドを合成したインデックスを作っておくなどの措置をとる事ができます。</p>
-            <h3>ユーザーのテーブル</h3>
-            <p>認証のためのユーザは、データベース内にテーブルを作成する方法と、データベースエンジンが管理するユーザによる方法を利用できます。データベース内にテーブルを作る場合、そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで少なくとも読み出しの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（authuser）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
-            <div class="table"><div class="caption">ユーザテーブルに必要なフィールド</div>
-                <table><tr><th>フィールド名</th>
-                    <th>型の例</th>
-                    <th>説明</th>
-                </tr>
-                    <tr><td>id</td>
-                        <td>INT AUTO_INCREMENT,</td>
-                        <td>連番の数値を入れて、キーフィールドとする</td>
-                    </tr>
-                    <tr><td>username</td>
-                        <td>VARCHAR(48)</td>
-                        <td>ユーザ名（特に制限はないが、重複した名前が定義されないようにするのが望ましい）</td>
-                    </tr>
-                    <tr><td>hashedpasswd</td>
-                        <td>VARCHAR(48)</td>
-                        <td>パスワードのハッシュ値</td>
-                    </tr>
-                    <tr><td>email</td>
-                        <td>VARCHAR(48),</td>
-                        <td>電子メールアドレス。ユーザー名の代わりに使用したり、パスワードのリセットで利用</td>
-                    </tr>
-                    <tr><td>limitdt</td>
-                        <td>DateTime</td>
-                        <td>LDAP認証ユーザーのキャッシュの期限</td>
-                    </tr>
-                </table>
-            </div>
-            <p>ユーザの場合は、ユーザ名をキーフィールドに使えるとも考えられますが、大量のユーザになったときなどに処理速度を有利にするために、内部的にはidフィールドによる連番で与えた数値で処理をすることにします。なお、usernameを条件として検索をかけるので、高速化のためにはこのフィールドにインデックスを作成しておきます。パスワードはハッシュを保存しますが、ハッシュ値は、次の手順で計算をします。</p>
-            <ol><li>パスワード（pw）と、4バイトのソルト（s）を用意します。</li>
-                <li>パスワードとソルトをつなげた文字列のSHA-1を求めます（ sha1(pw+s) → H1）</li>
-                <li>H1の16進数表現した文字列と、ソルトを16進数表現した文字列をつなげます（hex(H1)+hex(s)→H2）</li>
-                <li>H2をフィールドに保存します。</li>
-            </ol>
-            <p>たとえば、OS Xにおいて、pw=user1、s=TESTとすると、以下のコマンドで「d83eefa0a9bd7190c94e7911688503737a99db0154455354」というハッシュ値の16進数表現を求めることができます。</p>
-            <div class="code"><pre><code>pw=user1
-salt=TEST
-h1=`/bin/echo -n "${pw}${salt}" | openssl sha1 -sha1`
-h2=`/bin/echo -n "${salt}" | xxd -ps`
-echo ${h1}${h2}</code>
-</pre>
-            </div>
-            <h3>グループを管理するテーブル</h3>
-            <p>グループそのものを管理するテーブルと、ユーザーやグループの特定のグループへの所属を記録するテーブルの2つがあります。</p>
-            <div class="table"><div class="caption">グループテーブル（既定名：authgroup）のフィールド</div>
-                <table><tr><th>フィールド名</th>
-                    <th>型の例</th>
-                    <th>説明</th>
-                </tr>
-                    <tr><td>id</td>
-                        <td>INT AUTO_INCREMENT,</td>
-                        <td>グループを識別するための番号</td>
-                    </tr>
-                    <tr><td>groupname</td>
-                        <td>VARCHAR(48),</td>
-                        <td>グループ名</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="table"><div class="caption">ユーザ・グループ対応付けテーブル（既定名：authcor）のフィールド</div>
-                <table><tr><th>フィールド名</th>
-                    <th>型の例</th>
-                    <th>説明</th>
-                </tr>
-                    <tr><td>user_id</td>
-                        <td>INT,</td>
-                        <td>所属するユーザのidフィールドの値</td>
-                    </tr>
-                    <tr><td>group_id</td>
-                        <td>INT,</td>
-                        <td>所属するグループのidフィールドの値</td>
-                    </tr>
-                    <tr><td>dest_group_id</td>
-                        <td>INT,</td>
-                        <td>所属されるグループのidフィールドの値</td>
-                    </tr>
-                </table>
-            </div>
-            <h2>アクセス権に関する設定の評価</h2>
-            <p>認証の設定は基本的にコンテキストに行いますが、IM_Entryの2番目の引数にも行えます。記述可能な内容については、『<a href="reference.html">定義ファイルでの記述方法</a>a>』を参照してください。つまり、2カ所の設定があるので、以下のように、コンテキストに設定する方を「コンテキストの認証設定」、2つ目の引数に設定するのを「オプションの認証設定」とします。また、いずれも、アクセス権の設定も行いますが、「認証とアクセス権」を合わせてここでは「認証」というネーミングをします。</p>
-            <div class="code"><pre><code>IM_Entry(
-	array(
-		array(
-			"name"=>"context",
-			"authentication"=>array(
-				/* コンテキストの認証設定 */
-			),
-		),
-	),
-	array(
-		"authentication"=>array(
-			/* オプションの認証設定 */
-		),
-...);</code>
-</pre>
-            </div>
-            <h3>コンテキストの認証設定なし、オプションの認証設定あり</h3>
-            <p>タイトル用な条件だと、コンテキストの認証設定のuserとgroupがアクセス権の設定に関係します。もし、userもgroupも設定されていない場合は、認証が通ったユーザは何でもできると考えてください。</p>
-            <p>userあるいはgroupが設定されている場合、認証が通ると同時に、そのユーザあるいはそのユーザを含むグループが、userあるいはgroupの設定に含まれている必要があります。</p>
-            <h3>コンテキストの認証設定あり、オプションの認証設定なし</h3>
-            <p>オプションの設定のうちuserとgroupの設定がないということです。この場合、特定のコンテキストのデータベース処理に対して、コンテキストの認証設定が適用されます。</p>
-            <h3>コンテキストの認証設定あり、オプションの認証設定あり</h3>
-            <p>両方の認証設定があれば、先にオプションの認証設定が評価されて、その後にコンテキストの認証設定が評価されます。</p>
-            <h3>コンテキストの認証設定の適用対象</h3>
-            <p>適用対象として、4つのデータベース処理、load/update/new/deleteに対する処理と、それらすべてに対してまとめて設定を行うallがあります。</p>
-            <h3>コンテキストの認証設定のtableとfleld</h3>
-            <p>"table"キーに対する値がfield-userあるいはfield-groupの場合は、そのテーブルにあるfieldに指定したフィールドに、ログインが成功したユーザあるいはそのユーザが含むグループの名前が設定されちているレコードだけに絞り込まれます。検索条件にANDでユーザないしはグループの値をfieldに指定したフィールドに対する条件を付け加えます。したがって、fieldで指定したフィールドのうち、空欄ものは認証すればいっさいアクセスできないということになります。</p>
-            <p>"table"キーに対する値がfield-useやfield-groupではない場合、アクセス権はすべてのテーブルに渡って適用されます。レコードごとのアクセス権を記録するフィールドは不要です。このとき、userあるいはgroup属性に含まれていないユーザで認証した場合、いっさいのアクセスはできないようになっています。オプションの認証設定と異なる動作ですので、注意してください。</p>
-            <p>load/update/deleteに関しては、アクセス権は「検索条件」として集約されます。一方、newの操作に対しては、アクセス権がある場合だけ、レコードの作成が可能です。レコードの作成により、fieldで指定したフィールドに、ユーザないしはグループが設定されます。ユーザの場合は1つに決まりますが、グループの場合は、グループ名を並べ替えたときのいちばん先頭のグループ名を記録するようにします。</p>
-            
-            <h2>ネイティブ認証、LDAP認証で使う鍵データ</h2>
-            <p>ネイティブ認証やLDAP認証では、クライアントで入力したパスワードを、サーバー側でも利用します。そのため、クライアントからサーバーにパスワードそのものを伝達しなければなりませんが、平文で流すことがないように、暗号化してクライアントからサーバーに送ります。そのために、RSAの鍵ペアを生成してサーバーに記録します。クライアントへは公開鍵だけが送られて、暗号にしたデータをサーバーに送ります。鍵ペアは例えば、「openssl rsagen -out gen.key 2048」のようなコマンドを入れてファイルをまず作ります。そして、その内容のテキストを、$params.phpファイルの変数$generatedPrivateKeyに代入します。INTER-Mediatorに含まれているparams.phpファイルで、該当する変数を探して、生成した鍵に置き換えてください。もし、鍵にパスワードが必要な場合には変数$passPhraseに記述できますが、このファイル自体はPHPが稼働していればクライアントから参照できないとはいえ、扱いには注意しましょう。</p>
-            
-            <h2>LDAP認証</h2>
-            <p>LDAPサーバに関する情報を、params.phpファイルに記述をします。以下はその例です。変数ldapServerはLDAPサーバのURL、ldapPortはポート番号です。そして、ユーザーのDN（Distinguished Name）を決定するために、3つの変数を指定します。たとえば、ユーザー名がmsykなら、Open Directoryの場合はDNは「uid=msyk,cn=users,dc=homeserver,dc=msyk,dc=net」となります。「msyk」の前はldapAccountKey、後はldapContainerとldapBaseで指定した記述がつなげられて、DNを構成しています。ldapExpiringSecondsは、1回のLDAP認証後、指定した時間はLDAPサーバではなく、ネイティブ認証のためのテーブルにキャッシュした情報で認証します。これはパフォーマンスを高めるためです。最後に認証してから、変数ldapExpiringSeconds以上の時間が経過すると、改めてLDAPサーバに接続して認証を行います。</p>
-<div class="code"><pre><code>$ldapServer = "ldap://homeserver.msyk.net";
-$ldapPort = 389;
-$ldapBase = "dc=homeserver,dc=msyk,dc=net";
-$ldapContainer = "cn=users";
-$ldapAccountKey = "uid";
-$ldapExpiringSeconds = 1800;</code></pre></div>
-
         </section>
     </article>
 </body>

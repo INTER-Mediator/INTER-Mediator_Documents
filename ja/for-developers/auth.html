@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   Copyright (c) 2010-2015 INTER-Mediator Directive Committee, All rights reserved.
+ *
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザー認証とアクセス権 - Product Manual - INTER-Mediator</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
+    <link rel="icon" href="../images/im-icon.png" type="image/png">
+    <script src="../../lib/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1>ユーザー認証とアクセス権</h1>
+        </div>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+                <section><h1>ユーザ認証とアクセス権の動作について</h1>
+            <p>ユーザ認証とアクセス権の設定をサポートします。INTER-Mediator自身がデータベースを利用して、ユーザーやグループを管理する手法を「ビルトイン認証」、データベースエンジン側に登録したユーザーを利用する認証を「ネイティブ認証」、LDAPサーバのユーザーを利用した認証を「LDAP認証」と呼びます。</p>
+            <h2>認証動作に必要なテーブル</h2>
+            <h3>チャレンジ等を記録するテーブル</h3>
+            <p>ユーザ認証ではセキュリティを高めるために、サーバーからクライアントに「チャレンジ」を送り、その値を利用して認証情報を作ります。そのため、サーバー側にチャレンジを残しておく必要があり、テーブルの定義が必要です。そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで読み書きの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（issuedhash）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
+            <div class="table"><div class="caption">チャレンジのテーブルに必要なフィールド</div>
+                <table><tr><th>フィールド名</th>
+                    <th>型の例</th>
+                    <th>説明</th>
+                </tr>
+                    <tr><td>user_id</td>
+                        <td>INT,</td>
+                        <td>ユーザテーブルのキーフィールドとなるid値（ユーザをデータベース内のテーブルで管理する場合に利用）</td>
+                    </tr>
+                    <tr><td>username</td>
+                        <td>VARCHAR(48),</td>
+                        <td>ユーザテーブルのキーフィールドとなるid値（ユーザをデータベースエンジンが提供するもので運用する場合に利用）</td>
+                    </tr>
+                    <tr><td>clienthost</td>
+                        <td>VARCHAR(48),</td>
+                        <td>クライアントを識別するもの。Ver.1.0.5の実装では、クライアントのIPアドレスのみを記録している</td>
+                    </tr>
+                    <tr><td>hash</td>
+                        <td>VARCHAR(48),</td>
+                        <td>チャレンジに使うハッシュ値。実際には24バイトの16進数文字列。</td>
+                    </tr>
+                    <tr><td>expired</td>
+                        <td>DateTime,</td>
+                        <td>チャレンジの有効期限を示すタイムスタンプ値</td>
+                    </tr>
+                </table>
+            </div>
+            <p>なお、このテーブルへの検索では、user_idとclienthostあるいはusernameとclienthostの2つのフィールドに対してAND演算での検索条件が与えられます。従って、高速化するためには、この2つのフィールドを合成したインデックスを作っておくなどの措置をとる事ができます。</p>
+            <h3>ユーザーのテーブル</h3>
+            <p>認証のためのユーザは、データベース内にテーブルを作成する方法と、データベースエンジンが管理するユーザによる方法を利用できます。データベース内にテーブルを作る場合、そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで少なくとも読み出しの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（authuser）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
+            <div class="table"><div class="caption">ユーザテーブルに必要なフィールド</div>
+                <table><tr><th>フィールド名</th>
+                    <th>型の例</th>
+                    <th>説明</th>
+                </tr>
+                    <tr><td>id</td>
+                        <td>INT AUTO_INCREMENT,</td>
+                        <td>連番の数値を入れて、キーフィールドとする</td>
+                    </tr>
+                    <tr><td>username</td>
+                        <td>VARCHAR(48)</td>
+                        <td>ユーザ名（特に制限はないが、重複した名前が定義されないようにするのが望ましい）</td>
+                    </tr>
+                    <tr><td>hashedpasswd</td>
+                        <td>VARCHAR(48)</td>
+                        <td>パスワードのハッシュ値</td>
+                    </tr>
+                    <tr><td>email</td>
+                        <td>VARCHAR(48),</td>
+                        <td>電子メールアドレス。ユーザー名の代わりに使用したり、パスワードのリセットで利用</td>
+                    </tr>
+                    <tr><td>limitdt</td>
+                        <td>DateTime</td>
+                        <td>LDAP認証ユーザーのキャッシュの期限</td>
+                    </tr>
+                </table>
+            </div>
+            <p>ユーザの場合は、ユーザ名をキーフィールドに使えるとも考えられますが、大量のユーザになったときなどに処理速度を有利にするために、内部的にはidフィールドによる連番で与えた数値で処理をすることにします。なお、usernameを条件として検索をかけるので、高速化のためにはこのフィールドにインデックスを作成しておきます。パスワードはハッシュを保存しますが、ハッシュ値は、次の手順で計算をします。</p>
+            <ol><li>パスワード（pw）と、4バイトのソルト（s）を用意します。</li>
+                <li>パスワードとソルトをつなげた文字列のSHA-1を求めます（ sha1(pw+s) → H1）</li>
+                <li>H1の16進数表現した文字列と、ソルトを16進数表現した文字列をつなげます（hex(H1)+hex(s)→H2）</li>
+                <li>H2をフィールドに保存します。</li>
+            </ol>
+            <p>たとえば、OS Xにおいて、pw=user1、s=TESTとすると、以下のコマンドで「d83eefa0a9bd7190c94e7911688503737a99db0154455354」というハッシュ値の16進数表現を求めることができます。</p>
+            <div class="code"><pre><code>pw=user1
+salt=TEST
+h1=`/bin/echo -n "${pw}${salt}" | openssl sha1 -sha1`
+h2=`/bin/echo -n "${salt}" | xxd -ps`
+echo ${h1}${h2}</code>
+</pre>
+            </div>
+            <h3>グループを管理するテーブル</h3>
+            <p>グループそのものを管理するテーブルと、ユーザーやグループの特定のグループへの所属を記録するテーブルの2つがあります。</p>
+            <div class="table"><div class="caption">グループテーブル（既定名：authgroup）のフィールド</div>
+                <table><tr><th>フィールド名</th>
+                    <th>型の例</th>
+                    <th>説明</th>
+                </tr>
+                    <tr><td>id</td>
+                        <td>INT AUTO_INCREMENT,</td>
+                        <td>グループを識別するための番号</td>
+                    </tr>
+                    <tr><td>groupname</td>
+                        <td>VARCHAR(48),</td>
+                        <td>グループ名</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="table"><div class="caption">ユーザ・グループ対応付けテーブル（既定名：authcor）のフィールド</div>
+                <table><tr><th>フィールド名</th>
+                    <th>型の例</th>
+                    <th>説明</th>
+                </tr>
+                    <tr><td>user_id</td>
+                        <td>INT,</td>
+                        <td>所属するユーザのidフィールドの値</td>
+                    </tr>
+                    <tr><td>group_id</td>
+                        <td>INT,</td>
+                        <td>所属するグループのidフィールドの値</td>
+                    </tr>
+                    <tr><td>dest_group_id</td>
+                        <td>INT,</td>
+                        <td>所属されるグループのidフィールドの値</td>
+                    </tr>
+                </table>
+            </div>
+            <h2>アクセス権に関する設定の評価</h2>
+            <p>認証の設定は基本的にコンテキストに行いますが、IM_Entryの2番目の引数にも行えます。記述可能な内容については、『<a href="reference.html">定義ファイルでの記述方法</a>a>』を参照してください。つまり、2カ所の設定があるので、以下のように、コンテキストに設定する方を「コンテキストの認証設定」、2つ目の引数に設定するのを「オプションの認証設定」とします。また、いずれも、アクセス権の設定も行いますが、「認証とアクセス権」を合わせてここでは「認証」というネーミングをします。</p>
+            <div class="code"><pre><code>IM_Entry(
+	array(
+		array(
+			"name"=>"context",
+			"authentication"=>array(
+				/* コンテキストの認証設定 */
+			),
+		),
+	),
+	array(
+		"authentication"=>array(
+			/* オプションの認証設定 */
+		),
+...);</code>
+</pre>
+            </div>
+            <h3>コンテキストの認証設定なし、オプションの認証設定あり</h3>
+            <p>タイトル用な条件だと、コンテキストの認証設定のuserとgroupがアクセス権の設定に関係します。もし、userもgroupも設定されていない場合は、認証が通ったユーザは何でもできると考えてください。</p>
+            <p>userあるいはgroupが設定されている場合、認証が通ると同時に、そのユーザあるいはそのユーザを含むグループが、userあるいはgroupの設定に含まれている必要があります。</p>
+            <h3>コンテキストの認証設定あり、オプションの認証設定なし</h3>
+            <p>オプションの設定のうちuserとgroupの設定がないということです。この場合、特定のコンテキストのデータベース処理に対して、コンテキストの認証設定が適用されます。</p>
+            <h3>コンテキストの認証設定あり、オプションの認証設定あり</h3>
+            <p>両方の認証設定があれば、先にオプションの認証設定が評価されて、その後にコンテキストの認証設定が評価されます。</p>
+            <h3>コンテキストの認証設定の適用対象</h3>
+            <p>適用対象として、4つのデータベース処理、load/update/new/deleteに対する処理と、それらすべてに対してまとめて設定を行うallがあります。</p>
+            <h3>コンテキストの認証設定のtableとfleld</h3>
+            <p>"table"キーに対する値がfield-userあるいはfield-groupの場合は、そのテーブルにあるfieldに指定したフィールドに、ログインが成功したユーザあるいはそのユーザが含むグループの名前が設定されちているレコードだけに絞り込まれます。検索条件にANDでユーザないしはグループの値をfieldに指定したフィールドに対する条件を付け加えます。したがって、fieldで指定したフィールドのうち、空欄ものは認証すればいっさいアクセスできないということになります。</p>
+            <p>"table"キーに対する値がfield-useやfield-groupではない場合、アクセス権はすべてのテーブルに渡って適用されます。レコードごとのアクセス権を記録するフィールドは不要です。このとき、userあるいはgroup属性に含まれていないユーザで認証した場合、いっさいのアクセスはできないようになっています。オプションの認証設定と異なる動作ですので、注意してください。</p>
+            <p>load/update/deleteに関しては、アクセス権は「検索条件」として集約されます。一方、newの操作に対しては、アクセス権がある場合だけ、レコードの作成が可能です。レコードの作成により、fieldで指定したフィールドに、ユーザないしはグループが設定されます。ユーザの場合は1つに決まりますが、グループの場合は、グループ名を並べ替えたときのいちばん先頭のグループ名を記録するようにします。</p>
+            
+            <h2>ネイティブ認証、LDAP認証で使う鍵データ</h2>
+            <p>ネイティブ認証やLDAP認証では、クライアントで入力したパスワードを、サーバー側でも利用します。そのため、クライアントからサーバーにパスワードそのものを伝達しなければなりませんが、平文で流すことがないように、暗号化してクライアントからサーバーに送ります。そのために、RSAの鍵ペアを生成してサーバーに記録します。クライアントへは公開鍵だけが送られて、暗号にしたデータをサーバーに送ります。鍵ペアは例えば、「openssl rsagen -out gen.key 2048」のようなコマンドを入れてファイルをまず作ります。そして、その内容のテキストを、$params.phpファイルの変数$generatedPrivateKeyに代入します。INTER-Mediatorに含まれているparams.phpファイルで、該当する変数を探して、生成した鍵に置き換えてください。もし、鍵にパスワードが必要な場合には変数$passPhraseに記述できますが、このファイル自体はPHPが稼働していればクライアントから参照できないとはいえ、扱いには注意しましょう。</p>
+            
+            <h2>LDAP認証</h2>
+            <p>LDAPサーバに関する情報を、params.phpファイルに記述をします。以下はその例です。変数ldapServerはLDAPサーバのURL、ldapPortはポート番号です。そして、ユーザーのDN（Distinguished Name）を決定するために、3つの変数を指定します。たとえば、ユーザー名がmsykなら、Open Directoryの場合はDNは「uid=msyk,cn=users,dc=homeserver,dc=msyk,dc=net」となります。「msyk」の前はldapAccountKey、後はldapContainerとldapBaseで指定した記述がつなげられて、DNを構成しています。ldapExpiringSecondsは、1回のLDAP認証後、指定した時間はLDAPサーバではなく、ネイティブ認証のためのテーブルにキャッシュした情報で認証します。これはパフォーマンスを高めるためです。最後に認証してから、変数ldapExpiringSeconds以上の時間が経過すると、改めてLDAPサーバに接続して認証を行います。</p>
+<div class="code"><pre><code>$ldapServer = "ldap://homeserver.msyk.net";
+$ldapPort = 389;
+$ldapBase = "dc=homeserver,dc=msyk,dc=net";
+$ldapContainer = "cn=users";
+$ldapAccountKey = "uid";
+$ldapExpiringSeconds = 1800;</code></pre></div>
+
+        </section>
+</artile>
+    </div>
+</body>
+
+</html>
