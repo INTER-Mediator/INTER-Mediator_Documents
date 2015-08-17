@@ -295,19 +295,27 @@ INTERMediator.additionalSortKey = sortKeys;</code></pre>
 
                 <h1>コンテキストオブジェクト</h1>
                 <p>IMLibContextクラスのオブジェクトに対するメソッドは以下の通りです。通常は、new IMLibContext(contextName)で生成された結果を使っています。《IMLibContext》は、IMLibContextクラスのインスタンスを示します。</p>
+			<h2>コンテキストごとに生成されるオブジェクト</h2>
                 <h4>《IMLibContext》.contextName</h4>
                 <p>コンテキスト名</p>
                 <h4>《IMLibContext》.enclosureNode</h4>
                 <p>エンクロージャーの要素への参照</p>
+                <h4>《IMLibContext》.store</h4>
+                <p>コンテキストが保持するデータベースの値。このオブジェクトのプロパティは、keyフィールードが「id」とすれば、id=3、id=420のように、「主キーフィールド名=値」の文字列。その文字列のプロパティはさらにオブジェクトとなっていて、そのオブジェクトのプロパティはフィールド名。そのフィールド名のプロパティに対する値がデータベースに記録された値。FileMaker Serverで、relationキーのportalがtrueの場合、その値がさらにオブジェクトとなっており、プロパティはリレーションシップの関連キーの値である。なお、この値は更新しても、データベースへの更新は自動的には行われない。</p>
                 <h4>《IMLibContext》.setValue(recKey, key, value, nodeId, target)</h4>
                 <p>コンテキストに値valueを設定する。キーとしてはrecKey（id=34、つまり主キーとイコール、その値を合成した文字列）およびkey（フィールド名）を指定する。最初は要素のid属性値nodeIdを伴ってい指定され、id属性値とターゲット指定targetで決定されるページ内のノードと、データベースの値の対応関係を記録する。nodeIdを省略すると、値を保存すると同時に、他のコンテキストの同じテーブルの同じレコードの同じフィールドとバインドしている値も更新し、要素に表示する値も更新する。</p>
                 <h4>《IMLibContext》.getValue(recKey, key)</h4>
-                <p>2種類のキーを指定して値を取り出す</p>
+                <p>2種類のキーを指定して値を取り出す。最初のキーは、「主キーフィールド名=値」の文字列、次のキーはフィールド名。つまり、storeプロパティへのアクセッサーメソッド。</p>
                 <h4>《IMLibContext》.getContextInfo(nodeId, target)</h4>
                 <p>要素のid属性値とターゲットから、コンテキスト情報（{context: this, record: recKey, field: key}形式のオブジェクト）を得る。コンテキスト名とフィールド名だけのターゲットの場合は、"" を指定する</p>
                 <h4>《IMLibContext》.getContextValue(nodeId, target)</h4>
                 <p>要素のid属性値とターゲットから、コンテキストでの値を得る</p>
-                <h4>IMLibContextPool.poolingContexts</h4>
+                <h4>《IMLibContext》.setDataAtLastRecord(key, value)</h4>
+                <p>コンテキストの最後のレコードのkeyで指定したフィールドに、valueの値を設定し、データベースへの更新を行う。</p>
+                <h4>《IMLibContext》.setDataWithKey(pkValue, key, value)</h4>
+                <p>コンテキストにあるレコードをpkValueで指定して、そのレコードにあるkeyで指定したフィールドに、valueの値を設定し、データベースへの更新を行う。レコードの指定は「主キーフィールド名=値」の文字列。</p>
+ 			<h2>コンテキストを管理するIMLibContextPool</h2>
+               <h4>IMLibContextPool.poolingContexts</h4>
                 <p>IMLibContextPoolは複数のコンテキストを管理するオブジェクト。このプロパティは配列で、管理しているそれぞれのIMLibContextクラスのオブジェクトが要素として記録されている</p>
                 <h4>IMLibContextPool.getContextInfoFromId(idValue, target)</h4>
                 <p>要素のid属性値とターゲットから、コンテキスト情報（{context: this, record: recKey, field: key}形式のオブジェクト）を得る。コンテキストをまたいで検索する</p>
@@ -317,11 +325,10 @@ INTERMediator.additionalSortKey = sortKeys;</code></pre>
                 <p>指定したid属性を持つ要素がエンクロージャーのコンテキストオブジェクトを返す</p>
                 <h4>IMLibContextPool.contextFromName(cName)</h4>
                 <p>コンテキスト名からコンテキストを返すが、最初のコンテキストオブジェクトのみが返される</p>
-
+                <h4>IMLibContextPool.getContextFromName(cName)</h4>
+                <p>コンテキスト名からコンテキストを返すが、引数のコンテキスト名を持つすべてのコンテキストオブジェクトを含む配列が返される</p>
             </section>
-
             <section>
-
                 <h1>イベント対応</h1>
                 <h4>IMLibMouseEventDispatch.setExecute(idValue, exec)</h4>
                 <p>指定したid属性値の要素に対してclickイベントが発生したときにexecに指定した関数が実行されるようにする</p>
