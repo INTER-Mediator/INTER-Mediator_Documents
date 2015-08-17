@@ -68,49 +68,26 @@
 
                 <h4>INTERMediatorOnPage.doAfterConstruct = function() { }</h4>
                 <p>ページの合成処理が終わったときに呼び出す関数を指定します。引数のない関数を代入します。INTERMediator.construct(true)でページ合成を行いますが、非同期に処理を進めるため、このステートメントの次に書かれた命令は、通常は合成途中に実行されるなど、少なくともページを作り終える前になってしまいます。ページができていないと取得できないような情報もあるので、このようなコールバックの仕組みを用意してあります。</p>
-
-            </section>
-
-            <section>
-
-                <h1>検索条件やソート条件の追加</h1>
-
-                <h4>INTERMediator.additionalCondition = ....</h4>
-                <p>コンテキストに従ってデータベースのクエリを行うとき、ここで指定した検索条件が、他の条件に対してAND条件で追加される第1引数がコンテキストのname属性値、その後にオブジェクトないしはオブジェクトの配列を指定するが、オブジェクトはfield、operator、valueのプロパティを指定し、それぞれフィールド名、演算子、値を指定する。プロパティのセッタを稼働させるために、プロパティそのものへの代入を行う必要がある。</p>
-                <div class="code"><pre><code>var conditions = INTERMediator.additionalCondition;
-conditions['tableName'] = {field:xxx,operator:xxx,value:xxxx};
-INTERMediator.additionalCondition = conditions;
-
-var conditions = INTERMediator.additionalCondition;
-conditions['tableName']= [
-    {field:xxx,operator:xxx,value:xxxx},
-    {field:xxx,operator:xxx,value:xxxx}
-];
-INTERMediator.additionalCondition = conditions;</code></pre>
-                </div>
-
-                <h4>INTERMediator.additionalCondition = ....</h4>
-                <p>コンテキストに従ってデータベースのクエリを行うとき、ここで指定したソート条件が設定される。コンテキストのソート条件より高い優先順になっている。プロパティのセッタを稼働させるために、プロパティそのものへの代入を行う必要がある。</p>
-                <div class="code"><pre><code>var sortKeys = INTERMediator.additionalSortKey;
-sortKeys['tableName'] = {field:xxx,direction:xxxx};
-INTERMediator.additionalSortKey = sortKeys;
-
-var sortKeys = INTERMediator.additionalSortKey;
-INTERMediator.additionalSortKey['tableName'] = [
-    {field:xxx,direction:xxxx},
-    {field:xxx,direction:xxxx}
-];
-INTERMediator.additionalSortKey = sortKeys;</code></pre>
-                </div>
-
-            </section>
-
-            <section>
-
-                <h1>ページ合成処理に割り込む処理の記述</h1>
-
-                <h4>INTERMediatorOnPage.expandingEnclosureFinish (name,target) </h4>
-                <h4>INTERMediatorOnPage.《コンテキストで指定した名前》 (target) </h4>
+</section>
+<section>
+<h1>検索条件やソート条件の追加</h1>
+<h4>INTERMediator.addCondition(contextName, {field:xxx,operator:xxx,value:xxxx})</h4>
+<p>コンテキストに従ってデータベースのクエリを行うとき、ここで指定した検索条件が、他の条件に対してAND条件で追加される。引数contextNameにはコンテキスト名を指定する。第2引数は条件を示すオブジェクトを指定する。このオブジェクトではfield、operator、valueのプロパティを指定し、それぞれフィールド名、演算子、値を指定する。複数の条件を追加する場合には、このメソッドを繰り返し呼べば良い。additionalConditionプロパティはセッター／ゲッターで実装しているため、内部のオブジェクトへの追加はこのAPIを使うようにする。</p>
+<h4>INTERMediator.clearCondition(contextName)</h4>
+<p>検索条件に追加される設定を、引数に指定したコンテキスト名のものついて初期化して、指定なしにする。</p>
+<h4>INTERMediator.additionalCondition = {};</h4>
+<p>すべての検索条件に追加される設定を消す。</p>
+<h4>INTERMediator.addSortKey(contextName, {field:xxx,direction:xxxx})</h4>
+<p>コンテキストに従ってデータベースのクエリを行うとき、ここで指定したソート条件が設定される。コンテキストのソート条件より高い優先順になっている。引数contextNameにはコンテキスト名を指定する。第2引数はそーと条件を示すオブジェクトを指定する。このオブジェクトではfield、directionのプロパティを指定し、それぞれフィールド名、昇順か降順かをASCないしはDESCを指定する。複数の条件を追加する場合には、このメソッドを繰り返し呼べばよく、先に指定した方が優先順位が高い。</p>
+<h4>INTERMediator.clearSortKey(contextName)</h4>
+<p>ソート条件に追加される設定を、引数に指定したコンテキスト名のものついて初期化して、指定なしにする。</p>
+<h4>INTERMediator.additionalSortKey = {};</h4>
+<p>すべてのソート条件に追加される設定を消す。</p>
+</section>
+<section>
+<h1>ページ合成処理に割り込む処理の記述</h1>
+<h4>INTERMediatorOnPage.expandingEnclosureFinish (name,target) </h4>
+<h4>INTERMediatorOnPage.《コンテキストで指定した名前》 (target) </h4>
                 <ul>
                     <li>引数：name：展開が終わった箇所で利用した定義ファイルのコンテキストのname属性の値</li>
                     <li>引数：target：展開が終わったエンクロージャのノード</li>
