@@ -83,6 +83,8 @@
 <p>ソート条件に追加される設定を、引数に指定したコンテキスト名のものついて初期化して、指定なしにする。</p>
 <h4>INTERMediator.additionalSortKey = {};</h4>
 <p>すべてのソート条件に追加される設定を消す。</p>
+<h4>INTERMediator.additionalFieldValueOnNewRecord</h4>
+<p>新規レコードを作った時のフィールドの既定値を、JavaScript上で追加定義する。INTERMediator.additionalFieldValueOnNewRecord["コンテキスト名"] = [{field: フィールド名, value: 値}, ...] の形式で利用する。</p>
 </section>
 <section>
 <h1>ページ合成処理に割り込む処理の記述</h1>
@@ -125,24 +127,24 @@
                 <h1>特定のターゲット指定を持つノードの検索</h1>
                 <h4>INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(fromNode, imDefinition)</h4>
                 <ul>
-                    <li>引数：fromNode：基準となるノードで、このノードより下位のノードを検索する</li>
+                    <li>引数：fromNode：基準となるノードで、このノードより下位のノードを検索する。ノードの配列でもOK</li>
                     <li>引数：imDefinition：ターゲット指定。例えば、「&lt;input type="text" class="IM[item@unitprice]" /&gt;」については、引数に "item@unitprice" を指定する
                     </li>
-                    <li>返り値：ノードのid属性を示す文字列の配列</li>
+                    <li>返り値：ノードのid属性を示す文字列の配列。ノードが発見された場合でid属性がない場合は、そのノードへの参照</li>
                 </ul>
                 <h4>INTERMediatorOnPage.getNodeIdsHavingTargetFromRepeater(fromNode, imDefinition)</h4>
                 <ul>
                     <li>引数：fromNode：基準となるノードで、このノードより上位のノードを検索し最初に見つかったリピータよりも下位のノードを検索する</li>
                     <li>引数：imDefinition：ターゲット指定。例えば、「&lt;input type="text" class="IM[item@unitprice]" /&gt;」については、引数に "item@unitprice" を指定する
                     </li>
-                    <li>返り値：ノードのid属性を示す文字列の配列</li>
+                    <li>返り値：ノードのid属性を示す文字列の配列。ノードが発見された場合でid属性がない場合は、そのノードへの参照</li>
                 </ul>
                 <h4>INTERMediatorOnPage.getNodeIdsHavingTargetFromEnclosure(fromNode, imDefinition)</h4>
                 <ul>
                     <li>引数：fromNode：基準となるノードで、このノードより上位のノードを検索し最初に見つかったエンクロージャよりも下位のノードを検索する</li>
                     <li>引数：imDefinition：ターゲット指定。例えば、「&lt;input type="text" class="IM[item@unitprice]" /&gt;」については、引数に "item@unitprice" を指定する
                     </li>
-                    <li>返り値：ノードのid属性を示す文字列の配列</li>
+                    <li>返り値：ノードのid属性を示す文字列の配列。ノードが発見された場合でid属性がない場合は、そのノードへの参照</li>
                 </ul>
 
             </section>
@@ -159,9 +161,9 @@
 
                 <h1>Post Onlyモードでのメソッド</h1>
                 <h4>INTERMediatorOnPage.processingBeforePostOnlyContext = function(targetNode) {}</h4>
-                <p>バリデーションが完了し、データベースへの書き込み前に呼び出される。falseを返すとデータベースの書き込み処理はキャンセルされる。</p>
-                <h4>INTERMediatorOnPage.doAfterValidationFailure = function(node) {}</h4>
-                <p>バリデーションのエラーが検知される度に呼び出される。引数nodeにはエラーのある要素への参照が設定される。</p>
+                <p>バリデーションが完了し、データベースへの書き込み前に呼び出される。falseを返すとデータベースの書き込み処理はキャンセルされる。引数targetにはPost Onlyモードのエンクロージャーへの参照が設定される。</p>
+                <h4>INTERMediatorOnPage.processingAfterPostOnlyContext = function(targetNode, idValue) {}</h4>
+                <p>新規レコードを作成した直後に呼び出される。引数targetにはPost Onlyモードのエンクロージャーへの参照が設定される。引数idValueは新たに作成されたレコードの主キー値が設定される。設定されていない場合は、レコード作成ができなかったことを示す。</p>
 
             </section>
 
@@ -177,11 +179,17 @@
 
             <section>
 
-                <h1>日付自国のデータから文字列を生成</h1>
+                <h1>日付時刻のデータから文字列を生成</h1>
                 <h4>INTERMediatorLib.dateTimeStringISO( dt );</h4>
                 <p>引数のDateクラスの値を、ISO8601形式（2015-06-21 00:00:00）に変換する。引数を省略すると、現在の日付を得る。日時はブラウザのローカル時刻。</p>
                 <h4>INTERMediatorLib.dateTimeStringFileMaker( dt );</h4>
                 <p>引数のDateクラスの値を、FileMaker Serverが受け付ける形式（06/21/2015 00:00:00）に変換する。引数を省略すると、現在の日付を得る。日時はブラウザのローカル時刻。</p>
+                <h4>INTERMediatorLib.dateStringISO( dt );</h4>
+                <p>引数のDateクラスの値を、ISO8601形式（2015-06-21）に変換する。引数を省略すると、現在の日付を得る。日付はブラウザのローカル時刻。</p>
+                <h4>INTERMediatorLib.dateStringFileMaker( dt );</h4>
+                <p>引数のDateクラスの値を、FileMaker Serverが受け付ける形式（06/21/2015）に変換する。引数を省略すると、現在の日付を得る。日付はブラウザのローカル時刻。</p>
+                <h4>INTERMediatorLib.timeString( dt );</h4>
+                <p>引数のDateクラスの値を、時刻の形式（12:34:56）に変換する。引数を省略すると、現在の時刻を得る。時刻はブラウザのローカル時刻。</p>
 
             </section>
 
@@ -277,6 +285,8 @@
                 <p>コンテキスト名</p>
                 <h4>《IMLibContext》.enclosureNode</h4>
                 <p>エンクロージャーの要素への参照</p>
+                <h4>《IMLibContext》.repeaterNodes</h4>
+                <p>リピーターの初期状態で、ドキュメントツリー外に複製して取ってあるもの。値はノードの配列。</p>
                 <h4>《IMLibContext》.store</h4>
                 <p>コンテキストが保持するデータベースの値。このオブジェクトのプロパティは、keyフィールードが「id」とすれば、id=3、id=420のように、「主キーフィールド名=値」の文字列。その文字列のプロパティはさらにオブジェクトとなっていて、そのオブジェクトのプロパティはフィールド名。そのフィールド名のプロパティに対する値がデータベースに記録された値。FileMaker Serverで、relationキーのportalがtrueの場合、その値がさらにオブジェクトとなっており、プロパティはリレーションシップの関連キーの値である。なお、この値は更新しても、データベースへの更新は自動的には行われない。</p>
                 <h4>《IMLibContext》.setValue(recKey, key, value, nodeId, target)</h4>

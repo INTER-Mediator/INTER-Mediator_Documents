@@ -686,13 +686,13 @@ Relationship:
 table: chat
 view: chat
 key: id
+post-reconstruct: true
+post-dismiss-message: 投稿しました
 query: 
     [field: groupname , operator: IS NULL, value:]　// ←[MySQL]の場合
     [field: groupname, operator: eq, value: =]  // ←[FileMaker Server]の場合
 sorting:
     [field: postdt, direction: desc]
-post-reconstruct: true
-post-dismiss-message: 投稿しました
 validation: 
     [field: user, rule: value !=  '', message: 入力してください。]
     [field: message, rule: value !=  '', message: 入力してください。]
@@ -701,11 +701,11 @@ name:comment
 table: chat
 view: chat
 key: id
+post-reconstruct: true
+post-dismiss-message: 投稿しました
 relationship:
     [foreign-key: groupname, join-field: id, operator: =]　// ←[MySQL]の場合
     [foreign-key: groupname, join-field: id, operator: eq]　// ←[FileMaker Server]の場合
-post-reconstruct: true
-post-dismiss-message: 投稿しました
 sorting:
     [field: postdt, direction: desc]
 validation: 
