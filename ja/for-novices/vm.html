@@ -121,18 +121,18 @@
 
                 <h3>INTER-Mediatorをアップデートする</h3>
                 <p>ホストマシン上で、sshにより「192.168.56.101」に接続してください。ユーザー名は「developer」、パスワードは「im4135dev」です。例えば、OS Xの場合は「ターミナル」アプリケーションで、「ssh developer@192.168.56.101」とコマンドを入れて、パスワードがその後にたずねられるので、キータイプをします。Windowsの場合は、TeraTermやPuTTY等のアプリケーションをご利用ください。</p>
-                <p>INTER-Mediator Ver.5.2以降のINTER-Mediator-Server VMの場合、以下のようにコマンドを入力します。</p>
+                <p>INTER-Mediator Ver.5.2（Ver.5.2-RC3を含む）以降のINTER-Mediator-Server VMの場合、以下のようにコマンドを入力します。</p>
                 <div class="code">
 <pre><code>cd /var/www/html/INTER-Mediator
-git pull origin master</code></pre>
+git pull origin stable</code></pre>
 </div>
                 <p>INTER-Mediator Ver.5.2-RC1およびそれ以前のINTER-Mediator-Server VMの場合、以下のようにコマンドを入力します。checkoutの後にスペースとドット（git checkout .）を入れるのを忘れないようにして下さい。</p>
                 <div class="code">
 <pre><code>cd /var/www/html/INTER-Mediator
 git checkout .
-git pull origin master</code></pre>
+git pull origin stable</code></pre>
 </div>
-				<p>現状のレポジトリの最新状況が、VMに反映されます。現在のバージョンは、INTER-Mediator以下、dist-docs/build.shというスクリプトの最初の方のバージョン記述を確認してください。反映されている最終的なコミットは、git logやgit showコマンドで、現在のcommitの識別子（16進数の非常に長いコードで、commitの後に続けて記述されている）を得て、GitHubのレポジトリで探してください。なお、Ver.5.1以前の場合は、アクセス権の設定が若干違います。もともと用意されているページファイルと定義ファイルの編集には問題がありませんが、自分でファイルを追加したような場合などは、アクセス権について見直してください。</p>
+				<p>GitHubのリポジトリにあるINTER-Mediatorの最新安定版がVMに反映されます。なお、開発版の最新状況を反映させる場合には「git pull origin stable」の代わりに「git pull origin master」を実行します。現在のバージョンは、INTER-Mediator以下、dist-docs/build.shというスクリプトの最初の方のバージョン記述を確認してください。反映されている最終的なコミットは、git logやgit showコマンドで、現在のcommitの識別子（16進数の非常に長いコードで、commitの後に続けて記述されている）を得て、GitHubのリポジトリで探してください。なお、Ver.5.1以前の場合は、アクセス権の設定が若干違います。もともと用意されているページファイルと定義ファイルの編集には問題がありませんが、自分でファイルを追加したような場合などは、アクセス権について見直してください。</p>
             </section>
             <section>
                 <h1>（参考）VMを自分で作成して起動する</h1>
