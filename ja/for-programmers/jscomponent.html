@@ -52,7 +52,9 @@
                 <h3>単一のコンテキストとバインドしたファイルアップロード</h3>
                 <p>ファイルのドラッグ&amp;ドロップによるアップロード機能は、JavaScriptのドラッグ&amp;ドロップの機能などを利用して実装しています。シンプルな利用方法は、ファイルのドラッグを受け付けたい箇所に、以下のように記述します。JavaScriptのプログラムはINTER-Mediatorに含まれているので、定義ファイルをscriptタブで読み込むだけで基本的には利用できます。</p>
 
-                <span data-im="testtable@vc1" data-im-widget="fileupload"></span>
+                <div class="code">
+                    <pre><code>&lt;span data-im="testtable@vc1" data-im-widget="fileupload"&gt;&lt;/span&gt;</code></pre>
+                </div>
 
                 <p>単にドラッグ&amp;ドロップしてファイルをサーバーにアップロードするだけということは通常はなく、そのファイルをどこかに記録し、さらにパスなどを記録しておくことになるはずです。前述の例では、testtableというコンテキストのvc1フィールドに、ファイルのパスを記述します。実際にアップロードしたファイルが置かれるディレクトリは、IM_Entryの第2引数（オプション指定）で、'media-root-dir'キーでパスを指定します。</p>
 
