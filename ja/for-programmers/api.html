@@ -296,7 +296,7 @@
                 <h4>《IMLibContext》.setValue(recKey, key, value, nodeId, target)</h4>
                 <p>コンテキストに値valueを設定する。キーとしてはrecKey（id=34、つまり主キーとイコール、その値を合成した文字列）およびkey（フィールド名）を指定する。最初は要素のid属性値nodeIdを伴ってい指定され、id属性値とターゲット指定targetで決定されるページ内のノードと、データベースの値の対応関係を記録する。nodeIdを省略すると、値を保存すると同時に、他のコンテキストの同じテーブルの同じレコードの同じフィールドとバインドしている値も更新し、要素に表示する値も更新する。</p>
                 <h4>《IMLibContext》.getValue(recKey, key)</h4>
-                <p>2種類のキーを指定して値を取り出す。最初のキーは、「主キーフィールド名=値」の文字列、次のキーはフィールド名。つまり、storeプロパティへのアクセッサーメソッド。</p>
+                <p>2種類のキーを指定して値を取り出す。最初のキーは、「主キーフィールド名=値」の文字列、次のキーはフィールド名。つまり、storeプロパティへのアクセッサーメソッド。なお、keyに "_im_buttom_master_id" を指定すると、「詳細」ボタンの要素に設定されているid属性値を得られるので、プログラムでクリック操作をしたい時には利用できる。</p>
                 <h4>《IMLibContext》.getContextInfo(nodeId, target)</h4>
                 <p>要素のid属性値とターゲットから、コンテキスト情報（{context: this, record: recKey, field: key}形式のオブジェクト）を得る。コンテキスト名とフィールド名だけのターゲットの場合は、"" を指定する</p>
                 <h4>《IMLibContext》.getContextValue(nodeId, target)</h4>

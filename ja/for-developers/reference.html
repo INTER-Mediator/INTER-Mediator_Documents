@@ -995,7 +995,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="11">
+                            <td rowspan="12">
                                 'authentication'
                             </td>
                             <td>
@@ -1127,6 +1127,16 @@
                             <td>
                                 メディアアクセスに認証を設定するとき、ここで指定したコンテキストにアクセスしたときにメディアの認証用のトークンをクライアントに届ける。このトークンをクライアントが持つ事で、メディアプロキシが認証される
                             </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                'password-policy'
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>パスワード変更時に適用されるパスワードポリシー。useAlphabet useNumber useUpper useLower usePunctuation length(10) notUserNameの各単語をスペースで区切って指定する。useAlphabetはアルファベットを使用していないといけなくする。その他、同様に単語から意味が分かるはずである。length(10)はパスワードは10文字以上にする必要があるという意味で、( ) 内には任意の数値を記述できる。</td>
                         </tr>
                         <tr>
                             <td rowspan="3">'pusher'</td>
