@@ -784,7 +784,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="19">'send-mail'</td>
+                            <td rowspan="18">'send-mail'</td>
                             <td rowspan="16">'load'<br/><br/>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
                             <td>'from'</td>
                             <td>送信者名や送信者アドレスが含まれるフィールド名</td>
@@ -858,6 +858,22 @@
                             <td>'new'</td>
 							<td></td>
                             <td>コンテキストに対して新たなレコードを作るアクションを起こした後にメールを送信する。第3次元については、loadと同様。</td>
+                        </tr>
+                        <tr>
+                            <td>'aggregation-select'</td>
+					<td></td>
+					<td></td>
+                            <td rowspan="3">PDOのデータベースクラスのみで利用できる。これらの3つの設定と、sort、queryの設定を加えて、集計処理などのSQLを構成する。このコンテキストは読み出しのみとなる。</td>
+                        </tr>
+                        <tr>
+                            <td>'aggregation-from'</td>
+					<td></td>
+					<td></td>
+                        </tr>
+                        <tr>
+                            <td>'aggregation-group-by'</td>
+					<td></td>
+					<td></td>
                         </tr>
                     </table>
                 </div>
@@ -995,7 +1011,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="14">
+                            <td rowspan="12">
                                 'authentication'
                             </td>
                             <td>
@@ -1106,11 +1122,21 @@
                         </tr>
                         <tr>
                             <td>
+                                'password-policy'
+                            </td>
+                            <td>
+                            </td>
+                            <td>パスワード変更時に適用されるパスワードポリシー。useAlphabet useNumber useUpper useLower usePunctuation length(10) notUserNameの各単語をスペースで区切って指定する。useAlphabetはアルファベットを使用していないといけなくする。その他、同様に単語から意味が分かるはずである。length(10)はパスワードは10文字以上にする必要があるという意味で、( ) 内には任意の数値を記述できる。</td>
+                        </tr>
+                        <tr>
+                            <td>
                                 'media-root-dir'
                             </td>
                             <td>
                             </td>
-                            <td>
+                             <td>
+                            </td>
+                           <td>
                                 メディアアクセスに対して定義ファイルにリダイレクトの設定をWebサーバーで行う。そうすれば、この設定に指定したディレクトリにある画像などのメディアファイルを読み出す。
                             </td>
                         </tr>
@@ -1120,17 +1146,11 @@
                             </td>
                             <td>
                             </td>
-                            <td>
+                                <td>
+                            </td>
+                        <td>
                                 メディアアクセスに認証を設定するとき、ここで指定したコンテキストにアクセスしたときにメディアの認証用のトークンをクライアントに届ける。このトークンをクライアントが持つ事で、メディアプロキシが認証される
                             </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                'password-policy'
-                            </td>
-                            <td>
-                            </td>
-                            <td>パスワード変更時に適用されるパスワードポリシー。useAlphabet useNumber useUpper useLower usePunctuation length(10) notUserNameの各単語をスペースで区切って指定する。useAlphabetはアルファベットを使用していないといけなくする。その他、同様に単語から意味が分かるはずである。length(10)はパスワードは10文字以上にする必要があるという意味で、( ) 内には任意の数値を記述できる。</td>
                         </tr>
                         <tr>
                             <td rowspan="3">'pusher'</td>

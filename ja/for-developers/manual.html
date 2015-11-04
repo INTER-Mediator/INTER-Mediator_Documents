@@ -44,7 +44,7 @@ require_once ('INTER-Mediator/INTER-Mediator.php');
 IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );                
 ?&gt;</code></pre>
         </div>
-        <p>サンプルで言えば、sample_form_FMS_include.phpや、sample_form_MySQL_include.phpのファイルが、定義ファイルに相当します。定義ファイルに記述できる内容は<a                    href="reference.html">こちら</a>
+        <p>サンプルで言えば、sample_form_FMS_include.phpや、sample_form_MySQL_include.phpのファイルが、定義ファイルに相当します。定義ファイルに記述できる内容は<a href="reference.html">こちら</a>
             のページにまとめてあります。</p>
         <h3>ページファイルの記述</h3>
         <p>ページファイルでは、定義ファイルを、ヘッダエリアのscriptタグで読み込みます。定義ファイルは、JavaScriptのソースを返します。そして、典型的な方法として、ページを開いたときにデータベースのデータを取り出すという流れがあるかと思います。その場合、以下のように、bodyタグのonload属性に、NTERMediator.construct(true)というJavaScriptの呼び出しを記述します。基本的にはこれで、INTER-Mediatorが働き始めます。NTERMediator.construct(true)は、たとえばボタンをクリックして呼び出すという方法も取る事ができます。</p>
@@ -210,20 +210,28 @@ IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
             <p>なお、ANDとORの組み合わせしかできないのかと思われるかもしれませんが、すべての論理式が論理和標準形ないしは論理積標準形で表現できるという定理があるので、この仕様ですべての論理式が記述できると言えるかと思われます。</p>
             <p>FileMaker Serverの場合、FileMaker側の仕様の制限として、検索条件は全部ANDか全部ORかで結ぶしかできません。ANDとORを組み合わせることはできないのです。コンテキストのqueryキーの値、あるいはaddtionalConditionに「array('field'=&gt;'__operation__', 'operator'=>'or')」を加えれば、OR演算を行います。この指定がなければAND演算になります。OR演算を指定した場合、外部キーの検索条件もORになってしまい、リレーションが正確にとれませんので、その点は十分に注意が必要です。</p>
             <h3>INTERMediatorオブジェクトのadditionalConditionプロパティに指定する検索条件</h3>
-            <p>JavaScriptのプログラムで、INTERMediator.construct(true)                を実行するよりも前に、例えば以下のようなプログラムを実行します。additionalConditionプロパティは配列で、最初のインデックスはコンテキスト名、つまり定義ファイルでの name                キーに対応する値を指定します。右辺の条件は、もちろん、該当するコンテキストにしか適用されません。オブジェクトの値については前のqueryについての説明とおおむね共通です。OR条件とAND条件がどちらも出てくるような条件も記述できます。条件が一組の場合はオブジェクトとして記述できます。2つ以上あるときはオブジェクトの配列として記述します。</p>
-            <div class="code"><pre><code>INTERMediator.additionalCondition[コンテキスト名] = {field:'age', operator:'&gt;', value: 19}                        INTERMediator.additionalCondition[コンテキスト名] = [{field:'age', operator:'&gt;', value: 19},                        {field:'year',                        operator:'&gt;', value: 1999}]</code>
+            <p>JavaScriptのプログラムで、INTERMediator.construct(true) を実行するよりも前に、例えば以下のようなプログラムを実行します。additionalConditionプロパティは配列で、最初のインデックスはコンテキスト名、つまり定義ファイルでのnameキーに対応する値を指定します。ただし、セッタを定義したプロパティであるため、値の設定には、INTERMediatorクラスのaddConditionメソッドを利用します。右辺の条件は、もちろん、該当するコンテキストにしか適用されません。オブジェクトの値については前のqueryについての説明とおおむね共通です。OR条件とAND条件がどちらも出てくるような条件も記述できます。条件が一組の場合はオブジェクトとして記述できます。2つ以上あるときはオブジェクトの配列として記述します。</p>
+            <div class="code"><pre><code>
+INTERMediator.addCondition(コンテキスト名, {field:'age', operator:'&gt;', value: 19});
+INTERMediator.addCondition(コンテキスト名, [
+    {field:'age', operator:'&gt;', value: 19},
+    {field:'year', operator:'&gt;', value: 1999}
+]);</code>
 </pre>
             </div>
             <h3>コンテキストのrelationキーの値</h3>
             <p>こちらもqueryと同様、配列の配列という形式をとります。キーはqueryと違います。外側のエンクロージャー／リピータとその内側のエンクロージャー／リピーターがあるとします。外側はmaster、内側はdetailというコンテキスト名で定義されているとします。</p>
             <div class="code"><pre><code>array(
-&nbsp;&nbsp;&nbsp;&nbsp;array( 'name' =>'master', 'key' =>'id' )),
-&nbsp;&nbsp;&nbsp;&nbsp;array(
-&nbsp;&nbsp;&nbsp;&nbsp;array(
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'name' =>'detail',
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'relation' =>array( array( 'foreign-field' =>'master_id','join-field' =>'id', 'operator' =>'=' ))),</code>
-</pre>
-            </div>
+    array(
+        'name' =>'master',
+        'key' =>'id'
+    ),
+    array(
+        'name' =>'detail',
+        'relation' =>array(
+            array( 'foreign-field' =>'master_id','join-field' =>'id', 'operator' =>'=' )
+        )
+    ), ....</code></pre></div>
             <p>外側のコンテキストの1レコードを処理すると、その内部にあるエンクロージャー／リピーターが見つかります。そのとき、コンテキスト名がdetailのrelationキーの値を参照します。そして、join-fieldキーについては、外側の1レコードに存在する値を取り出し、foreign-fieldキーの値とoperatorキーの値を使って検索条件を作ります。たとえば、外側のレコードのidフィールドの値が34だった場合、「master_id                = '34'」という条件を作成し、AND条件として追加します。relationの配列は配列が複数あってもかまいません。その場合、すべての指定で生成される条件式のANDをとります。</p>
             <p>なお、join-fieldの指定は必須です。不要と思われるかもしれませんが、必ずしも主キーとリンクしているとは限らないので指定は必須としました。</p>
             <h3>検索結果の並べ替えに関して</h3>
