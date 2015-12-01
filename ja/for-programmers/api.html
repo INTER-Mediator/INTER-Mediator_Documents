@@ -335,7 +335,8 @@
                 <h1>クライアントからの直接的なデータベース処理</h1>
                 <p>INTER-Mediatorは、INPUT、SELECT、TEXTAREAタグ要素を編集してフォーカスを離れる時（つまり、onchangeイベントを受けて）、自動的にデータを書き戻すようにしています。しかしながら、データベースの読み書きの処理はこれだけでは足りないと思われます。たとえば、DIVタグ要素をドラッグできるようにして、ドラッグ先の座標をデータベースに書き戻すようなことをしたいと思うかもしれません。その場合、イベント処理関数で、ノードの属性やスタイルの値を取り出して、データベース処理を自前でやりたくなります。そのために、以下のように、CRUDに対応した4つの関数を用意してあります。</p>
 
-                <p>なお、認証を必要とする状況では、別途WithAuthという名前が付加されたメソッドが用意されています。引数argは通常のメソッドと同じですが、引数completionには認証が成功した後に実行されるプログラムを関数リテラルの形式で与えておくことができます。</p>
+			<h2>同期通信による手法</h2>
+                <p>INTER-Mediatorでは古くからあるAPIで、通信処理はAjaxの関数を使用しながらも同期で行います。通信結果を持って何か処理を記述するプログラムが書きやすい手法です。Ver.5.3より、一部の処理は非同期通信をサポートしますが、これらのAPIは過去に作られたプログラムでの互換性を確保するために削除しないでそのまま残します。認証を必要とする状況では、WithAuthという名前が付加されたメソッドが用意されています。引数argは通常のメソッドと同じですが、引数completionには認証が成功した後に実行されるプログラムを関数リテラルの形式で与えておくことができます。</p>
 
                 <h4>INTERMediator_DBAdapter.db_query(args)</h4>
                 <h4>INTERMediator_DBAdapter.db_queryWithAuth(args, completion)</h4>
@@ -437,6 +438,28 @@
                         </tr>
                     </table>
                 </div>
+
+		<h2>非同期通信によるネットワーク処理</h2>
+		<p>以下のメソッドはいずれも、ネットワーク処理を非同期で行います。通信のためのパラメータは、argsに指定します。それぞれ、直前に示した、同期通信の対応するAPIと同じように、argsを指定します。successProcとfailProcはそれぞれ、通信が成功した時、エラーが発生した時に呼び出されるメソッドを指定します。何もしないなら、nullを指定します。通信処理は非同期で実行されるため、これらのメソッドの直後にステートメントは、通常は通信終了前に実施されるでしょう。原則として、このメソッド以降はプログラムを何も書かない、つまり、一連の処理がこのメソッドの呼出で終わるように記述する必要があります。これらのメソッドは認証が必要な場合でも、不要な場合でも利用されます。認証が必要な場合、認証が失敗すると、繰り返しログインパネルが表示する仕組みも組み込んであります。</p>
+               <h4>INTERMediator_DBAdapter.db_query_async(args, successProc, failProc)</h4>
+               <h4>INTERMediator_DBAdapter.db_update_async(args, successProc, failProc)</h4>
+               <h4>INTERMediator_DBAdapter.db_delete_async(args, successProc, failProc)</h4>
+               <h4>INTERMediator_DBAdapter.db_createRecord_async(args, successProc, failProc)</h4>
+               <h4>INTERMediator_DBAdapter.db_copy_async(args, successProc, failProc)</h4>
+<p>通信が失敗した時に呼び出されるfailProcの関数は引数がありません。成功した時に呼び出されるメソッドは、引数が1つあり、通信結果を含むオブジェクトを引数で得られます。そのオブジェクトは、以下のプロパティを持っています。このsuccessProcに、通信結果をもとにした処理を記述することが可能です。</p>
+
+<div class="table">
+<table>
+<tr><th>プロパティ</th><th>内容</th></tr>
+<tr><td>dbresult</td><td>検索結果あるいは処理したレコードを示すオブジェクトの配列</td></tr>
+<tr><td>resultCount</td><td>検索あるいは処理したレコード数</td></tr>
+<tr><td>totalCount</td><td>現在の検索条件で得られる総レコード数</td></tr>
+<tr><td>newRecordKeyValue</td><td>新しいレコードを作ったり複製をした時、新しいレコードのキーフィールドの値</td></tr>
+<tr><td>newPasswordResult</td><td>パスワードの変更が成功したかどうかを示す論理値</td></tr>
+<tr><td>registeredId</td><td>クライアント間連携で利用する登録ID</td></tr>
+<tr><td>nullAcceptable</td><td>フィールドの値にnullが許可されているかどうか</td></tr>
+</table>
+</div>
             </section>
         </article>
     </div>
