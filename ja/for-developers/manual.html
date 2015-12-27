@@ -96,26 +96,6 @@ IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
                     <td>TR</td>
                     <td>any elements</td>
                 </tr>
-                <tr><td>汎用</td>
-                    <td>DIV data-im-control="enclosure"</td>
-                    <td>DIV data-im-control="repeater"</td>
-                    <td>any elements</td>
-                </tr>
-                <tr><td>汎用</td>
-                    <td>DIV class="_im_enclosure"</td>
-                    <td>DIV class="_im_repeater"</td>
-                    <td>any elements</td>
-                </tr>
-                <tr><td>汎用</td>
-                    <td>SPAN data-im-control="enclosure"</td>
-                    <td>SPAN data-im-control="repeater"</td>
-                    <td>any elements</td>
-                </tr>
-                <tr><td>汎用</td>
-                    <td>SPAN class="_im_enclosure"</td>
-                    <td>SPAN class="_im_repeater"</td>
-                    <td>any elements</td>
-                </tr>
                 <tr><td>番号リスト</td>
                     <td>OL</td>
                     <td>LI</td>
@@ -131,10 +111,16 @@ IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
                     <td>OPTION</td>
                     <td>OPTION itself</td>
                 </tr>
+                <tr><td>汎用</td>
+                    <td>data-im-control="enclosure"の指定があるタグ</td>
+                    <td>data-im-control="repeater"の指定があるタグ</td>
+                    <td>any elements</td>
+                </tr>
                 </tbody>
             </table>
             </div>
             <p>テーブルの場合で説明します。たとえば、テーブルのあるセル、つまりTDタグで囲まれた中に、DIVタグ等で記述されたリンクノードがあったとします。そのリンクノードから上位のノードにたどって、TRをリピータとします。TRの1つ上位のノードはTBODYに必ずなります。そのTBODYがエンクロージャとなります。リンクノードに記述された情報からテーブルがわかり、そのテーブルへアクセスします。そして、レコードの値をリンクノードの定義に従って、ノードに反映されます。もし、レコードが複数あれば、リピータを複製して、その複製した一連のノードに対してリンクノードの処理を行います。ページファイルを作るときは、通常、TRタグによる要素が1つのテーブルを作りますが、レコードの数だけ行数が増えるということになります。なお、リピータとなるTRタグの要素は複数個あってもかまいません。レコードの数だけ複数のTRのセットが複製されて、データの反映が行われます。</p>
+<p>Ver.5.3-devの段階で、任意のタグについて、data-im-control属性を指定することで、エンクロージャーやリピーターになることできるように機能を拡張しました。つまり、TBOD/TR、OL/LI、UL/LI、SELECT/OPTIONについては、属性の指定がなく、リンクノードが含まれていればエンクロージャー／リピーターとして機能します。それ以外のタグの組み合わせについては、data-im-control属性を指定します。なお、エンクロージャーの直下の子要素としてリピーターを記述する必要があります。</p>
             <h3>レコードがない場合の表示</h3>
             <p>レコードがあれば、リピーターを複製していくつかのオブジェクトがページに見えますが、そのままだと、レコードがない場合、リピーターが全くない状態になってしまいます。そこで、リピーターの1つのdata-im-control属性を「noresult」にするか、あるいはclass属性を「_im_for_noresult_」とします。すると、このリピータはレコードが存在すれば単に消しさられますが、レコードがないときにはこのリピータが1つだけエンクロージャーの中に配置されます。「レコードがありません」などの記述をこの方法で組み込めます。</p>
             <h3>エンクロージャやリピーターの動作をキャンセルする</h3>
