@@ -13,7 +13,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>サーバーサイドの拡張(Ver.5.4-dev以降) - Product Manual - INTER-Mediator</title>
+    <title>サーバーサイドの拡張(Ver.5.3まで) - Product Manual - INTER-Mediator</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
@@ -33,7 +33,7 @@
 <body class="docs" data-page-title="for-programmers">
     <div class="container clearfix">
         <div class="page-title">
-            <h1>サーバーサイドの拡張(Ver.5.4-dev以降)</h1>
+            <h1>サーバーサイドの拡張(Ver.5.3まで)</h1>
         </div>
         <div class="docs-sidebar sticky clearfix">
             <nav>
@@ -42,6 +42,9 @@
             </nav>
         </div>
         <article>
+<section><h1>本ドキュメントはVer.5.3までのものです</h1>
+<p>本ドキュメントに記載された内容は、Ver.5.3までのものです。Ver.5.4-devからは、<a href="serverextending.html">こちら</a>の内容をご覧ください。</p>
+</section>
         <section><h1>データコンバータクラスの利用方法</h1>
             <p>IM_Entry関数の第2引数で、'formatter'を利用して、特定のコンテキストのフィールドに対して、データベースの読み書き前後にフィルタを設定することができます。このときに使うクラスをデータコンバータクラスと呼びます。自分で作成もできますが、以下のものが最初から組み込まれています。自分で作成する場合はDataConverter_template.phpを参照してください</p>
             <div class="table"><table><tr><td>DataConverter_AppendPrefix.php</td>
@@ -58,20 +61,6 @@
                 </tr>
                 <tr><td>DataConverter_HTMLString.php</td>
                     <td>改行をBRタグ要素、そして&lt;や&gt;や&amp;を参照形式に変換する。parameterにautolinkと指定するとURLにAタグ要素を付加してリンクに変換する。バージョン4.2以降においてparameterにnoescapeと指定すると参照形式への変換を無効にする。データベースへの書き込み時はそのままの文字列</td>
-                </tr>
-                <tr><td>DataConverter_MarkdownString</td>
-                    <td>マークダウン表記のテキストをHTMLに整形する。コンバーターを通したフィールドは、innerHTMLで受ける必要がある。現在サポートしているマークダウン表記は以下のとおり。
-<div class="table">
-<table>
-<tr><th>行頭の記号</th><th>動作</th></tr>
-<tr><td>*</td><td>その行をHnタグで囲む。nは*の個数に対応する</td></tr>
-<tr><td>-</td><td>その行を箇条書きにする。-を重ねて階層的に記述することも可能</td></tr>
-<tr><td>#</td><td>クラスが「_im_markdown_p1」のPタグで囲む。#は2つおよび3つにも対応し、クラス名の末尾の数字と#の個数が対応する</td></tr>
-<tr><td>@@IMG[file]</td><td>href属性がfileのIMGタグを生成すし、さらにクラスが「_im_markdown_para_img」のPタグで囲む</td></tr>
-<tr><td>|</td><td>TABLEタグで表を作る。セルの区切りと末尾に|を入れる</td></tr>
-</table>
-</div>
-</td>
                 </tr>
                 <tr><td>DataConverter_MySQLDateTime.php</td>
                     <td>MySQLの出力する「年-月-日」形式の日付や時刻を整える</td>
@@ -91,49 +80,114 @@
             </table>
             </div>
         </section>
-         <section><h1>データベースアクセス処理の拡張クラスを定義する</h1>
-            <p>データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「拡張処理クラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「拡張処理クラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。必要な処理だけを記述する「拡張処理クラスを定義する方法」を使う方がプログラムの作成は容易でしょう。</p>
+        <section><h1>データベースクラスを自作する</h1>
+            <p>データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-MediatorのDB_PDO.php、FileMaer                Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。</p>
+            <div class="code"><pre><code>require_once( "INTER-Mediator/DB_PDO.php" );
+class DB_MyOriginalDB extends DB_PDO.php {
+	function getFromDB($dataSourceName) {
+		/* ここにプログラムを追加できる */
+		$result = super::getFromDB($dataSourceName);
+		/* ここにプログラムを追加できる */
+		$this->mainTableCount = count( $result ); //レコード数
+		return $result;
+	}
+	
+	function setToDB($dataSourceName) {
+		/* ここにプログラムを追加できる */
+		super::setToDB($dataSourceName);
+		/* ここにプログラムを追加できる */
+	}
+	
+	function newToDB($dataSourceName) {
+		/* ここにプログラムを追加できる */
+		$lastKeyValue = super::newToDB($dataSourceName);
+		/* ここにプログラムを追加できる */
+	    return $lastKeyValue;
+	}
+	
+	function deleteFromDB($dataSourceName) {
+		/* ここにプログラムを追加できる */
+	    $result = super::deleteFromDB($dataSourceName);
+		/* ここにプログラムを追加できる */
+	}
+}</code></pre></div>
+            <p>自分で作るクラスでは、要はCRUDに対応した4つのメソッドをオーバーライドすることによって、独自の仕組みを組み込むことができます。また、4つのうち、特にプログラムの追加がない場合には、定義する必要はありません。いずれの関数も、コンテキスト名を引数に取ります。そして、現在処理しているコンテキスト名が設定されてこれらのメソッドを呼び出します。</p>
+            <p>getFromDBメソッドは、データベースからデータを取り出します。取り出し結果は連想配列の配列です。連想配列のキーがフィールド名になっています。そこから、特定のフィールドの値を元に集計をしたり、あるいは必要な値だけに取り除くなどの処理を、親クラスのgetFromDBメソッドを呼び出す後に入れればいいでしょう。リクエスト時と同じフィールド名を返す必要はなく（つまりINTER-Mediatorはそのチェックをしていない）、自由に連想配列の配列を作ります。そして、ページファイルの方で適切なフィールド名を指定すれば、集計結果が表示されます。なお、ページファイルで、一定レコード数ごとのページングをしているときには、mainTableCountメンバ変数にレコード数、つまり返す配列の要素数も指定します。何か問題が発生したのなら、array()                を返します。以下のプログラムは売り上げのテーブルから集計を行う例です。</p>
+            <div class="code"><pre><code>$result = super::getFromDB($dataSourceName);
+if ( $dataSourceName == 'ItemsInvoice' ) {
+	$summary = array();
+	foreach( $returnValue as $record ) {
+		$summary[ $record[ 'itemNo' ]] += $record[ 'qty' ] * $record[ 'unitPrice' ];
+		}
+	return array( $summary );
+}</code>
+</pre>
+            </div>
+            <p>getFromDBメソッドを呼び出す前は、検索条件の追加なども可能です。たとえば、IM_Entry関数の第一引数に指定している配列が、$this->dataSourceで得られます。また、現在のコンテキストが$this->dataSourceで得られる配列の何番目かが$this->getIndexOfDataSource($dataSourceName)で得られます。例えば特定の名前のフィールドがあれば、それをFileMaker Serverのグローバルフィールドに設定して、検索条件から取り除くといったことも行えます。</p>
+            <div class="code"><pre><code>$this->dataSource[$this->getIndexOfDataSource($dataSourceName)]['global'] = array(...);</code>
+</pre>
+            </div>
+            <p>setToDBとdeleteFromDBメソッドは、いずれも値の更新や削除のときに呼び出されるメソッドです。返り値は論理値で、処理が成功すればtrueで失敗ならfalseです。</p>
+            <p>newToDBは新規レコードの作成です。メソッドの返り値は、新たに作ったレコードのキーフィールドの値である必要があります。問題があれば返り値をfalseにします。</p>
+            <h3>データベースクラス内で便利なメソッド</h3>
+            <p>現状、未整理です。DB_Base.phpに多くは定義されています。以下は抜粋です。</p>
+            <div class="table"><table><tr><th>メンバ変数／メソッド</th>
+                <th>役割</th>
+            </tr>
+                <tr><td>$this->dataSource</td>
+                    <td>IM_Entry関数の第1引数の配列</td>
+                </tr>
+                <tr><td>$this->currentUser</td>
+                    <td>ログインしたユーザ名</td>
+                </tr>
+                <tr><td>$this->setDebugMessage($str)</td>
+                    <td>デバッグメッセージに追加する</td>
+                </tr>
+                <tr><td>$this->setErrorMessage($str)</td>
+                    <td>エラーメッセージに追加する</td>
+                </tr>
+                <tr><td>$this->setExtraCriteria($field, $operator, $value)</td>
+                    <td>検索条件の追加</td>
+                </tr>
+                <tr><td>$this->setExtraSortKey($field, $direction)</td>
+                    <td>ソート条件の追加</td>
+                </tr>
+            </table>
+            </div>
+        </section>
+        <section><h1>データベースアクセス処理の拡張クラスを定義する</h1>
+            <p>データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「拡張処理クラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「拡張処理クラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。</p>
             <p>IM_Entry関数の第一引数、つまりコンテキストの中に「extending-class」でクラス名を指定します。ここで指定したクラス名は任意のものでかまいませんが、そのクラスをPHPが認識できる場所に記述しておく必要があります。クラスは以下のようなインタフェースをインプリメントする必要があります。つまり、CRUDに対応する4種類のデータアクセス処理の前後にメソッドを含めることができるのです。</p>
-            <div class="code"><pre><code>interface Extending_Interface_BeforeRead {
-    public function doBeforeReadFromDB();
+            <div class="code"><pre><code>interface Extending_Interface_BeforeGet {
+	function doBeforeGetFromDB($dataSourceName);
 }
-interface Extending_Interface_AfterRead {
-    public function doAfterReadFromDB($result);
-}
-interface Extending_Interface_AfterRead_WithNavigation {
-    public function doAfterReadFromDB( $result);
-    public function countQueryResult();
-    public function getTotalCount();
-}
-interface Extending_Interface_BeforeUpdate {
-    public function doBeforeUpdateDB();
-}
-interface Extending_Interface_AfterUpdate {
-    public function doAfterUpdateToDB($result);
-}
-interface Extending_Interface_BeforeCreate {
-    public function doBeforeCreateToDB();
-}
-interface Extending_Interface_AfterCreate{
-    public function doAfterCreateToDB($result);
-}
+interface Extending_Interface_AfterGet {
+	function doAfterGetFromDB($dataSourceName, $result);
+	// function countQueryResult($dataSourceName);
+}                        
+interface Extending_Interface_BeforeSet {
+	function doBeforeSetToDB($dataSourceName);
+}                        
+interface Extending_Interface_AfterSet {
+	function doAfterSetToDB($dataSourceName, $result);
+}                        
+interface Extending_Interface_BeforeNew {
+	function doBeforeNewToDB($dataSourceName);
+}                        
+interface Extending_Interface_AfterNew {
+	function doAfterNewToDB($dataSourceName, $result);
+}                        
 interface Extending_Interface_BeforeDelete {
-    public function doBeforeDeleteFromDB();
-}
+	function doBeforeDeleteFromDB($dataSourceName);
+}                        
 interface Extending_Interface_AfterDelete {
-    public function doAfterDeleteFromDB($result);
-}
-interface Extending_Interface_BeforeCopy {
-    public function doBeforeCopyInDB();
-}
-interface Extending_Interface_AfterCopy{
-    public function doAfterCopyInDB($result);
+	function doAfterDeleteFromDB($dataSourceName, $result);
 }</code>
 </pre>
             </div>
             <p>以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。引数$resultにはデータベースからの取得した結果が、連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。たとえば集計処理などを行い、同様に連想配列の配列にして結果を返します。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。PHPではoptionのメソッドの定義をインタフェースできないので、定義上はコメントでこのメソッドを記載しています。</p>
-            <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterRead {
-	function doAfterReadFromDB($result) {
+            <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterGet {
+	function doAfterGetFromDB($dataSourceName, $result) {
 		foreach( $result as $record ) {
 			foreach( $record as $field =&gt; $value ) {
 				:
@@ -145,17 +199,17 @@ interface Extending_Interface_AfterCopy{
 </pre>
             </div>
             <p>countQueryResultメソッドを記述する場合の例を以下に示します。countQueryResultはdoAfterGetFromDBよりも後に呼び出されます。countQueryResultによって返されるのは、実際のレコード数ではなく、検索条件に合ったレコード数です。つまり、1万個のレコードのうち40個を表示している場合には、1万という数値を返す必要があります。doAfterGetFromDBで集計処理などをすると、1万レコードを取得して、それが20個などになると思います。その場合は20個を返さないといけません。この場合、自分でメンバ変数（dataCount）を定義して、そこに値を残しておくのが分かりやすい方法でしょう。</p>
-<div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterRead_WithNavigation {
+            <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterGet {
 	var $dataCount;
 	
-	function doAfterReadFromDB($result) {
+	function doAfterGetFromDB($dataSourceName, $result) {
 			:
 		$thisthis-&gt;dataCount = count( $result );
 		$return result;
 	}
 	
-	function countQueryResult() {
-		$return $this-&gt;dataCount;
+	function countQueryResult($dataSourceName) {
+		$return $thisthis-&gt;dataCount;
 	}
 }</code>
 </pre>
@@ -180,63 +234,6 @@ interface Extending_Interface_AfterCopy{
                     </tr>
                 </table>
             </div>
-        </section>
-       <section><h1>データベースクラスを自作する</h1>
-            <p>データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-MediatorのDB_PDO.php、FileMaer Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。</p>
-            <div class="code"><pre><code>require_once( "INTER-Mediator/DB_PDO.php" );
-class DB_MyOriginalDB extends DB_PDO.php {
-	public function readFromDB() {
-		/* ここにプログラムを追加できる */
-		$result = super::readFromDB();
-		/* ここにプログラムを追加できる */
-		$this->mainTableCount = count( $result ); //レコード数
-		return $result;
-	}
-
-	public function countQueryResult()  {
-		return super::countQueryResult();
-	}
-
-	public function getTotalCount()  {
-		return super::getTotalCount();
-	}
-
-	public function updateDB() {
-		/* ここにプログラムを追加できる */
-		$result = super::updateDB();
-		/* ここにプログラムを追加できる */
-		return $result;
-	}
-	
-	public function createInDB($bypassAuth) {
-		/* ここにプログラムを追加できる */
-		$lastKeyValue = super::createInDB($bypassAuth);
-		/* ここにプログラムを追加できる */
-	    return $lastKeyValue;
-	}
-	
-	public function deleteFromDB() {
-		/* ここにプログラムを追加できる */
-	     $result = super::deleteFromDB();
-		/* ここにプログラムを追加できる */
-		return $result;
-	}
-	public function copyInDB()  {
-	     $result = super::copyInDB();
-		return $result;
-	}
-}</code></pre></div>
-            <p>自分で作るクラスでは、要はCRUDに対応した4つのメソッドをオーバーライドすることによって、独自の仕組みを組み込むことができます。また、4つのうち、特にプログラムの追加がない場合には、定義する必要はありません。いずれの関数も、コンテキスト名を引数に取ります。そして、現在処理しているコンテキスト名が設定されてこれらのメソッドを呼び出します。</p>
-            <p>readFromDBメソッドは、データベースからデータを取り出します。取り出し結果は連想配列の配列です。連想配列のキーがフィールド名になっています。そこから、特定のフィールドの値を元に集計をしたり、あるいは必要な値だけに取り除くなどの処理を、親クラスのreadFromDBメソッドを呼び出す後に入れればいいでしょう。リクエスト時と同じフィールド名を返す必要はなく（つまりINTER-Mediatorはそのチェックをしていない）、自由に連想配列の配列を作ります。そして、ページファイルの方で適切なフィールド名を指定すれば、集計結果が表示されます。なお、ページファイルで、一定レコード数ごとのページングをしているときには、mainTableCountメンバ変数にレコード数、つまり返す配列の要素数も指定します。何か問題が発生したのなら、array()を返します。以下のプログラムは売り上げのテーブルから集計を行う例です。</p>
-            <div class="code"><pre><code>$result = super::readFromDB();
-$summary = array();
-foreach( $returnValue as $record ) {
-	$summary[ $record[ 'itemNo' ]] += $record[ 'qty' ] * $record[ 'unitPrice' ];
-	}
-return array( $summary );</code>
-</pre>
-            </div>
-            <p>updateDBとdeleteFromDBメソッドは、いずれも値の更新や削除のときに呼び出されるメソッドです。返り値は論理値で、処理が成功すればtrueで失敗ならfalseです。createInDBは新規レコードの作成です。メソッドの返り値は、新たに作ったレコードのキーフィールドの値である必要があります。問題があれば返り値をfalseにします。</p>
         </section>
         </article>
     </div>
