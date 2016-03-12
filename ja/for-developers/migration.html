@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2015 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -162,6 +162,10 @@ function setTargetFields($fields)</code></pre>
 </div>
 <p>getTargetName/getTargetDataSource/setTargetDataSourceメソッドは、ほぼ同一の動きをするgetDataSourceName/setDataSourceNameメソッドに置き換えました。setTargetFieldsとgetIndexOfDataSourceメソッドは使われていないので、削除しました。</p>
               </section>
+                <h1>Ver.5.3での変更</h1>
+                <h4>CSRF攻撃対策の追加</h4>
+                <p>params.phpファイルで$webServerNameという変数を設定することでCSRF攻撃対策を実施することができるようになりました。Webサーバーのドメイン名もしくはFQDN（完全修飾ドメイン名）を配列で設定するようにしてください。<br>設定例1：array('inter-mediator.com');<br>設定例2：array('www.inter-mediator.com', 'inter-mediator.org');</p>
+            </section>
             <section>
                 <h1>Ver.5.2での変更</h1>
                 <h4>データベースクラスでのメソッド定義の変更</h4>
@@ -304,7 +308,7 @@ INTERMediator.additionalCondition = conditions</code></pre>
             </section>
             <section>
                 <h1>Ver.3.8 (2013/8/22) での変更</h1>
-                <p>$params.phpファイルにおいて記述できていた$scriptPathPrefix、$scriptPathSufixを利用して、クライアントから呼び出すURLをコントロールできていましたが、$callURLという変数で完全にURLで指定できるようにしています。$scriptPathPrefix、$scriptPathSufixも使用できます。</p>
+                <p>params.phpファイルにおいて記述できていた$scriptPathPrefix、$scriptPathSufixを利用して、クライアントから呼び出すURLをコントロールできていましたが、$callURLという変数で完全にURLで指定できるようにしています。$scriptPathPrefix、$scriptPathSufixも使用できます。</p>
             </section>
         </article>
     </div>
