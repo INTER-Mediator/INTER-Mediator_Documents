@@ -162,6 +162,7 @@ function setTargetFields($fields)</code></pre>
 </div>
 <p>getTargetName/getTargetDataSource/setTargetDataSourceメソッドは、ほぼ同一の動きをするgetDataSourceName/setDataSourceNameメソッドに置き換えました。setTargetFieldsとgetIndexOfDataSourceメソッドは使われていないので、削除しました。</p>
               </section>
+              <section>
                 <h1>Ver.5.3での変更</h1>
                 <h4>CSRF攻撃対策の追加</h4>
                 <p>params.phpファイルで$webServerNameという変数を設定することでCSRF攻撃対策を実施することができるようになりました。Webサーバーのドメイン名もしくはFQDN（完全修飾ドメイン名）を配列で設定するようにしてください。<br>設定例1：array('inter-mediator.com');<br>設定例2：array('www.inter-mediator.com', 'inter-mediator.org');</p>
