@@ -47,8 +47,12 @@
                 <p>FileMakerは、テーブル、TO、レイアウトといったオブジェクトを利用する。Web共有からテーブルを直接指定はできない。また、TOも指定できない。指定できるのはレイアウトのみである。レイアウトが事実上のテーブルに相当するエンティティとなる。したがって、定義ファイルのnameキー、viewキー、tableキーには、レイアウト名を指定する。たまたま、同じ名前のテーブルやTOがあっても、FileMakerのWebアクセス時に実際に利用するのはその名前のレイアウトである。</p>
 
                 <p>フィールドのタイプで、日時の記録用に「日付」「時刻」「タイムスタンプ」の3つがある。Web経由では、「月/日/年 時:分:秒」のフォーマットにしなければならない。また、日付フィールドに時刻を含む文字列を入力したり、時刻フィールドに日付を含む文字列を入力すると、エラーになり処理は何もなされない。その「日付等の書式エラー」の番号が500なので、余計なことを考えてしまいそうだが、この500はFileMakerが規定したエラー番号である。</p>
+
                 <h3>データベース側の設定</h3>
                 <p>FileMaker Serverでは、INTER-MediatorからはFileMaker ServerのXML Web公開機能を使用しているため、XML Web公開でのアクセスを許可する必要があります。INTER-Mediatorが使用するアカウントを用意し、XML Web公開でのアクセスを許可するようにしてください（拡張アクセス権のキーワードは「fmxml」）。</p>
+
+                <h3>Windows版FileMaker Serverにおける注意点</h3>
+                <p>Windows版FileMaker Server（バージョン13、14、15）ではmbstring拡張モジュールが標準で有効になっていません。FileMaker Serverフォルダ内のWeb Publishing > publishing engine > phpフォルダ以下にある「php.ini」ファイルにおいて「;extension=php_mbstring.dll」を「extension=php_mbstring.dll」に変更した上でIISの再起動を行い、mbstring拡張モジュールを有効にする必要があります。</p>
 
                 <h3>定義ファイルに記述するテーブル名</h3>
                 <p>FileMaker Serverでは、定義ファイルに記述するテーブル名（nameキーの値）は、FileMakerデータベースのレイアウト名を指定する必要があります。</p>
