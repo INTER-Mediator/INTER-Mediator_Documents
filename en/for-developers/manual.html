@@ -3,14 +3,13 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
  *
- *   This project started at the end of 2009.
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
  */
--->
+ -->
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <title>INTER-MediatorによるWebアプリケーションの概要 - Product Manual - INTER-Mediator</title>
@@ -25,11 +24,8 @@
     <script src="../../lib/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
-    <script>
-    hljs.initHighlightingOnLoad()
-    </script>
+    <script>hljs.initHighlightingOnLoad()</script>
 </head>
-
 <body class="docs" data-page-title="for-developers">
     <div class="container clearfix">
         <div class="page-title">
@@ -618,7 +614,7 @@ IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
                 <h3>ポップアップメニュー／リスト</h3>
 
                 <p>
-                    SELECTタグの要素自体が値を持つコンポーネントです。SELECTタグ要素のターゲット指定の3つ目の項目を省略すると、SELECT要素の選択値として指定されます。また、OPTIONタグは決められたものでもかまいませんが、データベースからも値を設定できます。このとき、自動的に、SELECT/OPTIONタグがエンクロージャー／リピータとなります。OPTIONタグはSELECTタグ要素の選択値に対応するvalue属性と、実際にメニュー項目として見えるOPTIONタグ要素のテキストの2つの設定が必要になるでしょう。従って、「&lt;option data-im="contact_way@id@value contact_way@name"&gt;&lt;/option&gt;」のようなターゲット指定が2つありょうなタグ要素をSELECTの中に1つだけ作っておき、ターゲット指定の1つ目の名前のコンテキスト定義を定義ファイルに記述しておきます。</p>
+                    SELECTタグの要素自体が値を持つコンポーネントです。SELECTタグ要素のターゲット指定の3つ目の項目を省略すると、SELECT要素の選択値として指定されます。また、OPTIONタグは決められたものでもかまいませんが、データベースからも値を設定できます。このとき、自動的に、SELECT/OPTIONタグがエンクロージャー／リピータとなります。OPTIONタグはSELECTタグ要素の選択値に対応するvalue属性と、実際にメニュー項目として見えるOPTIONタグ要素のテキストの2つの設定が必要になるでしょう。従って、「&lt;option data-im="contact_way@id@value contact_way@name"&gt;&lt;/option&gt;」のようなターゲット指定が2つあるようなタグ要素をSELECTの中に1つだけ作っておき、ターゲット指定の1つ目の名前のコンテキスト定義を定義ファイルに記述しておきます。</p>
 
                 <h3>チェックボックス</h3>
 

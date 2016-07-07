@@ -9,7 +9,9 @@
  *   INTER-Mediator is supplied under MIT License.
  */
 -->
-<html lang="ja"><head><meta charset="UTF-8">
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
 	<title>INTER-MediatorによるWebアプリケーションの概要 - Product Manual - INTER-Mediator</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -313,7 +315,7 @@ INTERMediator.addCondition(コンテキスト名, [
             <h3>テキストエリア</h3>
             <p>ターゲット指定の3つ目の指定は省略できます。すると、TEXTAREAタグ要素のテキストとして設定されます。</p>
             <h3>ポップアップメニュー／リスト</h3>
-            <p>SELECTタグの要素自体が値を持つコンポーネントです。SELECTタグ要素のターゲット指定の3つ目の項目を省略すると、SELECT要素の選択値として指定されます。また、OPTIONタグは決められたものでもかまいませんが、データベースからも値を設定できます。このとき、自動的に、SELECT/OPTIONタグがエンクロージャー／リピータとなります。OPTIONタグはSELECTタグ要素の選択値に対応するvalue属性と、実際にメニュー項目として見えるOPTIONタグ要素のテキストの2つの設定が必要になるでしょう。従って、「&lt;option                data-im="contact_way@id@value contact_way@name"&gt;&lt;/option&gt;」のようなターゲット指定が2つありょうなタグ要素をSELECTの中に1つだけ作っておき、ターゲット指定の1つ目の名前のコンテキスト定義を定義ファイルに記述しておきます。</p>
+            <p>SELECTタグの要素自体が値を持つコンポーネントです。SELECTタグ要素のターゲット指定の3つ目の項目を省略すると、SELECT要素の選択値として指定されます。また、OPTIONタグは決められたものでもかまいませんが、データベースからも値を設定できます。このとき、自動的に、SELECT/OPTIONタグがエンクロージャー／リピータとなります。OPTIONタグはSELECTタグ要素の選択値に対応するvalue属性と、実際にメニュー項目として見えるOPTIONタグ要素のテキストの2つの設定が必要になるでしょう。従って、「&lt;option                data-im="contact_way@id@value contact_way@name"&gt;&lt;/option&gt;」のようなターゲット指定が2つあるようなタグ要素をSELECTの中に1つだけ作っておき、ターゲット指定の1つ目の名前のコンテキスト定義を定義ファイルに記述しておきます。</p>
             <h3>チェックボックス</h3>
             <p>データベースから読み出された特定のフィールドのデータがチェックボックスのINPUTタグ要素とリンクされている場合、そのタグのvalue属性を調べます。そして、データとvalue属性が一致していればチェックを入れます。データの有無ではなく、valueとの一致を調べます。また、書き戻す場合は、チェックが入ったときはvalue属性の値、チェックがなくなった場合には空文字列を書き戻します。通常、数値フィールドで、1ならチェックあり、それ以外ならチェックなしといったデータの持たせ方をするのが順当でしょう。</p>
             <h3>ラジオボタン</h3>
