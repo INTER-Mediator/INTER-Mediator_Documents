@@ -456,9 +456,15 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td>indexof(x,y)</td>
+                            <td>indexof(x, y, fr)</td>
                             <td>indexof('abcdefg','cd') → 2</td>
-                            <td>xの文字列の最初からyの文字列を探し、最初に見つかった場所を返す</td>
+                            <td>xの文字列の最初からyの文字列を探し、最初に見つかった場所を返す。引数frを指定するとその文字以降を探すが、省略すると最初から。JavaScriptのString.indexOfを利用</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>lastindexof(x,y)</td>
+                            <td>indexof('abcdefg','cd') → 2</td>
+                            <td>xの文字列の最後からyの文字列を探し、最初に見つかった場所を返す。引数frを指定するとその文字以降を探すが、省略すると最初から。JavaScriptのString.lastIndexOfを利用</td>
                         </tr>
                         <tr>
                             <td></td>
