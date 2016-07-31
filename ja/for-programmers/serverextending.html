@@ -262,7 +262,7 @@ return array( $summary );</code>
 </div>
 <h4><span class="object">DB_Proxy</span>->processingRequest($access, $bypassAuth)</h4>
 <p class="exp">初期化したDB_Proxyクラスのオブジェクトに対して処理を行う。返り値はない。引数$bypassAuthは、認証やアクセス権設定を無視するが、この指定は慎重に行う必要がある。既定値はfalse。引数$accessに、行うデータベース処理を示す文字列を指定する。nullを指定したときや省略したときにはPOST時のパラメーターの"access"キーの値を使用する。$accessに指定できる値と動作は次の通り：'create'（レコードの作成）、'read'（データベースへのクエリー）、'update'（レコードの更新）、'delete'（レコードの削除）、'copy'（レコードの複製）、'challenge'（チャレンジの生成＝原則として何もしない）、'changepassword'（パスワード変更）、'unregister'（Pusherによるクライアント同期の登録解除）、'describe'（スキーマ情報を得る）。他に'select' 'new'が過去の互換性のために利用可能となっている。それ以外の文字列の場合は、特に何もしない。</p>
-<h4><span class="object">DB_Proxy</span>-><span class="index"><span class="indexword" yomi="ignoringPost">ignoringPost</span></span>ignoringPost()</h4>
+<h4><span class="object">DB_Proxy</span>->ignoringPost()</h4>
 <p class="exp">initializeメソッドではPOSTされたデータを取り込むが、その結果、処理拡張クラス内で新たにDB_Proxyクラスを生成してコンテキストを別途用意したとき、POSTデータの取り込みをしたくない場合も発生する。そのときにこのメソッドをinitializeメソッドよりも前に呼び出す。</p>
 <h4><span class="object">DB_Proxy</span>->getDatabaseResult()</h4>
 <p class="exp">データベースからの検索結果などで、1レコードが連想配列として表現され、その連想配列がレコード数分ある配列が返される。利用可能なprocessingRequestメソッドの最初の引数は、create（作成されたレコード）、read（検索結果）、update（更新後のレコード）、copy（複製後のレコード）、describe（スキーマ情報）。</p>
