@@ -313,6 +313,25 @@ video {
     src: url("../fonts/FMPress-Publisher-icons.woff") format('woff');
 }
 
+/* Breadcrumb
+--------------------------------------------------------- */
+.breadcrumb {
+    padding: 0 0 1em 0;
+    border-bottom: 1px solid #efefef;
+}
+.breadcrumb-item {
+    float: left;
+    padding: 0 0.2em 0 0;
+    font-size: 100%;
+    list-style-type: none;
+    color: #818a91;
+}
+.breadcrumb-item+.breadcrumb-item:before {
+    padding: 0 0.5em 0 0;
+    color: #818a91;
+    content: "/";
+}
+
 /* Responsive
 --------------------------------------------------------- */
 @media only screen and (max-width: 767px) {
