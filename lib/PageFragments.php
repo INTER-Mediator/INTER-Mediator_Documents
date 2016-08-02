@@ -7,22 +7,22 @@
  * Time: 12:27
  */
 class PageFragments extends DB_UseSharedObjects
-    implements Extending_Interface_AfterGet, Extending_Interface_AfterGet_WithNavigation
+    implements Extending_Interface_AfterRead, Extending_Interface_AfterRead_WithNavigation
 {
-    function doBeforeGetFromDB($dataSourceName)
+    function doBeforeReadFromDB()
     {
 
     }
 
     private $resultCount;
 
-    function doAfterGetFromDB($dataSourceName, $result)
+    function doAfterReadFromDB($result)
     {
         $lang = $this->dbSettings->getCriteriaValue("language");
         if ($lang !== 'ja') {
             $lang = 'en';
         }
-        if ($dataSourceName == "pagebuilder") {
+        if ($this->dbSettings->getDataSourceName() == "pagebuilder") {
             return array(
                 array(
                     "pagenavigation" => $this->fileContents("{$lang}/pagenavigation.html"),
@@ -30,7 +30,7 @@ class PageFragments extends DB_UseSharedObjects
                     "pagefooter" => $this->fileContents("{$lang}/pagefooter.html")
                 )
             );
-        } else if ($dataSourceName == "newslist") {
+        } else if ($this->dbSettings->getDataSourceName() == "newslist") {
             $this->resultCount = 0;
             $newsList = array();
             $dom = new DOMDocument;
@@ -65,19 +65,19 @@ class PageFragments extends DB_UseSharedObjects
         return array(array());
     }
 
-    function countQueryResult($dataSourceName)
+    function countQueryResult()
     {
-        if ($dataSourceName == "pagebuilder") {
+        if ($this->dbSettings->getDataSourceName() == "pagebuilder") {
             return 1;
-        } else if ($dataSourceName == "newslist") {
+        } else if ($this->dbSettings->getDataSourceName() == "newslist") {
             return $this->resultCount;
         }
         return 0;
     }
 
-    function getTotalCount($dataSourceName)
+    function getTotalCount()
     {
-        $this->countQueryResult($dataSourceName);
+        $this->countQueryResult();
     }
     
     function fileContents($filename)
