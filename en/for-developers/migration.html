@@ -50,6 +50,135 @@
                 <p class="lead">INTER-Mediatorもバージョンを重ねてきており、以前の引き継がなくなってしまった箇所が出てきています。Ver.3 (2012/12/10) 以降の大きな変更点、つまりアプリケーション側を書き換えないといけないような変更をここにまとめておきます。</p>
             </section>
             <section>
+                <h1>Ver.5.4での変更</h1>
+                <h2>サーバーサイドのPHPのAPIを整理</h2>
+<h3>データベースアクセスクラスの基本メソッド</h3>
+<p>データベースアクセスクラスでは、CRUDおよびその関連処理のためのメソッドを既定しています。従来は、そのメソッドに処理しているコンテキスト名を引数として渡していましたが、それをやめました。また、メソッドの名称もCRUDの各単語に対応したものとなりました。現在処理しているコンテキスト名は、DB_SettingsクラスのメソッドgetDataSourceName()で取得できます。Ver.5.4-dev以降は、getFromDBは呼び出されず、readFromDBが呼び出されるようになるので、必要な修正をしてください。</p>
+<h4>従来の定義</h4>
+<div class="code">
+<pre><code>interface DB_Interface extends DB_Spec_Behavior
+{
+    public function getFromDB($contextName);
+    public function countQueryResult($contextName);
+    public function getTotalCount($contextName);
+    public function setToDB($contextName);
+    public function newToDB($contextName, $bypassAuth);
+    public function deleteFromDB($contextName);
+    public function copyInDB($contextName);
+}</code></pre>
+</div>
+<h4>新しい定義</h4>
+<div class="code">
+<pre><code>interface DB_Interface extends DB_Spec_Behavior
+{
+    public function readFromDB();         // former getFromDB
+    public function countQueryResult();
+    public function getTotalCount();
+    public function updateDB();           // former setToDB
+    public function createInDB($bypassAuth);  // former newToDB
+    public function deleteFromDB();
+    public function copyInDB();
+}</code></pre>
+</div>
+
+<h3>データベースアクセス処理の拡張クラス</h3>
+<p>コンテキストにextending-classキーで指定したクラス名にインプリメントするインタフェースを以下のように変更しました。名前をCRUDに対応するものにすると同時に、データソース名の引数は渡しません。拡張処理クラスがDB_UseSharedObjectsを継承している場合は、DB_SettingsクラスのインスタンスへdbSettingsプロパティでアクセスできます。これを利用すると、現在処理しているコンテキスト名は、DB_SettingsクラスのメソッドgetDataSourceName()で取得できます。Ver.5.4-dev以降は、従来の名称のメソッドは呼び出されず、新しいメソッドしか呼び出されませんので、必要な修正をしてください。</p>
+<h4>従来の定義</h4>
+<div class="code">
+<pre><code>interface Extending_Interface_BeforeGet {
+    public function doBeforeGetFromDB($dataSourceName);
+}
+interface Extending_Interface_AfterGet {
+    public function doAfterGetFromDB($dataSourceName, $result);
+}
+interface Extending_Interface_AfterGet_WithNavigation {
+    public function doAfterGetFromDB($dataSourceName, $result);
+    public function countQueryResult($dataSourceName);
+    public function getTotalCount($dataSourceName);
+}
+interface Extending_Interface_BeforeSet {
+    public function doBeforeSetToDB($dataSourceName);
+}
+interface Extending_Interface_AfterSet {
+    public function doAfterSetToDB($dataSourceName, $result);
+}
+interface Extending_Interface_BeforeDelete {
+    public function doBeforeDeleteFromDB();
+}
+interface Extending_Interface_AfterDelete {
+    public function doAfterDeleteFromDB($result);
+}
+interface Extending_Interface_BeforeNew {
+    public function doBeforeNewToDB($dataSourceName);
+}
+interface Extending_Interface_AfterNew{
+    public function doAfterNewToDB($dataSourceName, $result);
+}</code></pre>
+</div>
+<h4>新しい定義</h4>
+<div class="code">
+<pre><code>interface Extending_Interface_BeforeRead {
+    public function doBeforeReadFromDB();
+}
+interface Extending_Interface_AfterRead {
+    public function doAfterReadFromDB($result);
+}
+interface Extending_Interface_AfterRead_WithNavigation {
+    public function doAfterReadFromDB( $result);
+    public function countQueryResult();
+    public function getTotalCount();
+}
+interface Extending_Interface_BeforeUpdate {
+    public function doBeforeUpdateDB();
+}
+interface Extending_Interface_AfterUpdate {
+    public function doAfterUpdateToDB($result);
+}
+interface Extending_Interface_BeforeCreate {
+    public function doBeforeCreateToDB();
+}
+interface Extending_Interface_AfterCreate {
+    public function doAfterCreateToDB($result);
+}
+interface Extending_Interface_BeforeDelete {
+    public function doBeforeDeleteFromDB();
+}
+interface Extending_Interface_AfterDelete {
+    public function doAfterDeleteFromDB($result);
+}
+interface Extending_Interface_BeforeCopy {
+    public function doBeforeCopyInDB();
+}
+interface Extending_Interface_AfterCopy {
+    public function doAfterCopyInDB($result);
+}</code></pre>
+</div>
+
+<h3>DB_Settingsクラスの整理統合</h3>
+<p>以下のメソッドはVer.5.4-devでは定義されていません。代替メソッドを使ってください。</p>
+<div class="code">
+<pre><code>function getTargetName()
+function getTargetDataSource()
+function setTargetDataSource($targetDataSource)
+function getIndexOfDataSource($dataSourceName)
+function setTargetFields($fields)</code></pre>
+</div>
+<p>getTargetName/getTargetDataSource/setTargetDataSourceメソッドは、ほぼ同一の動きをするgetDataSourceName/setDataSourceNameメソッドに置き換えました。setTargetFieldsとgetIndexOfDataSourceメソッドは使われていないので、削除しました。</p>
+              </section>
+              <section>
+                <h1>Ver.5.3での変更</h1>
+                <h4>CSRF攻撃対策の追加</h4>
+                <p>params.phpファイルで$webServerNameという変数を設定することでCSRF攻撃対策を実施することができるようになりました。Webサーバーのドメイン名もしくはFQDN（完全修飾ドメイン名）を配列で設定するようにしてください。<br>設定例1：array('inter-mediator.com');<br>設定例2：array('www.inter-mediator.com', 'inter-mediator.org');</p>
+            </section>
+            <section>
+                <h1>Ver.5.2での変更</h1>
+                <h4>データベースクラスでのメソッド定義の変更</h4>
+                <p>Auth_Interface_DBインタフェースで定義しているauthSuportCreateUserメソッドの引数が、LDAP対応に伴い2つから4つに増えました。
+	                データベースクラス（DB_PDO.phpなど）については、機能を組み込んでいなくても、メソッドの引数をインタフェースでの定義に揃えなければなりません。
+	                定義内容は、DB_Interfaces.phpファイルを参照してください。
+                </p>
+              </section>
+            <section>
                 <h1>Ver.4.7での変更</h1>
                 <h4>Internet Explorer Ver.8対応に関して</h4>
                 <p>これまでは、Internet Explorerの最低サポートバージョンをVer.8としてきましたが、Ver.4.7現在、いくつかの機能が動かない状態になっています。これらについては、今後サポートする予定はありません。しかしながら、主要な機能はVer.4.7でも動いているので、IE8のサポートバージョンとして、最後のものがVer.4.7とします。Ver.4.7でIE8で動作に問題があるものとして、以下のものがわかっています。</p>
@@ -179,11 +308,11 @@ INTERMediator.additionalCondition = conditions</code></pre>
             </section>
             <section>
                 <h1>Ver.4.0 (2013/12/4) での変更</h1>
-                <p>INTER-Mediatorの配布ファイルのファイル構成が変わりました。ルート直下にフレームワークがあり、サンプルファイルはSamplesの下に配備しました。同時に、dist-docs/buildup.shを利用して、運用向けのフレームワークを用意する機能を加えています。<a href="/en/for-novices/deploy.html">こちら</a>をごらんください。</p>
+                <p>INTER-Mediatorの配布ファイルのファイル構成が変わりました。ルート直下にフレームワークがあり、サンプルファイルはSamplesの下に配備しました。同時に、dist-docs/buildup.shを利用して、運用向けのフレームワークを用意する機能を加えています。<a href="/ja/for-novices/deploy.html">こちら</a>をごらんください。</p>
             </section>
             <section>
                 <h1>Ver.3.8 (2013/8/22) での変更</h1>
-                <p>$params.phpファイルにおいて記述できていた$scriptPathPrefix、$scriptPathSufixを利用して、クライアントから呼び出すURLをコントロールできていましたが、$callURLという変数で完全にURLで指定できるようにしています。$scriptPathPrefix、$scriptPathSufixも使用できます。</p>
+                <p>params.phpファイルにおいて記述できていた$scriptPathPrefix、$scriptPathSufixを利用して、クライアントから呼び出すURLをコントロールできていましたが、$callURLという変数で完全にURLで指定できるようにしています。$scriptPathPrefix、$scriptPathSufixも使用できます。</p>
             </section>
         </article>
     </div>
