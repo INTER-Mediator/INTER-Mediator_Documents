@@ -15,14 +15,18 @@
     <meta charset="UTF-8">
     <title></title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
     <link rel="stylesheet" href="../lib/css/normalize.min.css" media="screen">
     <link rel="stylesheet" href="../lib/css/style.min.css" media="screen">
     <link rel="stylesheet" href="../lib/css/nav.min.css" media="screen">
     <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
     <link rel="icon" href="../images/im-icon.png" type="image/png">
     <script src="../lib/ja/sitemap.min.js"></script>
-    <script src="../lib/pagebuilder-r2.js"></script>
+    <script src="../lib/js/lunr.min.js"></script>
+    <script src="../lib/js/lunr.stemmer.support.min.js" charset="UTF-8"></script>
+    <script src="../lib/js/tinyseg.js" charset="UTF-8"></script>
+    <script src="../lib/js/lunr.jp.min.js" charset="UTF-8"></script>
+    <script src="../lib/js/pagebuilder-r2.js"></script>
     <script src="../lib/pagebuilder-r2.php"></script>
 </head>
 
@@ -31,28 +35,15 @@
         <div class="page-title">
             <h1 id="pageTitle"></h1>
         </div>
-        <ol id="breadcrumb" class="breadcrumb clearfix">
-        </ol>
-        <article>
-            <section class="clearfix">
-
-                <h4><a href="for-novices/index.html" title="INTER-Mediatorをはじめよう">INTER-Mediatorをはじめよう</a></h4>
-                <p>これから始める方はこちらをご覧ください。ダウンロードとインストール方法、試用や学習用途として利用できるバーチャルマシンのダウンロードリンクと利用方法、スタートアップガイド、ハンズオンセッション手順書があります。</p>
-
-                <h4><a href="practices/index.html" title="プラクティス">プラクティス</a></h4>
-                <p>実際の開発時に発生するニーズに近い形式のテーマをもとにしてサンプルプログムを作成し、その動作をみながら個別の機能をどのように実現しているかを示すものです。書籍で言えば「クックブック」といった名称で紹介されるような内容です。</p>
-
-                <h4><a href="for-developers/index.html" title="開発ガイド">開発ガイド</a></h4>
-                <p>定義ファイルの記述方法、Dockerの利用、データベースごとの固有の事情、計算式、メール送信、ユーザー認証とアクセス権、サンプルファイルについて、検索ページを作成するための機能など、実際に開発を行う際に必要な内容について説明しています。</p>
-
-                <h4><a href="for-programmers/index.html" title="プログラミングガイド">プログラミングガイド</a></h4>
-                <p>クライアント側で処理を行うJavaScriptの処理、INTERMediatorの各クラスのプロパティ、メディアの取り扱い、サーバーサイドの拡張等、より高度な使い方をされる場合にご覧ください。また、ソースコードの投稿についても説明しています。</p>
-
-                <h4><a href="developers-blog/index.html" title="開発者によるブログ">開発者、コミッター、利用者によるブログ</a></h4>
-                <p>INTER-Mediatorの記事を掲載しているブログのリンク集です。</p>
-
-            </section>
-        </article>
+        <div id="searchInputBox" class="search-input-box">
+            <input id="searchInput" class="search-input" type="text" placeholder="キーワードを入力してください" autocapitalize="off" onfocus="this.select()">
+            <button id="search" class="btn btn-primary search-button">マニュアル検索</button>
+        </div>
+        <div id="searchResultBox" class="search-resulut-box">
+            <h3 id="searchResultHeader" class="search-result-header"><span id="searchInfo" class="search-info"></span></h3>
+            <ul id="searchResult" class="search-result">
+            </ul>
+        </div>
     </div>
 </body>
 

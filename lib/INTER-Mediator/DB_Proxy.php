@@ -1,5 +1,4 @@
 <?php
-
 /**
  * INTER-Mediator
  * Copyright (c) INTER-Mediator Directive Committee (http://inter-mediator.org)
@@ -13,6 +12,7 @@
  * @link          https://inter-mediator.com/
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
 {
     /**
@@ -318,7 +318,8 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
                 ) {
                     $this->dbClass->requireUpdatedRecord(true);
                 }
-                $result = $this->dbClass->createInDB($bypassAuth);
+                $resultOfCreate = $this->dbClass->createInDB($bypassAuth);
+                $result = $this->dbClass->updatedRecord();
             }
 //            if ($this->userExpanded !== null && method_exists($this->userExpanded, "doAfterNewToDB")) {
 //                $this->logger->setDebugMessage("The method 'doAfterNewToDB' of the class '{$className}' is calling.", 2);
@@ -326,7 +327,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
 //            }
             if ($this->userExpanded !== null && method_exists($this->userExpanded, "doAfterCreateToDB")) {
                 $this->logger->setDebugMessage("The method 'doAfterCreateToDB' of the class '{$className}' is calling.", 2);
-                $result = $this->userExpanded->doAfterCreateToDB($this->dbClass->updatedRecord());
+                $result = $this->userExpanded->doAfterCreateToDB($result);
             }
             if ($this->dbSettings->notifyServer && $this->clientPusherAvailable) {
                 try {
@@ -366,7 +367,7 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
             $this->logger->setErrorMessage("Exception: {$e->getMessage()}");
             return false;
         }
-        return $result;
+        return $resultOfCreate;
 
     }
 
@@ -494,9 +495,11 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
         return null;
     }
 
-    public function ignoringPost()   {
+    public function ignoringPost()
+    {
         $this->ignorePost = true;
-}
+    }
+
     /**
      * @param $datasource
      * @param $options
@@ -1058,12 +1061,17 @@ class DB_Proxy extends DB_UseSharedObjects implements DB_Proxy_Interface
             include($currentDirParam);
         }
 
-        $rsa = new Crypt_RSA();
+        $rsaClass = IMUtil::phpSecLibClass('phpseclib\Crypt\RSA');
+        $rsa = new $rsaClass;
         $rsa->setPassword($passPhrase);
         $rsa->loadKey($generatedPrivateKey);
         $rsa->setPassword();
         $privatekey = $rsa->getPrivateKey();
-        $priv = $rsa->_parseKey($privatekey, CRYPT_RSA_PRIVATE_FORMAT_PKCS1);
+        if (IMUtil::phpVersion() < 6) {
+            $priv = $rsa->_parseKey($privatekey, CRYPT_RSA_PRIVATE_FORMAT_PKCS1);
+        } else {
+            $priv = $rsa->_parseKey($privatekey, constant('phpseclib\Crypt\RSA::PRIVATE_FORMAT_PKCS1'));
+        }
         require_once('lib/bi2php/biRSA.php');
         $keyDecrypt = new biRSAKeyPair('0', $priv['privateExponent']->toHex(), $priv['modulus']->toHex());
         $decrypted = $keyDecrypt->biDecryptedString($paramCryptResponse);

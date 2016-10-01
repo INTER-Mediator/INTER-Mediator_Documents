@@ -768,10 +768,24 @@ class DB_FileMaker_FX extends DB_AuthCommon implements DB_Access_Interface
             'DBPassword' => $this->dbSettings->getAccessPassword(),
         );
         $cwpkit = new CWPKit($config);
+
+        $compoundFind = TRUE;
         if ($searchConditions === array() || (int)$cwpkit->getServerVersion() < 12) {
+            $compoundFind = FALSE;
+        } else {
+            foreach ($searchConditions as $searchCondition) {
+                if (isset($searchCondition[0]) && $searchCondition[0] === '-recid') {
+                    $compoundFind = FALSE;
+                }
+            }
+        }
+
+        if ($compoundFind === FALSE) {
             $currentSearch = $fxUtility->CreateCurrentSearch();
             if ($hasFindParams) {
-                $queryString .= $currentSort . $currentSearch . '&-find';
+                $queryString = $cwpkit->_removeDuplicatedQuery(
+                    $queryString . $currentSort . $currentSearch . '&-find'
+                );
             } else {
                 $queryString .= $currentSort . $currentSearch . '&-findall';
             }
@@ -1125,6 +1139,16 @@ class DB_FileMaker_FX extends DB_AuthCommon implements DB_Access_Interface
         $tableInfo = $this->dbSettings->getDataSourceTargetArray();
         $primaryKey = isset($tableInfo['key']) ? $tableInfo['key'] : $this->getDefaultKey();
 
+        $fxUtility = new RetrieveFM7Data($this->fx);
+        $config = array(
+            'urlScheme' => $this->fx->urlScheme,
+            'dataServer' => $this->fx->dataServer,
+            'dataPort' => $this->fx->dataPort,
+            'DBUser' => $this->dbSettings->getAccessUser(),
+            'DBPassword' => $this->dbSettings->getAccessPassword(),
+        );
+        $cwpkit = new CWPKit($config);
+
         if (isset($tableInfo['query'])) {
             foreach ($tableInfo['query'] as $condition) {
                 if (!$this->dbSettings->getPrimaryKeyOnly() || $condition['field'] == $primaryKey) {
@@ -1148,7 +1172,9 @@ class DB_FileMaker_FX extends DB_AuthCommon implements DB_Access_Interface
                 }
                 $convertedValue = $this->formatter->formatterToDB(
                     "{$tableSourceName}{$this->dbSettings->getSeparator()}{$value['field']}", $value['value']);
-                $this->fx->AddDBParam($value['field'], $convertedValue, $value['operator']);
+                if ($cwpkit->_checkDuplicatedFXCondition($fxUtility->CreateCurrentSearch(), $value['field'], $convertedValue) === TRUE) {
+                    $this->fx->AddDBParam($value['field'], $convertedValue, $value['operator']);
+                }
             }
         }
         if (isset($tableInfo['authentication'])
@@ -1163,14 +1189,18 @@ class DB_FileMaker_FX extends DB_AuthCommon implements DB_Access_Interface
                     $authFailure = true;
                 } else {
                     $signedUser = $this->authSupportUnifyUsernameAndEmail($this->dbSettings->getCurrentUser());
-                    $this->fx->AddDBParam($authInfoField, $signedUser, "eq");
+                    if ($cwpkit->_checkDuplicatedFXCondition($fxUtility->CreateCurrentSearch(), $authInfoField, $signedUser) === TRUE) {
+                        $this->fx->AddDBParam($authInfoField, $signedUser, "eq");
+                    }
                 }
             } else if ($authInfoTarget == 'field-group') {
                 $belongGroups = $this->authSupportGetGroupsOfUser($this->dbSettings->getCurrentUser());
                 if (strlen($this->dbSettings->getCurrentUser()) == 0 || count($belongGroups) == 0) {
                     $authFailure = true;
                 } else {
-                    $this->fx->AddDBParam($authInfoField, $belongGroups[0], "eq");
+                    if ($cwpkit->_checkDuplicatedFXCondition($fxUtility->CreateCurrentSearch(), $authInfoField, $belongGroups[0]) === TRUE) {
+                        $this->fx->AddDBParam($authInfoField, $belongGroups[0], "eq");
+                    }
                 }
             } else {
                 if ($this->dbSettings->isDBNative()) {
@@ -1237,8 +1267,10 @@ class DB_FileMaker_FX extends DB_AuthCommon implements DB_Access_Interface
                     $counter++;
                     $convVal = $this->stringReturnOnly((is_array($value)) ? implode("\n", $value) : $value);
                     $convVal = $this->formatter->formatterToDB(
-                        "{$tableSourceName}{$this->dbSettings->getSeparator()}{$originalfield}", $convVal);
-                    $this->fx->AddDBParam($field, $convVal);
+                        $this->getFieldForFormatter($tableSourceName, $originalfield), $convVal);
+                    if ($cwpkit->_checkDuplicatedFXCondition($fxUtility->CreateCurrentSearch(), $field, $convVal) === TRUE) {
+                        $this->fx->AddDBParam($field, $convVal);
+                    }
                 }
                 if ($counter < 1) {
                     $this->logger->setErrorMessage('No data to update.');
@@ -1547,9 +1579,32 @@ class DB_FileMaker_FX extends DB_AuthCommon implements DB_Access_Interface
         return true;
     }
 
-    function copyInDB()
+    public function copyInDB()
     {
         $this->errorMessage[] = "Copy operation is not implemented so far.";
+    }
+
+    private function getFieldForFormatter($entity, $field)
+    {
+        if (strpos($field, "::") === false) {
+            return "{$entity}{$this->dbSettings->getSeparator()}{$field}";
+        }
+        $fieldComp = explode("::", $field);
+        $ds = $this->dbSettings->getDataSource();
+        foreach ($ds as $contextDef) {
+            if ($contextDef["name"] == $fieldComp[0] ||
+                ($contextDef["table"] && $contextDef["table"] == $fieldComp[0])
+            ) {
+                if ($contextDef["relation"] &&
+                    $contextDef["relation"][0] &&
+                    $contextDef["relation"][0]["portal"] &&
+                    $contextDef["relation"][0]["portal"] = true
+                ) {
+                    return "{$fieldComp[0]}{$this->dbSettings->getSeparator()}{$field}";
+                }
+            }
+        }
+        return "{$entity}{$this->dbSettings->getSeparator()}{$field}";
     }
 
     public function authSupportStoreChallenge($uid, $challenge, $clientId)
@@ -2112,7 +2167,7 @@ class DB_FileMaker_FX extends DB_AuthCommon implements DB_Access_Interface
             $this->setupFXforDB_Alt($userTable, 1);
             $this->fxAlt->SetRecordID($recId);
             $this->fxAlt->AddDBParam('hashedpasswd', $password);
-            if ($rawPWField!== false)   {
+            if ($rawPWField !== false) {
                 $this->fxAlt->AddDBParam($rawPWField, $rawPW);
             }
             $result = $this->fxAlt->DoFxAction('update', TRUE, TRUE, 'full');
