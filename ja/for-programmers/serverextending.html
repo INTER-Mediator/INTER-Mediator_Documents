@@ -190,6 +190,12 @@ interface Extending_Interface_AfterCopy{
                     </tr>
                 </table>
             </div>
+            <p>doAfter*メソッドの中では、原則として引数から処理対象のレコードが得られます。以下、処理結果のレコードを参照したり更新するメソッドを用意していますが、updateRecordメソッドは通常は不要と思われます。メール処理のためにフィールドを追加するようなときには、setUpdatedRecordメソッドを使います。</p>
+<h4><span class="object">DB_Class</span>->updatedRecord()</h4>
+<p class="exp">データベース処理後、処理した結果のレコードの配列が得られる。読み出しなら、読み出したレコード群、更新なら更新したレコード、新規レコードなら作成したレコードが得られる。</p>
+<h4><span class="object">DB_Class</span>->setUpdatedRecord($f, $v, $n)</h4>
+<p class="exp">処理した結果のレコードの特定のフィールドを修正する。$fがフィールド、$vがその値、$nは0から始まる番号でレコードを指定するが、$nを省略すると最初のレコードを参照する。返り値はなし。</p>
+
         </section>
        <section><h1>データベースクラスを自作する</h1>
             <p>データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-MediatorのDB_PDO.php、FileMaer Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。</p>
