@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--
 /*
- * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
- *
- *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
- *   INTER-Mediator is supplied under MIT License.
- */
+* INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+*
+*   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
+*
+*   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+*   INTER-Mediator is supplied under MIT License.
+*/
 -->
-<html lang="en">
+<html lang="ja">
 
 <head>
     <meta charset="UTF-8">
@@ -22,136 +22,133 @@
     <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
     <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
     <link rel="icon" href="../images/im-icon.png" type="image/png">
-    <script src="../../lib/en/sitemap.min.js"></script>
+    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
     <script>
-    hljs.initHighlightingOnLoad()
+        hljs.initHighlightingOnLoad()
     </script>
 </head>
 
 <body class="docs" data-page-title="for-novices">
-    <div class="container clearfix">
-        <div class="page-title">
-            <h1 id="pageTitle"></h1>
-        </div>
-        <ol id="breadcrumb" class="breadcrumb clearfix">
-        </ol>
-        <div class="docs-sidebar sticky clearfix">
-            <nav>
-                <ul id="pageIndex">
-                </ul>
-            </nav>
-        </div>
-        <article>
-            <section>
-                <h1>はじめに</h1>
-                <p class="lead">INTER-Mediatorの試用や学習用に、即座にサーバーとして利用できるVirtual Machine（VM）についての情報をこの文書に記載します。VMを自分で作成するか、あるいはすでに作成されているVMをダウンロードするかして利用できます。</p>
-                <p class="infobox red">このVirtual Machineは、特定のホスト内でのみ利用することを想定して、ログインアカウントなどを見える場所に記載しています。学習用に定義ファイルとページファイルをブラウザーで編集できる状態にしているため、Virtual Machineとして配布している「INTER-Mediator-Server VM」をそのままインターネットに公開することは絶対に行わないでください。</p>
-            </section>
-            <section>
-                <h1>使用までの準備</h1>
-                <p>VMは、VirtualBox用を提供します。アプリケーション形式のVirtualBoxを以下の方法で、ご自分のパソコンにインストールしておいてください。</p>
-
-                <h3>VirtualBoxのインストール</h3>
-                <p>Windows、Mac、Linux、Solarisで利用できるVirtual Machine実行環境の「VirtualBox」は、Oracle社が開発してフリーで配布しているものです。<a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">こちらのページ</a>より、ご利用のホストコンピュータに対応したVirtualBoxをダウンロードしてご利用ください。</p>
-            </section>
-            <section>
-                <h1>INTER-Mediator-Server VMのダウンロード</h1>
-                <p>INTER-Mediator-Server VMは以下のリンクよりダウンロードしてください。1.6GBほどあります。</p>
-                <ul>
-                    <li>
-                        <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.4.ova">INTER-Mediator-Server VM 5.4</a>（最終更新日：2016/08/24）<!-- SHA-256 checksum: fa9145732c5890987f04e53d4e22df2109771924370b3db615fece9eeb01e5a4 -->
-                    </li>
-                    <li>
-                        <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.5-RC2.ova">INTER-Mediator-Server VM 5.5-RC2</a>（最終更新日：2016/09/23）<!-- SHA-256 checksum: 97c3c52f5bec9fccb6d361dd73a66da444e4d65a68c230b86b8030e90174d3d9 -->
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <h1>VMの準備</h1>
-                <p>VMをINTER-Mediatorに含まれているスクリプト等を利用して自分で生成する方法を「VMを自分で作成して起動する」に、一方、すでに誰かが作ったVMを利用する方法を「VMをダウンロードして利用する」に解説します。もちろん、いずれか一方の作業を行うことで、VMを利用することができるので、状況に応じて使い分けてください。</p>
-
-                <h3>VMをダウンロードして利用する</h3>
-                <p>以下の手順は、VirtualBoxの初期状態を仮定しています。他の利用などでさまざまな設定がある場合には、手順が異なるかもしれませんが、原則として、ホストオンリーネットワークを用意して、そのネットワークを使用してVMが起動するようにセットアップされていればOKです。ダウンロードしたVMは、OS XでもWindowsでも、プラットフォームに関係なく利用できます。ただし、FileMaker Serverの場合には、VMとホスト側のIPアドレスが以下で行われる設定と同一である必要があります。</p>
-
-                <h4>VirtualBoxの準備</h4>
-                <p>VirtualBoxで稼働させるゲストのネットワーク環境にはいくつかありますが、「ホストオンリーネットワーク」を利用します。この方法だと、ゲストOS自体は、ホストマシン外からのネットワークアクセスはできなくなります。また、ゲストOSからホストOSへの接続も可能です。作成されるVMは、ホストオンリーネットワークであることを前提としているので、それ以外の設定での利用では、VMの状況を確認するなどして、ご自分で対処する必要があります。</p>
-                <p>Windowsでは、「ホストオンリーネットワーク」が最初から1つ作成されています。確認のため、「ファイル」メニューから「環境設定」を選択して、ダイアログボックスの左側で「ネットワーク」を選択し、「ホストオンリーネットワーク」のタブを選択します。そこに最初から「VirtualBox Host-Only Ethernet Adapter」が存在することを確認してください。</p>
-                <div class="picture">
-                    <img class="picture-small picture-dummy" src="/images/shot9518.png">
-                </div>
-                <p>Mac版では、「ホストオンリーネットワーク」は最初は1つもありません。「VirtualBox」メニューの「環境設定」を選択してダイアログボックスを表示します。ツールバーにある「ネットワーク」を選択します。さらに、「ホストオンリーネットワーク」のタブを選択します。ここに何もない場合には、リストの右側の3つあるアイコンの一番上をクリックして、項目を1つ作ります。作成されたままの状態で通常はかまいません。</p>
-                <div class="picture">
-                    <img class="picture-small picture-dummy" src="/images/shot9515.png">
-                </div>
-
-                <h4>ダウンロードした.ovaファイルの読み込み</h4>
-                <p>WindowsおよびMacのいずれの場合でも、「ファイル」メニューから「仮想アプライアンスのインポート」を選択してください。そして、ダウンロードしたファイルを指定して読み込み、「VirtualBox マネージャー」の画面の左側に新しい項目ができていることを確認します。</p>
-
-                <h4>INTER-Mediator-Server VMのネットワーク設定</h4>
-                <p>「VirtualBox マネージャー」で、読み込んだINTER-Mediator-Server VMの項目を選択します。そして、ツールバーの「設定」アイコンをクリックします。すると、そのVirtual Machineの設定が画面が表示されます。</p>
-                <p>Windowsでは、画面左側のリストで「ネットワーク」を選択します、さらに「アダプター2」のタブを選択します。そして、「割り当て」のポップアップメニューで「ホストオンリーアダプター」を選択します。すると、「名前」のところは、自動的に、「ホストオンリーネットワーク」に定義された名前が見えています。そこまでを確認して、OKボタンをクリックします。</p>
-                <div class="picture">
-                    <img class="picture-small picture-dummy" src="/images/shot9517.png">
-                </div>
-                <p>Macの場合は、ツールバーの「ネットワーク」を選択して、さらに「アダプター2」のタブを選択します。そして、「割り当て」のポップアップメニューで「ホストオンリーアダプター」を選択します。すると、「名前」のところは、自動的に、「ホストオンリーネットワーク」に定義された名前が見えています。そこまでを確認して、OKボタンをクリックします。</p>
-                <div class="picture">
-                    <img class="picture-small picture-dummy" src="/images/shot9516.png">
-                </div>
-            </section>
-            <section>
-                <h1>INTER-Mediator-Server VMの利用</h1>
-                <p>以上の準備ができれば、VirtualBox マネージャーでINTER-Mediator-Server VMの項目を選択して「起動」ボタンをクリックします。黒いコンソール画面に文字が流れて起動します。ログインプロンプトが表示されます。Webブラウザから「<a href="http://192.168.56.101" target="_blank">http://192.168.56.101</a>」に接続してください。すると、このINTER-Mediator-Server VMで利用出来る機能などなどが見えるページがあります。</p>
-                <p>「サンプルプログラム」のリンクからは、INTER-MediatorのSamplesフォルダの内容を即座に稼働させることができます。ホスト側でFileMaker Serverが稼働している場合、INTER-Mediatorのディストリビューションの中にあるdist-docs/TestDB.fmp12をサーバーに登録してXML共有ができる状態になっていれば、ゲストからホストに接続して動作するので、FileMaker Serverのサンプルも試せます。FileMaker Serverが稼働していない場合には、FileMaker Serverのサンプルはエラーが出ます。</p>
-                <div class="picture">
-                    <img class="picture-small picture-dummy" src="/images/shot9633.png">
-                </div>
-                <p>また、Webブラウザ上で、定義ファイルとページファイルを修正して、実際にプログラムした結果を参照することもできます。たとえば、ページファイルのpage01.htmlを開くリンクだけでなく、page01.htmlを編集するリンクはHTMLエディタを表示します。また、def01.phpはpage01.htmlからSCRIPTタグで参照されている定義ファイルで、定義ファイルエディタを開いて修正もできるようになっています。</p>
-                <div class="picture">
-                    <img class="picture-small picture-dummy" src="/images/shot9634.png">
-                </div>
-
-                <h3>「http://192.168.56.101」に接続できない場合</h3>
-                <p>INTER-Mediator-Server VMが起動しているのなら、ユーザ名「developer」、パスワード「im4135dev」でログインをしてみて、「ifconfig」コマンドを実行してください。そこに、INTER-Mediator-Server VMが現在使用しているIPアドレスが見えます。eth1と記述された塊の中の、inet addrの後のIPアドレスが、現在のゲストOSのIPアドレスです。ホスト側でWebブラウザを起動して、そのIPアドレスで接続をしてみてください。</p>
-                <p>それでも考えられるのは次のようなことです。</p>
-                <ul>
-                    <li>そもそも、VirtualBox自体がきちんと動かない状態である。Windowsで仮想化機能が無効になっている、Windows 10でHyper-Vを有効にしている、VMwareで稼働するWindowsの上でさらにINTER-Mediator-Server VMを使用しようとした、など。</li>
-                    <li>ここまでに説明したネットワークの設定が正しく行われていない。あるいは、以前にその種の設定を独自に変更してしまっている。</li>
-                    <li>なんらかの設定により、ホストからゲストへのIP接続ができない状態になっている。VirtualBoxでの設定次第で、あり得ると考えられます。</li>
-                </ul>
-
-                <h3>自分で作ったファイルを運用する</h3>
-                <p>「http://192.168.56.101」に接続したページに、ログイン可能なアカウントが末尾に書かれています。それをご利用ください。SFTPでファイルの転送をするのが手軽かと思われます。また、INTER-Mediator-Server VM自体にログインをして、独自のデータベーススキーマを読み込ませるなどしてください。データベースの管理アカウントも、「http://192.168.56.101」に接続したページに記載しています。</p>
-
-                <h3>INTER-Mediatorをアップデートする</h3>
-                <p>ホストマシン上で、sshにより「192.168.56.101」に接続してください。ユーザー名は「developer」、パスワードは「im4135dev」です。例えば、OS Xの場合は「ターミナル」アプリケーションで、「ssh developer@192.168.56.101」とコマンドを入れて、パスワードがその後にたずねられるので、キータイプをします。Windowsの場合は、TeraTermやPuTTY等のアプリケーションをご利用ください。</p>
-                <p>INTER-Mediator Ver.5.2（Ver.5.2-RC3を含む）以降のINTER-Mediator-Server VMの場合、以下のようにコマンドを入力します。</p>
-                <div class="code">
-<pre><code>cd /var/www/html/INTER-Mediator
-git pull origin stable</code></pre>
-</div>
-                <p>INTER-Mediator Ver.5.2-RC1およびそれ以前のINTER-Mediator-Server VMの場合、以下のようにコマンドを入力します。checkoutの後にスペースとドット（git checkout .）を入れるのを忘れないようにして下さい。</p>
-                <div class="code">
-<pre><code>cd /var/www/html/INTER-Mediator
-git checkout .
-git pull origin stable</code></pre>
-</div>
-                <p>GitHubのリポジトリにあるINTER-Mediatorの最新安定版がVMに反映されます。なお、開発版の最新状況を反映させる場合には「git pull origin stable」の代わりに「git pull origin master」を実行します。現在のバージョンは、INTER-Mediator以下、dist-docs/build.shというスクリプトの最初の方のバージョン記述を確認してください。反映されている最終的なコミットは、git logやgit showコマンドで、現在のcommitの識別子（16進数の非常に長いコードで、commitの後に続けて記述されている）を得て、GitHubのリポジトリで探してください。なお、Ver.5.1以前の場合は、アクセス権の設定が若干違います。もともと用意されているページファイルと定義ファイルの編集には問題がありませんが、自分でファイルを追加したような場合などは、アクセス権について見直してください。</p>
-            </section>
-            <section>
-                <h1>（参考）VMを自分で作成して起動する</h1>
-                <p>INTER-Mediatorの配布ファイルの中には、VMを生成するためのスクリプト等が含まれています。最新のINTER-Mediatorが組み込まれたVMを作成するには、この方法が最適です。なお、標準環境のWindowsでは、Vagrantをインストールしてもスクリプトが稼働しないので、ご注意ください（別途Git for Windowsなどのソフトウェアをインストールしてsshを実行できる環境が必要です）。</p>
-                <ol>
-                    <li>Vagrantをインストールします。<a href="https://www.vagrantup.com/" target="_blank">こちら</a>のページに移動して、使用するOSに対応したアプリケーションをダウンロードしてインストールします。単にインストールするだけで大丈夫です。</li>
-                    <li>INTER-Mediatorの最新版をcloneします。<a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">こちら</a>のページににある「Clone in Desktop」ボタンを利用するのが手軽な方法です。</li>
-                    <li>OS Xであればターミナルアプリケーションを起動し、cloneしたINTER-Mediatorフォルダ内のdist-docs/vm-for-trialフォルダに移動します。</li>
-                    <li>「vagrant up」というコマンドを実行します。ダウンロードや作成処理に時間がかかります。概ね20分程度です。「INTER-Mediator-Server VM is ready.」と表示されたら準備完了です。</li>
-                </ol>
-            </section>
-        </article>
+<div class="container clearfix">
+    <div class="page-title">
+        <h1 id="pageTitle"></h1>
     </div>
+    <ol id="breadcrumb" class="breadcrumb clearfix">
+    </ol>
+    <div class="docs-sidebar sticky clearfix">
+        <nav>
+            <ul id="pageIndex">
+            </ul>
+        </nav>
+    </div>
+    <article>
+        <section>
+            <h1>Summary</h1>
+            <p class="lead">We prepare the Virtual Machine (VM) that can be used immediately as a server for trial and learning of INTER-Mediator. The informmation of VM is described in this document. You can use it by creating the VM yourself, or by downloading the already created VM.</p>
+            <p class="infobox red">This virtual machine is described in a place where you can see the login account etc., assuming that it is used only within a specific host. Since you can edit definition files and page files for easy to learn with the browser, please never publish "INTER-Mediator-Server VM" distributed as Virtual Machine to the Internet as it is.</p>
+        </section>
+        <section>
+            <h1>Preparation to use</h1>
+            <p>VM provides for VirtualBox. Please install the application type VirtualBox on your personal computer as below. </p>
+            <h3>Installing VirtualBox</h3>
+            <p>"VirtualBox" of Virtual Machine execution environment available on Windows, Mac, Linux, Solaris is developed by Oracle Corporation and is distributed freely in some circumstance. Please download VirtualBox corresponding to your host computer from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">this page</a>. </p>
+        </section>
+        <section>
+            <h1>INTER-Mediator-Server VM download</h1>
+            <p>Please download INTER-Mediator-Server VM from the link below. There is about 1.7GB. </p>
+            <ul>
+                <li>
+                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.5.ova">INTER-Mediator-Server
+                        VM 5.5</a>（Latest update: 2016-10-13）
+                    <!-- SHA-256 checksum: 97c3c52f5bec9fccb6d361dd73a66da444e4d65a68c230b86b8030e90174d3d9 -->
+                </li>
+                <li>
+                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.4.ova">INTER-Mediator-Server
+                        VM 5.4</a>（Latest update: 2016-08-24）
+                    <!-- SHA-256 checksum: fa9145732c5890987f04e53d4e22df2109771924370b3db615fece9eeb01e5a4 -->
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h1>Preparing the VM</h1>
+            <p>To create your own VM using scripts included in INTER-Mediator by yourself, you can refer the "Create your own VM and start it yourself" section. If you want to use the VM that someone already made, it's described on "Downloading and using VM" section. Of course, you can use the VM by doing one of the tasks, so use it according to the situation. </p>
+            <h3> Download and use VM </h3>
+            <p> The following procedure assumes the initial state of VirtualBox. Procedures may be different if there are various settings due to other uses etc, but in principle, prepare a host-only network and set up the VM to start using it. The downloaded VM can be used regardless of platform regardless of OS X or Windows. However, in the case of FileMaker Server, the IP address of the VM and the host side must be the same as the setting done below. </p>
+            <h4>Preparing VirtualBox</h4>
+            <p>There are several network environments of guests running on VirtualBox, but we use "host-only network". With this method, the guest OS itself can't be accessed from outside the host machine. It is just possible to connect from the guest OS to the host OS. Since it is assumed that the created VM is a host-only network, if you use it with other settings, you need to deal with it yourself by checking the status of the VM.</p>
+            <p>On Windows, "Host-only network" has been created from the beginning. For confirmation, select "Preferences" from the "File" menu, select "Network" on the left side of the dialog box, and select the "Host Only Network" tab. Please check that there is "VirtualBox Host-Only Ethernet Adapter" from the beginning there.</p>
+            <div class="picture">
+                <img class="picture-small" src="/images/shot9518.png">                
+            </div>
+            <p> On the Mac version, there is no "host-only network" at the beginning. Select "Preferences" on the "VirtualBox" menu to display the dialog box. Select "Network" on the tool bar. In addition, select the "Host Only Network" tab. If there is nothing here, click one of the three icons on the right side of the list to create one item. You usually don't have to modify the setting of newly created item.</p>
+            <div class="picture">
+                <img class="picture-small" src="/images/shot9515.png">                
+            </div>
+            <h4>Loading the downloaded .ova file</h4>
+            <p>For both Windows and Mac, choose Import Virtual Appliance from the File menu. Then, specify and load the downloaded file and confirm that a new item is created on the left side of "VirtualBox Manager" screen. </p>
+            <h4>INTER-Mediator-Server VM network settings</h4>
+            <p>In VirtualBox Manager, select the item of INTER-Mediator-Server VM that you have imported. Then click the "Settings" icon on the tool bar. The screen of the Virtual Machine setting will be displayed.</p>
+            <p> On Windows, select "Network" in the list on the left side of the screen, and further select the "Adapter 2" tab. Then select "Host Only Adapter" from the "Assign" pop-up menu. Then, the name defined in "Host Only Network" is automatically visible in "Name". Confirm that point and click the OK button. </p>
+            <div class="picture">
+                <img class="picture-small" src="/images/shot9517.png">
+            </div>
+            <p> For Mac, select "Network" on the toolbar and further select "Adapter 2" tab. Then select "Host Only Adapter" from the "Assign" pop-up menu. Then, the name defined in "Host Only Network" is automatically visible in "Name". Confirm that point and click the OK button.</p>
+            <div class="picture">
+                <img class="picture-small" src="/images/shot9516.png">
+            </div>
+        </section>
+        <section>
+            <h1>Using INTER-Mediator-Server VM</h1>
+            <p>Once you are ready, select the INTER-Mediator-Server VM item in the VirtualBox Manager and click on the "Launch" button. Characters start flowing on the black console screen. The login prompt is displayed. Please connect to <a href="http://192.168.56.101" target="_blank"> http://192.168.56.101 </a> from the web browser. Then, there are pages that you can see the functions available in this INTER-Mediator-Server VM. </p>
+            <p>From the "Sample Program" link, you can immediately activate the contents of INTER-Mediator's Samples folder. If FileMaker Server is running on the host side, you have to upload the dist-docs/TestDB.fmp12 in the INTER-Mediator distribution, and XML and PHP Sharing is available. If FileMaker Server is not running, FileMaker Server sample will show any errors. </p>
+            <div class="picture">
+                <img class="picture-small" src="/images/shot 633.png">
+            </div>
+            <p>You can modify the definition file and page file on the Web browser to see the result of actual codes. For example, a link that edits page01.html, as well as a link that opens page01.html of a page file, displays an HTML editor. Also, def01.php is a definition file referred to by the SCRIPT tag from page01.html, and it can be modified by opening the definition file editor.</p>
+            <div class="picture">
+                <img class="picture-small" src="/images/shot9634.png">
+            </div>
+            <h3>If you can not connect to "http://192.168.56.101"</h3>
+            <p> If the INTER-Mediator-Server VM is running, try logging in with the user name "developer" and password "im4135dev" and execute the "ifconfig" command. You can see the IP address currently used by the INTER-Mediator-Server VM. The IP address after the "inet addr" in the chunk written as eth1 is the IP address of the current guest OS. Please start the web browser on the host side and try connecting with that IP address. </p>
+            <p>Even so, the following things are possible. </p>
+            <ul>
+                <li>In the first place, VirtualBox itself does not work properly. Virtualization function is disabled on Windows, Hyper-V is enabled on Windows 10, Windows is running on VM that runs on VMware, and you tried to use INTER-Mediator-Server VM.</li>
+                <li>The network settings described so far have not been done correctly. Or, you changed that kind of setting before.</li>
+                <li>IP connection from the host to the guest is disabled due to some setting. Depending on the setting in VirtualBox, it is considered possible.</li>
+            </ul>
+            <h3>Operate your own files</h3>
+            <p>The login account is written at the end on the page connected to "http://192.168.56.101". Please use it. It seems easy to transfer files with SFTP. Also log in to the INTER-Mediator-Server VM itself and load your own database schema. The database management account is also described on the page connected to "http://192.168.56.101". </p>
+            <h3>Update INTER-Mediator</h3>
+            <p>Please connect to "192.168.56.101" by ssh on the host machine. The user name is "developer" and the password is "im4135dev". For example, in case of OS X, enter the command "ssh developer@192.168.56.101" in the "terminal" application, and the password will be asked afterwards, so we will key type. For Windows, please use applications such as TeraTerm or PuTTY. </p>
+            <p>For the INTER-Mediator-Server VM after INTER-Mediator Ver.5.2 (including Ver.5.2-RC3), enter the command as follows. </p>
+
+            <div class="code">
+<pre> <code>cd /var/www/html/INTER-Mediator
+git pull origin stable </code> </pre>
+            </div>
+            <p>For INTER-Mediator Ver.5.2-RC1 and earlier INTER-Mediator-Server VM, enter the command as follows. Be sure to include spaces and dot (git checkout .) affter "checkout."</p>
+            <div class="code">
+<pre> <code>cd /var/www/html/INTER-Mediator
+git checkout .
+git pull origin stable </code> </pre>
+            </div>
+            <p>The latest stable version of INTER-Mediator in GitHub's repository is reflected in VM. To reflect the latest status of development version, execute "git pull origin master" instead of "git pull origin stable". For the current version, check INTER-Mediator and the version description at the beginning of the script called dist-docs/build.sh. The final commit reflected is git log or git show command, gets the identifier of the current commit (very long hexadecimal code followed by commit) and got the repository of GitHub. In the case of Ver.5.1 or earlier, the access right setting is slightly different. There is no problem in editing the page file and the definition file which are originally prepared, but please review the access right if you added the file yourself. </p>
+        </section>
+        <section>
+            <h1>(FYI) Create and run the VM yourself </h1>
+            <p>The INTER-Mediator distribution file contains scripts etc. for generating VMs. This is the best way to create a VM with the latest INTER-Mediator. Please note that the script does not run even when Vagrant is installed under Windows in the standard environment (you need to install an application such as Git for Windows separately and run ssh). </p>
+            <ol>
+                <li>Install Vagrant. Go to the <a href="https://www.vagrantup.com/" target="_blank">this page</a> and download and install the application corresponding to the OS you want to use. Just install it and it's okay.</li>
+                <li>Clone the latest version of INTER-Mediator. It's easy to use the "Clone in Desktop" button on the <a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">this page</a>.</li>
+                <li>As far as OS X goes, start the terminal application and move to the dist-docs/vm-for-trial folder in the clone of INTER-Mediator repository.</li>
+                <li>Run "vagrant up" command. It takes time to download and create. It is about 20 minutes. It's ready when "INTER-Mediator-Server VM is ready." Is displayed.</li>
+            </ol>
+        </section>
+    </article>
+</div>
 </body>
 
 </html>
