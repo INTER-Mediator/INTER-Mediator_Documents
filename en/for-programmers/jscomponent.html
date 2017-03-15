@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2017 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -112,7 +112,7 @@
                 </div>
 
                 <h3>Uploading a file to FileMaker's container field</h3>
-                <p>INTER-Mediator 5.1以降を使用している場合、FileMakerのオブジェクトフィールドに直接ファイルをアップロードできます。ただし、FileMaker Serverのバージョン13あるいはバージョン14が必要、かつあらかじめデータベースのフィールドオプションにおいて［入力値の自動化］オプションの［計算値］に下記を設定しておく必要があります。</p>
+                <p>INTER-Mediator 5.1以降を使用している場合、FileMakerのオブジェクトフィールドに直接ファイルをアップロードできます。ただし、FileMaker Serverのバージョン13以降が必要、かつあらかじめデータベースのフィールドオプションにおいて［入力値の自動化］オプションの［計算値］に下記を設定しておく必要があります。</p>
                 <div class="code"><pre><code>If (
     GetContainerAttribute(Self; "filename") ≠ "";
         Self;
