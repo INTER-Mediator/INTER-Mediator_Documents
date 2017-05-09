@@ -308,8 +308,6 @@ INTERMediator.addCondition(コンテキスト名, [
                 <tr><td>6</td>
                     <td>レコード番号範囲と全レコード数の間の文字列</td>
                     <td>/</td>
-
-
                     <td>無関係</td>
                 </tr>
                 <tr><td>7</td>
@@ -322,9 +320,12 @@ INTERMediator.addCondition(コンテキスト名, [
                     <td>更新</td>
                     <td>インデックス8</td>
                 </tr>
+<tr><td>9</td><td>レコード作成などのボタンの表示の有無</td><td>作成や削除などレコード操作のボタン</td><td>インデックス9</td></tr>
+<tr><td>10</td><td>まとめ保存のボタン</td><td>保存</td><td>インデックス10</td></tr>
+<tr><td>11</td><td>ログアウトボタンの名称</td><td>ログアウト</td><td>インデックス11</td></tr>
             </table>
             </div>
-            <p>INTERMediator.navigationLabelに指定する配列は9つの要素を指定します。それぞれ、インデックスに要素が対応します。要素がnullだと既定値のままになります。文字列を指定すると、その文字列に置き換わります。インデックスが0、4,、8の要素に関しては、「非表示」の列に示したインデックスのものが非表示になります。たとえば、以下の記述だと、Refreshボタンのみが消えて他は既定とおりのものが表示されます。</p>
+            <p>INTERMediator.navigationLabelに指定する配列は12の要素を指定します。それぞれ、インデックスに要素が対応します。要素がnullだと既定値のままになります。文字列を指定すると、その文字列に置き換わります。インデックスが0、4,、8、9、10、11の要素に関しては、値をfalseにすると「非表示」の列に示したものが非表示になります。たとえば、以下の記述だと、更新ボタンのみが消えて他は既定とおりのものが表示されます。インデックス9の「レコード作成」などのボタンのカスタマイズは、コンテキスト定義にあるbutton-namesキーで行います。</p>
             <p>INTERMediator.navigationLabel = [null, null, null, null, null, null, null, null, false];</p>
         </section>
         <section><h1>HTMLのUIコンポーネントの扱い</h1>

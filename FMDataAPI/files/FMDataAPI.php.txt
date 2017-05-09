@@ -13,6 +13,7 @@ namespace INTERMediator\FileMakerServer\RESTAPI;
  * Class FMDataAPI is the wrapper of The REST API in FileMaker Server 16/Cloud.
  *
  * @package INTER-Mediator\FileMakerServer\RESTAPI
+ * @link https://github.com/msyk/FMDataAPI GitHub Repository
  * @property-read FileMakerLayout $<<layout_name>> FileMakerLayout object named as the property name.
  *    If the layout doesn't exist, no error arises here. Any errors might arise on methods of FileMakerLayout class.
  * @version 1.0 1.0
@@ -107,7 +108,7 @@ class FMDataAPI
 
     /**
      * The HTTP status code of the latest response from the REST API.
-     * @return Interger The HTTP status code.
+     * @return int The HTTP status code.
      */
     public function httpStatus()
     {
@@ -116,12 +117,33 @@ class FMDataAPI
 
     /**
      * The error code of the latest response from the REST API.
+     * The code 0 means no error, and -1 means error information wasn't return.
      * This error code is associated with FileMaker's error code.
-     * @return Interger The error code.
+     * @return int The error code.
      */
     public function errorCode()
     {
         return $this->provider->errorCode;
+    }
+
+    /**
+     * The error message of the latest response from the REST API.
+     * This error message is associated with FileMaker's error code.
+     * @return string The error messege.
+     */
+    public function errorMessage()
+    {
+        return $this->provider->errorMessage;
+    }
+
+    /**
+     * Set to prevent to throw an exception in case of error.
+     * The default is true and an exception is going to throw in error.
+     * @param bool $value Turn off to throw an exception in case of error if the value is false.
+     */
+    public function setThrowException($value)
+    {
+        $this->provider->throwExceptionInError = $value;
     }
 
     /**
@@ -152,6 +174,7 @@ namespace INTERMediator\FileMakerServer\RESTAPI\Supporting;
  * and you shouldn't call the constructor of this class.
  *
  * @package INTER-Mediator\FileMakerServer\RESTAPI
+ * @link https://github.com/msyk/FMDataAPI GitHub Repository
  * @version 1.0 1.0
  * @author Masayuki Nii <nii@msyk.net>
  * @copyright 2017 Masayuki Nii (FileMaker is registered trademarks of FileMaker, Inc. in the U.S. and other countries.)
@@ -201,10 +224,6 @@ class FileMakerLayout
     }
 
     /**
-     * $portal should be:
-     * array('portal1', portal2') or
-     * array('portal1' => array('offset'=>1,'range'=>5), 'portal2' => null)
-     *
      * @param $param
      * @return array
      * @ignore
@@ -229,9 +248,10 @@ class FileMakerLayout
     }
 
     /**
-     * Query to the FileMaker Database and returns the result as FileMakerRelation object. 
+     * Query to the FileMaker Database and returns the result as FileMakerRelation object.
      * @param array $condition The array of associated array which has a field name and "omit" keys as like:
-     * array(array("FamilyName"=>"Nii*", "Country"=>"Japan")). In this example of apply the AND operation for two fields,
+     * array(array("FamilyName"=>"Nii*", "Country"=>"Japan")).
+     * In this example of apply the AND operation for two fields,
      * and "FamilyName" and "Country" are field name. The value can contain the operator:
      * =, ==, !, <, ≤ or <=, >, ≥ or >=, ..., //, ?, @, #, *, \, "", ~.
      * If you want to apply the OR operation, describe array of array as like:
@@ -246,44 +266,51 @@ class FileMakerLayout
      * @param int $range The number of records contains in the result record set.
      * @param array $portal The array of the portal's object names. The query result is going to contain portals
      * specified in this parameter. If you want to include all portals, set it null or omit it.
+     * Simple case is array('portal1', portal2'), and just includes two portals named 'portal1' and 'portal2'
+     * in the query result. If you set the range of records to a portal, you have to build associated array as like:
+     * array('portal1' => array('offset'=>1,'range'=>5), 'portal2' => null). The record 1 to 5 of portal1 include
+     * the query result, and also all records in portal2 do.
      * @return FileMakerRelation|null Query result.
+     * @throws Exception In case of any error, an exception arises.
      */
     public function query($condition = NULL, $sort = NULL, $offset = -1, $range = -1, $portal = null)
     {
-        $this->restAPI->login($this->layout);
-        $request = array();
-        if (!is_null($sort)) {
-            $request["sort"] = $sort;
+        try {
+            $this->restAPI->login($this->layout);
+            $request = array();
+            if (!is_null($sort)) {
+                $request["sort"] = $sort;
+            }
+            if ($offset > -1) {
+                $request["offset"] = $offset;
+            }
+            if ($range > -1) {
+                $request["range"] = $range;
+            }
+            if (!is_null($portal)) {
+                $request = array_merge($request, $this->buildPortalParameters($portal));
+            }
+            if (!is_null($condition)) {
+                $request["query"] = $condition;
+                $this->restAPI->callRestAPI("find", $this->layout, true, "POST", $request);
+            } else {
+                $this->restAPI->callRestAPI("record", $this->layout, true);
+            }
+            $this->restAPI->storeToProperties();
+            $result = $this->restAPI->responseBody;
+            $fmrel = null;
+            if ($result &&
+                property_exists($result, 'data') &&
+                property_exists($result, 'result') &&
+                property_exists($result, 'errorCode')
+            ) {
+                $fmrel = new FileMakerRelation($result->data, $result->result, $result->errorCode);
+            }
+            $this->restAPI->logout();
+            return $fmrel;
+        } catch (Exception $e) {
+            throw $e;
         }
-        if ($offset > -1) {
-            $request["offset"] = $offset;
-        }
-        if ($range > -1) {
-            $request["range"] = $range;
-        }
-        if (!is_null($portal)) {
-            $request = array_merge($request, $this->buildPortalParameters($portal));
-        }
-        $fmrel = null;
-        if (!is_null($condition)) {
-            $request["query"] = $condition;
-            $this->restAPI->callRestAPI("find", $this->layout, true, "POST", $request);
-        } else {
-            $this->restAPI->callRestAPI("record", $this->layout, true);
-        }
-        $result = $this->restAPI->responseBody;
-        $this->restAPI->httpStatus = $this->restAPI->getCurlInfo("http_code");
-        $this->restAPI->errorCode = property_exists($result, 'errorCode') ? $result->errorCode : -1;
-        $this->restAPI->errorMessage = property_exists($result, 'errorMessage') ? $result->errorMessage : null;
-        if ($result &&
-            property_exists($result, 'data') &&
-            property_exists($result, 'result') &&
-            property_exists($result, 'errorCode')
-        ) {
-            $fmrel = new FileMakerRelation($result->data, $result->result, $result->errorCode);
-        }
-        $this->restAPI->logout();
-        return $fmrel;
     }
 
     /**
@@ -291,25 +318,28 @@ class FileMakerLayout
      * @param int $recordId The recordId.
      * @param array $portal See the query() method's same parameter.
      * @return FileMakerRelation|null Query result.
+     * @throws Exception In case of any error, an exception arises.
      */
     public function getRecord($recordId, $portal = null)
     {
-        $request = array();
-        $this->restAPI->login($this->layout);
-        if (!is_null($portal)) {
-            $request = array_merge($request, $this->buildPortalParameters($portal));
+        try {
+            $request = array();
+            $this->restAPI->login($this->layout);
+            if (!is_null($portal)) {
+                $request = array_merge($request, $this->buildPortalParameters($portal));
+            }
+            $this->restAPI->callRestAPI("record", $this->layout, true, "GET", $request, $recordId);
+            $this->restAPI->storeToProperties();
+            $result = $this->restAPI->responseBody;
+            $fmrel = null;
+            if ($result) {
+                $fmrel = new FileMakerRelation($result->data, "OK", $result->errorCode);
+            }
+            $this->restAPI->logout();
+            return $fmrel;
+        } catch (Exception $e) {
+            throw $e;
         }
-        $this->restAPI->callRestAPI("record", $this->layout, true, "GET", $request, $recordId);
-        $result = $this->restAPI->responseBody;
-        $this->restAPI->httpStatus = $this->restAPI->getCurlInfo("http_code");
-        $fmrel = null;
-        $this->restAPI->errorCode = property_exists($result, 'errorCode') ? $result->errorCode : -1;
-        $this->restAPI->errorMessage = property_exists($result, 'errorMessage') ? $result->errorMessage : null;
-        if ($result) {
-            $fmrel = new FileMakerRelation($result->data, "OK", $result->errorCode);
-        }
-        $this->restAPI->logout();
-        return $fmrel;
     }
 
     /**
@@ -318,33 +348,38 @@ class FileMakerLayout
      * Keys are field names and values is these initial values.
      * @return integer The recordId of created record. If the returned value is an integer larger than 0,
      * it shows one record was created.
+     * @throws Exception In case of any error, an exception arises.
      */
     public function create($data)
     {
-        $this->restAPI->login($this->layout);
-        $request = array("data" => $data);
-        $this->restAPI->callRestAPI("record", $this->layout, true, "POST", $request);
-        $result = $this->restAPI->responseBody;
-        $this->restAPI->httpStatus = $this->restAPI->getCurlInfo("http_code");
-        $this->restAPI->errorCode = property_exists($result, 'errorCode') ? $result->errorCode : -1;
-        $this->restAPI->errorMessage = property_exists($result, 'errorMessage') ? $result->errorMessage : null;
-        $this->restAPI->logout();
-        return $result->recordId;
+        try {
+            $this->restAPI->login($this->layout);
+            $request = array("data" => $data);
+            $this->restAPI->callRestAPI("record", $this->layout, true, "POST", $request);
+            $result = $this->restAPI->responseBody;
+            $this->restAPI->storeToProperties();
+            $this->restAPI->logout();
+            return $result->recordId;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     /**
      * Delete on record.
      * @param int $recordId The valid recordId value to delete.
+     * @throws Exception In case of any error, an exception arises.
      */
     public function delete($recordId)
     {
-        $this->restAPI->login($this->layout);
-        $this->restAPI->callRestAPI("record", $this->layout, true, "DELETE", null, $recordId);
-        $result = $this->restAPI->responseBody;
-        $this->restAPI->httpStatus = $this->restAPI->getCurlInfo("http_code");
-        $this->restAPI->errorCode = property_exists($result, 'errorCode') ? $result->errorCode : -1;
-        $this->restAPI->errorMessage = property_exists($result, 'errorMessage') ? $result->errorMessage : null;
-        $this->restAPI->logout();
+        try {
+            $this->restAPI->login($this->layout);
+            $this->restAPI->callRestAPI("record", $this->layout, true, "DELETE", null, $recordId);
+            $this->restAPI->storeToProperties();
+            $this->restAPI->logout();
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -354,34 +389,46 @@ class FileMakerLayout
      * Keys are field names and values is these initial values.
      * @param int $modId The modId to allow to update. This parameter is for detect to modifying other users.
      * If you omit this parameter, update operation does not care the value of modId special field.
+     * @throws Exception In case of any error, an exception arises.
      */
     public function update($recordId, $data, $modId = -1)
     {
-        $this->restAPI->login($this->layout);
-        $request = array("data" => $data);
-        $this->restAPI->callRestAPI("record", $this->layout, true, "PUT", $request, $recordId);
-        $result = $this->restAPI->responseBody;
-        $this->restAPI->httpStatus = $this->restAPI->getCurlInfo("http_code");
-        $this->restAPI->errorCode = property_exists($result, 'errorCode') ? $result->errorCode : -1;
-        $this->restAPI->errorMessage = property_exists($result, 'errorMessage') ? $result->errorMessage : null;
-        $this->restAPI->logout();
+        try {
+            $this->restAPI->login($this->layout);
+            $request = array("data" => $data);
+            try {
+                $this->restAPI->callRestAPI("record", $this->layout, true, "PUT", $request, $recordId);
+            } catch (Exception $e) {
+                throw $e;
+            }
+            $this->restAPI->storeToProperties();
+            $this->restAPI->logout();
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     /**
      * Set the value to the global field.
      * @param array $fields Associated array contains the global field names and its values.
      * Keys are global field names and values is these values.
+     * @throws Exception In case of any error, an exception arises.
      */
     public function setGlobalField($fields)
     {
-        $this->restAPI->login($this->layout);
-        $request = array("globalFields" => $fields);
-        $this->restAPI->callRestAPI("global", $this->layout, true, "PUT", $request);
-        $result = $this->restAPI->responseBody;
-        $this->restAPI->httpStatus = $this->restAPI->getCurlInfo("http_code");
-        $this->restAPI->errorCode = property_exists($result, 'errorCode') ? $result->errorCode : -1;
-        $this->restAPI->errorMessage = property_exists($result, 'errorMessage') ? $result->errorMessage : null;
-        $this->restAPI->logout();
+        try {
+            $this->restAPI->login($this->layout);
+            $request = array("globalFields" => $fields);
+            try {
+                $this->restAPI->callRestAPI("global", $this->layout, true, "PUT", $request);
+            } catch (Exception $e) {
+                throw $e;
+            }
+            $this->restAPI->storeToProperties();
+            $this->restAPI->logout();
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }
 
@@ -391,6 +438,7 @@ class FileMakerLayout
  * and you shouldn't call the constructor of this class.
  *
  * @package INTER-Mediator\FileMakerServer\RESTAPI
+ * @link https://github.com/msyk/FMDataAPI GitHub Repository
  * @property string $<<field_name>> The field value named as the property name.
  * @property FileMakerRelation $<<portal_name>> FileMakerRelation object associated with the property name.
  *    The table occurrence name of the portal can be the 'portal_name,' and also the object name of the portal.
@@ -509,6 +557,7 @@ class FileMakerRelation implements \Iterator
      * The table occurrence name of the portal can be the portal name, and also the object name of the portal.
      * @param string $toName The table occurrence name of the portal as the prefix of the field name.
      * @return string|FileMakerRelation The field value as string, or the FileMakerRelation object of the portal.
+     * @throws Exception The field specified in parameters doesn't exist.
      */
     public function field($name, $toName = null)
     {
@@ -554,6 +603,9 @@ class FileMakerRelation implements \Iterator
                     break;
                 default:
             }
+        }
+        if (is_null($value))    {
+            throw new Exception("Field {$fieldName} doesn't exist.");
         }
         return $value;
     }
@@ -679,6 +731,7 @@ class FileMakerRelation implements \Iterator
  * Class CommunicationProvider is for internal use to communicate with FileMaker Server.
  *
  * @package INTER-Mediator\FileMakerServer\RESTAPI
+ * @link https://github.com/msyk/FMDataAPI GitHub Repository
  * @version 1.0 1.0
  * @author Masayuki Nii <nii@msyk.net>
  * @copyright 2017 Masayuki Nii (FileMaker is registered trademarks of FileMaker, Inc. in the U.S. and other countries.)
@@ -797,6 +850,11 @@ class CommunicationProvider
      * @ignore
      */
     public $isCertVaridating;
+    /**
+     * @var
+     * @ignore
+     */
+    public $throwExceptionInError = true;
 
     /**
      * CommunicationProvider constructor.
@@ -840,6 +898,7 @@ class CommunicationProvider
 
     /**
      * @param $layout
+     * @throws Exception In case of any error, an exception arises.
      * @ignore
      */
     public function login($layout)
@@ -852,7 +911,11 @@ class CommunicationProvider
             "password" => $this->password,
             "layout" => $layout,
         );
-        $this->callRestAPI("auth", "", false, "POST", $request);
+        try {
+            $this->callRestAPI("auth", "", false, "POST", $request);
+        } catch (Exception $e) {
+            throw $e;
+        }
         if ($this->responseBody->errorCode != 0) {
             echo "Authentication Error: {$this->responseBody->errorCode}";  // Exception
             $this->accessToken = NULL;
@@ -863,6 +926,7 @@ class CommunicationProvider
 
     /**
      *
+     * @throws Exception In case of any error, an exception arises.
      * @ignore
      */
     public function logout()
@@ -870,7 +934,11 @@ class CommunicationProvider
         if ($this->keepAuth) {
             return;
         }
-        $this->callRestAPI("auth", "", true, "DELETE");
+        try {
+            $this->callRestAPI("auth", "", true, "DELETE");
+        } catch (Exception $e) {
+            throw $e;
+        }
         $this->accessToken = NULL;
     }
 
@@ -881,6 +949,7 @@ class CommunicationProvider
      * @param string $method
      * @param null $request
      * @param null $recordId
+     * @throws Exception In case of any error, an exception arises.
      * @ignore
      */
     public function callRestAPI($action, $layout, $isAddToken, $method = 'GET', $request = NULL, $recordId = null)
@@ -945,6 +1014,38 @@ class CommunicationProvider
         if ($this->isDebug) {
             $this->debugOutput();
         }
+        if ($this->throwExceptionInError) {
+            $httpStatus = $this->getCurlInfo("http_code");
+            $errorCode = property_exists($this->responseBody, 'errorCode') ? $this->responseBody->errorCode : -1;
+            $errorMessage = property_exists($this->responseBody, 'errorMessage') ? $this->responseBody->errorMessage : 'ERROR';
+            $description = '';
+            if ($this->curlErrorNumber > 0) {
+                $description .= "cURL in PHP / Error Code: {$this->curlErrorNumber}, Error Message: {$this->curlError}. ";
+            } else {
+                if ($httpStatus !== 200) {
+                    $description .= "HTTP Status Code: {$httpStatus}. ";
+                }
+                if ($errorCode > 0) {
+                    $description .= "FileMaker Data API / Error Code: {$errorCode}, Error Message: {$errorMessage}. ";
+                }
+            }
+            if ($description !== '') {
+                $description = date('Y-m-d H:i:s ') . "{$description}";
+                $description .= "[URL({$this->method}): {$this->url}]";
+                throw new Exception($description);
+            }
+        }
+    }
+
+    /**
+     * @ignore
+     */
+    public function storeToProperties()
+    {
+        $result = $this->responseBody;
+        $this->httpStatus = $this->getCurlInfo("http_code");
+        $this->errorCode = property_exists($result, 'errorCode') ? $result->errorCode : -1;
+        $this->errorMessage = property_exists($result, 'errorMessage') ? $result->errorMessage : null;
     }
 
     /**
@@ -988,3 +1089,16 @@ class CommunicationProvider
     }
 }
 
+/**
+ * Class CommunicationProvider is for internal use to communicate with FileMaker Server.
+ *
+ * @package INTER-Mediator\FileMakerServer\RESTAPI
+ * @link https://github.com/msyk/FMDataAPI GitHub Repository
+ * @version 1.0 1.0
+ * @author Masayuki Nii <nii@msyk.net>
+ * @copyright 2017 Masayuki Nii (FileMaker is registered trademarks of FileMaker, Inc. in the U.S. and other countries.)
+ */
+class Exception extends \Exception
+{
+
+}

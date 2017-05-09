@@ -144,51 +144,52 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1369889466"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-44265053"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1369889466" class="accordion-body collapse in">
+            <div id="namespace-44265053" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1442659958"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-137223562"></a>
                                 <a href="../namespaces/INTERMediator.html" style="margin-left: 30px; padding-left: 0">INTERMediator</a>
             </div>
-            <div id="namespace-1442659958" class="accordion-body collapse ">
+            <div id="namespace-137223562" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1603741122"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1430959335"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.html" style="margin-left: 30px; padding-left: 0">FileMakerServer</a>
             </div>
-            <div id="namespace-1603741122" class="accordion-body collapse ">
+            <div id="namespace-1430959335" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-969984686"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-118916742"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.RESTAPI.html" style="margin-left: 30px; padding-left: 0">RESTAPI</a>
             </div>
-            <div id="namespace-969984686" class="accordion-body collapse ">
+            <div id="namespace-118916742" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-377665182"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-466004216"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.RESTAPI.Supporting.html" style="margin-left: 30px; padding-left: 0">Supporting</a>
             </div>
-            <div id="namespace-377665182" class="accordion-body collapse ">
+            <div id="namespace-466004216" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
                     <ul>
                                                                                                     <li class="class"><a href="../classes/INTERMediator.FileMakerServer.RESTAPI.Supporting.CommunicationProvider.html">CommunicationProvider</a></li>
+                                                    <li class="class"><a href="../classes/INTERMediator.FileMakerServer.RESTAPI.Supporting.Exception.html">Exception</a></li>
                                                     <li class="class"><a href="../classes/INTERMediator.FileMakerServer.RESTAPI.Supporting.FileMakerLayout.html">FileMakerLayout</a></li>
                                                     <li class="class"><a href="../classes/INTERMediator.FileMakerServer.RESTAPI.Supporting.FileMakerRelation.html">FileMakerRelation</a></li>
                                             </ul>
@@ -318,7 +319,9 @@ and you shouldn't call the constructor of this class.</p>
                         
                         
                         
-                        
+                                                                            <dt>See also</dt>
+                                                                                    <dd><a href="https://github.com/msyk/FMDataAPI"><div class="namespace-wrapper">GitHub Repository</div></a></dd>
+                                                    
                                                                         </dl>
                     <h2>Tags</h2>
                     <table class="table table-condensed">
@@ -427,7 +430,8 @@ and login with the target layout.</em></p>
                                 <td>array</td>
                                 <td>$condition </td>
                                 <td><p>The array of associated array which has a field name and &quot;omit&quot; keys as like:
-array(array(&quot;FamilyName&quot;=&gt;&quot;Nii<em>&quot;, &quot;Country&quot;=&gt;&quot;Japan&quot;)). In this example of apply the AND operation for two fields,
+array(array(&quot;FamilyName&quot;=&gt;&quot;Nii<em>&quot;, &quot;Country&quot;=&gt;&quot;Japan&quot;)).
+In this example of apply the AND operation for two fields,
 and &quot;FamilyName&quot; and &quot;Country&quot; are field name. The value can contain the operator:
 =, ==, !, &lt;, ≤ or &lt;=, &gt;, ≥ or &gt;=, ..., //, ?, @, #, </em>, \, &quot;&quot;, ~.
 If you want to apply the OR operation, describe array of array as like:
@@ -457,10 +461,19 @@ The value of sortOrder key can be 'ascend', 'descend' or value list name.</p></t
                                 <td>array</td>
                                 <td>$portal </td>
                                 <td><p>The array of the portal's object names. The query result is going to contain portals
-specified in this parameter. If you want to include all portals, set it null or omit it.</p></td>
+specified in this parameter. If you want to include all portals, set it null or omit it.
+Simple case is array('portal1', portal2'), and just includes two portals named 'portal1' and 'portal2'
+in the query result. If you set the range of records to a portal, you have to build associated array as like:
+array('portal1' =&gt; array('offset'=&gt;1,'range'=&gt;5), 'portal2' =&gt; null). The record 1 to 5 of portal1 include
+the query result, and also all records in portal2 do.</p></td>
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\INTERMediator\FileMakerServer\RESTAPI\Supporting\Exception</dt>
+                            <dd><p>In case of any error, an exception arises.</p></dd>
+                                                                    </dl>
                 
                                     <h4>Returns</h4>
                     <a href="../classes/INTERMediator.FileMakerServer.RESTAPI.Supporting.FileMakerRelation.html">\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation</a>|null
@@ -503,6 +516,11 @@ specified in this parameter. If you want to include all portals, set it null or 
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\INTERMediator\FileMakerServer\RESTAPI\Supporting\Exception</dt>
+                            <dd><p>In case of any error, an exception arises.</p></dd>
+                                                                    </dl>
                 
                                     <h4>Returns</h4>
                     <a href="../classes/INTERMediator.FileMakerServer.RESTAPI.Supporting.FileMakerRelation.html">\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation</a>|null
@@ -541,6 +559,11 @@ Keys are field names and values is these initial values.</p></td>
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\INTERMediator\FileMakerServer\RESTAPI\Supporting\Exception</dt>
+                            <dd><p>In case of any error, an exception arises.</p></dd>
+                                                                    </dl>
                 
                                     <h4>Returns</h4>
                     integer
@@ -579,6 +602,11 @@ it shows one record was created.</p>
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\INTERMediator\FileMakerServer\RESTAPI\Supporting\Exception</dt>
+                            <dd><p>In case of any error, an exception arises.</p></dd>
+                                                                    </dl>
                 
                 				
                             </article>
@@ -625,6 +653,11 @@ If you omit this parameter, update operation does not care the value of modId sp
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\INTERMediator\FileMakerServer\RESTAPI\Supporting\Exception</dt>
+                            <dd><p>In case of any error, an exception arises.</p></dd>
+                                                                    </dl>
                 
                 				
                             </article>
@@ -660,6 +693,11 @@ Keys are global field names and values is these values.</p></td>
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\INTERMediator\FileMakerServer\RESTAPI\Supporting\Exception</dt>
+                            <dd><p>In case of any error, an exception arises.</p></dd>
+                                                                    </dl>
                 
                 				
                             </article>
@@ -727,7 +765,7 @@ Keys are global field names and values is these values.</p></td>
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
                     on 
 Warning: date_default_timezone_get(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /usr/local/pear/share/pear/phpDocumentor/vendor/twig/twig/lib/Twig/Extension/Core.php on line 89
-May 5th, 2017 at 11:39.
+May 6th, 2017 at 03:18.
                 </section>
             </section>
         </section>
