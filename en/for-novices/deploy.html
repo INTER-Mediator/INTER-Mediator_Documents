@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2017 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -121,32 +121,42 @@ git pull</code></pre>
                 <p>Of course, this is easy at first, but it means that the folder will be detached from the repository, so if there are updates to the repository, you will have to carry out this same procedure each time.</p>
             </section>
             <section>
-                <h1>Creating an INTER-Mediator containing versions intended for actual work</h1>
-                <p>We will be developing using the results taken from the repository, so you should be able to do actual work in that condition. Of course, since it runs in this condition it is possible to upload it as it is, but at the bottom of the page there will be a character string such as @@1@@ denoting the version of INTER-Mediator, which may be considered somewhat sloppy. Also, if you use the following method to create a build, samples and other materials unnecessary to the actual operation will be removed, and the JavaScript programs will be compressed into one file, which will be advantageous to performance.</p>
-                <p>First, as preparation, in the same folder as the INTER-Mediator folder which was taken from the repository, please deploy yuicompressor-2.4.7.jar. The download can be found at the "Binary download" link on <a href="http://grepcode.com/snapshot/repo1.maven.org/maven2/com.yahoo.platform.yui/yuicompressor/2.4.7" target="_blank">this page</a>.</p>
-                <p>To create an INTER-Mediator including the original version and today's date, please use the script dist-docs/buildup.sh. For example, if the INTER-Mediator directory is set as the current directory, on a Mac or a UNIX-based OS, please input the data as follows.</p>
+                <h1>Creating an INTER-Mediator for deployment</h1>
+                <p>We will be developing using the results taken from the repository, so you should be able to do actual work in that condition. Also, if you use the following method to create a build, samples and other materials unnecessary to the actual operation will be removed, and the JavaScript programs will be compressed into one file, which will be advantageous to performance.</p>
+                <p>First, as preparation, in the same folder as the INTER-Mediator folder which was taken from the repository, please deploy minify folder with "git" command</a>.</p>
+
                 <div class="code">
-                    <pre><code>cd dist_docs #When the INTER-Mediator folder is current<p></p>
+                    <pre><code>git clone https://github.com/INTER-Mediator/INTER-Mediator.git
+git clone https://github.com/matthiasmullie/minify.git</code></pre>
+                </div>
+
+                <p>To create an INTER-Mediator including the original version and today's date, please use the script dist-docs/buildup.sh. For example, if the INTER-Mediator directory is set as the current directory, on a Mac or a UNIX-based OS, please input the data as follows.</p>
+
+                <div class="code">
+                    <pre><code>cd INTER-Mediator/dist-docs/
 ./buildup.sh</code></pre>
                 </div>
+
                 <p>On the other hand, on a Windows system, please use Cygwin. Drag and drop the buildup.sh file into the Cygwin terminal window, and simply press the return key in the Cygwin terminal. Furthermore, if you want to specify the drive path, in Cygwin, look at /cygdrive/c/, and this is the path which denotes the C:¥ drive root.</p>
-                <p>If you do that, a message such as the following will be displayed in the terminal. Here, please type either 1, 2 or 3, and press the return key. You can choose from three kinds of build, but (2) is the smallest configuration, so it is usually best to select that one. (3) contains samples of the user certificate management page, a definition file editor and such. Furthermore, regarding the certification application, we recommend developing an original based on the contents of the Autu_Support folder.</p>
+                <p>If you do that, a message such as the following will be displayed in the terminal. Here, please type either 1, 2, 3 or 4, and press the return key. You can choose from these kinds of build, but (2) is the smallest configuration, so it is usually best to select that one. (3) contains samples of the user certificate management page, a definition file editor and such. Furthermore, regarding the certification application, we recommend developing an original based on the contents of the Autu_Support folder.</p>
                 <div class="code">
                     <pre><code>$ ./buildup.sh
 =================================================
-Start to build the INTER-Mediator Ver.4.7
+Start to build the INTER-Mediator Ver.5.6
 -------------------------------------------------
-Original: /Users/msyk/Documents/INTER-Mediator_develop/INTER-Mediator
-Build to: /Users/msyk/Documents/INTER-Mediator_develop/im_build/INTER-Mediator
+ Original: /Users/msyk/Documents/INTER-Mediator_develop/INTER-Mediator
+ Build to: /Users/msyk/Documents/INTER-Mediator_develop/im_build/INTER-Mediator
+ Path of minifier: /Users/msyk/Documents/INTER-Mediator_develop/minify
 -------------------------------------------------
 Choose the build result from these:
 (1) Complete (everything contains)
 (2) Core only (the least set to work wep applications)
 (3) Core + Support (add Auth_Support and INTER-Mediator-Support)
-Type 1, 2 or 3, and then type return----&gt;</code></pre>
+(4) Write just version and release date to metadata.json
+Type 1, 2, 3 or 4, and then type return----&gt;</code></pre>
                 </div>
-                <p>If you have the file yuicompressor-2.4.7.jar in the same folder as the INTER-Mediator folder, use this to compress the JavaScript programs. If you do not have this, then without compressing them, simply collect the various JavaScript files into one. Furthermore, if you are using a different version, there is a passage that describes a path at the start of the buildup.sh file, so please amend that.</p>
-                <p>Following that, as stated in the message, in the same layer as the INTER-Mediator folder, there should be an "im_build" folder, and the INTER-Mediator folder is inside that. Inside these files are only the most essential things needed for operation. Also, in each file and on the bottom bar of each page, a version number and a build date will be appended. This im_build/INTER-Mediator folder can be used to replace the current INTER-Mediator folder.</p>
+                <p>If you have the file minify folder in the same folder as the INTER-Mediator folder, use this to compress the JavaScript programs. If you do not have this, then without compressing them, simply collect the various JavaScript files into one.</p>
+                <p>Following that, as stated in the message, in the same layer as the INTER-Mediator folder, there should be an "im_build" folder, and the INTER-Mediator folder is inside that. Inside these files are only the most essential things needed for operation. This im_build/INTER-Mediator folder can be used to replace the current INTER-Mediator folder.</p>
                 <p>However, there is one point to be careful of. The INTER-Mediator that you built collects all the JavaScript programs into an INTER-Mediator.js file, and any other js files will be deleted. If you upload to an FTP at that point, those js files which should have disappeared will still be there. Therefore, the best thing to do is to upload after deleting the INTER-Mediator folder on the server. If you think an operation is behaving strangely, please check if there are JavaScript files aside from INTER-Mediator.js on the server.</p>
                 <p>Regarding the version number, it is described at the start of the buildup.sh file, so please change that when you use it. Furthermore, the version rules are as follows.</p>
                 <ul id="IM11-64">
