@@ -123,7 +123,7 @@ git pull</code></pre>
             <section>
                 <h1>Creating an INTER-Mediator for deployment</h1>
                 <p>We will be developing using the results taken from the repository, so you should be able to do actual work in that condition. Also, if you use the following method to create a build, samples and other materials unnecessary to the actual operation will be removed, and the JavaScript programs will be compressed into one file, which will be advantageous to performance.</p>
-                <p>First, as preparation, in the same folder as the INTER-Mediator folder which was taken from the repository, please deploy minify folder with "git" command</a>.</p>
+                <p>First, as preparation, in the same folder as the INTER-Mediator folder which was taken from the repository, please deploy Minify folder with "git" command</a>.</p>
 
                 <div class="code">
                     <pre><code>git clone https://github.com/INTER-Mediator/INTER-Mediator.git
@@ -155,7 +155,7 @@ Choose the build result from these:
 (4) Write just version and release date to metadata.json
 Type 1, 2, 3 or 4, and then type return----&gt;</code></pre>
                 </div>
-                <p>If you have the file minify folder in the same folder as the INTER-Mediator folder, use this to compress the JavaScript programs. If you do not have this, then without compressing them, simply collect the various JavaScript files into one.</p>
+                <p>If you have the file Minify folder in the same folder as the INTER-Mediator folder, use this to compress the JavaScript programs. If you do not have this, then without compressing them, simply collect the various JavaScript files into one.</p>
                 <p>Following that, as stated in the message, in the same layer as the INTER-Mediator folder, there should be an "im_build" folder, and the INTER-Mediator folder is inside that. Inside these files are only the most essential things needed for operation. This im_build/INTER-Mediator folder can be used to replace the current INTER-Mediator folder.</p>
                 <p>However, there is one point to be careful of. The INTER-Mediator that you built collects all the JavaScript programs into an INTER-Mediator.js file, and any other js files will be deleted. If you upload to an FTP at that point, those js files which should have disappeared will still be there. Therefore, the best thing to do is to upload after deleting the INTER-Mediator folder on the server. If you think an operation is behaving strangely, please check if there are JavaScript files aside from INTER-Mediator.js on the server.</p>
                 <p>Regarding the version number, it is described at the start of the buildup.sh file, so please change that when you use it. Furthermore, the version rules are as follows.</p>

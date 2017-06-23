@@ -158,7 +158,7 @@ git pull</code></pre>
 
                 <p>リポジトリから取り出した結果で開発しているので、その状態で稼働はできるはずです。また、以下の方法でビルドすれば、サンプルなど実稼働に不要な素材が取り除かれると同時に、JavaScriptのプログラムを1つのファイルに圧縮してまとめるので、動作のパフォーマンスは有利になります。</p>
 
-                <p>まず、準備として、リポジトリから取り出したINTER-Mediatorフォルダと同じ階層に、<a href="https://github.com/matthiasmullie/minify" target="_blank">minify</a>をダウンロードします。ダウンロードにはgitコマンドを利用します（バージョン5.6以降ではyuicompressor-2.4.7.jarではなく<a href="https://github.com/matthiasmullie/minify" target="_blank">minify</a>を使用します）。</p>
+                <p>まず、準備として、リポジトリから取り出したINTER-Mediatorフォルダと同じ階層に、<a href="https://github.com/matthiasmullie/minify" target="_blank">Minify</a>をダウンロードします。ダウンロードにはgitコマンドを利用します（バージョン5.6以降ではyuicompressor-2.4.7.jarではなく<a href="https://github.com/matthiasmullie/minify" target="_blank">Minify</a>を使用します）。</p>
 
                 <div class="code">
                     <pre><code>git clone https://github.com/INTER-Mediator/INTER-Mediator.git
@@ -198,7 +198,7 @@ Choose the build result from these:
 Type 1, 2, 3 or 4, and then type return----&gt;</code></pre>
                 </div>
 
-                <p>INTER-Mediatorフォルダと同じ階層に、minifyディレクトリがあれば、これを使ってJavaScriptのプログラムを圧縮します。ない場合には圧縮しないで、いくつかあるJavaScriptのファイルを1つにまとめることだけを行います。</p>
+                <p>INTER-Mediatorフォルダと同じ階層に、Minifyのディレクトリがあれば、これを使ってJavaScriptのプログラムを圧縮します。ない場合には圧縮しないで、いくつかあるJavaScriptのファイルを1つにまとめることだけを行います。</p>
 
                 <p>その後、メッセージ通り、INTER-Mediatorフォルダと同じ階層に、「im_build」フォルダが作られ、その中に、INTER-Mediatorフォルダがあります。こちらのファイルの中は、動作実行上必要なものだけに絞られています。このim_build/INTER-Mediatorフォルダを、現状のINTER-Mediatorフォルダと置き換えればOKです。</p>
 
