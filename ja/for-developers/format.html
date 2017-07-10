@@ -83,7 +83,7 @@
 <table>
 <tr><th>設定例</th><th>値が「0」の場合</th><th>値が「0」でない場合</th></tr>
 <tr><td>data-im-format="boolean()"</td><td>false</td><td>true</td></tr>
-<tr><td>data-im-format="boolean(T,F)"</td><td>T</td><td>F</td></tr>
+<tr><td>data-im-format="boolean(T,F)"</td><td>F</td><td>T</td></tr>
 </table>
 </div>
 
@@ -104,13 +104,13 @@
 <div class="caption">data-im-formatに設定可能な値</div>
 <table>
 <tr><th>分類</th><th>属性値</th><th>書式化の動作</th></tr>
-<tr><td rowspan="4">数値</td><td>number(桁数)</td><td>数値に関する書式化を行う。桁数は少数以下の桁数</td></tr>
-<tr><td>currency(桁数)</td><td>通過記号を伴う書式化を行う。桁数は少数以下の桁数</td></tr>
-<tr><td>boolean(true表現,false表現)</td><td>引数は省略すると、True/Falseになる。trueとfalseの時の表現をそのまま記述する</td></tr>
-<tr><td>percent(桁数)</td><td>パーセント表現による書式化を行う。桁数は少数以下の桁数</td></tr>
-<tr><td rowspan="3">日付時刻<br>[未実装]</td><td>date(書式)</td><td>日付のみを書式化する。日付がない場合は食う文字列を表示する。桁数は少数以下の桁数</td></tr>
-<tr><td>time(書式)</td><td>時刻のみを書式化する。時刻がない場合には「00:00:00」とみなす。書式は別表を参照</td></tr>
-<tr><td>datetime(書式)</td><td>日付時刻を書式化する。日付や時刻がない場合には、date、timeの動作通り。書式は別表を参照</td></tr>
+<tr><td rowspan="4">数値</td><td>number(桁数)</td><td>数値に関する書式化を行う。桁数は少数以下の桁数で、省略すると0とみなす</td></tr>
+<tr><td>currency(桁数)</td><td>通過記号を伴う書式化を行う。桁数は少数以下の桁数で、省略すると0とみなす</td></tr>
+<tr><td>boolean(true表現,false表現)</td><td>論理値を表現する。引数にはtrueとfalseの時の表現をそのまま記述する。引数を省略すると、true/falseになる</td></tr>
+<tr><td>percent(桁数)</td><td>パーセント表現による書式化を行う。桁数は少数以下の桁数で、省略すると0とみなす</td></tr>
+<tr><td rowspan="3">日付時刻<br>[未実装]</td><td>date(書式)</td><td>日付のみを書式化する。日付がない場合は食う文字列を表示する。桁数は少数以下の桁数、省略するとそのまま表示</td></tr>
+<tr><td>time(書式)</td><td>時刻のみを書式化する。時刻がない場合には「00:00:00」とみなす。書式は別表を参照、省略するとそのまま表示</td></tr>
+<tr><td>datetime(書式)</td><td>日付時刻を書式化する。日付や時刻がない場合には、date、timeの動作通り。書式は別表を参照、省略するとそのまま表示</td></tr>
 </table>
 </div>
             </section>
