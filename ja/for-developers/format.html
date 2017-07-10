@@ -49,7 +49,7 @@
 <body class="docs" data-page-title="for-developers">
     <div class="container clearfix">
         <div class="page-title">
-            <h1 id="pageTitle"></h1>
+            <h1 id="pageTitle">HTMLの属性に記述する書式を適用する機能</h1>
         </div>
         <ol id="breadcrumb" class="breadcrumb clearfix">
         </ol>
@@ -62,53 +62,122 @@
         <article>
             <section>
                 <h1>はじめに</h1>
-                <p class="lead"></p>
-
+                <p class="lead">数値をカンマ区切りにしたり通貨記号をつけたり、日付を特定の書式で記述するような機能は、アプリケーション作成には必須です。Ver.5.6までは主としてDataConverterクラスによりサーバーサイドで処理をしていましたが、変更や計算結果更新に対する書式設定が適用されない場合がありました。この書式設定の仕組みをクライアントサイドで指定をするようにして、書式の適用を確実に行います。書式の適用は、HTMLの属性に記述を行います。データベースはもちろん、コンテキストにキャッシュされる内容までは「生データ」として、そこからHTML要素に書き込まれる場合に書式を適用し、逆に編集時には書式を解除して生データとして扱えるようにするのが動作の基本となります。</p>
             </section>
+            <section>
+                <h1>設定例</h1>
+                <p></p>
+<div class="table">
+<div class="caption">数値、通貨についての設定例</div>
+<table>
+<tr><th>設定例</th><th>値が「1923」の場合</th><th>値が「1923.8765」の場合</th><th>値が「-1923.8765」の場合</th></tr>
+<tr><td>data-im-format="number(0)"</td><td>1923</td><td>1924</td><td>-1924</td></tr>
+<tr><td>data-im-format="number(2)"<br>data-im-format-options="useseparator"</td><td>1,923.00</td><td>1,923.88</td><td>-1,923.88</td></tr>
+<tr><td>data-im-format="number(2)"<br>data-im-format-negative-style="triangle"</td><td>1923.00</td><td>1923.88</td><td>▲1923.88</td></tr>
+<tr><td>data-im-format="currency(2)"<br>data-im-format-options="useseparator"</td><td>¥1,923.00</td><td>¥1,923.88</td><td>¥-1,923.88</td></tr>
+</table>
+</div>  
+
+<div class="table">
+<div class="caption">論理値についての設定例</div>
+<table>
+<tr><th>設定例</th><th>値が「0」の場合</th><th>値が「0」でない場合</th></tr>
+<tr><td>data-im-format="boolean()"</td><td>false</td><td>true</td></tr>
+<tr><td>data-im-format="boolean(T,F)"</td><td>T</td><td>F</td></tr>
+</table>
+</div>
+
+<div class="table">
+<div class="caption">日付時刻についての設定例</div>
+<table>
+<tr><th>設定例</th><th>値が「2017-07-12 09:05:00」の場合</th></tr>
+<tr><td>data-im-format="datetime(middle)"</td><td>2017/07/12 09:05:00</td></tr>
+<tr><td>data-im-format="datetime(%m月%d日の%h時%i分)"</td><td>7月12日 9時5分</td></tr>
+<tr><td>data-im-format="datetime(%g%M月%D日)"</td><td>平成29年07月12日</td></tr>
+</table>
+</div>
+          </section>
             <section>
                 <h1>data-im-format</h1>
-                <p class="lead"></p>
-data-im-formatに設定可能な値
-
-number(桁数)
-currency(桁数)
-boolean("true表現", "false表現")　：ダブルクォート、シングルクォート、縦棒を使える
-percent(桁数)
-
-
-
+                <p>ターゲット指定によりコンテキストの値を要素に設定する時、その要素にdata-im-format属性があれば、書式化されるようになります。この設定は排他的なので、どれか1つが設定されていることが期待されます。</p>
+<div class="table">
+<div class="caption">data-im-formatに設定可能な値</div>
+<table>
+<tr><th>分類</th><th>属性値</th><th>書式化の動作</th></tr>
+<tr><td rowspan="4">数値</td><td>number(桁数)</td><td>数値に関する書式化を行う。桁数は少数以下の桁数</td></tr>
+<tr><td>currency(桁数)</td><td>通過記号を伴う書式化を行う。桁数は少数以下の桁数</td></tr>
+<tr><td>boolean(true表現,false表現)</td><td>引数は省略すると、True/Falseになる。trueとfalseの時の表現をそのまま記述する</td></tr>
+<tr><td>percent(桁数)</td><td>パーセント表現による書式化を行う。桁数は少数以下の桁数</td></tr>
+<tr><td rowspan="3">日付時刻<br>[未実装]</td><td>date(書式)</td><td>日付のみを書式化する。日付がない場合は食う文字列を表示する。桁数は少数以下の桁数</td></tr>
+<tr><td>time(書式)</td><td>時刻のみを書式化する。時刻がない場合には「00:00:00」とみなす。書式は別表を参照</td></tr>
+<tr><td>datetime(書式)</td><td>日付時刻を書式化する。日付や時刻がない場合には、date、timeの動作通り。書式は別表を参照</td></tr>
+</table>
+</div>
             </section>
             <section>
-                <h1>data-im-format-options</h1>
-                <p class="lead"></p>
-data-im-format-optionsに設定可能な値
+                <h1>数値に対するオプション設定のための属性</h1>
+                <p>数値に関連したdata-im-format属性を指定した場合、書式化の動作を以下のいくつかの属性で指定することができます。</p>
 
+<div class="table">
+<div class="caption">書式設定に関するオプション設定</div>
+<table>
+<tr><th>属性名</th><th>属性値</th><th>書式化の動作</th></tr>
+<tr><td rowspan="2">data-im-format-options</td><td>useseparator</td><td>数値の整数部で3桁ごとにカンマを入れる</td></tr>
+<tr><td>blankifzero</td><td>数値が0の時には何も表示しない</td></tr>
+<tr><td>data-im-format-negative-color</td><td>(CSSのcolorプロパティに設定可能な値)</td><td>負の数場合に文字に設定する色</td></tr>
+<tr><td rowspan="6">data-im-format-negative-style</td><td>leading-minus</td><td>負の数の記号（通常はマイナス）を数値の前に指定</td></tr>
+<tr><td>trailingminus</td><td>負の数の記号（通常はマイナス）を数値の後に指定</td></tr>
+<tr><td>parenthesis</td><td>負の数の場合、数値をカッコで囲む</td></tr>
+<tr><td>angle</td><td>負の数の場合、数値を &lt; &gt;で囲む</td></tr>
+<tr><td>credit</td><td>負の数の場合、前にCRを付加する</td></tr>
+<tr><td>triangle</td><td>負の数の場合、前に▲を付加する</td></tr>
+<tr><td rowspan="4">data-im-format-numeral-type</td><td>half-width</td><td>数値を一般的なアスキーコードの数字で記述</td></tr>
+<tr><td>full-width</td><td>数値を全角の数字で記述する</td></tr>
+<tr><td>kanji-numeral-modern</td><td>数値を、数字を示す漢字（一二三…）で記述</td></tr>
+<tr><td>kanji-numeral</td><td>数値を、数字を示す漢字（壱弐参…）で記述</td></tr>
+<tr><td rowspan="2">data-im-format-kanji-separator</td><td>every-4th-place</td><td>4桁ごと日本語表記する（例：1億2345万3456）</td></tr>
+<tr><td>full-notation</td><td>全ての桁において日本語表記する（例：1億2千3百4十5万3千4百5十6）</td></tr>
+</table>
+</div>
+            </section>
+            <section>
+                <h1>日付に対する引数設定（未実装）</h1>
+                <p>日付に関連したdata-im-format属性を指定する場合、引数に以下の文字列を指定できます。「単独使用」の場合には、引数にはその文字列のみを記述します。一方、「組み合わせ」の文字列については、組み合わせて指定をします。</p>
 
-
-useseparator
-blankifzero
-
-data-im-format-negative-color
-data-im-format-negative-style
-leading-minus
-trailingminus
-parenthesis
-angle
-credit
-triangle
-
-data-im-format-numeral-type
-half-width
-full-width
-kanji-numeral-modern
-kanji-numeral
-
-data-im-format-kanji-separator
-every-4th-place
-full-notation
-
-
-
+<div class="table">
+<div class="caption">日付に対する引数設定</div>
+<table>
+<tr><th>指定</th><th>指定文字列</th><th>意味</th><th>表示例</th></tr>
+<tr><td rowspan="3">単独使用</td><td>short</td><td>短い形式</td><td>17/07/12 09:05</td></tr>
+<tr><td>middle</td><td>よく利用される形式</td><td>2017/07/12 09:05:00</td></tr>
+<tr><td>long</td><td>長い形式</td><td>2017/07/12 月曜日 09:05:00 JST</td></tr>
+<tr><td rowspan="25">組み合わせ</td><td>%Y</td><td>西暦4桁</td><td>2017</td></tr>
+<tr><td>%y</td><td>西暦2桁</td><td>17</td></tr>
+<tr><td>%g</td><td>ロカールによる年数</td><td>平成29年</td></tr>
+<tr><td>%M</td><td>月2桁</td><td>07</td></tr>
+<tr><td>%m</td><td>月数値</td><td>7</td></tr>
+<tr><td>%b</td><td>短縮月名</td><td>Jul</td></tr>
+<tr><td>%B</td><td>月名</td><td>July</td></tr>
+<tr><td>%D</td><td>日2桁</td><td>12</td></tr>
+<tr><td>%d</td><td>日数値</td><td>12</td></tr>
+<tr><td>%a</td><td>英語短縮曜日名</td><td>Mon</td></tr>
+<tr><td>%A</td><td>英語曜日名</td><td>Monday</td></tr>
+<tr><td>%w</td><td>ロカールによる短縮曜日名</td><td>月</td></tr>
+<tr><td>%W</td><td>ロカールによる曜日名</td><td>月曜日</td></tr>
+<tr><td>%H</td><td>時2桁</td><td>09</td></tr>
+<tr><td>%h</td><td>時数値</td><td>9</td></tr>
+<tr><td>%I</td><td>分2桁</td><td>05</td></tr>
+<tr><td>%i</td><td>分数値</td><td>5</td></tr>
+<tr><td>%S</td><td>秒2桁</td><td>00</td></tr>
+<tr><td>%s</td><td>秒数値</td><td>0</td></tr>
+<tr><td>%P</td><td>AM/PM</td><td>AM</td></tr>
+<tr><td>%p</td><td>am/pm</td><td>am</td></tr>
+<tr><td>%Z</td><td>タイムゾーン省略名</td><td>JST</td></tr>
+<tr><td>%z</td><td>タイムゾーンオフセット</td><td>+0900</td></tr>
+<tr><td>%%</td><td>パーセント</td><td> %</td></tr>
+<tr><td>上記以外</td><td>そのまま表示</td><td>-</td></tr>
+</table>
+</div>
             </section>
         </artile>
     </div>
