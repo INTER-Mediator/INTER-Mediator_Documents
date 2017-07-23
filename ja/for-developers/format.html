@@ -108,11 +108,12 @@
 <tr><td>currency(桁数)</td><td>通過記号を伴う書式化を行う。桁数は少数以下の桁数で、省略すると0とみなす</td></tr>
 <tr><td>boolean(true表現,false表現)</td><td>論理値を表現する。引数にはtrueとfalseの時の表現をそのまま記述する。引数を省略すると、true/falseになる</td></tr>
 <tr><td>percent(桁数)</td><td>パーセント表現による書式化を行う。桁数は少数以下の桁数で、省略すると0とみなす</td></tr>
-<tr><td rowspan="3">日付時刻<br>[未実装]</td><td>date(書式)</td><td>日付のみを書式化する。日付がない場合は食う文字列を表示する。桁数は少数以下の桁数、省略するとそのまま表示</td></tr>
-<tr><td>time(書式)</td><td>時刻のみを書式化する。時刻がない場合には「00:00:00」とみなす。書式は別表を参照、省略するとそのまま表示</td></tr>
-<tr><td>datetime(書式)</td><td>日付時刻を書式化する。日付や時刻がない場合には、date、timeの動作通り。書式は別表を参照、省略するとそのまま表示</td></tr>
+<tr><td rowspan="3">日付時刻<br>[未実装]</td><td>date(書式)</td><td>引数がlong/middle/shortの場合は日付のみを書式化する。それ以外の引数は引数のパターンに従って表示される。日付がない場合は空文字列を表示する</td></tr>
+<tr><td>time(書式)</td><td>引数がlong/middle/shortの場合は時刻のみを書式化する。それ以外の引数は引数のパターンに従って表示される。時刻がない場合には「00:00:00」とみなす。書式は別表を参照</td></tr>
+<tr><td>datetime(書式)</td><td>引数がlong/middle/shortの場合は日付時刻を書式化する。それ以外の引数は引数のパターンに従って表示される。日付や時刻がない場合には、date、timeの動作通り。書式は別表を参照</td></tr>
 </table>
 </div>
+<p>日付や時刻については、long/middle/shortの場合はロケールに応じた形式で表示します。それ以外のパターン（%とアルファベットの置き換え文字列）については、ロケールに応じるものとそうでないものがあります。引数にパターンを指定した場合は、date/time/datetimeのいずれの指定でも結果は同じになります。</p>
             </section>
             <section>
                 <h1>数値に対するオプション設定のための属性</h1>
@@ -148,9 +149,9 @@
 <div class="caption">日付に対する引数設定</div>
 <table>
 <tr><th>指定</th><th>指定文字列</th><th>意味</th><th>表示例</th></tr>
-<tr><td rowspan="3">単独使用</td><td>short</td><td>短い形式</td><td>17/07/12 09:05</td></tr>
-<tr><td>middle</td><td>よく利用される形式</td><td>2017/07/12 09:05:00</td></tr>
-<tr><td>long</td><td>長い形式</td><td>2017/07/12 月曜日 09:05:00 JST</td></tr>
+<tr><td rowspan="3">単独使用</td><td>short</td><td>短い形式</td><td>2017/07/23 14:39</td></tr>
+<tr><td>middle</td><td>よく利用される形式</td><td>2017/07/23(日) 14:39:06</td></tr>
+<tr><td>long</td><td>長い形式</td><td>2017年07月23日 日曜日 14時39分06秒 JST</td></tr>
 <tr><td rowspan="25">組み合わせ</td><td>%Y</td><td>西暦4桁</td><td>2017</td></tr>
 <tr><td>%y</td><td>西暦2桁</td><td>17</td></tr>
 <tr><td>%g</td><td>ロカールによる年数</td><td>平成29年</td></tr>
