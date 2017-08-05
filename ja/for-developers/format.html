@@ -92,7 +92,7 @@
 <table>
 <tr><th>設定例</th><th>値が「2017-07-12 09:05:00」の場合</th></tr>
 <tr><td>data-im-format="datetime(middle)"</td><td>2017/07/12 09:05:00</td></tr>
-<tr><td>data-im-format="datetime(%m月%d日の%h時%i分)"</td><td>7月12日 9時5分</td></tr>
+<tr><td>data-im-format="datetime(%m月%d日の%h時%i分)"</td><td>7月12日の9時5分</td></tr>
 <tr><td>data-im-format="datetime(%g%M月%D日)"</td><td>平成29年07月12日</td></tr>
 </table>
 </div>
@@ -157,8 +157,10 @@
 <tr><td>%g</td><td>ロカールによる年数</td><td>平成29年</td></tr>
 <tr><td>%M</td><td>月2桁</td><td>07</td></tr>
 <tr><td>%m</td><td>月数値</td><td>7</td></tr>
-<tr><td>%b</td><td>短縮月名</td><td>Jul</td></tr>
-<tr><td>%B</td><td>月名</td><td>July</td></tr>
+<tr><td>%t</td><td>英語短縮月名</td><td>Jul</td></tr>
+<tr><td>%T</td><td>英語月名</td><td>July</td></tr>
+<tr><td>%b</td><td>ロカールによる短縮月名</td><td>Jul</td></tr>
+<tr><td>%B</td><td>ロカールによる月名</td><td>July</td></tr>
 <tr><td>%D</td><td>日2桁</td><td>12</td></tr>
 <tr><td>%d</td><td>日数値</td><td>12</td></tr>
 <tr><td>%a</td><td>英語短縮曜日名</td><td>Mon</td></tr>
@@ -173,8 +175,11 @@
 <tr><td>%s</td><td>秒数値</td><td>0</td></tr>
 <tr><td>%P</td><td>AM/PM</td><td>AM</td></tr>
 <tr><td>%p</td><td>am/pm</td><td>am</td></tr>
+<tr><td>%N</td><td>ロカールによる午前午後</td><td>am</td></tr>
+<!--
 <tr><td>%Z</td><td>タイムゾーン省略名</td><td>JST</td></tr>
 <tr><td>%z</td><td>タイムゾーンオフセット</td><td>+0900</td></tr>
+-->
 <tr><td>%%</td><td>パーセント</td><td> %</td></tr>
 <tr><td>上記以外</td><td>そのまま表示</td><td>-</td></tr>
 </table>
