@@ -72,7 +72,7 @@
             <section>
                 <h1>はじめに</h1>
                 <p class="lead">この手順書は、2015年4月11日の勉強会で利用するために当初作成したものを、その後に改定してきたものです。個人で進めることもできますが、この手順書を利用して、2〜3時間のハンズオンをオフラインで開催することもできます。INTER-Mediatorをまったく触ったことがないが、どんな感じなのかを知りたい方、あるいはINTER-Mediator普及のために、活用していただけます。</p>
-<p><a href="IM_Hands-On_Aug_2016.pdf">2016/8/6用PDF資料</a></p>
+<p><a href="IM_Hands-On_Aug_2016.pdf">2016/8/6用PDF資料</a>なお、本ページの内容はこのPDFの内容から、細かな点では変わっています。</p>
             </section>
             <section>
                 <h1>使用までの準備</h1>
@@ -111,7 +111,7 @@
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
     &lt;script type="text/javascript" src="def01.php"&gt;&lt;/script&gt;
@@ -234,14 +234,14 @@
     &lt;input type="radio" value="14" name="q3" data-im="survey@Q3"/&gt;北
     &lt;/div&gt;&lt;/td&gt;
     &lt;/tr&gt;
-    </strong>&lt;tr&gt;&lt;th&gt;質問4&lt;/th&gt;</strong>
-    </strong>&lt;td&gt;&lt;div data-im-group="survey@Q4"&gt;</strong>
-    </strong>&lt;input type="checkbox" value="21"/&gt;Docomo</strong>
-    </strong>&lt;input type="checkbox" value="22"/&gt;au</strong>
-    </strong>&lt;input type="checkbox" value="23"/&gt;Softbank</strong>
-    </strong>&lt;input type="checkbox" value="24"/&gt;Willcom</strong>
-    </strong>&lt;/div&gt;&lt;/td&gt;</strong>
-    </strong>&lt;/tr&gt;</strong>
+    <strong>&lt;tr&gt;&lt;th&gt;質問4&lt;/th&gt;</strong>
+    <strong>&lt;td&gt;&lt;div data-im-group="survey@Q4"&gt;</strong>
+    <strong>&lt;input type="checkbox" value="21"/&gt;Docomo</strong>
+    <strong>&lt;input type="checkbox" value="22"/&gt;au</strong>
+    <strong>&lt;input type="checkbox" value="23"/&gt;Softbank</strong>
+    <strong>&lt;input type="checkbox" value="24"/&gt;Willcom</strong>
+    <strong>&lt;/div&gt;&lt;/td&gt;</strong>
+    <strong>&lt;/tr&gt;</strong>
     &lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;td&gt;&lt;button data-im-control="post"&gt;Answer&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;</code></pre>
@@ -277,7 +277,7 @@
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
     &lt;script type="text/javascript" src="def02.php"&gt;&lt;/script&gt;
@@ -320,26 +320,26 @@
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
-    <strong>&lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;</strong>
     &lt;script type="text/javascript" src="def02.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
 <string>&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;</string>
 &lt;table&gt;
     &lt;thead&gt;
-        &lt;tr&gt;&lt;td&gt;名前&lt;/td&gt;&lt;td&gt;質問1&lt;/td&gt;&lt;td&gt;質問2&lt;/td&gt;&lt;td&gt;質問3&lt;/td&gt;&lt;td&gt;質問4&lt;/td&gt;&lt;/tr&gt;
+        <strong>&lt;tr&gt;&lt;th&gt;名前&lt;/th&gt;&lt;th&gt;質問1&lt;/th&gt;&lt;th&gt;質問2&lt;/th&gt;
+        &lt;th&gt;質問3&lt;/th&gt;&lt;th&gt;質問4&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;</strong>
     &lt;/thead&gt;
     &lt;tbody&gt;
         &lt;tr&gt;
-            &lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;
+            <strong>&lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;</strong>
             &lt;td data-im="survey@Q1"&gt;&lt;/td&gt;
             &lt;td data-im="survey@Q2"&gt;&lt;/td&gt;
             &lt;td data-im="survey@Q3"&gt;&lt;/td&gt;
             &lt;td data-im="survey@Q4"&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;/td&gt;
+            <strong>&lt;td&gt;&lt;/td&gt;</strong>
         &lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;
@@ -393,7 +393,7 @@
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
     &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
@@ -438,7 +438,7 @@
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
     &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
