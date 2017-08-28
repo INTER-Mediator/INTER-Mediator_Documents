@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,7 +37,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -75,26 +74,18 @@
                 <p>たくさんのレコード、そしてたくさんのフィールドがある場合、そのデータの一覧を表示して、ボタンをクリックするなどして移動したページで詳細を表示したり編集したりするような作りのユーザーインタフェースはよく利用されます。この種のユーザーインタフェースをマスター/ディテール、あるいは一覧と詳細といった呼び方をします。</p>
                 <p>サンプルデータベースには、商品マスターのテーブルがあります。その内容を一覧と詳細形式で表示したいとします。一般的なWebアプリケーションだと、それぞれ異なるページを用意して、ページ移動などの必要な機能を実装するということになります。一方、INTER-Mediatorでは、そうしたユーザーインタフェースを作りやすくした仕組みを組み込んでいます。一覧も詳細も、同一のページに表示して、必要に応じて表示と非表示を行うことで、一覧と詳細の動作を行っています。</p>
                 <p>サンプルの一覧のページからは「Practices」の「Master/Detail」にある「alternative navigation」をクリックすると、以下のようなページが表示されます。最初は、商品マスターの商品名と単価が見えている一覧が表示されています。ここで、「詳細」ボタンをクリックすると、クリックした商品に関する他のフィールドを、そのレコードだけ表示します。「一覧表示」ボタンをクリックすると、元の一覧のページが表示されます。</p>
-
                 <div class="picture"><img class="frame" src="/images/shot9912.png">
                 </div>
-
                 <p>サンプルの一覧のページからは「Practices」の「Master/Detail」にある「split master/detail」をクリックすると、以下のようなページが表示されます。一覧と詳細が同時に表示されています。CSSの仕組みを利用して、それぞれのテーブルを左右に並ぶように配置しています。</p>
-
                 <div class="picture"><img class="frame" src="/images/shot9913.png">
                 </div>
-
                 <p>左側の一覧で「詳細」ボタンをクリックすると、該当するレコードが右側に表示されます。つまり、右側は、左側のリストでクリックしたレコードの情報に逐次切り替わります。</p>
-
                 <div class="picture"><img class="frame" src="/images/shot9914.png">
                 </div>
-
                 <p>ここで、右側の詳細表示の方が、テキストフィールドになっています。たとえば、単価を1200に修正したとします。修正をしてTabキーを押すなどすると、このレコードのunitpriceフィールドの値は1200に更新されます。</p>
                 <div class="picture"><img class="frame" src="/images/shot9915.png">
                 </div>
-
                 <p>テキストフィールドからフォーカスが外れると同時に、左側の対応するフィールドも値が置き換わっています。このように、同一のフィールドがページ内の複数の箇所に見えている場合には、1つの修正が他の要素へ自動的に反映されるようになっています。（書式の反映に関しては、Ver.5.0より後に修正をおこなう予定です。）</p>
-
                 <div class="picture"><img class="frame" src="/images/shot9916.png">
                 </div>
             </section>
@@ -138,7 +129,6 @@ IM_Entry(
             <section>
                 <h1>ページファイル</h1>
                 <p>ページファイルについては、ボディ部のみを示します。もちろん、ヘッダ部で、前述の定義ファイルSCRIPTタグで読み込んだ状態になっています。一覧を表示するTABLEと詳細を表示するTABLEが定義されているだけです。左右のレイアウトをしやすいように、それぞれDIVタグ要素に含めてあります。それぞれのTABLEタグ要素内では、productlistコンテキストと、productdetailコンテキストを利用したターゲット指定があるだけで、特に何も特別な記述はありません。</p>
-
                 <div class="code">
                     <pre><code>&lt;body onload="INTERMediator.construct(true);"&gt;
 &lt;!-- Table for the list view --&gt;

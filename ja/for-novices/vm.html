@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,7 +37,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -68,13 +67,14 @@
             <section>
                 <h1>使用までの準備</h1>
                 <p>VMは、VirtualBox用を提供します。アプリケーション形式のVirtualBoxを以下の方法で、ご自分のパソコンにインストールしておいてください。</p>
-
                 <h3>VirtualBoxのインストール</h3>
                 <p>Windows、Mac、Linux、Solarisで利用できるVirtual Machine実行環境の「VirtualBox」は、Oracle社が開発してフリーで配布しているものです。<a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">こちらのページ</a>より、ご利用のホストコンピュータに対応したVirtualBoxをダウンロードしてご利用ください。</p>
             </section>
             <section>
                 <h1>INTER-Mediator-Server VMのダウンロード</h1>
-                <p>INTER-Mediator-Server VMは以下のリンクよりダウンロードしてください。<!-- 1.8GBほどあります。--></p>
+                <p>INTER-Mediator-Server VMは以下のリンクよりダウンロードしてください。
+                    <!-- 1.8GBほどあります。-->
+                </p>
                 <ul>
                     <li>
                         <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.6.ova">INTER-Mediator-Server VM 5.6</a>（約700MB、最終更新日：2017/06/23）
@@ -89,10 +89,8 @@
             <section>
                 <h1>VMの準備</h1>
                 <p>VMをINTER-Mediatorに含まれているスクリプト等を利用して自分で生成する方法を「VMを自分で作成して起動する」に、一方、すでに誰かが作ったVMを利用する方法を「VMをダウンロードして利用する」に解説します。もちろん、いずれか一方の作業を行うことで、VMを利用することができるので、状況に応じて使い分けてください。</p>
-
                 <h3>VMをダウンロードして利用する</h3>
                 <p>以下の手順は、VirtualBoxの初期状態を仮定しています。他の利用などでさまざまな設定がある場合には、手順が異なるかもしれませんが、原則として、ホストオンリーネットワークを用意して、そのネットワークを使用してVMが起動するようにセットアップされていればOKです。ダウンロードしたVMは、OS XでもWindowsでも、プラットフォームに関係なく利用できます。ただし、FileMaker Serverの場合には、VMとホスト側のIPアドレスが以下で行われる設定と同一である必要があります。</p>
-
                 <h4>VirtualBoxの準備</h4>
                 <p>VirtualBoxで稼働させるゲストのネットワーク環境にはいくつかありますが、「ホストオンリーネットワーク」を利用します。この方法だと、ゲストOS自体は、ホストマシン外からのネットワークアクセスはできなくなります。また、ゲストOSからホストOSへの接続も可能です。作成されるVMは、ホストオンリーネットワークであることを前提としているので、それ以外の設定での利用では、VMの状況を確認するなどして、ご自分で対処する必要があります。</p>
                 <p>Windowsでは、「ホストオンリーネットワーク」が最初から1つ作成されています。確認のため、「ファイル」メニューから「環境設定」を選択して、ダイアログボックスの左側で「ネットワーク」を選択し、「ホストオンリーネットワーク」のタブを選択します。そこに最初から「VirtualBox Host-Only Ethernet Adapter」が存在することを確認してください。</p>
@@ -103,10 +101,8 @@
                 <div class="picture">
                     <img class="picture-small picture-dummy" src="/images/shot9515.png">
                 </div>
-
                 <h4>ダウンロードした.ovaファイルの読み込み</h4>
                 <p>WindowsおよびMacのいずれの場合でも、「ファイル」メニューから「仮想アプライアンスのインポート」を選択してください。そして、ダウンロードしたファイルを指定して読み込み、「VirtualBox マネージャー」の画面の左側に新しい項目ができていることを確認します。</p>
-
                 <h4>INTER-Mediator-Server VMのネットワーク設定</h4>
                 <p>「VirtualBox マネージャー」で、読み込んだINTER-Mediator-Server VMの項目を選択します。そして、ツールバーの「設定」アイコンをクリックします。すると、そのVirtual Machineの設定が画面が表示されます。</p>
                 <p>Windowsでは、画面左側のリストで「ネットワーク」を選択します、さらに「アダプター2」のタブを選択します。そして、「割り当て」のポップアップメニューで「ホストオンリーアダプター」を選択します。すると、「名前」のところは、自動的に、「ホストオンリーネットワーク」に定義された名前が見えています。そこまでを確認して、OKボタンをクリックします。</p>
@@ -129,7 +125,6 @@
                 <div class="picture">
                     <img class="picture-small picture-dummy" src="/images/shot9634.png">
                 </div>
-
                 <h3>「http://192.168.56.101」に接続できない場合</h3>
                 <p>INTER-Mediator-Server VMが起動しているのなら、ユーザ名「developer」、パスワード「im4135dev」でログインをしてみて、「ifconfig」コマンドを実行してください。そこに、INTER-Mediator-Server VMが現在使用しているIPアドレスが見えます。eth1と記述された塊の中の、inet addrの後のIPアドレスが、現在のゲストOSのIPアドレスです。ホスト側でWebブラウザを起動して、そのIPアドレスで接続をしてみてください。</p>
                 <p>それでも考えられるのは次のようなことです。</p>
@@ -138,23 +133,21 @@
                     <li>ここまでに説明したネットワークの設定が正しく行われていない。あるいは、以前にその種の設定を独自に変更してしまっている。</li>
                     <li>なんらかの設定により、ホストからゲストへのIP接続ができない状態になっている。VirtualBoxでの設定次第で、あり得ると考えられます。</li>
                 </ul>
-
                 <h3>自分で作ったファイルを運用する</h3>
                 <p>「http://192.168.56.101」に接続したページに、ログイン可能なアカウントが末尾に書かれています。それをご利用ください。SFTPでファイルの転送をするのが手軽かと思われます。また、INTER-Mediator-Server VM自体にログインをして、独自のデータベーススキーマを読み込ませるなどしてください。データベースの管理アカウントも、「http://192.168.56.101」に接続したページに記載しています。</p>
-
                 <h3>INTER-Mediatorをアップデートする</h3>
                 <p>ホストマシン上で、sshにより「192.168.56.101」に接続してください。ユーザー名は「developer」、パスワードは「im4135dev」です。例えば、OS Xの場合は「ターミナル」アプリケーションで、「ssh developer@192.168.56.101」とコマンドを入れて、パスワードがその後にたずねられるので、キータイプをします。Windowsの場合は、TeraTermやPuTTY等のアプリケーションをご利用ください。</p>
                 <p>INTER-Mediator Ver.5.2（Ver.5.2-RC3を含む）以降のINTER-Mediator-Server VMの場合、以下のようにコマンドを入力します。</p>
                 <div class="code">
-<pre><code>cd /var/www/html/INTER-Mediator
+                    <pre><code>cd /var/www/html/INTER-Mediator
 git pull origin stable</code></pre>
-</div>
+                </div>
                 <p>INTER-Mediator Ver.5.2-RC1およびそれ以前のINTER-Mediator-Server VMの場合、以下のようにコマンドを入力します。checkoutの後にスペースとドット（git checkout .）を入れるのを忘れないようにして下さい。</p>
                 <div class="code">
-<pre><code>cd /var/www/html/INTER-Mediator
+                    <pre><code>cd /var/www/html/INTER-Mediator
 git checkout .
 git pull origin stable</code></pre>
-</div>
+                </div>
                 <p>GitHubのリポジトリにあるINTER-Mediatorの最新安定版がVMに反映されます。なお、開発版の最新状況を反映させる場合には「git pull origin stable」の代わりに「git pull origin master」を実行します。現在のバージョンは、INTER-Mediator以下、dist-docs/build.shというスクリプトの最初の方のバージョン記述を確認してください。反映されている最終的なコミットは、git logやgit showコマンドで、現在のcommitの識別子（16進数の非常に長いコードで、commitの後に続けて記述されている）を得て、GitHubのリポジトリで探してください。なお、Ver.5.1以前の場合は、アクセス権の設定が若干違います。もともと用意されているページファイルと定義ファイルの編集には問題がありませんが、自分でファイルを追加したような場合などは、アクセス権について見直してください。</p>
             </section>
             <section>

@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,20 +37,19 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
     <script>
     hljs.initHighlightingOnLoad()
     </script>
-<style>
-.object {
-     color: white;
-     background-color: #444444;
-     padding: 2px;
-}
-</style>
+    <style>
+    .object {
+        color: white;
+        background-color: #444444;
+        padding: 2px;
+    }
+    </style>
 </head>
 
 <body class="docs" data-page-title="for-programmers">
@@ -67,59 +66,92 @@
             </nav>
         </div>
         <article>
-        <section><h1>データコンバータクラスの利用方法</h1>
-            <p>IM_Entry関数の第2引数で、'formatter'を利用して、特定のコンテキストのフィールドに対して、データベースの読み書き前後にフィルタを設定することができます。このときに使うクラスをデータコンバータクラスと呼びます。自分で作成もできますが、以下のものが最初から組み込まれています。自分で作成する場合はDataConverter_template.phpを参照してください</p>
-            <div class="table"><table><tr><td>DataConverter_AppendPrefix.php</td>
-                <td>parameterに指定した文字列を前につける</td>
-            </tr>
-                <tr><td>DataConverter_AppendSuffix.php</td>
-                    <td>parameterに指定した文字列を後につける</td>
-                </tr>
-                <tr><td>DataConverter_Currency.php</td>
-                    <td>parameterに指定した小数以下の桁数で、数値を通貨で表示する</td>
-                </tr>
-                <tr><td>DataConverter_FMDateTime.php</td>
-                    <td>FileMaker Serverの出力する「月/日/年」形式の日付や時刻を整える</td>
-                </tr>
-                <tr><td>DataConverter_HTMLString.php</td>
-                    <td>改行をBRタグ要素、そして&lt;や&gt;や&amp;を参照形式に変換する。parameterにautolinkと指定するとURLにAタグ要素を付加してリンクに変換する。バージョン4.2以降においてparameterにnoescapeと指定すると参照形式への変換を無効にする。データベースへの書き込み時はそのままの文字列</td>
-                </tr>
-                <tr><td>DataConverter_MarkdownString</td>
-                    <td>マークダウン表記のテキストをHTMLに整形する。コンバーターを通したフィールドは、innerHTMLで受ける必要がある。現在サポートしているマークダウン表記は以下のとおり。
-<div class="table">
-<table>
-<tr><th>行頭の記号</th><th>動作</th></tr>
-<tr><td>*</td><td>その行をHnタグで囲む。nは*の個数に対応する</td></tr>
-<tr><td>-</td><td>その行を箇条書きにする。-を重ねて階層的に記述することも可能</td></tr>
-<tr><td>#</td><td>クラスが「_im_markdown_p1」のPタグで囲む。#は2つおよび3つにも対応し、クラス名の末尾の数字と#の個数が対応する</td></tr>
-<tr><td>@@IMG[file]</td><td>href属性がfileのIMGタグを生成すし、さらにクラスが「_im_markdown_para_img」のPタグで囲む</td></tr>
-<tr><td>|</td><td>TABLEタグで表を作る。セルの区切りと末尾に|を入れる</td></tr>
-</table>
-</div>
-</td>
-                </tr>
-                <tr><td>DataConverter_MySQLDateTime.php</td>
-                    <td>MySQLの出力する「年-月-日」形式の日付や時刻を整える</td>
-                </tr>
-                <tr><td>DataConverter_Number.php</td>
-                    <td>parameterに指定した小数以下の桁数で、数値をカンマ付きで表示する</td>
-                </tr>
-                <tr><td>DataConverter_NumberBase.php</td>
-                    <td>NumberやCurrencyの基底クラス</td>
-                </tr>
-                <tr><td>DataConverter_NullZeroString.php</td>
-                    <td>書き込み時にデータが''ならNULLとする、読み込み時は逆変換</td>
-                </tr>
-                <tr><td>DataConverter_template.php</td>
-                    <td>データコンバータのクラスのテンプレート</td>
-                </tr>
-            </table>
-            </div>
-        </section>
-         <section><h1>データベースアクセス処理の拡張クラスを定義する</h1>
-            <p>データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「拡張処理クラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「拡張処理クラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。必要な処理だけを記述する「拡張処理クラスを定義する方法」を使う方がプログラムの作成は容易でしょう。</p>
-            <p>IM_Entry関数の第一引数、つまりコンテキストの中に「extending-class」でクラス名を指定します。ここで指定したクラス名は任意のものでかまいませんが、そのクラスをPHPが認識できる場所に記述しておく必要があります。クラスは以下のようなインタフェースをインプリメントする必要があります。つまり、CRUDに対応する4種類のデータアクセス処理の前後にメソッドを含めることができるのです。</p>
-            <div class="code"><pre><code>interface Extending_Interface_BeforeRead {
+            <section>
+                <h1>データコンバータクラスの利用方法</h1>
+                <p>IM_Entry関数の第2引数で、'formatter'を利用して、特定のコンテキストのフィールドに対して、データベースの読み書き前後にフィルタを設定することができます。このときに使うクラスをデータコンバータクラスと呼びます。自分で作成もできますが、以下のものが最初から組み込まれています。自分で作成する場合はDataConverter_template.phpを参照してください</p>
+                <div class="table">
+                    <table>
+                        <tr>
+                            <td>DataConverter_AppendPrefix.php</td>
+                            <td>parameterに指定した文字列を前につける</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_AppendSuffix.php</td>
+                            <td>parameterに指定した文字列を後につける</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_Currency.php</td>
+                            <td>parameterに指定した小数以下の桁数で、数値を通貨で表示する</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_FMDateTime.php</td>
+                            <td>FileMaker Serverの出力する「月/日/年」形式の日付や時刻を整える</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_HTMLString.php</td>
+                            <td>改行をBRタグ要素、そして&lt;や&gt;や&amp;を参照形式に変換する。parameterにautolinkと指定するとURLにAタグ要素を付加してリンクに変換する。バージョン4.2以降においてparameterにnoescapeと指定すると参照形式への変換を無効にする。データベースへの書き込み時はそのままの文字列</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_MarkdownString</td>
+                            <td>マークダウン表記のテキストをHTMLに整形する。コンバーターを通したフィールドは、innerHTMLで受ける必要がある。現在サポートしているマークダウン表記は以下のとおり。
+                                <div class="table">
+                                    <table>
+                                        <tr>
+                                            <th>行頭の記号</th>
+                                            <th>動作</th>
+                                        </tr>
+                                        <tr>
+                                            <td>*</td>
+                                            <td>その行をHnタグで囲む。nは*の個数に対応する</td>
+                                        </tr>
+                                        <tr>
+                                            <td>-</td>
+                                            <td>その行を箇条書きにする。-を重ねて階層的に記述することも可能</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#</td>
+                                            <td>クラスが「_im_markdown_p1」のPタグで囲む。#は2つおよび3つにも対応し、クラス名の末尾の数字と#の個数が対応する</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@@IMG[file]</td>
+                                            <td>href属性がfileのIMGタグを生成すし、さらにクラスが「_im_markdown_para_img」のPタグで囲む</td>
+                                        </tr>
+                                        <tr>
+                                            <td>|</td>
+                                            <td>TABLEタグで表を作る。セルの区切りと末尾に|を入れる</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_MySQLDateTime.php</td>
+                            <td>MySQLの出力する「年-月-日」形式の日付や時刻を整える</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_Number.php</td>
+                            <td>parameterに指定した小数以下の桁数で、数値をカンマ付きで表示する</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_NumberBase.php</td>
+                            <td>NumberやCurrencyの基底クラス</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_NullZeroString.php</td>
+                            <td>書き込み時にデータが''ならNULLとする、読み込み時は逆変換</td>
+                        </tr>
+                        <tr>
+                            <td>DataConverter_template.php</td>
+                            <td>データコンバータのクラスのテンプレート</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+            <section>
+                <h1>データベースアクセス処理の拡張クラスを定義する</h1>
+                <p>データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「拡張処理クラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「拡張処理クラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。必要な処理だけを記述する「拡張処理クラスを定義する方法」を使う方がプログラムの作成は容易でしょう。</p>
+                <p>IM_Entry関数の第一引数、つまりコンテキストの中に「extending-class」でクラス名を指定します。ここで指定したクラス名は任意のものでかまいませんが、そのクラスをPHPが認識できる場所に記述しておく必要があります。クラスは以下のようなインタフェースをインプリメントする必要があります。つまり、CRUDに対応する4種類のデータアクセス処理の前後にメソッドを含めることができるのです。</p>
+                <div class="code"><pre><code>interface Extending_Interface_BeforeRead {
     public function doBeforeReadFromDB();
 }
 interface Extending_Interface_AfterRead {
@@ -155,252 +187,278 @@ interface Extending_Interface_AfterCopy{
     public function doAfterCopyInDB($result);
 }</code>
 </pre>
-            </div>
-            <p>以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。引数$resultにはデータベースからの取得した結果が、連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。たとえば集計処理などを行い、同様に連想配列の配列にして結果を返します。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。PHPではoptionのメソッドの定義をインタフェースできないので、定義上はコメントでこのメソッドを記載しています。</p>
-            <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterRead {
-	function doAfterReadFromDB($result) {
-		foreach( $result as $record ) {
-			foreach( $record as $field =&gt; $value ) {
-				:
-			}
-		}
-		return $result;
-	}
+                </div>
+                <p>以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。引数$resultにはデータベースからの取得した結果が、連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。たとえば集計処理などを行い、同様に連想配列の配列にして結果を返します。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。PHPではoptionのメソッドの定義をインタフェースできないので、定義上はコメントでこのメソッドを記載しています。</p>
+                <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterRead {
+    function doAfterReadFromDB($result) {
+        foreach( $result as $record ) {
+            foreach( $record as $field =&gt; $value ) {
+                :
+            }
+        }
+        return $result;
+    }
 }</code>
 </pre>
-            </div>
-            <p>countQueryResultメソッドを記述する場合の例を以下に示します。countQueryResultはdoAfterGetFromDBよりも後に呼び出されます。countQueryResultによって返されるのは、実際のレコード数ではなく、検索条件に合ったレコード数です。つまり、1万個のレコードのうち40個を表示している場合には、1万という数値を返す必要があります。doAfterGetFromDBで集計処理などをすると、1万レコードを取得して、それが20個などになると思います。その場合は20個を返さないといけません。この場合、自分でメンバ変数（dataCount）を定義して、そこに値を残しておくのが分かりやすい方法でしょう。</p>
-<div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterRead_WithNavigation {
-	var $dataCount;
-	
-	function doAfterReadFromDB($result) {
-			:
-		$thisthis-&gt;dataCount = count( $result );
-		$return result;
-	}
-	
-	function countQueryResult() {
-		$return $this-&gt;dataCount;
-	}
+                </div>
+                <p>countQueryResultメソッドを記述する場合の例を以下に示します。countQueryResultはdoAfterGetFromDBよりも後に呼び出されます。countQueryResultによって返されるのは、実際のレコード数ではなく、検索条件に合ったレコード数です。つまり、1万個のレコードのうち40個を表示している場合には、1万という数値を返す必要があります。doAfterGetFromDBで集計処理などをすると、1万レコードを取得して、それが20個などになると思います。その場合は20個を返さないといけません。この場合、自分でメンバ変数（dataCount）を定義して、そこに値を残しておくのが分かりやすい方法でしょう。</p>
+                <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterRead_WithNavigation {
+    var $dataCount;
+    
+    function doAfterReadFromDB($result) {
+            :
+        $thisthis-&gt;dataCount = count( $result );
+        $return result;
+    }
+    
+    function countQueryResult() {
+        $return $this-&gt;dataCount;
+    }
 }</code>
 </pre>
-            </div>
-            <p>それぞれのメソッドの$dataSourceNameはコンテキスト名の文字列が入っています。2つのコンテキストでクラスを共有するような場合には分岐のための手がかりになります。doAfterNewToDBの2つ目の引数$resultは、新たに作成したレコードのキーフィールドの値が設定されています。この値はdoAfterNewToDBメソッドでの返り値にしなければなりません。doAfterDeleteFromDBとdoAfterSetToDBメソッドの2つ目の引数はデータベース処理が失敗したかどうかをbooleanで示され、trueなら処理が成功です。これらのメソッドでもやはり引数で得られた値を返さないといけません。</p>
-            <p>開発者が作成するクラスで「DB_UseSharedObjects」クラスの子クラスにした場合は、他のオブジェクトへの参照が得られます。メソッドが呼び出された段階で、メンバ変数はオブジェクトを参照した状態になります。</p>
-            <div class="table"><div class="caption">DB_UseSharedObjectsを継承したときに利用できるメンバ変数</div>
-                <table><tr><th>メンバ変数</th>
-                    <th>参照するもの</th>
-                </tr>
-                    <tr><td>$this-&gt;dbSettings</td>
-                        <td>DB_Settingsクラスのインスタンス</td>
-                    </tr>
-                    <tr><td>$this-&gt;logger</td>
-                        <td>DB_Loggerクラスのインスタンス</td>
-                    </tr>
-                    <tr><td>$this-&gt;authCommon</td>
-                        <td>DB_AuthCommonクラスのインスタンス</td>
-                    </tr>
-                    <tr><td>$this-&gt;formatter</td>
-                        <td>DB_Formattersクラスのインスタンス</td>
-                    </tr>
-                </table>
-            </div>
-            <p>doAfter*メソッドの中では、原則として引数から処理対象のレコードが得られます。以下、処理結果のレコードを参照したり更新するメソッドを用意していますが、updateRecordメソッドは通常は不要と思われます。メール処理のためにフィールドを追加するようなときには、setUpdatedRecordメソッドを使います。</p>
-<h4><span class="object">DB_Class</span>->updatedRecord()</h4>
-<p class="exp">データベース処理後、処理した結果のレコードの配列が得られる。読み出しなら、読み出したレコード群、更新なら更新したレコード、新規レコードなら作成したレコードが得られる。</p>
-<h4><span class="object">DB_Class</span>->setUpdatedRecord($f, $v, $n)</h4>
-<p class="exp">処理した結果のレコードの特定のフィールドを修正する。$fがフィールド、$vがその値、$nは0から始まる番号でレコードを指定するが、$nを省略すると最初のレコードを参照する。返り値はなし。</p>
-
-        </section>
-       <section><h1>データベースクラスを自作する</h1>
-            <p>データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-MediatorのDB_PDO.php、FileMaer Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。</p>
-            <div class="code"><pre><code>require_once( "INTER-Mediator/DB_PDO.php" );
+                </div>
+                <p>それぞれのメソッドの$dataSourceNameはコンテキスト名の文字列が入っています。2つのコンテキストでクラスを共有するような場合には分岐のための手がかりになります。doAfterNewToDBの2つ目の引数$resultは、新たに作成したレコードのキーフィールドの値が設定されています。この値はdoAfterNewToDBメソッドでの返り値にしなければなりません。doAfterDeleteFromDBとdoAfterSetToDBメソッドの2つ目の引数はデータベース処理が失敗したかどうかをbooleanで示され、trueなら処理が成功です。これらのメソッドでもやはり引数で得られた値を返さないといけません。</p>
+                <p>開発者が作成するクラスで「DB_UseSharedObjects」クラスの子クラスにした場合は、他のオブジェクトへの参照が得られます。メソッドが呼び出された段階で、メンバ変数はオブジェクトを参照した状態になります。</p>
+                <div class="table">
+                    <div class="caption">DB_UseSharedObjectsを継承したときに利用できるメンバ変数</div>
+                    <table>
+                        <tr>
+                            <th>メンバ変数</th>
+                            <th>参照するもの</th>
+                        </tr>
+                        <tr>
+                            <td>$this-&gt;dbSettings</td>
+                            <td>DB_Settingsクラスのインスタンス</td>
+                        </tr>
+                        <tr>
+                            <td>$this-&gt;logger</td>
+                            <td>DB_Loggerクラスのインスタンス</td>
+                        </tr>
+                        <tr>
+                            <td>$this-&gt;authCommon</td>
+                            <td>DB_AuthCommonクラスのインスタンス</td>
+                        </tr>
+                        <tr>
+                            <td>$this-&gt;formatter</td>
+                            <td>DB_Formattersクラスのインスタンス</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>doAfter*メソッドの中では、原則として引数から処理対象のレコードが得られます。以下、処理結果のレコードを参照したり更新するメソッドを用意していますが、updateRecordメソッドは通常は不要と思われます。メール処理のためにフィールドを追加するようなときには、setUpdatedRecordメソッドを使います。</p>
+                <h4><span class="object">DB_Class</span>->updatedRecord()</h4>
+                <p class="exp">データベース処理後、処理した結果のレコードの配列が得られる。読み出しなら、読み出したレコード群、更新なら更新したレコード、新規レコードなら作成したレコードが得られる。</p>
+                <h4><span class="object">DB_Class</span>->setUpdatedRecord($f, $v, $n)</h4>
+                <p class="exp">処理した結果のレコードの特定のフィールドを修正する。$fがフィールド、$vがその値、$nは0から始まる番号でレコードを指定するが、$nを省略すると最初のレコードを参照する。返り値はなし。</p>
+            </section>
+            <section>
+                <h1>データベースクラスを自作する</h1>
+                <p>データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-MediatorのDB_PDO.php、FileMaer Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。</p>
+                <div class="code"><pre><code>require_once( "INTER-Mediator/DB_PDO.php" );
 class DB_MyOriginalDB extends DB_PDO.php {
-	public function readFromDB() {
-		/* ここにプログラムを追加できる */
-		$result = super::readFromDB();
-		/* ここにプログラムを追加できる */
-		$this->mainTableCount = count( $result ); //レコード数
-		return $result;
-	}
+    public function readFromDB() {
+        /* ここにプログラムを追加できる */
+        $result = super::readFromDB();
+        /* ここにプログラムを追加できる */
+        $this->mainTableCount = count( $result ); //レコード数
+        return $result;
+    }
 
-	public function countQueryResult()  {
-		return super::countQueryResult();
-	}
+    public function countQueryResult()  {
+        return super::countQueryResult();
+    }
 
-	public function getTotalCount()  {
-		return super::getTotalCount();
-	}
+    public function getTotalCount()  {
+        return super::getTotalCount();
+    }
 
-	public function updateDB() {
-		/* ここにプログラムを追加できる */
-		$result = super::updateDB();
-		/* ここにプログラムを追加できる */
-		return $result;
-	}
-	
-	public function createInDB($bypassAuth) {
-		/* ここにプログラムを追加できる */
-		$lastKeyValue = super::createInDB($bypassAuth);
-		/* ここにプログラムを追加できる */
-	    return $lastKeyValue;
-	}
-	
-	public function deleteFromDB() {
-		/* ここにプログラムを追加できる */
-	     $result = super::deleteFromDB();
-		/* ここにプログラムを追加できる */
-		return $result;
-	}
-	public function copyInDB()  {
-	     $result = super::copyInDB();
-		return $result;
-	}
+    public function updateDB() {
+        /* ここにプログラムを追加できる */
+        $result = super::updateDB();
+        /* ここにプログラムを追加できる */
+        return $result;
+    }
+    
+    public function createInDB($bypassAuth) {
+        /* ここにプログラムを追加できる */
+        $lastKeyValue = super::createInDB($bypassAuth);
+        /* ここにプログラムを追加できる */
+        return $lastKeyValue;
+    }
+    
+    public function deleteFromDB() {
+        /* ここにプログラムを追加できる */
+         $result = super::deleteFromDB();
+        /* ここにプログラムを追加できる */
+        return $result;
+    }
+    public function copyInDB()  {
+         $result = super::copyInDB();
+        return $result;
+    }
 }</code></pre></div>
-            <p>自分で作るクラスでは、要はCRUDに対応した4つのメソッドをオーバーライドすることによって、独自の仕組みを組み込むことができます。また、4つのうち、特にプログラムの追加がない場合には、定義する必要はありません。いずれの関数も、コンテキスト名を引数に取ります。そして、現在処理しているコンテキスト名が設定されてこれらのメソッドを呼び出します。</p>
-            <p>readFromDBメソッドは、データベースからデータを取り出します。取り出し結果は連想配列の配列です。連想配列のキーがフィールド名になっています。そこから、特定のフィールドの値を元に集計をしたり、あるいは必要な値だけに取り除くなどの処理を、親クラスのreadFromDBメソッドを呼び出す後に入れればいいでしょう。リクエスト時と同じフィールド名を返す必要はなく（つまりINTER-Mediatorはそのチェックをしていない）、自由に連想配列の配列を作ります。そして、ページファイルの方で適切なフィールド名を指定すれば、集計結果が表示されます。なお、ページファイルで、一定レコード数ごとのページングをしているときには、mainTableCountメンバ変数にレコード数、つまり返す配列の要素数も指定します。何か問題が発生したのなら、array()を返します。以下のプログラムは売り上げのテーブルから集計を行う例です。</p>
-            <div class="code"><pre><code>$result = super::readFromDB();
+                <p>自分で作るクラスでは、要はCRUDに対応した4つのメソッドをオーバーライドすることによって、独自の仕組みを組み込むことができます。また、4つのうち、特にプログラムの追加がない場合には、定義する必要はありません。いずれの関数も、コンテキスト名を引数に取ります。そして、現在処理しているコンテキスト名が設定されてこれらのメソッドを呼び出します。</p>
+                <p>readFromDBメソッドは、データベースからデータを取り出します。取り出し結果は連想配列の配列です。連想配列のキーがフィールド名になっています。そこから、特定のフィールドの値を元に集計をしたり、あるいは必要な値だけに取り除くなどの処理を、親クラスのreadFromDBメソッドを呼び出す後に入れればいいでしょう。リクエスト時と同じフィールド名を返す必要はなく（つまりINTER-Mediatorはそのチェックをしていない）、自由に連想配列の配列を作ります。そして、ページファイルの方で適切なフィールド名を指定すれば、集計結果が表示されます。なお、ページファイルで、一定レコード数ごとのページングをしているときには、mainTableCountメンバ変数にレコード数、つまり返す配列の要素数も指定します。何か問題が発生したのなら、array()を返します。以下のプログラムは売り上げのテーブルから集計を行う例です。</p>
+                <div class="code"><pre><code>$result = super::readFromDB();
 $summary = array();
 foreach( $returnValue as $record ) {
-	$summary[ $record[ 'itemNo' ]] += $record[ 'qty' ] * $record[ 'unitPrice' ];
-	}
+    $summary[ $record[ 'itemNo' ]] += $record[ 'qty' ] * $record[ 'unitPrice' ];
+    }
 return array( $summary );</code>
 </pre>
-            </div>
-            <p>updateDBとdeleteFromDBメソッドは、いずれも値の更新や削除のときに呼び出されるメソッドです。返り値は論理値で、処理が成功すればtrueで失敗ならfalseです。createInDBは新規レコードの作成です。メソッドの返り値は、新たに作ったレコードのキーフィールドの値である必要があります。問題があれば返り値をfalseにします。</p>
-        </section>
-       <section><h1>サーバーサイドのプログラムで利用できるAPI</h1>
-<p>以下、<span class="object">DB_Proxy</span>はDB_Proxyクラスのオブジェクトへの参照を意味します。</p>
-<h4><span class="object">DB_Proxy</span>->initialize($datasource, $options, $dbspec, $debug, $target = null)</h4>
-<p class="exp">DB_Proxyクラスを初期化する。返り値はなし。生成したDB_Proxyクラスのオブジェクトに対して適用することで、さまざまな設定が反映されたオブジェクト群を形成する。</p>
-<div class="table">
-<div class="caption">initializeメソッドの引数</div>
-<table>
-<tr><th>引数</th><th>指定する内容</th></tr>
-<tr><td>$datasource</td><td>IM_Entry関数の第1引数と同様に、連想配列で表現されたコンテキストの配列。</td></tr>
-<tr><td>$options</td><td>IM_Entry関数の第2引数と同様、さまざまな設定を含む連想配列。</td></tr>
-<tr><td>$dbspec</td><td>IM_Entry関数の第3引数と同様、データベース接続に関する連想配列。</td></tr>
-<tr><td>$debug</td><td>IM_Entry関数の第4引数と同様、falseならデバッグ出力なし、1ないしは2なら出力あり。</td></tr>
-<tr><td>$target</td><td>コンテキストのnameキーの値のひとつを文字列で指定する。省略することも可能。</td></tr>
-</table>
-</div>
-<h4><span class="object">DB_Proxy</span>->processingRequest($access, $bypassAuth)</h4>
-<p class="exp">初期化したDB_Proxyクラスのオブジェクトに対して処理を行う。返り値はない。引数$bypassAuthは、認証やアクセス権設定を無視するが、この指定は慎重に行う必要がある。既定値はfalse。引数$accessに、行うデータベース処理を示す文字列を指定する。nullを指定したときや省略したときにはPOST時のパラメーターの"access"キーの値を使用する。$accessに指定できる値と動作は次の通り：'create'（レコードの作成）、'read'（データベースへのクエリー）、'update'（レコードの更新）、'delete'（レコードの削除）、'copy'（レコードの複製）、'challenge'（チャレンジの生成＝原則として何もしない）、'changepassword'（パスワード変更）、'unregister'（Pusherによるクライアント同期の登録解除）、'describe'（スキーマ情報を得る）。他に'select' 'new'が過去の互換性のために利用可能となっている。それ以外の文字列の場合は、特に何もしない。</p>
-<h4><span class="object">DB_Proxy</span>->ignoringPost()</h4>
-<p class="exp">initializeメソッドではPOSTされたデータを取り込むが、その結果、処理拡張クラス内で新たにDB_Proxyクラスを生成してコンテキストを別途用意したとき、POSTデータの取り込みをしたくない場合も発生する。そのときにこのメソッドをinitializeメソッドよりも前に呼び出す。</p>
-<h4><span class="object">DB_Proxy</span>->getDatabaseResult()</h4>
-<p class="exp">データベースからの検索結果などで、1レコードが連想配列として表現され、その連想配列がレコード数分ある配列が返される。利用可能なprocessingRequestメソッドの最初の引数は、create（作成されたレコード）、read（検索結果）、update（更新後のレコード）、copy（複製後のレコード）、describe（スキーマ情報）。</p>
-<h4><span class="object">DB_Proxy</span>->getDatabaseResultCount()</h4>
-<p class="exp">processingRequestメソッドの最初の引数がreadの場合、検索結果に含まれるレコード数を返す。コンテキストのrecordsキーが上限値となるが、実際に検索されたレコード数はそれより少ない場合もある。</p>
-<h4><span class="object">DB_Proxy</span>->getDatabaseTotalCount()</h4>
-<p class="exp">processingRequestメソッドの最初の引数がreadの場合、検索条件に合致したレコード数を返す。</p>
-<h4><span class="object">DB_Proxy</span>->getDatabaseNewRecordKey()</h4>
-<p class="exp">processingRequestメソッドの最初の引数がcreateあるいはcopyの場合、新たに作成されたレコードの主キーの値を返す。</p>
-<h4><span class="object">DB_Proxy</span>->finishCommunication($notFinish)</h4>
-<p class="exp">出力するためのさまざまな準備を行う。</p>
-<h4><span class="object">DB_Proxy</span>->exportOutputDataAsJSON()</h4>
-<p class="exp">JSON形式のテキストで各種データを出力する。</p>
-<h4><span class="object">DB_Logger</span>->setDebugMessage($str, $level)</h4>
-<p class="exp">引数$strに指定した文字列を、引数$levelに指定したレベルでのデバッグメッセージとして記録する。レベルは1ないしは2のみをサポートし、引数$levelを省略すると1になる。</p>
-<h4><span class="object">DB_Logger</span>->setErrorMessage($str)</h4>
-<p class="exp">引数$strに指定した文字列を、エラーメッセージとして記録する。</p>
-<h4><span class="object">DB_Logger</span>->getDebugMessages()</h4>
-<p class="exp">記録されたデバッグメッセージを要素として含む配列を返す。</p>
-<h4><span class="object">DB_Logger</span>->getErrorMessages()</h4>
-<p class="exp">記録されたエラーメッセージを要素として含む配列を返す。</p>
-<h4><span class="object">DB_Settings</span>->setDataSourceName($dataSourceName)</h4>
-<p class="exp">引数に指定した文字列をnameキーの値として持つコンテキストを選択する。</p>
-<h4><span class="object">DB_Settings</span>->getDataSourceName()</h4>
-<p class="exp">現在、選択されているコンテキストのnameキーに対する値。</p>
-<h4><span class="object">DB_Settings</span>->getDataSourceTargetArray()</h4>
-<p class="exp">現在、選択されているコンテキストの定義内容を連想配列で返す。</p>
-<h4><span class="object">DB_Settings</span>->getDataSourceDefinition($dataSourceName)</h4>
-<p class="exp">引数に指定した文字列をnameキーの値として持つコンテキスト定義の連想配列を返す。</p>
-<h4><span class="object">DB_Settings</span>->getEntityForRetrieve()</h4>
-<p class="exp">クエリー処理に利用するエンティティ名を返す。つまり、viewキーの値が指定されていればその値、指定されていない場合にはnameキーの値が返される。</p>
-<h4><span class="object">DB_Settings</span>->getEntityForUpdate()</h4>
-<p class="exp">更新処理に利用するエンティティ名を返す。つまり、tableキーの値が指定されていればその値、指定されていない場合にはnameキーの値が返される。</p>
-<h4><span class="object">DB_Settings</span>->setStart($st)</h4>
-<p class="exp">検索結果の最初のいくつ目から結果として取り出すかを、引数の数値で指定する。クライアントのINTERMediator.startFromの値が自動的に設定される。</p>
-<h4><span class="object">DB_Settings</span>->getStart()</h4>
-<p class="exp">検索結果の最初のいくつ目から結果として取り出すかが得られる。</p>
-<h4><span class="object">DB_Settings</span>->setRecordCount($sk)</h4>
-<p class="exp">検索結果の中から、最大でいくつのレコードを取り出すかを引数の数値で指定する。コンテキストのrecordsキーの値や、クライアントINTERMediator.pageSizeの値など、すでに決まっている値が指定される。</p>
-<h4><span class="object">DB_Settings</span>->getRecordCount()</h4>
-<p class="exp">検索結果の中から、最大でいくつのレコードを取り出すかが得られる。</p>
-<h4><span class="object">DB_Settings</span>->getAggregationSelect()<br/>
+                </div>
+                <p>updateDBとdeleteFromDBメソッドは、いずれも値の更新や削除のときに呼び出されるメソッドです。返り値は論理値で、処理が成功すればtrueで失敗ならfalseです。createInDBは新規レコードの作成です。メソッドの返り値は、新たに作ったレコードのキーフィールドの値である必要があります。問題があれば返り値をfalseにします。</p>
+            </section>
+            <section>
+                <h1>サーバーサイドのプログラムで利用できるAPI</h1>
+                <p>以下、<span class="object">DB_Proxy</span>はDB_Proxyクラスのオブジェクトへの参照を意味します。</p>
+                <h4><span class="object">DB_Proxy</span>->initialize($datasource, $options, $dbspec, $debug, $target = null)</h4>
+                <p class="exp">DB_Proxyクラスを初期化する。返り値はなし。生成したDB_Proxyクラスのオブジェクトに対して適用することで、さまざまな設定が反映されたオブジェクト群を形成する。</p>
+                <div class="table">
+                    <div class="caption">initializeメソッドの引数</div>
+                    <table>
+                        <tr>
+                            <th>引数</th>
+                            <th>指定する内容</th>
+                        </tr>
+                        <tr>
+                            <td>$datasource</td>
+                            <td>IM_Entry関数の第1引数と同様に、連想配列で表現されたコンテキストの配列。</td>
+                        </tr>
+                        <tr>
+                            <td>$options</td>
+                            <td>IM_Entry関数の第2引数と同様、さまざまな設定を含む連想配列。</td>
+                        </tr>
+                        <tr>
+                            <td>$dbspec</td>
+                            <td>IM_Entry関数の第3引数と同様、データベース接続に関する連想配列。</td>
+                        </tr>
+                        <tr>
+                            <td>$debug</td>
+                            <td>IM_Entry関数の第4引数と同様、falseならデバッグ出力なし、1ないしは2なら出力あり。</td>
+                        </tr>
+                        <tr>
+                            <td>$target</td>
+                            <td>コンテキストのnameキーの値のひとつを文字列で指定する。省略することも可能。</td>
+                        </tr>
+                    </table>
+                </div>
+                <h4><span class="object">DB_Proxy</span>->processingRequest($access, $bypassAuth)</h4>
+                <p class="exp">初期化したDB_Proxyクラスのオブジェクトに対して処理を行う。返り値はない。引数$bypassAuthは、認証やアクセス権設定を無視するが、この指定は慎重に行う必要がある。既定値はfalse。引数$accessに、行うデータベース処理を示す文字列を指定する。nullを指定したときや省略したときにはPOST時のパラメーターの"access"キーの値を使用する。$accessに指定できる値と動作は次の通り：'create'（レコードの作成）、'read'（データベースへのクエリー）、'update'（レコードの更新）、'delete'（レコードの削除）、'copy'（レコードの複製）、'challenge'（チャレンジの生成＝原則として何もしない）、'changepassword'（パスワード変更）、'unregister'（Pusherによるクライアント同期の登録解除）、'describe'（スキーマ情報を得る）。他に'select' 'new'が過去の互換性のために利用可能となっている。それ以外の文字列の場合は、特に何もしない。</p>
+                <h4><span class="object">DB_Proxy</span>->ignoringPost()</h4>
+                <p class="exp">initializeメソッドではPOSTされたデータを取り込むが、その結果、処理拡張クラス内で新たにDB_Proxyクラスを生成してコンテキストを別途用意したとき、POSTデータの取り込みをしたくない場合も発生する。そのときにこのメソッドをinitializeメソッドよりも前に呼び出す。</p>
+                <h4><span class="object">DB_Proxy</span>->getDatabaseResult()</h4>
+                <p class="exp">データベースからの検索結果などで、1レコードが連想配列として表現され、その連想配列がレコード数分ある配列が返される。利用可能なprocessingRequestメソッドの最初の引数は、create（作成されたレコード）、read（検索結果）、update（更新後のレコード）、copy（複製後のレコード）、describe（スキーマ情報）。</p>
+                <h4><span class="object">DB_Proxy</span>->getDatabaseResultCount()</h4>
+                <p class="exp">processingRequestメソッドの最初の引数がreadの場合、検索結果に含まれるレコード数を返す。コンテキストのrecordsキーが上限値となるが、実際に検索されたレコード数はそれより少ない場合もある。</p>
+                <h4><span class="object">DB_Proxy</span>->getDatabaseTotalCount()</h4>
+                <p class="exp">processingRequestメソッドの最初の引数がreadの場合、検索条件に合致したレコード数を返す。</p>
+                <h4><span class="object">DB_Proxy</span>->getDatabaseNewRecordKey()</h4>
+                <p class="exp">processingRequestメソッドの最初の引数がcreateあるいはcopyの場合、新たに作成されたレコードの主キーの値を返す。</p>
+                <h4><span class="object">DB_Proxy</span>->finishCommunication($notFinish)</h4>
+                <p class="exp">出力するためのさまざまな準備を行う。</p>
+                <h4><span class="object">DB_Proxy</span>->exportOutputDataAsJSON()</h4>
+                <p class="exp">JSON形式のテキストで各種データを出力する。</p>
+                <h4><span class="object">DB_Logger</span>->setDebugMessage($str, $level)</h4>
+                <p class="exp">引数$strに指定した文字列を、引数$levelに指定したレベルでのデバッグメッセージとして記録する。レベルは1ないしは2のみをサポートし、引数$levelを省略すると1になる。</p>
+                <h4><span class="object">DB_Logger</span>->setErrorMessage($str)</h4>
+                <p class="exp">引数$strに指定した文字列を、エラーメッセージとして記録する。</p>
+                <h4><span class="object">DB_Logger</span>->getDebugMessages()</h4>
+                <p class="exp">記録されたデバッグメッセージを要素として含む配列を返す。</p>
+                <h4><span class="object">DB_Logger</span>->getErrorMessages()</h4>
+                <p class="exp">記録されたエラーメッセージを要素として含む配列を返す。</p>
+                <h4><span class="object">DB_Settings</span>->setDataSourceName($dataSourceName)</h4>
+                <p class="exp">引数に指定した文字列をnameキーの値として持つコンテキストを選択する。</p>
+                <h4><span class="object">DB_Settings</span>->getDataSourceName()</h4>
+                <p class="exp">現在、選択されているコンテキストのnameキーに対する値。</p>
+                <h4><span class="object">DB_Settings</span>->getDataSourceTargetArray()</h4>
+                <p class="exp">現在、選択されているコンテキストの定義内容を連想配列で返す。</p>
+                <h4><span class="object">DB_Settings</span>->getDataSourceDefinition($dataSourceName)</h4>
+                <p class="exp">引数に指定した文字列をnameキーの値として持つコンテキスト定義の連想配列を返す。</p>
+                <h4><span class="object">DB_Settings</span>->getEntityForRetrieve()</h4>
+                <p class="exp">クエリー処理に利用するエンティティ名を返す。つまり、viewキーの値が指定されていればその値、指定されていない場合にはnameキーの値が返される。</p>
+                <h4><span class="object">DB_Settings</span>->getEntityForUpdate()</h4>
+                <p class="exp">更新処理に利用するエンティティ名を返す。つまり、tableキーの値が指定されていればその値、指定されていない場合にはnameキーの値が返される。</p>
+                <h4><span class="object">DB_Settings</span>->setStart($st)</h4>
+                <p class="exp">検索結果の最初のいくつ目から結果として取り出すかを、引数の数値で指定する。クライアントのINTERMediator.startFromの値が自動的に設定される。</p>
+                <h4><span class="object">DB_Settings</span>->getStart()</h4>
+                <p class="exp">検索結果の最初のいくつ目から結果として取り出すかが得られる。</p>
+                <h4><span class="object">DB_Settings</span>->setRecordCount($sk)</h4>
+                <p class="exp">検索結果の中から、最大でいくつのレコードを取り出すかを引数の数値で指定する。コンテキストのrecordsキーの値や、クライアントINTERMediator.pageSizeの値など、すでに決まっている値が指定される。</p>
+                <h4><span class="object">DB_Settings</span>->getRecordCount()</h4>
+                <p class="exp">検索結果の中から、最大でいくつのレコードを取り出すかが得られる。</p>
+                <h4><span class="object">DB_Settings</span>->getAggregationSelect()<br/>
 <span class="object">DB_Settings</span>->setAggregationSelect($value)</h4>
-<p class="exp">選択されているコンテキストに指定したaggregation-selectキーの設定と取得</p>
-<h4><span class="object">DB_Settings</span>->getAggregationFrom()<br/>
+                <p class="exp">選択されているコンテキストに指定したaggregation-selectキーの設定と取得</p>
+                <h4><span class="object">DB_Settings</span>->getAggregationFrom()<br/>
 <span class="object">DB_Settings</span>->setAggregationFrom($value)</h4>
-<p class="exp">選択されているコンテキストに指定したaggregation-fromキーの設定と取得</p>
-<h4><span class="object">DB_Settings</span>->getAggregationGroupBy()<br/>
+                <p class="exp">選択されているコンテキストに指定したaggregation-fromキーの設定と取得</p>
+                <h4><span class="object">DB_Settings</span>->getAggregationGroupBy()<br/>
 <span class="object">DB_Settings</span>->setAggregationGroupBy($value)</h4>
-<p class="exp">選択されているコンテキストに指定したaggregation-group-byキーの設定と取得</p>
-<h4><span class="object">DB_Settings</span>->setDataSource($src)</h4>
-<p class="exp">引数には定義ファイルのIM_Entry関数の第1引数の値を指定して、コンテキスト定義の配列をオブジェクトに記録する。</p>
-<h4><span class="object">DB_Settings</span>->getDataSource()</h4>
-<p class="exp">定義ファイルのIM_Entry関数の第1引数の値が返される。</p>
-<h4><span class="object">DB_Settings</span>->setOptions($src)</h4>
-<p class="exp">引数には定義ファイルのIM_Entry関数の第2引数の値を指定して、オプション指定の配列をオブジェクトに記録する。</p>
-<h4><span class="object">DB_Settings</span>->getOptions()</h4>
-<p class="exp">定義ファイルのIM_Entry関数の第2引数の値が返される。</p>
-<h4><span class="object">DB_Settings</span>->setDbSpec($src)</h4>
-<p class="exp">引数には定義ファイルのIM_Entry関数の第3引数の値を指定して、データベース設定の配列をオブジェクトに記録する。</p>
-<h4><span class="object">DB_Settings</span>->getDbSpec()</h4>
-<p class="exp">定義ファイルのIM_Entry関数の第3引数の値が返される。</p>
-<h4><span class="object">DB_Settings</span>->setFieldsRequired($fieldsRequired)</h4>
-<p class="exp">フィールドの配列として、引数の配列を設定する。このメソッドは、配列そのものを設定するが、addValueWithField、addTargetFieldメソッドにより、フィールド一覧を管理する配列へ要素が追加される。</p>
-<h4><span class="object">DB_Settings</span>->getFieldsRequired()</h4>
-<p class="exp">フィールドの配列を返す。</p>
-<h4><span class="object">DB_Settings</span>->addTargetField($field)</h4>
-<p class="exp">フィールドの配列の要素として、引数に指定した文字列を追加する。</p>
-<h4><span class="object">DB_Settings</span>->getFieldOfIndex($ix)</h4>
-<p class="exp">フィールドの配列から、引数に指定した番号の要素を返す。</p>
-<h4><span class="object">DB_Settings</span>->setValue($values)</h4>
-<p class="exp">値の配列として、引数の配列を設定する。</p>
-<h4><span class="object">DB_Settings</span>->getValue()</h4>
-<p class="exp">値の配列を返す。</p>
-<h4><span class="object">DB_Settings</span>->addValue($value)</h4>
-<p class="exp">値の配列の要素として、引数に指定した文字列を追加する。</p>
-<h4><span class="object">DB_Settings</span>->addValueWithField($field, $value)</h4>
-<p class="exp">フィールドの配列および値の配列の要素として、引数に指定した文字列をそれぞれ追加する。</p>
-<h4><span class="object">DB_Settings</span>->getValuesWithFields()</h4>
-<p class="exp">フィールドの配列にある値をキー、そのキーに対する値を要素にした連想配列を返す。</p>
-<h4><span class="object">DB_Settings</span>->getValueOfField($targetField)</h4>
-<p class="exp">引数に指定したフィールド名をフィールドの配列の何番目なのかを判別し、値の配列の同じ番号の要素を返す。つまり、フィールド名に対応した値を返す。</p>
-<h4><span class="object">DB_Settings</span>->setForeignFieldAndValue($foreignFieldAndValue)</h4>
-<p class="exp">引数を外部キーの値を保持する配列に指定する。引数は、field、valueをキーとした連想配列の配列である必要がある。</p>
-<h4><span class="object">DB_Settings</span>->getForeignFieldAndValue()</h4>
-<p class="exp">外部キーの値を保持する配列を返す。返される値は、field、valueをキーとした連想配列の配列。</p>
-<h4><span class="object">DB_Settings</span>->addForeignValue($field, $value)</h4>
-<p class="exp">引数に指定したフィールド名と値を、外部キーの値を保持する配列に追加する。</p>
-<h4><span class="object">DB_Settings</span>->getForeignKeysValue($targetField)</h4>
-<p class="exp">外部キーの値を保持する配列から、引数に指定したフィールドに対する値を返す。ない場合はnullが返る。</p>
-<h4><span class="object">DB_Settings</span>->addExtraCriteria($field, $operator, $value)</h4>
-<p class="exp">追加的な検索条件を保持する配列に、引数の3つの要素を持つ連想配列として追加する。</p>
-<h4><span class="object">DB_Settings</span>->getExtraCriteria()</h4>
-<p class="exp">追加的な検索条件を保持する配列を返す。</p>
-<h4><span class="object">DB_Settings</span>->unsetExtraCriteria($index)</h4>
-<p class="exp">追加的な検索条件を保持する配列の中にある引数に指定したインデックスの要素を削除する。</p>
-<h4><span class="object">DB_Settings</span>->getCriteriaValue($targetField)</h4>
-<p class="exp">追加的な検索条件を保持する配列から、引数に指定した文字列をfieldキーの値として持つ最初の要素を特定し、その要素のvalueキーの値を返す。</p>
-<h4><span class="object">DB_Settings</span>->getCriteriaOperator($targetField)</h4>
-<p class="exp">追加的な検索条件を保持する配列から、引数に指定した文字列をfieldキーの値として持つ最初の要素を特定し、その要素のoperatorキーの値を返す。</p>
-<h4><span class="object">DB_Settings</span>->setGlobalInContext($contextName, $operation, $field, $value)</h4>
-<p class="exp">引数に指定したコンテキストに、残りの引数で指定した設定内容を持つglobalキーの連想配列を追加する。もちろん、FileMaker Serverのみで意味のある機能である。</p>
-<h4><span class="object">DB_Settings</span>->setPrimaryKeyOnly($primaryKeyOnly)<br/>
+                <p class="exp">選択されているコンテキストに指定したaggregation-group-byキーの設定と取得</p>
+                <h4><span class="object">DB_Settings</span>->setDataSource($src)</h4>
+                <p class="exp">引数には定義ファイルのIM_Entry関数の第1引数の値を指定して、コンテキスト定義の配列をオブジェクトに記録する。</p>
+                <h4><span class="object">DB_Settings</span>->getDataSource()</h4>
+                <p class="exp">定義ファイルのIM_Entry関数の第1引数の値が返される。</p>
+                <h4><span class="object">DB_Settings</span>->setOptions($src)</h4>
+                <p class="exp">引数には定義ファイルのIM_Entry関数の第2引数の値を指定して、オプション指定の配列をオブジェクトに記録する。</p>
+                <h4><span class="object">DB_Settings</span>->getOptions()</h4>
+                <p class="exp">定義ファイルのIM_Entry関数の第2引数の値が返される。</p>
+                <h4><span class="object">DB_Settings</span>->setDbSpec($src)</h4>
+                <p class="exp">引数には定義ファイルのIM_Entry関数の第3引数の値を指定して、データベース設定の配列をオブジェクトに記録する。</p>
+                <h4><span class="object">DB_Settings</span>->getDbSpec()</h4>
+                <p class="exp">定義ファイルのIM_Entry関数の第3引数の値が返される。</p>
+                <h4><span class="object">DB_Settings</span>->setFieldsRequired($fieldsRequired)</h4>
+                <p class="exp">フィールドの配列として、引数の配列を設定する。このメソッドは、配列そのものを設定するが、addValueWithField、addTargetFieldメソッドにより、フィールド一覧を管理する配列へ要素が追加される。</p>
+                <h4><span class="object">DB_Settings</span>->getFieldsRequired()</h4>
+                <p class="exp">フィールドの配列を返す。</p>
+                <h4><span class="object">DB_Settings</span>->addTargetField($field)</h4>
+                <p class="exp">フィールドの配列の要素として、引数に指定した文字列を追加する。</p>
+                <h4><span class="object">DB_Settings</span>->getFieldOfIndex($ix)</h4>
+                <p class="exp">フィールドの配列から、引数に指定した番号の要素を返す。</p>
+                <h4><span class="object">DB_Settings</span>->setValue($values)</h4>
+                <p class="exp">値の配列として、引数の配列を設定する。</p>
+                <h4><span class="object">DB_Settings</span>->getValue()</h4>
+                <p class="exp">値の配列を返す。</p>
+                <h4><span class="object">DB_Settings</span>->addValue($value)</h4>
+                <p class="exp">値の配列の要素として、引数に指定した文字列を追加する。</p>
+                <h4><span class="object">DB_Settings</span>->addValueWithField($field, $value)</h4>
+                <p class="exp">フィールドの配列および値の配列の要素として、引数に指定した文字列をそれぞれ追加する。</p>
+                <h4><span class="object">DB_Settings</span>->getValuesWithFields()</h4>
+                <p class="exp">フィールドの配列にある値をキー、そのキーに対する値を要素にした連想配列を返す。</p>
+                <h4><span class="object">DB_Settings</span>->getValueOfField($targetField)</h4>
+                <p class="exp">引数に指定したフィールド名をフィールドの配列の何番目なのかを判別し、値の配列の同じ番号の要素を返す。つまり、フィールド名に対応した値を返す。</p>
+                <h4><span class="object">DB_Settings</span>->setForeignFieldAndValue($foreignFieldAndValue)</h4>
+                <p class="exp">引数を外部キーの値を保持する配列に指定する。引数は、field、valueをキーとした連想配列の配列である必要がある。</p>
+                <h4><span class="object">DB_Settings</span>->getForeignFieldAndValue()</h4>
+                <p class="exp">外部キーの値を保持する配列を返す。返される値は、field、valueをキーとした連想配列の配列。</p>
+                <h4><span class="object">DB_Settings</span>->addForeignValue($field, $value)</h4>
+                <p class="exp">引数に指定したフィールド名と値を、外部キーの値を保持する配列に追加する。</p>
+                <h4><span class="object">DB_Settings</span>->getForeignKeysValue($targetField)</h4>
+                <p class="exp">外部キーの値を保持する配列から、引数に指定したフィールドに対する値を返す。ない場合はnullが返る。</p>
+                <h4><span class="object">DB_Settings</span>->addExtraCriteria($field, $operator, $value)</h4>
+                <p class="exp">追加的な検索条件を保持する配列に、引数の3つの要素を持つ連想配列として追加する。</p>
+                <h4><span class="object">DB_Settings</span>->getExtraCriteria()</h4>
+                <p class="exp">追加的な検索条件を保持する配列を返す。</p>
+                <h4><span class="object">DB_Settings</span>->unsetExtraCriteria($index)</h4>
+                <p class="exp">追加的な検索条件を保持する配列の中にある引数に指定したインデックスの要素を削除する。</p>
+                <h4><span class="object">DB_Settings</span>->getCriteriaValue($targetField)</h4>
+                <p class="exp">追加的な検索条件を保持する配列から、引数に指定した文字列をfieldキーの値として持つ最初の要素を特定し、その要素のvalueキーの値を返す。</p>
+                <h4><span class="object">DB_Settings</span>->getCriteriaOperator($targetField)</h4>
+                <p class="exp">追加的な検索条件を保持する配列から、引数に指定した文字列をfieldキーの値として持つ最初の要素を特定し、その要素のoperatorキーの値を返す。</p>
+                <h4><span class="object">DB_Settings</span>->setGlobalInContext($contextName, $operation, $field, $value)</h4>
+                <p class="exp">引数に指定したコンテキストに、残りの引数で指定した設定内容を持つglobalキーの連想配列を追加する。もちろん、FileMaker Serverのみで意味のある機能である。</p>
+                <h4><span class="object">DB_Settings</span>->setPrimaryKeyOnly($primaryKeyOnly)<br/>
 <span class="object">DB_Settings</span>->getPrimaryKeyOnly()</h4>
-<p class="exp">検索条件の中から、主キー（コンテキストのkeyキー）で指定されたものだけを利用する設定とその状態の取得。なお、主キーのみを利用する検索は、データベースの更新前に楽観的ロックの仕組みを利用して、現在の値を取り出す場合に利用している。</p>
-<h4><span class="object">DB_Settings</span>->addExtraSortKey($field, $direction)</h4>
-<p class="exp">追加のソート条件を記録した配列に、引数にしていたフィールドと基準（昇順ないしは降順）を追加する。</p>
-<h4><span class="object">DB_Settings</span>->getExtraSortKey()</h4>
-<p class="exp">追加のソート条件を記録した配列を得る。</p>
-<h4><span class="object">DB_Settings</span>->addAssociated($name, $field, $value)</h4>
-<p class="exp">レコードのコピーにおいて、関連するコンテキストに対する設定を追加する。</p>
-<h4><span class="object">DB_Settings</span>->getAssociated()</h4>
-<p class="exp">レコードのコピーにおいて使用される関連するコンテキストに対する配列を得る。</p>
-<h4><span class="object">DB_Settings</span>->setDbSpecServer($str)<br/>
+                <p class="exp">検索条件の中から、主キー（コンテキストのkeyキー）で指定されたものだけを利用する設定とその状態の取得。なお、主キーのみを利用する検索は、データベースの更新前に楽観的ロックの仕組みを利用して、現在の値を取り出す場合に利用している。</p>
+                <h4><span class="object">DB_Settings</span>->addExtraSortKey($field, $direction)</h4>
+                <p class="exp">追加のソート条件を記録した配列に、引数にしていたフィールドと基準（昇順ないしは降順）を追加する。</p>
+                <h4><span class="object">DB_Settings</span>->getExtraSortKey()</h4>
+                <p class="exp">追加のソート条件を記録した配列を得る。</p>
+                <h4><span class="object">DB_Settings</span>->addAssociated($name, $field, $value)</h4>
+                <p class="exp">レコードのコピーにおいて、関連するコンテキストに対する設定を追加する。</p>
+                <h4><span class="object">DB_Settings</span>->getAssociated()</h4>
+                <p class="exp">レコードのコピーにおいて使用される関連するコンテキストに対する配列を得る。</p>
+                <h4><span class="object">DB_Settings</span>->setDbSpecServer($str)<br/>
 <span class="object">DB_Settings</span>->getDbSpecServer()<br/>
 <span class="object">DB_Settings</span>->setDbSpecPort($str)<br/>
 <span class="object">DB_Settings</span>->getDbSpecPort()<br/>
@@ -418,54 +476,53 @@ return array( $summary );</code>
 <span class="object">DB_Settings</span>->getDbSpecDSN()<br/>
 <span class="object">DB_Settings</span>->setDbSpecOption($str)<br/>
 <span class="object">DB_Settings</span>->getDbSpecOption()</h4>
-<p class="exp">データベース処理に関する設定を行ったり取り出したりするメソッド。</p>
-<h4><span class="object">DB_Settings</span>->setCurrentUser($str)<br/>
+                <p class="exp">データベース処理に関する設定を行ったり取り出したりするメソッド。</p>
+                <h4><span class="object">DB_Settings</span>->setCurrentUser($str)<br/>
 <span class="object">DB_Settings</span>->getCurrentUser()</h4>
-<p class="exp">クライアントから申告されたユーザー名の設定及び取得と行うメソッド。</p>
-<h4><span class="object">DB_Settings</span>->setUserAndPasswordForAccess($user, $pass)<br/>
+                <p class="exp">クライアントから申告されたユーザー名の設定及び取得と行うメソッド。</p>
+                <h4><span class="object">DB_Settings</span>->setUserAndPasswordForAccess($user, $pass)<br/>
 <span class="object">DB_Settings</span>->getAccessUser()<br/>
 <span class="object">DB_Settings</span>->getAccessPassword()</h4>
-<p class="exp">クライアントから申告されたユーザー名とパスワードの設定及び取得と行うメソッド。ネイティブ認証時にチャレンジに対応するレスポンスによって返されたユーザー名とパスワードが設定され、それ以外の時には設定されない。</p>
-<h4><span class="object">DB_Settings</span>->setAuthentication($authentication)<br/>
+                <p class="exp">クライアントから申告されたユーザー名とパスワードの設定及び取得と行うメソッド。ネイティブ認証時にチャレンジに対応するレスポンスによって返されたユーザー名とパスワードが設定され、それ以外の時には設定されない。</p>
+                <h4><span class="object">DB_Settings</span>->setAuthentication($authentication)<br/>
 <span class="object">DB_Settings</span>->getAuthentication()</h4>
-<p class="exp">IM_Entry関数の第2引数（オプション設定）の、authenticationキーに対する値を記録あるいは取り出す。</p>
-<h4><span class="object">DB_Settings</span>->getAuthenticationItem($key)</h4>
-<p class="exp">IM_Entry関数の第2引数（オプション設定）のauthenticationキーに対する値に対し、さらに引数の文字列のキーの値を取り出す。もし、引数に与えたキーに対する値が定義されていない場合で、引数がテーブル名の場合には、規定のテーブル名を返す。あるいは認証継続時間の場合には既定値として8時間が返される。</p>
-<h4><span class="object">DB_Settings</span>->getUserTable()</h4>
-<p class="exp">認証に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthuserが返される。</p>
-<h4><span class="object">DB_Settings</span>->getGroupTable()</h4>
-<p class="exp">グループ管理に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthgroupが返される。</p>
-<h4><span class="object">DB_Settings</span>->getCorrTable()</h4>
-<p class="exp">グループ所属記録に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthcorrが返される。</p>
-<h4><span class="object">DB_Settings</span>->getHashTable()</h4>
-<p class="exp">認証でのチャレンジ等を記録するためのテーブル名を返す。定義ファイル等で未設定の場合には既定値のissuedhashが返される。</p>
-<h4><span class="object">DB_Settings</span>->getExpiringSeconds()</h4>
-<p class="exp">認証結果を保持する時間を返す。定義ファイル等で未設定の場合には既定値の8時間が返される。</p>
-<h4><span class="object">DB_Settings</span>->setRequireAuthentication($requireAuthentication)<br/>
+                <p class="exp">IM_Entry関数の第2引数（オプション設定）の、authenticationキーに対する値を記録あるいは取り出す。</p>
+                <h4><span class="object">DB_Settings</span>->getAuthenticationItem($key)</h4>
+                <p class="exp">IM_Entry関数の第2引数（オプション設定）のauthenticationキーに対する値に対し、さらに引数の文字列のキーの値を取り出す。もし、引数に与えたキーに対する値が定義されていない場合で、引数がテーブル名の場合には、規定のテーブル名を返す。あるいは認証継続時間の場合には既定値として8時間が返される。</p>
+                <h4><span class="object">DB_Settings</span>->getUserTable()</h4>
+                <p class="exp">認証に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthuserが返される。</p>
+                <h4><span class="object">DB_Settings</span>->getGroupTable()</h4>
+                <p class="exp">グループ管理に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthgroupが返される。</p>
+                <h4><span class="object">DB_Settings</span>->getCorrTable()</h4>
+                <p class="exp">グループ所属記録に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthcorrが返される。</p>
+                <h4><span class="object">DB_Settings</span>->getHashTable()</h4>
+                <p class="exp">認証でのチャレンジ等を記録するためのテーブル名を返す。定義ファイル等で未設定の場合には既定値のissuedhashが返される。</p>
+                <h4><span class="object">DB_Settings</span>->getExpiringSeconds()</h4>
+                <p class="exp">認証結果を保持する時間を返す。定義ファイル等で未設定の場合には既定値の8時間が返される。</p>
+                <h4><span class="object">DB_Settings</span>->setRequireAuthentication($requireAuthentication)<br/>
 <span class="object">DB_Settings</span>->getRequireAuthentication()</h4>
-<p class="exp">ゲッターは、定義ファイルの内容から、認証が必要かどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
-<h4><span class="object">DB_Settings</span>->setRequireAuthorization($requireAuthorization)<br/>
+                <p class="exp">ゲッターは、定義ファイルの内容から、認証が必要かどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
+                <h4><span class="object">DB_Settings</span>->setRequireAuthorization($requireAuthorization)<br/>
 <span class="object">DB_Settings</span>->getRequireAuthorization()</h4>
-<p class="exp">ゲッターは、定義ファイルの内容から、アクセス権の判定が必要かどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
-<h4><span class="object">DB_Settings</span>->setDBNative($isDBNative)<br/>
+                <p class="exp">ゲッターは、定義ファイルの内容から、アクセス権の判定が必要かどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
+                <h4><span class="object">DB_Settings</span>->setDBNative($isDBNative)<br/>
 <span class="object">DB_Settings</span>->isDBNative()</h4>
-<p class="exp">ゲッターは、定義ファイルの内容から、ネイティブ認証を行うかどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
-<h4><span class="object">DB_Settings</span>->setEmailAsAccount($emailAsAccount)<br/>
+                <p class="exp">ゲッターは、定義ファイルの内容から、ネイティブ認証を行うかどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
+                <h4><span class="object">DB_Settings</span>->setEmailAsAccount($emailAsAccount)<br/>
 <span class="object">DB_Settings</span>->getEmailAsAccount()</h4>
-<p class="exp">ゲッターは、定義ファイルの内容から、電子メールを認証時のユーザー名として使用できるかどうかを返す。セッターはprocessingRequestメソッド内で設定を記録するために利用される。</p>
-<h4><span class="object">DB_Settings</span>->getLDAPSettings()</h4>
-<p class="exp">params.phpファイルで定義されたLDAPの設定値を持つ配列を返す。要素は順番に、サーバー名、ポート番号、検索ベース、コンテナ名、ユーザー名のキー名。</p>
-<h4><span class="object">DB_Settings</span>->setLDAPExpiringSeconds($sec)<br/>
+                <p class="exp">ゲッターは、定義ファイルの内容から、電子メールを認証時のユーザー名として使用できるかどうかを返す。セッターはprocessingRequestメソッド内で設定を記録するために利用される。</p>
+                <h4><span class="object">DB_Settings</span>->getLDAPSettings()</h4>
+                <p class="exp">params.phpファイルで定義されたLDAPの設定値を持つ配列を返す。要素は順番に、サーバー名、ポート番号、検索ベース、コンテナ名、ユーザー名のキー名。</p>
+                <h4><span class="object">DB_Settings</span>->setLDAPExpiringSeconds($sec)<br/>
 <span class="object">DB_Settings</span>->getLDAPExpiringSeconds()</h4>
-<p class="exp">ゲッターは、params.phpファイルの内容から得られたLDAP認証の継続時間を返す。セッターは設定を記録するために利用される。</p>
-<h4><span class="object">DB_Settings</span>->setSeparator($sep)<br/>
+                <p class="exp">ゲッターは、params.phpファイルの内容から得られたLDAP認証の継続時間を返す。セッターは設定を記録するために利用される。</p>
+                <h4><span class="object">DB_Settings</span>->setSeparator($sep)<br/>
 <span class="object">DB_Settings</span>->getSeparator()</h4>
-<p class="exp">ターゲット指定の区切り文字（通常は「@」）を記録したり取得するメソッド。設定しない場合には、＠が返される。</p>
-<h4><span class="object">DB_Settings</span>->setSmtpConfiguration($config)<br/>
+                <p class="exp">ターゲット指定の区切り文字（通常は「@」）を記録したり取得するメソッド。設定しない場合には、＠が返される。</p>
+                <h4><span class="object">DB_Settings</span>->setSmtpConfiguration($config)<br/>
 <span class="object">DB_Settings</span>->getSmtpConfiguration()</h4>
-<p class="exp">IM_Entry関数の第2引数（オプション設定）の、smtpキーに対する値を記録あるいは取り出す。</p>
-
-        </section>
+                <p class="exp">IM_Entry関数の第2引数（オプション設定）の、smtpキーに対する値を記録あるいは取り出す。</p>
+            </section>
         </article>
     </div>
 </body>

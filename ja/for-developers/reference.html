@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,7 +37,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -63,16 +62,11 @@
             <section>
                 <h1>はじめに</h1>
                 <p class="lead">定義ファイルに記述するIM_Entry関数の引数に、データベースに関する情報を与えておきます。4つの引数があり、うち3つは配列を指定します。配列の内容を記載します。以下の表で、次元の列にキーワードがあれば、「 'キーワード' => '値' 」で該当する値を与えます。次元が「（なし）」というのは、その次元では、単に要素が並ぶということを意味します。サンプルファイルの例などを見ながら解読してください。</p>
-
             </section>
-
             <section>
-
                 <h1>第1引数、テーブルとそれに関連した属性</h1>
-
                 <p>
                     テーブルと、テーブル間を関連づけるフィールドを指定します。この引数の第2次元にまとめられた1つの配列の設定を「コンテキスト定義」と呼ぶことにします。つまり、name、keyなどのキーを持った連想配列の1つ1つがコンテキスト定義です。もちろん、コンテキスト定義は複数を定義することが可能です。ここでのnameが、ターゲット指定のテーブル名で使用します。テーブル間の結合における相手のテーブル名がないと思われるかもしれませんが、相手のテーブル名は、ページファイル側の記述で自動的に決まってきます。</p>
-
                 <div class="table">
                     <table>
                         <tr>
@@ -330,7 +324,6 @@
                             </td>
                             <td>
                                 計算式。同一コンテキストのフィールド参照はフィールド名のみ記述する。他のコンテキストのフィールド参照は「コンテキスト名@フィールド名」の形式で記述する。
-
                             </td>
                         </tr>
                         <tr>
@@ -530,12 +523,12 @@
                                 MySQLは指定したSQLコマンドを実行、FileMaker Serverはスクリプト名を指定。（FileMaker Serverでforeign-keyの指定されたテーブルの読み込み時の設定はすべて無視される）
                             </td>
                         </tr>
-						<tr>
-							<td>
-								'parameter'
-							</td>
-							<td>FileMaker Serverを利用しているときにスクリプト引数を指定する。バージョン5.4以降で利用可能。</td>
-						</tr>
+                        <tr>
+                            <td>
+                                'parameter'
+                            </td>
+                            <td>FileMaker Serverを利用しているときにスクリプト引数を指定する。バージョン5.4以降で利用可能。</td>
+                        </tr>
                         <tr>
                             <td rowspan="3">
                                 'global'
@@ -826,7 +819,9 @@
                         </tr>
                         <tr>
                             <td rowspan="18">'send-mail'</td>
-                            <td rowspan="16">'load'<br/><br/>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
+                            <td rowspan="16">'load'
+                                <br/>
+                                <br/>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
                             <td>'from'</td>
                             <td>送信者名や送信者アドレスが含まれるフィールド名</td>
                         </tr>
@@ -897,49 +892,42 @@
                         </tr>
                         <tr>
                             <td>'new'</td>
-							<td></td>
+                            <td></td>
                             <td>コンテキストに対して新たなレコードを作るアクションを起こした後にメールを送信する。第3次元については、loadと同様。</td>
                         </tr>
                         <tr>
                             <td>'aggregation-select'</td>
-					<td></td>
-					<td></td>
+                            <td></td>
+                            <td></td>
                             <td rowspan="3">PDOのデータベースクラスのみで利用できる。これらの3つの設定と、sort、queryの設定を加えて、集計処理などのSQLを構成する。このコンテキストは読み出しのみとなる。</td>
                         </tr>
                         <tr>
                             <td>'aggregation-from'</td>
-					<td></td>
-					<td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>'aggregation-group-by'</td>
-					<td></td>
-					<td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </table>
                 </div>
                 <p>
                     認証についは別項目「ユーザ認証とアクセス権の動作について」も参照してください。
                 </p>
-
                 <p>
                     'relation'、'query'、'sort'、'script'については、配列の配列を指定します。サンプルのソース等で具体例を見てください。
                 </p>
-
                 <p>
                     それぞれのパラメータの解釈は、データベースドライバによって異なる場合があります。
                 </p>
-
             </section>
-
             <section>
-
                 <h1>第2引数、オプション設定</h1>
-
                 <p>
                     こちらは、「定義ファイルのオプション設定」と呼ぶことにします。
                 </p>
-
                 <div class="table">
                     <table>
                         <tr>
@@ -1175,9 +1163,9 @@
                             </td>
                             <td>
                             </td>
-                             <td>
+                            <td>
                             </td>
-                           <td>
+                            <td>
                                 メディアアクセスに対して定義ファイルにリダイレクトの設定をWebサーバーで行う。そうすれば、この設定に指定したディレクトリにある画像などのメディアファイルを読み出す。
                             </td>
                         </tr>
@@ -1187,9 +1175,9 @@
                             </td>
                             <td>
                             </td>
-                                <td>
+                            <td>
                             </td>
-                        <td>
+                            <td>
                                 メディアアクセスに認証を設定するとき、ここで指定したコンテキストにアクセスしたときにメディアの認証用のトークンをクライアントに届ける。このトークンをクライアントが持つ事で、メディアプロキシが認証される
                             </td>
                         </tr>
@@ -1235,25 +1223,18 @@
                 <p>
                     認証についは別項目「ユーザ認証とアクセス権の動作について」も参照してください。
                 </p>
-
                 <p>
                     browser-compatibilityは、params.phpファイルでも指定できますが、ここに指定をした方が有効になります。この指定に含まれているブラウザで通常処理を行い、含まれていないブラウザでは処理を行わないようにします。
                 </p>
-
                 <p>
                     以前「trigger」というキーワードを書いていましたが、この設定は不要で、普通にノードに対してJavaScriptの記述をすればいいので、設定としては組み込まないこととします。
                 </p>
-
             </section>
-
             <section>
-
                 <h1>第3引数、データベースへの接続情報</h1>
-
                 <p>
                     データベースヘの接続情報を設定します。この設定を「定義ファイルのデータベース接続設定」と呼ぶことにします。なお、INTER-Mediator.phpと同じフォルダに入れておく「params.php」でも、データベース接続に関する指定が可能です。ページごとに接続情報が違うなら、この引数に指定してもいいのですが、たくさんのファイルで同じ設定ならparams.phpで指定をしてもいいでしょう。さらに、IM_Entry関数の第一パラーメータで指定する配列のコンテキストに対しても設定できます。params.php内で指定できる変数についてもまとめておきます。なお、必要な情報は、データベースクラスごとに異なります。以下の表には、値を必要とするクラスも記述してあります。
                 </p>
-
                 <div class="table">
                     <table>
                         <tr>
@@ -1379,23 +1360,15 @@
                         </tr>
                     </table>
                 </div>
-
             </section>
-
             <section>
-
                 <h1>第4引数、デバッグ情報の表示</h1>
-
                 <p>
                     数値かfalseかを指定します。false以外だと、デバッグ情報をページの最初に表示します。1ないしは2を指定でき、2の方が多くの情報を出します。
                 </p>
-
             </section>
-
         </article>
-
     </div>
-
 </body>
 
 </html>
