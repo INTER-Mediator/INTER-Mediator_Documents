@@ -1,0 +1,193 @@
+[
+{
+    "parent": null,
+    "path": "/ja/",
+    "title": "マニュアルトップページ",
+    "breadcrumb": "トップ"
+},
+{
+    "parent": "/ja/",
+    "path": "/ja/for-novices/",
+    "title": "INTER-Mediatorをはじめよう",
+    "breadcrumb": "はじめよう"
+},
+{
+    "parent": "/ja/",
+    "path": "/ja/practices/",
+    "title": "プラクティス",
+    "breadcrumb": "プラクティス"
+},
+{
+    "parent": "/ja/",
+    "path": "/ja/for-developers/",
+    "title": "開発ガイド",
+    "breadcrumb": "開発ガイド"
+},
+{
+    "parent": "/ja/",
+    "path": "/ja/for-programmers/",
+    "title": "プログラミングガイド",
+    "breadcrumb": "プログラミングガイド"
+},
+{
+    "parent": "/ja/",
+    "path": "/ja/developers-blog/",
+    "title": "開発者、コミッター、利用者によるブログ",
+    "breadcrumb": "ブログ"
+},
+{
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/deploy.html",
+    "title": "ダウンロードとインストール",
+    "breadcrumb": "ダウンロードとインストール"
+},
+{
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/vm.html",
+    "title": "バーチャルマシンの利用",
+    "breadcrumb": "バーチャルマシンの利用"
+},
+{
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/startup.html",
+    "title": "スタートアップガイド",
+    "breadcrumb": "スタートアップガイド"
+},
+{
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/handson.html",
+    "title": "ハンズオンセッション手順書",
+    "breadcrumb": "ハンズオンセッション手順書"
+},
+{
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/movies.html",
+    "title": "ビデオで始めるINTER-Mediator",
+    "breadcrumb": "ビデオで始めるINTER-Mediator"
+},
+{
+    "parent": "/ja/practices/",
+    "path": "/ja/practices/practice-searchnp.html",
+    "title": "検索をしてその結果を一覧表示する（プログラムなし版）",
+    "breadcrumb": "検索結果の一覧表示（プログラムなし版）"
+},
+{
+    "parent": "/ja/practices/",
+    "path": "/ja/practices/practice-search.html",
+    "title": "検索をしてその結果を一覧表示する（JavaScript版）",
+    "breadcrumb": "検索結果の一覧表示（JavaScript版）"
+},
+{
+    "parent": "/ja/practices/",
+    "path": "/ja/practices/practice-masterdetail.html",
+    "title": "一覧と詳細",
+    "breadcrumb": "一覧と詳細"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/manual.html",
+    "title": "INTER-MediatorによるWebアプリケーションの概要",
+    "breadcrumb": "INTER-MediatorによるWebアプリの概要"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/reference.html",
+    "title": "定義ファイルの記述方法",
+    "breadcrumb": "定義ファイルの記述方法"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/migration.html",
+    "title": "バージョン移行ガイド",
+    "breadcrumb": "バージョン移行ガイド"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/docker.html",
+    "title": "Dockerの利用",
+    "breadcrumb": "Dockerの利用"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/db.html",
+    "title": "データベース特有の設定",
+    "breadcrumb": "データベース特有の設定"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/exp.html",
+    "title": "計算式",
+    "breadcrumb": "計算式"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/sendmail.html",
+    "title": "メール送信",
+    "breadcrumb": "メール送信"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/auth.html",
+    "title": "ユーザー認証とアクセス権",
+    "breadcrumb": "ユーザー認証とアクセス権"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/samples.html",
+    "title": "サンプルファイル",
+    "breadcrumb": "サンプルファイル"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/bindingfunc.html",
+    "title": "検索ページを作成するための機能",
+    "breadcrumb": "検索ページを作成するための機能"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/sharing.html",
+    "title": "変更結果の即時更新をマルチクライアントで実現する",
+    "breadcrumb": "変更結果の即時更新をマルチクライアントで実現"
+},
+{
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/format.html",
+    "title": "HTMLの属性に記述する書式を適用する機能",
+    "breadcrumb": "HTMLの属性に記述する書式を適用する機能"
+},
+{
+    "parent": "/ja/for-programmers/",
+    "path": "/ja/for-programmers/api.html",
+    "title": "JavaScriptのインタフェース",
+    "breadcrumb": "JavaScriptのインタフェース"
+},
+{
+    "parent": "/ja/for-programmers/",
+    "path": "/ja/for-programmers/jscomponent.html",
+    "title": "JavaScriptコンポーネントの使い方",
+    "breadcrumb": "JavaScriptコンポーネントの使い方"
+},
+{
+    "parent": "/ja/for-programmers/",
+    "path": "/ja/for-programmers/media.html",
+    "title": "MediaAccessクラスとその拡張点",
+    "breadcrumb": "MediaAccessクラスとその拡張点"
+},
+{
+    "parent": "/ja/for-programmers/",
+    "path": "/ja/for-programmers/serverextending.html",
+    "title": "サーバーサイドの拡張（Ver.5.4以降）",
+    "breadcrumb": "サーバーサイドの拡張（Ver.5.4以降）"
+},
+{
+    "parent": "/ja/for-programmers/",
+    "path": "/ja/for-programmers/commitcode.html",
+    "title": "ソースコードの投稿",
+    "breadcrumb": "ソースコードの投稿"
+},
+{
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/movies.html",
+    "title": "ビデオで始めるINTER-Mediator",
+    "breadcrumb": "ビデオで始めるINTER-Mediator"
+}]

@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,7 +37,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -77,7 +76,6 @@
                     <li>第4セクション（例：*match*）：演算子</li>
                 </ul>
                 <p>最初の2つはいいとして、3つ目のフィールドは複数指定も可能です。複数指定をすると、それぞれのフィールドに対して同じ値の検索条件をORで与えます。演算子は、一般的なものに加えて「*match」「match*」「*match*」の3つが用意されています。データベースエンジンに関わらずに、部分一致や前方一致などをこの演算子で記述します。</p>
-
                 <p>上記のテキストフィールドに、例えば「新宿」と入れてEnterキーを押すと、以下の検索条件がコンテキストに付加されて、再度検索を行い、そのコンテキストのエンクロージャー内が更新されます。</p>
                 <div class="code"><pre><code>(f3 LIKE '%新宿%' OR f7 LIKE '%新宿%' OR f8 LIKE '%新宿%' OR f9 LIKE '%新宿%')</code></pre>
                 </div>
