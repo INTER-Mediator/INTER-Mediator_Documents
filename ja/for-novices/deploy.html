@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,7 +37,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -65,89 +64,62 @@
                 <p class="lead">この文書では、リリース版のダウンロード情報と、INTER-Mediatorを使って開発をする場合のINTER-Mediatorの準備方法と、さらに作成したWebアプリケーションで使用するINTER-Mediatorを作成する方法をまとめたものです。INTER-MediatorはGitHubでソースを公開しています。通常の開発時は、リポジトリにあるものをインストールしておくのがおすすめです。そして、アプリケーション完成後は、JavaScriptに圧縮をかけた実稼働用のINTER-Mediatorを利用するのが少しの事ですが、効率よくなります。これらの方法を説明します。
                 </p>
             </section>
-
             <section>
                 <h1>ダウンロード</h1>
-                <p>INTER-Mediatorのリリースバージョンは、<a href="https://github.com/INTER-Mediator/INTER-Mediator/releases">こちら</a>をご覧ください。日々、リポジトリはアップデートされていますが、一定の機能を組み込むごとにバージョン番号を付与して、リリース版として公開します。最新のリリースバージョンは、Ver.5.6です。<a href="https://github.com/INTER-Mediator/INTER-Mediator/archive/5.6.zip">直接のダウンロードはこちら</a>です。</p>
+                <p>INTER-Mediatorのリリースバージョンは、<a href="https://github.com/INTER-Mediator/INTER-Mediator/releases">こちら</a>をご覧ください。日々、リポジトリはアップデートされていますが、一定の機能を組み込むごとにバージョン番号を付与して、リリース版として公開します。最新のリリースバージョンは、Ver.5.6.1です。<a href="https://github.com/INTER-Mediator/INTER-Mediator/archive/5.6.1.zip">直接のダウンロードはこちら</a>です。</p>
             </section>
-
             <section>
                 <h1>リポジトリから取り出したバージョンを開発時に利用する</h1>
                 <p>お勧めするのは、通常の開発は、リポジトリから取り出したもので進めておき、実際にアプリケーションを配備するときに、特定のバージョン向けにビルドしたものに置き換えるということになります。gitの使い方はいろいろ難しいですが、gitを全く知らない方も、ともかく以下のようにしてみてください。また、以下はコマンドラインによる汎用的な方法ですが、GitHubアプリケーションを使っても同様に可能です。</p>
-
                 <p>まず、あるフォルダに作成するWebアプリケーションのファイルをまとめておくとします。そのフォルダを作ります。以下は、Documentsの下にmywebappフォルダを作りました。</p>
-
                 <div class="picture">
                     <img src="/images/doc-deploy-fig1.png">
                 </div>
-
                 <p>次に、GitHubのINTER-Mdiatorのページに行きます。アカウントを持ってサインインしていただくのがいいのですが、なくてもソースのダウンロードは可能です。ここで、中央右付近にあるbranchがmasterになっているのを確認してください。ブランチのmasterがその時点でのコンプリートなソースです。そして、右の方にあるHTTPS clone URLをコピーしておきます。URLが薄く見える右のボタンをクリックすれば、コピーできます。</p>
-
                 <div class="picture">
                     <img src="/images/doc-deploy-fig2.png">
                 </div>
-
                 <p>そして、ターミナルを開いてください。次のように作業をします。#以降はコメントです。ファイルパスはもちろん、ご自分の作られているフォルダ構成に従って指定をしてください。</p>
-
                 <div class="code">
                     <pre><code>cd ~/Documents/mywebapp  # Webアプリケーションのフォルダをカレントにする
 git clone https://github.com/INTER-Mediator/INTER-Mediator.git  # サーバーからリポジトリを複製する</code></pre>
                 </div>
-
                 <p>これだけでOKです。すると、mywebappフォルダに、INTER-Mediatorフォルダが作られます。このINTER-Mediatorフォルダがフレームワーク本体となります。この階層に、たとえば、index.htmlファイルやら、アプリケーションのhtml/phpファイルを作って行けばOKです。後はこれをサーバーにコピーして稼働を確認します。</p>
-
                 <div class="picture"><img src="/images/doc-deploy-fig3.png">
                 </div>
-
                 <p>ここで、リポジトリからクローンしたINTER-Mediatorを参照するには、定義ファイルのcontext.phpはたとえば、次のように記述をします。</p>
-
                 <div class="code">
                     <pre><code>&lt;?php
 require_once('INTER-Mediator/INTER-Mediator.php');
 IM_Entry( .... );
 ?&gt;</code></pre>
                 </div>
-
                 <p>なお、サンプルファイルは、INTER-Mediatorフォルダ内のSamplesフォルダにあります。</p>
-
                 <p>もし、リポジトリ側に新しいソースコードが加わっていれば、以下のようにコマンドを入れれば、最新版を取得できます。INTER-Mediatorフォルダをカレントにして、git pullとすればいいです。</p>
-
                 <div class="code">
                     <pre><code>cd ~/Documents/mywebapp/INTER-Mediator
 git pull</code></pre>
                 </div>
-
                 <p>念のために説明しておきますが、pullは最新版に更新するという使い方は非常に稀で、正しくは別のリポジトリの修正を取り込むという意味合いがあります。ソースコードをメンテする上では単なる更新ではないのですが、ソースを利用する側の方から見れば更新コマンドと思っていただいて概ねいいかと思います。もし、自分でフレームワーク側のソースを修正された場合には、単純ではありませんので、ここではソースは参照だけでタッチしないという前提で、説明をここまでとします。</p>
-
                 <p>gitには実に多彩な機能があり、ここまでに説明した手順はほんとうにその一端でしかないのですが、これだけを知っていれば、とりあえず大丈夫かと思います。もし、フレームワーク側の修正結果をコミットしていただけるなら、それなりにコマンドを打ち込むか、あるいはアプリケーションを使うことになるかと思いますが、取り出すだけなら上記の手順以上はほとんどないと思います。</p>
-
                 <p>もし、開発中に、フレームワーク側のバグが見つかったなら、もちろん、報告をしてください。なるべく早く対処します。リポジトリのクローンを作って作業をしていれば、対処が終われば、git pullをするだけで済みます。</p>
-
                 <h1>OS XでGitHubアプリケーションを使う場合</h1>
                 <p>コマンドラインがどうしても苦手だという方は、GitHubのアプリケーションを入手してインストールをしてください。そして、セットアップを一通りすませます。GitHubへのログインが必要なのですが、通常はアカウントを持っていると思われるので、そのアカウントでログインをしておきます。</p>
-
                 <p>GitHubのページには、「Clone in Desktop」というボタンがあるので、それをクリックするとGitHubアプリケーションが起動して、いきなりINTER-Mediatorフォルダを作る場所を聞いてきます。そこで、配置した場所を選択してCloneボタンを押せばOKです。その後は、GitHubアプリケーションで、リポジトリのChangeのボタンを左側で選び、右上のSyncボタンをクリックすれば、サーバーにある最新のリポジトリの内容をダウンロードしてアップデートします。</p>
-
                 <div class="picture"><img src="/images/doc-deploy-fig9.png">
                 </div>
-
                 <p>ただし、この方法だと、2つ目のクローンを同じアカウント内に作成しようとしても、最初に作ったリポジトリをGitHubアプリケーション側では提示して、新たなリポジトリを作りに行きません。その場合は、クローン作成については、コマンドで行ってください。その上で、リポジトリの一覧を表示します。GitHubアプリケーションのタイトルバーの一番左の「Repositories」をクリックすればいいでしょう。そして、ウインドウ下にある「＋」ボタンをクリックして、「Add Local Repository」を選択します。そして、コマンドで作ったクローンのフォルダを指定すると、INTER-Mediatorの項目が複数登録できるようになります。あるいは、リポジトリのフォルダを、Repotoriesを選択してリポジトリ一覧が見えているウインドウの中にドラッグして追加します。ただし、リポジトリのリストで区別ができなくなるので、リポジトリのリストを右クリックして「Show in Finder」を選択してフォルダを確認して、間違えて作業しないように気をつけないといけません。</p>
             </section>
             <section>
                 <h1>WindowsでGitHubアプリケーションを使う場合</h1>
                 <p>WindowsにもGitHubアプリケーションがありますので、それを使ってくローンを作り、更新するということはもちろん可能です。ただし、サイトに見える「Clone Desktop」ボタンを押しても、アプリケーションの案内が見えるだけで、GitHubアプリケーションが起動して何かを始めるということはありません。従って、最初に作るクローンは、アプリケーションの左側のアカウント一覧から見えている場合は、その項目を選択して、右ボタンメニューから「Clone」を選択するなどして作成できます。</p>
-
                 <p>もし、どうしても出てこないなら、Git Shellという機能を使ってコマンドラインを呼び出し、クローンを作りたい場所をカレントディレクトリにして、「git clone https://github.com/INTER-Mediator/INTER-Mediator.git」というコマンドを実行します。コマンドラインで作ったクローンをGitHubアプリケーションで認識させるには、フォルダをアプリケーションのウインドウにドラッグ&amp;ドロップします。</p>
-
                 <div class="picture"><img src="/images/doc-deploy-fig5.png">
                 </div>
-
                 <p>作成すると、リポジトリの詳細を表示すれば、上にsyncボタンが登場します。更新はこのボタンを押すだけでOKです。</p>
-
                 <div class="picture"><img src="/images/doc-deploy-fig7.png">
                 </div>
             </section>
-
             <section>
                 <h1>ダウンロードしたバージョンを開発時に利用する</h1>
                 <p>GitHubのINTER-Mdiatorのページで、右側の「Donwload ZIP」ボタンをクリックすると、現状のリポジトリの各ファイルを圧縮・アーカイブしてダウンロードします。ブランチがmasterであれば、ダウンロードして展開したフォルダは、INTER-Mediator-masterという名前になっています。フォルダ名を適当に変更して、開発中のアプリケーションのフォルダ等へ移動します。</p>
@@ -155,32 +127,22 @@ git pull</code></pre>
             </section>
             <section>
                 <h1>実稼働向けINTER-Mediatorを生成する</h1>
-
                 <p>リポジトリから取り出した結果で開発しているので、その状態で稼働はできるはずです。また、以下の方法でビルドすれば、サンプルなど実稼働に不要な素材が取り除かれると同時に、JavaScriptのプログラムを1つのファイルに圧縮してまとめるので、動作のパフォーマンスは有利になります。</p>
-
                 <p>まず、準備として、リポジトリから取り出したINTER-Mediatorフォルダと同じ階層に、<a href="https://github.com/matthiasmullie/minify" target="_blank">Minify</a>をダウンロードします。ダウンロードにはgitコマンドを利用します（バージョン5.6以降ではyuicompressor-2.4.7.jarではなく<a href="https://github.com/matthiasmullie/minify" target="_blank">Minify</a>を使用します）。</p>
-
                 <div class="code">
                     <pre><code>git clone https://github.com/INTER-Mediator/INTER-Mediator.git
 git clone https://github.com/matthiasmullie/minify.git</code></pre>
                 </div>
-
                 <p>独自のバージョンと本日の日付を組み込んだ現状のINTER-Mediatorを作るには、dist-docs/buildup.shというスクリプトを使ってください。たとえば、INTER-Mediatorのディレクトリがカレントディレクトリであれば、MacあるいはUNIX系OSなら、以下のように入力します。</p>
-
                 <div class="code">
                     <pre><code>cd INTER-Mediator/dist-docs/
 ./buildup.sh</code></pre>
                 </div>
-
                 <p>一方、Windowsの場合はCygwinで実行させてください。buildup.shファイルを、Cygwinのターミナルのウインドウにドラッグ&amp;ドロップして、Cygwinのターミナルでreturnキーを押すのが手軽でしょう。なお、ドライブのパスを指定したい場合は、Cygwinでは、/cygdrive/c/で、C:¥ドライブのルートを示すパスとなります。</p>
-
                 <div class="picture">
                     <img src="/images/doc-deploy-fig11.png">
                 </div>
-
-
                 <p>すると以下のようなメッセージがターミナルに表示されます。ここで、キーボードから、1、2、3、4のいずれかをキータイプしてreturnキーを押してください。metadata.jsonファイルを更新する(4)を除くと3種類のビルド形式が選択できますが、(2)が最小の構成で、通常はこちらでいいかと思われます。(3)は認証ユーザの管理ページのサンプルや、定義ファイルエディタなどを含むようになります。なお、認証のアプリケーションに関しては、Autu_Supportフォルダの内容をもとに独自に開発されることをお勧めします。</p>
-
                 <div class="code">
                     <pre><code>$ ./buildup.sh
 =================================================
@@ -197,15 +159,10 @@ Choose the build result from these:
  (4) Write just version and release date to metadata.json
 Type 1, 2, 3 or 4, and then type return----&gt;</code></pre>
                 </div>
-
                 <p>INTER-Mediatorフォルダと同じ階層に、Minifyのディレクトリがあれば、これを使ってJavaScriptのプログラムを圧縮します。ない場合には圧縮しないで、いくつかあるJavaScriptのファイルを1つにまとめることだけを行います。</p>
-
                 <p>その後、メッセージ通り、INTER-Mediatorフォルダと同じ階層に、「im_build」フォルダが作られ、その中に、INTER-Mediatorフォルダがあります。こちらのファイルの中は、動作実行上必要なものだけに絞られています。このim_build/INTER-Mediatorフォルダを、現状のINTER-Mediatorフォルダと置き換えればOKです。</p>
-
                 <p>ただし、1点注意があります。ビルドしたINTER-Mediatorは、すべてのJavaScriptのプログラムを、INTER-Mediator.jsファイルにまとめて、その他のjsファイルは削除されています。そのままFTPでアップロードすると、消えたはずのその他のjsファイルが残ったままになります。なので、サーバー側にあるINTER-Mediatorフォルダもいったん消した上で、アップロードするのが確実です。動作がおかしいと思ったときには、INTER-Mediator.js以外のJavaScriptファイルがサーバー上で存在していないかを確認してください。</p>
-
                 <p>バージョン番号については、buildup.shファイルの最初の方に記述があるので、それを変更して利用してください。なお、バージョンのルールは次のようにします。</p>
-
                 <ul>
                     <li>バージョン番号は、整数をピリオドで区切ることとする（例：3.4、3.11）</li>
                     <li>バージョン表記は、Ver.を基本とするが、vでもVersionでもversionでも基本的には構わない</li>
@@ -213,9 +170,7 @@ Type 1, 2, 3 or 4, and then type return----&gt;</code></pre>
                     <li>開発者が独自にバージョンを付ける場合、3つ目の整数を必ず付ける（例：3.4.1、3.11.133）</li>
                     <li>開発者が独自にバージョンを付ける場合、さらに追加してもいい（例：3.4.1-rev.21）</li>
                 </ul>
-
                 <p>つまり、INTER-Mediatorをダウンロードして、実際にアプリケーションに搭載する上で少し修正したとしたら、3つ目の整数で枝番号を付けてくださいということです。できれば、その状態をコミット/プッシュした上で、そのバージョンタグをつけていただけると、自分のバックアップ用にもなると思います。他の人とバージョンが重ならないように、リポジトリをチェックして異なる番号を付けてください。また、3桁目は飛び番号でもいいとしましょう。けっこう緩いルールですね。</p>
-
             </section>
         </article>
 </body>

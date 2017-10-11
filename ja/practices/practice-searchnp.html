@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,7 +37,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -76,27 +75,18 @@
                 <h1>作成例について</h1>
                 <p>利用するデータベースは、郵便番号と地名が含まれているもので、サンプルのデータベースにあるpostalcodeという名称のものです。レポジトリ内では、Samples/Practices/search_page1.htmlを開く事で、実際に稼働させることができます。Samples/index.htmlにあるサンプルの一覧では「Practices」にある「search」の「search(no JavaScript)」のリンクをクリックして表示できます。</p>
                 <p>まず、どのような動作になるのかを見て行くことにしましょう。最初にページを開くと、郵便番号と地名がともかく一覧されています。サンプルのデータベースには、ある時期の東京都のデータのみを収録しています。検索条件は何もなく、おそらく全てのデータがリストされていると想定されます。ここで、ページネーション（ページ移動）の「&gt;」ボタンをクリックすると、次々と10件ずつレコードが表示されます。また、何件目のデータを現在表示しているのかという情報も見えています。</p>
-
                 <div class="picture"><img class="picture-small" src="/images/shot9902.png" />
                 </div>
-
                 <p>ここで、「検索条件」に適当な地名（ここでは「市谷」）を入力してReturnキーを押します（「Search」ボタンをクリックしてもかまいません）。すると、一覧表には、「市谷」を含む地名やビル名のものだけに絞り込まれました。全部で68件の地名があることが分かります。「&gt;」ボタンでページ移動ができますが、ページ移動後にも、検索条件はそのまま見えていることにも注意を払いましょう。</p>
-
                 <div class="picture"><img class="picture-small" src="/images/shot9904.png" />
                 </div>
-
                 <p>「表示件数」のポップアップメニューから「4」を選択すると、これまで10件ごとに表示されていた一覧表が、4件ごとの表示に切り替わります。切り替えると、以後、ずっと4件ずつ表示されるようになります。</p>
-
                 <div class="picture"><img class="picture-small" src="/images/shot9906.png" />
                 </div>
-
                 <p>検索条件に「171」と入力してReturnキーを押しました。すると、郵便番号に171が含まれる地名だけが絞り込まれています。また、ここで、「郵便番号」と書かれた右側の▼をクリックすると、郵便番号の逆順で表示されるようになりました。つまり、一覧表示が「郵便番号」の逆順にソートされて表示されるようになっています。「&lt;&lt;」ボタンを押して最初のページを表示すると、いちばん大きな数値になる郵便番号の地名が、リストの最初の行に見えています。</p>
-
                 <div class="picture"><img class="picture-small" src="/images/shot9908.png" />
                 </div>
-
                 <p>検索条件に、「市ヶ谷」という文字列を指定して検索してみます。検索結果が0件のときに表示する行が見えています。なお、東京には、市ヶ谷という駅はありますが、地名では「市谷」と記述しており、この名前の地名がないこともわかります。</p>
-
                 <div class="picture"><img class="picture-small" src="/images/shot9910.png" />
                 </div>
             </section>
@@ -125,7 +115,6 @@ array('db-class' =&gt; 'PDO'),
             <section>
                 <h1>ページファイル</h1>
                 <p>ページファイルについては、ボディ部のみを示します。もちろん、ヘッダ部で、前述の定義ファイルSCRIPTタグで読み込んだ状態になっています。このほかに何も読み込みは行っていません。つまり、このページは、プログラムとしては、BODYタグ要素のonload属性にあるINTERMediatorを動作させる1行だけなのです。</p>
-
                 <div class="code">
                     <pre><code>&lt;body onload="INTERMediator.construct()"&gt;
 &lt;div&gt;

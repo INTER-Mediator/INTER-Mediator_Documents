@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,7 +37,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/ja/sitemap.min.js"></script>
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -63,9 +62,7 @@
             <section>
                 <h1>はじめに</h1>
                 <p class="lead">メールはサーバーで送ります。送信方法は、PHPのmail関数を使う方法なので、UNIX系ならsendmailコマンドをたたく方法になります。一方、これだとSMTPサーバーへの転送ができないので、<a href="http://hal456.net/qdsmtp/">qdsmtp</a>も組み込みました（Thanks to Mr. Spok）。SMTP認証はPlainのみの対応となっています。Windowsの場合はmail関数がすでにSMTPですので、php.iniにサーバー情報などを書くことで対処できます。なお、Windows環境はチェックしていないので、何かあれば知らせてもらえると助かります。</p>
-
                 <p>ただ、これだけではだめだろうというのはご存知の方はお分かりかと思いますが、昔作っていたOMEというメールソフトにはPHPのクラスもあったので、それをUTF-8で動くように改造してエンコードなどをさせるようにしました。ちなみに、さらにその前に『<a href="http://msyk.net/emailbool/">メール送信システムの作り方大全</a>』という書籍も書いていて、その中の一部のクラスを使いやすいようにしたのがOME.phpです。この本、もう10年以上前なのですね…。</p>
-
                 <p>定義ファイルに指定可能なキーワードは以下の通り全て列挙します。しかしながら、すべてを記述することはないです。</p>
                 <div class="code">
                     <pre><code>IM_Entry(
@@ -107,63 +104,40 @@
         false
     );</code></pre>
                 </div>
-
             </section>
-
             <section>
                 <h1>メールを送信するタイミングの指定</h1>
                 <p>'send-mail'キーの配列の次のレベルのキーとして、'load' 'edit' 'new'のいずれかを指定できます。それぞれ、データベースからの読み込み時、更新時、新規レコード作成時を意味し、コンテキストに対するそれぞれのタイミングでメールを送信します。いずれも、データベース処理が終了してからメールの送信にかかります。上記の例では、新規レコード作成時に、メールが送信されます。</p>
             </section>
-
             <section>
                 <h1>宛先や送信者の指定</h1>
                 <p>宛先の指定は、'to'ないしは'to-constant'キーに指定します。もし、宛先が一定のものであれば、'to-constant'キーに指定をしてください。'to'キーにはフィールド名を指定します。データベース処理の結果、たとえば新規レコードの場合には新しいレコードが1つ作成されて、そのレコードの内容から'to'キーに指定したフィールドより宛先のデータが取り出されます。編集も原則は1レコードです。一方、読み出しの場合は1レコードにならないかもしれませんが、その場合は最初のレコードから取り出します。むしろ、1レコードに絞り込むコンテキストにするのがメールを送る場合には妥当だと考えられます。</p>
-
                 <p>メールアドレスは「名前 &lt;アドレス&gt;」ないしは「アドレス」の2つの形式のみのサポートになります。'to-constant'キーに対する値、あるいは'to'キーで指定されるフィールドの値は、このどちらかの形式にしてください。</p>
-
                 <p>cc、bccについてもまったく同様のルールです。'to'と'to-constant'の両方の指定があれば、'to-constant'が優先されます。cc、bccでも-constantが優先となります。</p>
-
                 <p>fromについても、fromとfrom-constantキーがあり、設定や動作等は同じです。ただし、UNIXでSMTPサーバーを使わない場合だと、通常はソース側のFrom:は無視されて、UNIXアカウントそのものをFrom:として設定してしまいます。ただし、サーバー側で許可されていれば「'f-option' =&gt; true」の指定を定義ファイル内に記述することで、sendmailコマンドの-fパラメータを指定して、送信者の指定が可能です。</p>
             </section>
-
             <section>
                 <h1>件名と本文の指定</h1>
                 <p>件名は、subjectあるいはsubject-constantのいずれかのキーに指定します。toなどと同じルールです。</p>
-
                 <p>メールの本文は、定義ファイル内に指定した通りに送信する'body-constant'、フィールドの内容をそのまま送信する'body'に加えて、テンプレートの処理も可能です。優先順はテンプレート、body-constant、bodyの順になりますので、不要なフィールドは消しておきましょう。</p>
-
                 <p>テンプレート処理をするには、テンプレートのファイル名をbody-templateキーに指定します。このとき、テンプレートのファイルは、定義ファイルのあるディレクトリを基準に検索します。つまり、定義ファイルといっしょに何らかのテキストファイルを億としたら、body-templateキーの値はファイル名だけでかまいません。</p>
-
                 <p>テンプレートのファイル内では、そのファイルの内容を本文にしますが、フィールドの値との置き換えも可能です。置き換えたい箇所に@@1@@、@@2@@のように、アットマーク2つに囲まれた1から始まる整数を指定します。テンプレートのファイルはUTF-8で保存します。</p>
-
                 <p>フィールドについては、'body-fields'キーに、半角のカンマで区切って指定します。最初が1で、順次番号が増えるようになります。例で言えば、emailフィールドの値は、テンプレート内の@@3@@と置き換わって表示されます。'body-fields'キーを省略すると、テンプレートのファイル通りにメールが送信されます。</p>
-
                 <p>本文は一定の長さで改行を入れます。既定値では72バイトですが、'body-wrap'キーで異なる値にできます。0に設定すると改行しません。ここで、バイト数ですが、実際のバイト数ではなく、日本語は2バイト、英語は1バイトと数えた結果で示しています。実際のエンコードはUTF-8なので、嘘と言えば嘘のカウントになりますが、おそらくこうして指定をすることに慣れている人が多いので、ここでは実態とは関係ない数値ではありますけども実用的という意味で「2バイトルール」でカウントしたものとします。</p>
-
             </section>
-
             <section>
-
                 <h1>UNIXの場合のSMTPサーバーの指定</h1>
                 <p>定義ファイルのIM_Entry関数の第3引数のオプション領域に'smtp'キーで配列を指定します。その他のキーは、前記の例の通りで、キーを見れば意味は分かると思います。もし、SMTP認証をしない場合は、serverとportだけを指定します。認証する場合は、server, port, username, passwordを指定します。したがって、2つないしは4つの要素があるかのどちらかになります。</p>
-
                 <p>SMTPサーバーの指定は、params.phpファイルでも指定が可能です。変数名として、$sendMailSMTPの定義し、値は'smtp'の右側の配列と同様に指定をします。params.phpファイルでの指定よりも、定義ファイルの指定が優先されます。どこにもSMTPサーバーの設定がない場合には、mail関数での送信になります。</p>
-
                 <p>Windowsの場合は、'smtp'の指定やparams.phpファイルでの指定は一般には不要ですが、もし設定すれば、mail関数ではなく、qdsmtpによるメール送信ができます。</p>
-
             </section>
-
             <section>
-
                 <h1>送信されるメールの文字セット</h1>
                 <p>基本的にはメールはUTF-8でエンコードして送られます。ISO-2022-JPの指定はOME.phpではできるのですが、必要なら定義ファイルでの指定ができるようにしようと思います。リクエストがなければUTF-8固定で行きます。</p>
-
                 <p>ヘッダについては、base64のインラインエンコードを、ASCIIコード以外の文字について行います。本文はそのままですが、ヘッダのContent-TyleのcharsetにUTF-8という文字を付けます。つまり、本文はbase64等でのエンコードは行いません。</p>
-
                 <p>ファイルの添付は実装する予定はありません。ファイルを送りたいのなら、そのリンクを送るようなアプリケーションの動作にしましょう。</p>
-
             </section>
-          <section>
+            <section>
                 <h1>Gmailのアカウントでメール送信する場合</h1>
                 <p>"server"キーの値は、"ssl://smtp.gmail.com" としてください。"port"キーの値は、"465"としてください。"username"キーの値は、ユーザー名を指定しますが、メールアドレスそのものを指定します。"password"キーはパスワードそのものを指定します。</p>
                 <p>定義ファイルやparams.phpに上記の2つのSMTP送信に関するパラメータを設定するとメールが送信できますが、できない場合には、<a href="https://support.google.com/accounts/answer/6010255?hl=ja" target="_blank">こちら</a>の記述に従って、「安全性の低いアプリのアクセス」を有効にします。この設定が「有効」になっていないと、SMTPサーバーが受け付けません。相当以前はこれが既定値で「有効」になっていましたが、ある時期からは「無効」が既定値になっているようですので、以前は送ることができたという方も、この設定は必ず確認をしてみてください。</p>
