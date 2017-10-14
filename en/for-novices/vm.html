@@ -141,13 +141,13 @@
 <pre> <code>cd /var/www/html/INTER-Mediator
 git pull origin stable </code> </pre>
             </div>
-            <p>For INTER-Mediator Ver.5.2-RC1 and earlier INTER-Mediator-Server VM, enter the command as follows. Be sure to include spaces and dot (git checkout .) affter "checkout."</p>
+            <p>For INTER-Mediator Ver.5.2-RC1 and earlier INTER-Mediator-Server VM, enter the command as follows. Be sure to include spaces and dot (git checkout .) after "checkout."</p>
             <div class="code">
 <pre> <code>cd /var/www/html/INTER-Mediator
 git checkout .
 git pull origin stable </code> </pre>
             </div>
-            <p>The latest stable version of INTER-Mediator in GitHub's repository is reflected in VM. To reflect the latest status of development version, execute "git pull origin master" instead of "git pull origin stable". For the current version, check INTER-Mediator and the version description at the beginning of the script called dist-docs/build.sh. The final commit reflected is git log or git show command, gets the identifier of the current commit (very long hexadecimal code followed by commit) and got the repository of GitHub. In the case of Ver.5.1 or earlier, the access right setting is slightly different. There is no problem in editing the page file and the definition file which are originally prepared, but please review the access right if you added the file yourself. </p>
+            <p>The latest stable version of INTER-Mediator in GitHub's repository is reflected in VM. To reflect the latest status of development version, execute "git checkout master;git pull origin master" instead of "git pull origin stable". For the current version, check INTER-Mediator and the version description at the beginning of the script called dist-docs/build.sh. The final commit reflected is git log or git show command, gets the identifier of the current commit (very long hexadecimal code followed by commit) and got the repository of GitHub. In the case of Ver.5.1 or earlier, the access right setting is slightly different. There is no problem in editing the page file and the definition file which are originally prepared, but please review the access right if you added the file yourself. </p>
         </section>
         <section>
             <h1>(FYI) Create and run the VM yourself </h1>
