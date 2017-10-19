@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2017 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -209,7 +209,7 @@ function setTargetFields($fields)</code></pre>
               <section>
                 <h1>Ver.4.6での変更</h1>
                 <h4>setExeucteメソッド</h4>
-                <p>グローバル変数のIMLibChangeEventDispatch、IMLibKeyEventDispatch、IMLibMouseEventDispatchの初期化は、constructメソッドを呼び出す後になりました。これらのオブジェクトで利用できていた、setExeucteなどのメソッドは、constructを呼び出した後に設定してください。具体的には、INTERMediatorOnPage.doAfterConstruct = function() { } という関数の定義と代入を行い、関数内でMLibChangeEventDispatch、IMLibKeyEventDispatch、IMLibMouseEventDispatchを利用してください。</p>
+                <p>グローバル変数のIMLibChangeEventDispatch、IMLibKeyEventDispatch、IMLibMouseEventDispatchの初期化は、constructメソッドを呼び出す後になりました。これらのオブジェクトで利用できていた、setExeucteなどのメソッドは、constructを呼び出した後に設定してください。具体的には、INTERMediatorOnPage.doAfterConstruct = function() { } という関数の定義と代入を行い、関数内でIMLibChangeEventDispatch、IMLibKeyEventDispatch、IMLibMouseEventDispatchを利用してください。</p>
                 <h4>INTERMediator.additionalCondition, additionalSortKeyプロパティ</h4>
                 <p>コンテキストを利用して読み出しを行うとき、JavaScriptで検索条件や並べ替え条件を付加できるプロパティadditionalConditionとadditionalSortKeyがあります。これらは、従来までは単純にオブジェクトを記録していただけですが、Ver.4.4あたりでローカルコンテキストに記録して、ページを改めて呼び出した時にローカルコンテキストを復活させることで元に戻すという仕様を組み込みました。しかしながら、その動作を見直している時にバグが見つかりましたが、結果的に、additionalConditionとadditionalSortKeyの参照は変更ありませんが、追加や書き換えには以下のような変更が必要になります。これらの2つのプロパティにセッタとゲッタを設定しているため、セッタを稼働させるために、プロパティそのものへの代入が必要になります。あるいは、新しいAPIのaddConditionやaddSortKeyメソッドを利用してください。追加した条件を消去するclearConditions、clearSortKeysメソッドも利用できます。</p>
 
