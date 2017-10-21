@@ -148,7 +148,7 @@ git pull origin stable</code></pre>
 git checkout .
 git pull origin stable</code></pre>
                 </div>
-                <p>GitHubのリポジトリにあるINTER-Mediatorの最新安定版がVMに反映されます。なお、開発版の最新状況を反映させる場合には「git pull origin stable」の代わりに「git pull origin master」を実行します。現在のバージョンは、INTER-Mediator以下、dist-docs/build.shというスクリプトの最初の方のバージョン記述を確認してください。反映されている最終的なコミットは、git logやgit showコマンドで、現在のcommitの識別子（16進数の非常に長いコードで、commitの後に続けて記述されている）を得て、GitHubのリポジトリで探してください。なお、Ver.5.1以前の場合は、アクセス権の設定が若干違います。もともと用意されているページファイルと定義ファイルの編集には問題がありませんが、自分でファイルを追加したような場合などは、アクセス権について見直してください。</p>
+                <p>GitHubのリポジトリにあるINTER-Mediatorの最新安定版がVMに反映されます。なお、開発版の最新状況を反映させる場合には「git pull origin stable」の代わりに「git checkout master;git pull origin master」を実行します。現在のバージョンは、INTER-Mediator以下、dist-docs/build.shというスクリプトの最初の方のバージョン記述を確認してください。反映されている最終的なコミットは、git logやgit showコマンドで、現在のcommitの識別子（16進数の非常に長いコードで、commitの後に続けて記述されている）を得て、GitHubのリポジトリで探してください。なお、Ver.5.1以前の場合は、アクセス権の設定が若干違います。もともと用意されているページファイルと定義ファイルの編集には問題がありませんが、自分でファイルを追加したような場合などは、アクセス権について見直してください。</p>
             </section>
             <section>
                 <h1>（参考）VMを自分で作成して起動する</h1>
