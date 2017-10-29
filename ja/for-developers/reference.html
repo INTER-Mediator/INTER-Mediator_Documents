@@ -51,6 +51,11 @@
         .keyword {
             white-space: nowrap;
         }
+
+        .subtitle {
+            font-size: 70%;
+            color: gray;
+        }
     </style>
 </head>
 <body class="docs" data-page-title="for-developers">
@@ -78,7 +83,10 @@
             <p>
                 テーブルと、テーブル間を関連づけるフィールドを指定します。この引数の第2次元にまとめられた1つの配列の設定を「コンテキスト定義」と呼ぶことにします。つまり、name、keyなどのキーを持った連想配列の1つ1つがコンテキスト定義です。もちろん、コンテキスト定義は複数を定義することが可能です。ここでのnameが、ターゲット指定のテーブル名で使用します。テーブル間の結合における相手のテーブル名がないと思われるかもしれませんが、相手のテーブル名は、ページファイル側の記述で自動的に決まってきます。</p>
             <div class="table">
-                <h3>コンテキスト名とエンティティ情報</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    コンテキスト名とエンティティ情報
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -126,7 +134,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>レコード繰り返しとページング</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    レコード繰り返しとページング
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -165,7 +176,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>リレーションシップ、検索条件、並べ替えフィールド</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    リレーションシップ、検索条件、並べ替え、初期値
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -241,7 +255,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>計算プロパティ</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    計算プロパティ
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -263,11 +280,15 @@
                     </tr>
                     <tr>
                         <td class="keyword">'expression'</td>
-                        <td>計算式。同一コンテキストのフィールド参照はフィールド名のみ記述する。他のコンテキストのフィールド参照は「コンテキスト名@フィールド名」の形式で記述する。</td>
+                        <td><a href="exp.html" target="_blank">計算式</a>。同一コンテキストのフィールド参照はフィールド名のみ記述する。他のコンテキストのフィールド参照は「コンテキスト名@フィールド名」の形式で記述する。
+                        </td>
                     </tr>
                     </tbody>
                 </table>
-                <h3>Post Onlyモードの動作定義</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    Post Onlyモードの動作定義
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -296,7 +317,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>ユーザーインタフェース生成</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    ユーザーインタフェース生成
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -326,28 +350,31 @@
                     </tr>
                     <tr>
                         <td rowspan="5" class="keyword">'button-names'</td>
-                        <td>'insert'</td>
+                        <td class="keyword">'insert'</td>
                         <td>repeat-controlに「insert」を指定したときに追加されるボタンのボタン名</td>
                     </tr>
                     <tr>
-                        <td>'delete'</td>
+                        <td class="keyword">'delete'</td>
                         <td>repeat-controlに「delete」を指定したときに追加されるボタンのボタン名</td>
                     </tr>
                     <tr>
-                        <td>'copy'</td>
+                        <td class="keyword">'copy'</td>
                         <td>repeat-controlに「copy」を指定したときに追加されるボタンのボタン名</td>
                     </tr>
                     <tr>
-                        <td>'navi-detail'</td>
+                        <td class="keyword">'navi-detail'</td>
                         <td>navi-controlに「master」を指定したときに追加されるボタンのボタン名。マスター側に追加されるディテール側へ移動するボタンの名前</td>
                     </tr>
                     <tr>
-                        <td>'navi-back'</td>
+                        <td class="keyword">'navi-back'</td>
                         <td>navi-controlに「detail」を指定したときに追加されるボタンのボタン名。ディテール側に追加されるマスター側へ移動するボタンの名前</td>
                     </tr>
                     </tbody>
                 </table>
-                <h3>バリデーション</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    バリデーション
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -385,7 +412,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>合成処理やデータベース処理の拡張</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    合成処理やデータベース処理の拡張
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -409,7 +439,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>スクリプト実行</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    スクリプト実行
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -450,7 +483,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>FileMakerでのグローバル変数設定</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    FileMakerでのグローバル変数設定
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -482,7 +518,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>認証・認可とセキュリティ</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    認証・認可とセキュリティ
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -561,7 +600,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>ファイルアップロード</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    ファイルアップロード
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -597,7 +639,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>データベース接続設定</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    データベース接続設定
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -608,7 +653,9 @@
                     <tbody>
                     <tr>
                         <td class="keyword">'db-class'</td>
-                        <td>このコンテキストで使うデータアクセスクラスの名前（例：PDO、FileMaker_FX）この指定がなければ、IM_Entry関数の第3引数あるいはparams.phpの値が使われます。以下、'datatype'まで同様</td>
+                        <td>
+                            このコンテキストで使うデータアクセスクラスの名前（例：PDO、FileMaker_FX）この指定がなければ、IM_Entry関数の第3引数あるいはparams.phpの値が使われます。以下、'datatype'まで同様
+                        </td>
                     </tr>
                     <tr>
                         <td class="keyword">'dsn'</td>
@@ -648,7 +695,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>メール送信</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    メール送信
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -744,7 +794,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>複雑なSQL文によるビュー生成</h3>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    複雑なSQL文によるビュー生成
+                </h3>
                 <table>
                     <thead>
                     <tr>
@@ -776,7 +829,42 @@
             <h1>第2引数、オプション設定</h1>
             <p>こちらは、「定義ファイルのオプション設定」と呼ぶことにします。</p>
             <div class="table">
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>
+                    各種動作設定
+                </h3>
                 <table>
+                    <thead>
+                    <tr>
+                        <th>キー</th>
+                        <th>値</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="keyword">'separator'</td>
+                        <td>テーブル名とフィールド名を区切る文字（既定値は「@」）</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'transaction'</td>
+                        <td>
+                            編集可能コンポーネントの変更時の書き戻しについて、'none'なら行わない、'automatic'ならchangeイベントが発生するたびに書き戻す。省略するとautomaticが指定されたものとみなす
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'media-root-dir'</td>
+                        <td>
+                            メディアアクセスに対して定義ファイルにリダイレクトの設定をWebサーバーで行う。そうすれば、この設定に指定したディレクトリにある画像などのメディアファイルを読み出す。
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>
+                    エイリアス
+                </h3>
+                <table>
+                    <thead>
                     <tr>
                         <th colspan="3">配列指定</th>
                         <th rowspan="2">値</th>
@@ -786,12 +874,33 @@
                         <th class="keyword">第2次元</th>
                         <th class="keyword">第3次元</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr>
-                        <td class="keyword">'separator'</td>
-                        <td></td>
-                        <td></td>
-                        <td>テーブル名とフィールド名を区切る文字（既定値は「@」）</td>
+                        <td class="keyword">'aliases'</td>
+                        <td>エイリアス名</td>
+                        <td>置き換える定義</td>
+                        <td>エイリアスに対応する値。この値は正しい1つのターゲット指定である必要がある。この指定があれば、ターゲット指定の代わりに、エイリアス名をリンクノードに指定できる。</td>
                     </tr>
+                    </tbody>
+                </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>
+                    フォーマッター（サーバーサイドでの値変換）
+                </h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="3">配列指定</th>
+                        <th rowspan="2">値</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                        <th class="keyword">第3次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td rowspan="3" class="keyword">'formatter'</td>
                         <td rowspan="3" class="keyword">(なし)</td>
@@ -806,159 +915,191 @@
                         <td class="keyword">'parameter'</td>
                         <td>コンバータクラスに与えるパラメータ</td>
                     </tr>
+                    </tbody>
+                </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>
+                    ブラウザの判定
+                </h3>
+                <table>
+                    <thead>
                     <tr>
-                        <td class="keyword">'aliases'</td>
-                        <td>(なし)</td>
-                        <td>エイリアス名</td>
-                        <td>エイリアスに対応する値。この値は正しい1つのターゲット指定である必要がある。この指定があれば、ターゲット指定の代わりに、エイリアス名をリンクノードに指定できる。</td>
+                        <th colspan="3">配列指定</th>
+                        <th rowspan="2">値</th>
                     </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                        <th class="keyword">第3次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td rowspan="2" class="keyword">'browser-compatibility'</td>
                         <td rowspan="2" class="keyword">(なし)</td>
                         <td>文字列</td>
-                        <td>キーにブラウザを示す文字列（safari, msieなど）を指定し、値にはバージョン番号を指定する。バージョン番号の後に+や-をつけて、以上あるいは以下をのバージョンを示すことができる</td>
+                        <td>キーにブラウザを示す文字列（safari,
+                            msieなど）を指定し、値にはバージョン番号を指定する。バージョン番号の後に+や-をつけて、以上あるいは以下をのバージョンを示すことができる
+                        </td>
                     </tr>
                     <tr>
                         <td>配列</td>
                         <td>要素にはキーにOSを指定し、その要素に前の行に説明のあるバージョン番号とプラス／マイナス記号を指定する。</td>
                     </tr>
+                    </tbody>
+                </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>
+                    認証・認可
+                </h3>
+                <table>
+                    <thead>
                     <tr>
-                        <td class="keyword">'transaction'</td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            編集可能コンポーネントの変更時の書き戻しについて、'none'なら行わない、'automatic'ならchangeイベントが発生するたびに書き戻す。省略するとautomaticが指定されたものとみなす
-                        </td>
+                        <th colspan="2">配列指定</th>
+                        <th rowspan="2">値</th>
                     </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td rowspan="12" class="keyword">'authentication'</td>
                         <td class="keyword">'user'</td>
-                        <td></td>
                         <td>
                             利用可能なユーザを配列で指定。この記述がなければすべてのユーザにアクセス権。データベースのネイティブユーザで認証する場合には、値を「array('database_native')」と指定する。
                         </td>
                     </tr>
                     <tr>
                         <td class="keyword">'group'</td>
-                        <td></td>
                         <td>
                             利用可能なグループを配列で指定。この記述がなければすべてのグループにアクセス権
                         </td>
                     </tr>
                     <tr>
                         <td class="keyword">'user-table'</td>
-                        <td></td>
                         <td>ユーザ情報が保存されているテーブル名。省略すると'authuser'</td>
                     </tr>
                     <tr>
                         <td class="keyword">'group-table'</td>
-                        <td></td>
                         <td>ユーザ情報が保存されているテーブル名。省略すると'authgroup'</td>
                     </tr>
                     <tr>
                         <td class="keyword">'corresponding-table'</td>
-                        <td></td>
                         <td>ユーザとグループが対応づけられている情報が保存されているテーブル名。省略すると'authcor'</td>
                     </tr>
                     <tr>
                         <td class="keyword">'challenge-table'</td>
-                        <td></td>
                         <td>チャレンジが保存されているテーブル名。省略すると'issuedhash'</td>
                     </tr>
                     <tr>
                         <td class="keyword">'authexpired'</td>
-                        <td></td>
                         <td>認証が自動的に継続される時間を秒数で指定する。省略すると'3600'（1時間）。バージョン4.4以降では、0を指定すると有効期限はWebブラウザー終了時まで</td>
                     </tr>
                     <tr>
                         <td class="keyword">'storing'</td>
-                        <td></td>
                         <td>
                             認証情報のクライアントへの保存を指定。'cookie'ならPathを指定しないでクッキーに保存（既定値）、'cookie-domainwide'ならドメイン全体で共有できるようにクッキーに保存、'session-storage'ならブラウザのセッションストレージに保存、'none'ならクッキーに保存しない
                         </td>
                     </tr>
                     <tr>
                         <td class="keyword">'realm'</td>
-                        <td></td>
                         <td>
                             認証領域名。ログインパネルの上部に表示される。また、認証情報を記憶するクッキーの名称の末尾に付与される。
                         </td>
                     </tr>
                     <tr>
                         <td class="keyword">'email-as-username'</td>
-                        <td></td>
                         <td>
                             trueを指定すると、authuserテーブルのusernameと同時にemailフィールドも検索する。つまり、電子メールアドレスでの認証が可能になる。既定値はfalse
                         </td>
                     </tr>
                     <tr>
-                    <td class="keyword">'issuedhash-dsn'</td>
-                        <td></td>
-                    <td>
-                        issuedhashテーブルに対するDSNを指定する。たとえば、FileMakerデータベースで、issuedhashテーブルをSQLiteで運用する場合に使える
-                    </td>
+                        <td class="keyword">'issuedhash-dsn'</td>
+                        <td>
+                            issuedhashテーブルに対するDSNを指定する。たとえば、FileMakerデータベースで、issuedhashテーブルをSQLiteで運用する場合に使える
+                        </td>
                     </tr>
                     <tr>
                         <td class="keyword">'password-policy'</td>
-                        <td></td>
                         <td>パスワード変更時に適用されるパスワードポリシー。useAlphabet useNumber useUpper useLower usePunctuation length(10)
                             notUserNameの各単語をスペースで区切って指定する。useAlphabetはアルファベットを使用していないといけなくする。その他、同様に単語から意味が分かるはずである。length(10)はパスワードは10文字以上にする必要があるという意味で、(
                             ) 内には任意の数値を記述できる。
                         </td>
                     </tr>
                     <tr>
-                        <td class="keyword">'media-root-dir'</td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            メディアアクセスに対して定義ファイルにリダイレクトの設定をWebサーバーで行う。そうすれば、この設定に指定したディレクトリにある画像などのメディアファイルを読み出す。
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="keyword">'media-context'</td>
-                        <td></td>
                         <td></td>
                         <td>
                             メディアアクセスに認証を設定するとき、ここで指定したコンテキストにアクセスしたときにメディアの認証用のトークンをクライアントに届ける。このトークンをクライアントが持つ事で、メディアプロキシが認証される
                         </td>
                     </tr>
+                    </tbody>
+                </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>Pusherの設定
+                </h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="2">配列指定</th>
+                        <th rowspan="2">値</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td rowspan="3" class="keyword">'pusher'</td>
                         <td class="keyword">'app_id'</td>
-                        <td></td>
                         <td>Pusherで定義したAppのapp_id</td>
                     </tr>
                     <tr>
                         <td class="keyword">'key'</td>
-                        <td></td>
                         <td>Pusherで定義したAppのkey</td>
                     </tr>
                     <tr>
                         <td class="keyword">'secret'</td>
-                        <td></td>
                         <td>Pusherで定義したAppのsecret</td>
                     </tr>
+                    </tbody>
+                </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>メール送信サーバー
+                </h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="2">配列指定</th>
+                        <th rowspan="2">値</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td rowspan="4" class="keyword">'smtp'</td>
                         <td class="keyword">'server'</td>
-                        <td></td>
                         <td>メール送信時に使用するサーバのホスト</td>
                     </tr>
                     <tr>
                         <td class="keyword">'port'</td>
-                        <td></td>
                         <td>メール送信時に使用するサーバのポート</td>
                     </tr>
                     <tr>
                         <td class="keyword">'username'</td>
-                        <td></td>
                         <td>メール送信時に認証で使用するユーザー名</td>
                     </tr>
                     <tr>
                         <td class="keyword">'password'</td>
-                        <td></td>
                         <td>メール送信時に認証で使用するパスワード</td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
             <p>
