@@ -29,14 +29,14 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
     <link rel="manifest" href="/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff"><script src="../../lib/en/sitemap.min.js"></script>
+    <meta name="theme-color" content="#ffffff">
     <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
@@ -64,13 +64,31 @@
                 <p class="lead">INTER-Mediatorもバージョンを重ねてきており、以前の引き継がなくなってしまった箇所が出てきています。Ver.3 (2012/12/10) 以降の大きな変更点、つまりアプリケーション側を書き換えないといけないような変更をここにまとめておきます。</p>
             </section>
             <section>
+                <h1>Ver.5.7での変更</h1>
+                <h2>データベースクラスに関してのリファクタリング</h2>
+                <p>DB_PDO.phpファイルなどのように、データベースクラスは非常に行数が大きくなり、保守しづらい状況になっていました。そこで、DB_Supportフォルダにいくつかのファイルを作り、異能の分離をしています。一般のアプリケーションに影響はないようになっているはずですが、自分でデータベースクラスを作っているような場合には、DB_Interface.phpに記述されたインタフェースに基づいて機能を分離している点をご理解いただきプログラムに反映させてください。データベースクラスからは、publicなポインタを利用して、別途定義された「ハンドラ」を参照するといった仕組みです。なお、例えば認証に関連する部分はDB_Auth_Handler_PDO.phpファイルに記述されていますが、あるデータベースクラスが認証の機能を使わないのなら、このハンドラは定義不要で、ポインタとなるプロパティはnullのままで構いません。</p>
+            </section>
+            <section>
+                <h1>Ver.5.6での変更</h1>
+                <h2>テーマの新設と既存の開発物について</h2>
+                <p>このバージョンより、一切のスタイル設定をしなくてもそれなりに見栄えの良いページが作成できるように、デフォルトのテーマを構築しました。また、テーマを入れ替えることで、手軽に見栄えを変更できるような機能にもなっています。しかしながら、独自にCSSを全面的に定義しているようなサイトにおいては、デフォルトのテーマの設定と当たってしまう場合もあります。その場合、「least」テーマに切り替えてください。IM_Entry関数の第2引数（オプション設定）に、"theme"がキーで、値が"least"という定義を加えまます。params.phpでは$themeName = "least"; と指定します。このテーマは、ログインパネルとページネーションの要素に適用される設定しかしていませんので、多くの場合テーマと自分のCSSが当たるということはないと思います。また、テーマのCSSは、独自のCSSファイルへのlinkタグより前に配置されるため、通常は、独自のCSSファイルでテーマの内容を上書きできるはずです。</p>
+                <h2>イベント取得</h2>
+                <p>キーボード関連のイベントに対する応答を登録できるグローバル変数IMLibKeyEventDispatchは、IMLibKeyDownEventDispatchとIMLibKeyUpEventDispatchに変更になりました。</p>
+            </section>
+            <section>
+                <h1>Ver.5.5での変更</h1>
+                <h2>アドバイス定義クラスでメールの送信内容を修正する場合</h2>
+                <p>データベースに対する処理のうち、Read/Update/Createの3つの処理が終了後にメールを送信する設定をコンテキスト定義に記述します。このとき、データベースで処理したレコードの配列を元にメールを送信するので、フィールドに送信時に使用する宛先や文面などのデータがあれば、コンテキスト定義上で使用するフィールドあるいは固定値を記述することでメールの送信ができます。しかしながら、状況によってはレコードにない情報を追加したり、あるいは変更してメール送信に利用したい場合もあります。その場合は、コンテキスト定義にextending-classキーの値を追加して、アドバイス定義クラスを実装します。そのクラスに、レコード作成直後にメールを送りたい場合の修正を組み込むため、doAfterCreateToDB($result)メソッドを実装します。このとき、書き直したフィールドや、追加したいフィールドは、データベースクラスのsetUpdatedRecordを利用して追加してください。通常、アドバイス定義クラスは、DB_UseSharedObjectsクラスを継承しているので、現在使用しているデータベース定義クラスは、dbClassプロパティで得られます。したがって、n番目のレコードのフィールドfに値vを書き込む場合は、「$this->dbClass->setUpdatedRecord（f, v, n）」というプログラムを書きます。これで、メール処理クラスに変更されたり追加されたフィールドを持つレコードが送信されます。なお、doAfterCreateToDBなどのメソッドは、基本は引数と同じレコードを返してください。メールの送信は、これらのメソッドの返り値ではなく、データベースクラスのインスタンスが管理して「結果のレコード」を利用します。返り値は、例えば、クエリー結果だと、ページ上に表示される値として利用されるものです。したがって、表示側もメール側も変更するのなら、setUpdatedRecordメソッドだけでなく、返り値の配列も変更が必要です。</p>
+                <p>なお、このように、setUpdatedRecordを使用する必要があるのは、これまでのバージョンは新規レコード作成時だけだったのですが、操作ごとに処理方法がバラついてしまっていたので、読み出しや更新処理も、同様にsetUpdatedRecordでメール処理に渡すレコード群の変更をするようにしました。</p>
+            </section>
+            <section>
                 <h1>Ver.5.4での変更</h1>
                 <h2>サーバーサイドのPHPのAPIを整理</h2>
-<h3>データベースアクセスクラスの基本メソッド</h3>
-<p>データベースアクセスクラスでは、CRUDおよびその関連処理のためのメソッドを既定しています。従来は、そのメソッドに処理しているコンテキスト名を引数として渡していましたが、それをやめました。また、メソッドの名称もCRUDの各単語に対応したものとなりました。現在処理しているコンテキスト名は、DB_SettingsクラスのメソッドgetDataSourceName()で取得できます。Ver.5.4-dev以降は、getFromDBは呼び出されず、readFromDBが呼び出されるようになるので、必要な修正をしてください。</p>
-<h4>従来の定義</h4>
-<div class="code">
-<pre><code>interface DB_Interface extends DB_Spec_Behavior
+                <h3>データベースアクセスクラスの基本メソッド</h3>
+                <p>データベースアクセスクラスでは、CRUDおよびその関連処理のためのメソッドを既定しています。従来は、そのメソッドに処理しているコンテキスト名を引数として渡していましたが、それをやめました。また、メソッドの名称もCRUDの各単語に対応したものとなりました。現在処理しているコンテキスト名は、DB_SettingsクラスのメソッドgetDataSourceName()で取得できます。Ver.5.4-dev以降は、getFromDBは呼び出されず、readFromDBが呼び出されるようになるので、必要な修正をしてください。</p>
+                <h4>従来の定義</h4>
+                <div class="code">
+                    <pre><code>interface DB_Interface extends DB_Spec_Behavior
 {
     public function getFromDB($contextName);
     public function countQueryResult($contextName);
@@ -80,10 +98,10 @@
     public function deleteFromDB($contextName);
     public function copyInDB($contextName);
 }</code></pre>
-</div>
-<h4>新しい定義</h4>
-<div class="code">
-<pre><code>interface DB_Interface extends DB_Spec_Behavior
+                </div>
+                <h4>新しい定義</h4>
+                <div class="code">
+                    <pre><code>interface DB_Interface extends DB_Spec_Behavior
 {
     public function readFromDB();         // former getFromDB
     public function countQueryResult();
@@ -93,13 +111,12 @@
     public function deleteFromDB();
     public function copyInDB();
 }</code></pre>
-</div>
-
-<h3>データベースアクセス処理の拡張クラス</h3>
-<p>コンテキストにextending-classキーで指定したクラス名にインプリメントするインタフェースを以下のように変更しました。名前をCRUDに対応するものにすると同時に、データソース名の引数は渡しません。拡張処理クラスがDB_UseSharedObjectsを継承している場合は、DB_SettingsクラスのインスタンスへdbSettingsプロパティでアクセスできます。これを利用すると、現在処理しているコンテキスト名は、DB_SettingsクラスのメソッドgetDataSourceName()で取得できます。Ver.5.4-dev以降は、従来の名称のメソッドは呼び出されず、新しいメソッドしか呼び出されませんので、必要な修正をしてください。</p>
-<h4>従来の定義</h4>
-<div class="code">
-<pre><code>interface Extending_Interface_BeforeGet {
+                </div>
+                <h3>データベースアクセス処理の拡張クラス</h3>
+                <p>コンテキストにextending-classキーで指定したクラス名にインプリメントするインタフェースを以下のように変更しました。名前をCRUDに対応するものにすると同時に、データソース名の引数は渡しません。拡張処理クラスがDB_UseSharedObjectsを継承している場合は、DB_SettingsクラスのインスタンスへdbSettingsプロパティでアクセスできます。これを利用すると、現在処理しているコンテキスト名は、DB_SettingsクラスのメソッドgetDataSourceName()で取得できます。Ver.5.4-dev以降は、従来の名称のメソッドは呼び出されず、新しいメソッドしか呼び出されませんので、必要な修正をしてください。</p>
+                <h4>従来の定義</h4>
+                <div class="code">
+                    <pre><code>interface Extending_Interface_BeforeGet {
     public function doBeforeGetFromDB($dataSourceName);
 }
 interface Extending_Interface_AfterGet {
@@ -128,10 +145,10 @@ interface Extending_Interface_BeforeNew {
 interface Extending_Interface_AfterNew{
     public function doAfterNewToDB($dataSourceName, $result);
 }</code></pre>
-</div>
-<h4>新しい定義</h4>
-<div class="code">
-<pre><code>interface Extending_Interface_BeforeRead {
+                </div>
+                <h4>新しい定義</h4>
+                <div class="code">
+                    <pre><code>interface Extending_Interface_BeforeRead {
     public function doBeforeReadFromDB();
 }
 interface Extending_Interface_AfterRead {
@@ -166,53 +183,48 @@ interface Extending_Interface_BeforeCopy {
 interface Extending_Interface_AfterCopy {
     public function doAfterCopyInDB($result);
 }</code></pre>
-</div>
-
-<h3>DB_Settingsクラスの整理統合</h3>
-<p>以下のメソッドはVer.5.4-devでは定義されていません。代替メソッドを使ってください。</p>
-<div class="code">
-<pre><code>function getTargetName()
+                </div>
+                <h3>DB_Settingsクラスの整理統合</h3>
+                <p>以下のメソッドはVer.5.4-devでは定義されていません。代替メソッドを使ってください。</p>
+                <div class="code">
+                    <pre><code>function getTargetName()
 function getTargetDataSource()
 function setTargetDataSource($targetDataSource)
 function getIndexOfDataSource($dataSourceName)
 function setTargetFields($fields)</code></pre>
-</div>
-<p>getTargetName/getTargetDataSource/setTargetDataSourceメソッドは、ほぼ同一の動きをするgetDataSourceName/setDataSourceNameメソッドに置き換えました。setTargetFieldsとgetIndexOfDataSourceメソッドは使われていないので、削除しました。</p>
-              </section>
-              <section>
+                </div>
+                <p>getTargetName/getTargetDataSource/setTargetDataSourceメソッドは、ほぼ同一の動きをするgetDataSourceName/setDataSourceNameメソッドに置き換えました。setTargetFieldsとgetIndexOfDataSourceメソッドは使われていないので、削除しました。</p>
+            </section>
+            <section>
                 <h1>Ver.5.3での変更</h1>
                 <h4>CSRF攻撃対策の追加</h4>
-                <p>params.phpファイルで$webServerNameという変数を設定することでCSRF攻撃対策を実施することができるようになりました。Webサーバーのドメイン名もしくはFQDN（完全修飾ドメイン名）を配列で設定するようにしてください。<br>設定例1：array('inter-mediator.com');<br>設定例2：array('www.inter-mediator.com', 'inter-mediator.org');</p>
+                <p>params.phpファイルで$webServerNameという変数を設定することでCSRF攻撃対策を実施することができるようになりました。Webサーバーのドメイン名もしくはFQDN（完全修飾ドメイン名）を配列で設定するようにしてください。
+                    <br>設定例1：array('inter-mediator.com');
+                    <br>設定例2：array('www.inter-mediator.com', 'inter-mediator.org');</p>
             </section>
             <section>
                 <h1>Ver.5.2での変更</h1>
                 <h4>データベースクラスでのメソッド定義の変更</h4>
-                <p>Auth_Interface_DBインタフェースで定義しているauthSuportCreateUserメソッドの引数が、LDAP対応に伴い2つから4つに増えました。
-	                データベースクラス（DB_PDO.phpなど）については、機能を組み込んでいなくても、メソッドの引数をインタフェースでの定義に揃えなければなりません。
-	                定義内容は、DB_Interfaces.phpファイルを参照してください。
+                <p>Auth_Interface_DBインタフェースで定義しているauthSuportCreateUserメソッドの引数が、LDAP対応に伴い2つから4つに増えました。 データベースクラス（DB_PDO.phpなど）については、機能を組み込んでいなくても、メソッドの引数をインタフェースでの定義に揃えなければなりません。 定義内容は、DB_Interfaces.phpファイルを参照してください。
                 </p>
-              </section>
+            </section>
             <section>
                 <h1>Ver.4.7での変更</h1>
                 <h4>Internet Explorer Ver.8対応に関して</h4>
                 <p>これまでは、Internet Explorerの最低サポートバージョンをVer.8としてきましたが、Ver.4.7現在、いくつかの機能が動かない状態になっています。これらについては、今後サポートする予定はありません。しかしながら、主要な機能はVer.4.7でも動いているので、IE8のサポートバージョンとして、最後のものがVer.4.7とします。Ver.4.7でIE8で動作に問題があるものとして、以下のものがわかっています。</p>
-
                 <ul>
                     <li>フィールドの文字列中に改行がある場合、TEXTAREAに正しく表示されない。これは、改行をBRタグに変更してinnerHTMLに設定するという手段が、IE8ではエラーになってしまうためです。</li>
                     <li>Pusherをベースにしたクライアント間同期の仕組みのうち、レコード削除後の処理でエラーが出る。フィールドの更新や新規レコードは稼働します。</li>
                     <li>ローカルコンテキストを利用して、検索パラメータを指定する機能のうち、1ページの件数の制限と、並べ替えに使用するフィールドの指定が正しく動作しません。検索条件と、「検索」ボタンは動作します。</li>
                 </ul>
-
                 <p>なお、Ver.5以降は、IE8のためのコードを削除する可能性もあり、動かない機能がより増える可能性もあります。また、Ver.5以降は、Internet Explorerでの確認は、主として最新バージョンでのみ行うことにします。Firefox、Chrome、Safariと同様な扱いにします。なお、特定のバージョンでの不具合について、対応を希望する場合には、Facebookのグループ等でリクエストを出してください。</p>
-              </section>
-
-              <section>
+            </section>
+            <section>
                 <h1>Ver.4.6での変更</h1>
                 <h4>setExeucteメソッド</h4>
                 <p>グローバル変数のIMLibChangeEventDispatch、IMLibKeyEventDispatch、IMLibMouseEventDispatchの初期化は、constructメソッドを呼び出す後になりました。これらのオブジェクトで利用できていた、setExeucteなどのメソッドは、constructを呼び出した後に設定してください。具体的には、INTERMediatorOnPage.doAfterConstruct = function() { } という関数の定義と代入を行い、関数内でIMLibChangeEventDispatch、IMLibKeyEventDispatch、IMLibMouseEventDispatchを利用してください。</p>
                 <h4>INTERMediator.additionalCondition, additionalSortKeyプロパティ</h4>
                 <p>コンテキストを利用して読み出しを行うとき、JavaScriptで検索条件や並べ替え条件を付加できるプロパティadditionalConditionとadditionalSortKeyがあります。これらは、従来までは単純にオブジェクトを記録していただけですが、Ver.4.4あたりでローカルコンテキストに記録して、ページを改めて呼び出した時にローカルコンテキストを復活させることで元に戻すという仕様を組み込みました。しかしながら、その動作を見直している時にバグが見つかりましたが、結果的に、additionalConditionとadditionalSortKeyの参照は変更ありませんが、追加や書き換えには以下のような変更が必要になります。これらの2つのプロパティにセッタとゲッタを設定しているため、セッタを稼働させるために、プロパティそのものへの代入が必要になります。あるいは、新しいAPIのaddConditionやaddSortKeyメソッドを利用してください。追加した条件を消去するclearConditions、clearSortKeysメソッドも利用できます。</p>
-
                 <div class="code">
                     <pre><code>INTERMediator.additionalCondition["acontext"] = [];
 INTERMediator.additionalCondition["acontext"].push({field: "afield", operator: "=", value: "1001"});
@@ -231,9 +243,7 @@ conditions["acontext"].push({field: "afield", operator: "=", value: "1001"});
 conditions["acontext"].push({field: "live", operator: "=", value: "1"});
 INTERMediator.additionalCondition = conditions</code></pre>
                 </div>
-
                 <p>検索条件が1つだけの場合も、同様に、次のように書き換えが必要になります。</p>
-
                 <div class="code">
                     <pre><code>INTERMediator.additionalCondition["acontext"] = {field: "afield", operator: "=", value: "1001"};
 
@@ -248,13 +258,11 @@ conditions["acontext"].push({field: "afield", operator: "=", value: "1001"});
 INTERMediator.additionalCondition = conditions</code></pre>
                 </div>
             </section>
-
             <section>
                 <h1>Ver.4.5での変更</h1>
                 <h4>valueChangeメソッド</h4>
                 <p>INTERMediator.valueChange(idValue)はIMLibUI.valueChange(idValue)に変更されました。もしもJavaScriptのプログラム内でvalueChangeメソッドを使用している場合には書き換えが必要です。</p>
             </section>
-
             <section>
                 <h1>Ver.4.1 (2014/2/7) での変更</h1>
                 <p>ターゲット指定をclass属性に独自の記述方法で書いていましたが、Ver.4.1より、HTML5のdata属性での記述に移行しました。なお、従来の記述も基本的にはそのまま利用できるはずですが、大した手間にならないので、書き直すのがいいかと思います。</p>

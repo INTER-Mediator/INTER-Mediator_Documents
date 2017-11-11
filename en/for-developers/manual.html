@@ -1,1440 +1,516 @@
 <!DOCTYPE html>
 <!--
 /*
- * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
- *
- *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
- *
- *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
- *   INTER-Mediator is supplied under MIT License.
- */
- -->
+* INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+*
+*   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
+*
+*   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+*   INTER-Mediator is supplied under MIT License.
+*/
+-->
 <html lang="ja">
+
 <head>
-    <meta charset="UTF-8">
-    <title></title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
-    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
-    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
-    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff"><script src="../../lib/en/sitemap.min.js"></script>
-    <script src="../../lib/js/pagebuilder-r2.js"></script>
-    <script src="../../lib/pagebuilder-r2.php"></script>
-    <script src="../../lib/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad()</script>
+<meta charset="UTF-8">
+<title></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+<link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+<link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+<link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<script src="../../lib/js/pagebuilder-r2.js"></script>
+<script src="../../lib/pagebuilder-r2.php"></script>
+<script src="../../lib/highlight.pack.js"></script>
+<script>
+hljs.initHighlightingOnLoad()
+</script>
 </head>
+
 <body class="docs" data-page-title="for-developers">
-    <div class="container clearfix">
-        <div class="page-title">
-            <h1 id="pageTitle"></h1>
-        </div>
-        <ol id="breadcrumb" class="breadcrumb clearfix">
-        </ol>
-        <div class="docs-sidebar sticky clearfix">
-            <nav>
-                <ul id="pageIndex">
-                </ul>
-            </nav>
-        </div>
-        <article>
-            <section>
-                <h1>はじめに</h1>
-                <p class="lead">
-                    データベースにMySQLなど、PHPのPDOに対応したものを利用することを想定します。データベースが稼働しており、INTER-Mediatorがインストールされている状況であるとします。このとき、以下の2つのファイルを作成します。いずれのファイルについても原則はどこにあってもかまいませんが、定義ファイルはデータベースサーバーと同一のコンピュータにあるようにするのが一般的でしょう。
-                </p>
-                <ul>
-                    <li>ブラウザにロードするHTMLファイル（「ページファイル」と名付けます）</li>
-                    <li>データベース接続など設定を記述したPHPファイル（「定義ファイル」と名付けます</li>
-                </ul>
-
-                <h3>定義ファイルの記述</h3>
-
-                <p>
-                    定義ファイルは、PHPのファイルにします。したがって、PHPの処理が可能なサーバーに配置しないといけません。以下のように、INTER-Mediator.phpを読み込み、IM_Entry関数をコールします。この関数の引数の指定方法は、後で記述します。
-                </p>
-
-                <div class="code"><pre><code>&lt;?php
+<div class="container clearfix">
+<div class="page-title">
+<h1 id="pageTitle"></h1>
+</div>
+<ol id="breadcrumb" class="breadcrumb clearfix">
+</ol>
+<div class="docs-sidebar sticky clearfix">
+<nav>
+<ul id="pageIndex"></ul>
+</nav>
+</div>
+<article>
+<section>
+<h1>Overview</h1>
+<p class="lead">It is assumed that you use a database corresponding to PDO of PHP, such as MySQL. Suppose that the database is running and INTER-Mediator is installed. At this time, create the following two files. In principle any of the files can be located anywhere, but it is common to make the definition file on the same computer as the database server.</p>
+<ul>
+ <li>HTML file to load into browser (named "page file")</li>
+<li>PHP file describing settings such as database connection (named "definition file")</li>
+</ul>
+<h3>Description of definition file</h3>
+<p>We will make the definition file a PHP file. Therefore, it must be placed on a server that can process PHP. In the file, INTER-Mediator.php have to include and call IM_Entry function as follows. How to specify the argument of this function is described later.</p>
+<div class="code"><pre><code>&lt;?php
 require_once ('INTER-Mediator/INTER-Mediator.php');
-IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
+IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );                
 ?&gt;</code></pre>
-                </div>
-                <p>
-                    サンプルで言えば、sample_form_FMS_include.phpや、sample_form_MySQL_include.phpのファイルが、定義ファイルに相当します。定義ファイルに記述できる内容は<a href="reference.html">こちら</a>のページにまとめてあります。
-                </p>
-
-                <h3>ページファイルの記述</h3>
-
-                <p>
-                    ページファイルでは、定義ファイルを、ヘッダエリアのscriptタグで読み込みます。定義ファイルは、JavaScriptのソースを返します。そして、典型的な方法として、ページを開いたときにデータベースのデータを取り出すという流れがあるかと思います。その場合、以下のように、bodyタグのonload属性に、NTERMediator.construct(true)というJavaScriptの呼び出しを記述します。基本的にはこれで、INTER-Mediatorが働き始めます。NTERMediator.construct(true)は、たとえばボタンをクリックして呼び出すという方法も取る事ができます。
-                </p>
-
-                <div class="code"><pre><code>&lt;html&gt;
-    &lt;head&gt;
-    &lt;script src="sample_form_MySQL_include.php"&gt;&lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body onload="INTERMediator.construct(true)"&gt;
-    :
-    &lt;td&gt;&lt;input type="text" data-im="contact@datetime"/&gt;&lt;/td&gt;</code></pre>
-                </div>
-                <p>
-                    以上の準備をすれば、ページファイル内のタグのdata-im属性に記述を加えることで、そのタグの値や他の属性に対してデータベースから取り出したデータが設定されることになります。属性の値は「contact@datetime」といった記述を行います。この記述を「ターゲット指定」と呼ぶ事にします。また、ターゲット指定のあるタグのことを「リンクノード」と呼びます。ターゲット指定の詳細は、後で説明をします。
-                </p>
-
-                <p>
-                    サンプルで言えば、sample_form_FMS.htmlや、sample_form_MySQL.htmlのファイルが、ページファイルに相当します。
-                </p>
-
-                <h3>ページの表示</h3>
-
-                <p> 以上のような準備をした上で、ブラウザより、ページファイルにアクセスをします。そうすれば、リンクノードのターゲット指定や、定義ファイルでの指定に基づいて、データベースのデータを取り込んでページを構成します。データベースの内容を表示しますが、複数のレコードがあれば繰り返して一覧表示などを行います。</p>
-            </section>
-            <section>
-                <h1>INTER-MediatorによるWebページ生成</h1>
-
-                <p>
-                    INTER-Mediatorは、WebページのDOM構造をたどり、データベースとリンクするノード（以後「リンクノード」と記述）をさがします。そして、そのリンクノードの上位のノードをたどり、「エンクロージャ」と「リピータ」となるノードを探します。リピータ自身あるいはリピータに含まれるリンクノードをすべて集めてデータベースにアクセスします。そして、レコードの数だけリピータを繰り返して、データベースの内容をページに表示します。
-                </p>
-
-                <h3>リンクノードでのターゲット指定</h3>
-                <ul>
-                    <li>任意の要素をリンクノードにすることができます。</li>
-                    <li>data-im属性に「table@field@target」の記述で記載されいているものをリンクノードとみなします。現在はこの記述方法が推奨されます。</li>
-                    <li>複数の設定を行う場合、値には「table@field@target table@field@target...」のように空白で区切って記述します。</li>
-                </ul>
-
-                <p>
-                    class属性に「IM[table@field@target]」の記述で記載される場合、title属性に「table@field@target」で記載されるものも、過去との互換性のためにリンクノードとみなします。複数の設定があってもかまいません。class属性の場合は、「IM[table@field@target|table@field@target|...]」と記述します。title属性の場合は「table@field@target|table@field@target|...」と記述します。title属性、class属性はいずれもリンクノードの指定にできなくすることができます。INTER-Mediatorのconstructメソッドの最初にあるtitleAsLinLinfo、classAsLinkInfo変数にfalseを入れれば、それぞれの属性に記述されたリンク指定は無視します。</p>
-
-                <h3>ターゲット指定について</h3>
-
-                <p>
-                    「table@field@target」がひとまとまりのターゲット指定となります。
-                </p>
-                <ul>
-                    <li>tableはテーブル名を記述します。IM_Entry関数の第一引数に指定した配列のname属性の値を記述できます。</li>
-                    <li>
-                        fieldはフィールド名を指定します。IM_Entry関数の第一引数に指定した配列の中で、name属性に対応したテーブルアクセスの中にフィールドが含まれていれば、そのフィールドの値を利用して、リンクノードの値を変更あるいは設定します。
-                    </li>
-                    <li>targetはノードのどの属性にフィールド値を差し込むかを指定します。</li>
-                </ul>
-                <p>
-                    targetの指定は以下のようなルールになります。
-                </p>
-                <ul>
-                    <li>省略すると、ノードの値として設定します。</li>
-                    <li>「innerHTML」の場合は、ノードのinnerHTML属性にフィールドの値を設定します。</li>
-                    <li>「nodeText」の場合はテキストノードを作成して子ノードとして追加します。</li>
-                    <li>「style.STYLENAME」の場合は、STYLENAMEで指定したスタイルに値として追加します。たとえば、「style.backgroundColor」は背景色のスタイル属性に値を指定します。</li>
-                    <li>targetの最初の文字が「#」の場合、innerHTMLないしは属性を指定していれば、既存のノードのデータに追加します。</li>
-                    <li>targetの最初の文字が「$」の場合、既存のノードのデータに含まれる$の部分を、データベースのフィールドの値に置き換えます。</li>
-                </ul>
-                <h3>エンクロージャとリピータ</h3>
-
-                <p>
-                    エンクロージャとリピータとなり得るノードの組み合わせを以下の表に示します。
-                </p>
-
-                <div class="table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    形態
-                                </th>
-                                <th>
-                                    Enclosure
-                                </th>
-                                <th>
-                                    Repeater
-                                </th>
-                                <th>
-                                    Linked Element
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    表
-                                </td>
-                                <td>
-                                    TBODY
-                                </td>
-                                <td>
-                                    TR
-                                </td>
-                                <td>
-                                    any elements
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    汎用
-                                </td>
-                                <td>
-                                    DIV data-im-control="enclosure"
-                                </td>
-                                <td>
-                                    DIV data-im-control="repeater"
-                                </td>
-                                <td>
-                                    any elements
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    汎用
-                                </td>
-                                <td>
-                                    DIV class="_im_enclosure"
-                                </td>
-                                <td>
-                                    DIV class="_im_repeater"
-                                </td>
-                                <td>
-                                    any elements
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    汎用
-                                </td>
-                                <td>
-                                    SPAN data-im-control="enclosure"
-                                </td>
-                                <td>
-                                    SPAN data-im-control="repeater"
-                                </td>
-                                <td>
-                                    any elements
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    汎用
-                                </td>
-                                <td>
-                                    SPAN class="_im_enclosure"
-                                </td>
-                                <td>
-                                    SPAN class="_im_repeater"
-                                </td>
-                                <td>
-                                    any elements
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    番号リスト
-                                </td>
-                                <td>
-                                    OL
-                                </td>
-                                <td>
-                                    LI
-                                </td>
-                                <td>
-                                    LI itself or inside of LI elements
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    箇条書き
-                                </td>
-                                <td>
-                                    UL
-                                </td>
-                                <td>
-                                    LI
-                                </td>
-                                <td>
-                                    LI itself or inside of LI elements
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    ポップアップ、リスト
-                                </td>
-                                <td>
-                                    SELECT
-                                </td>
-                                <td>
-                                    OPTION
-                                </td>
-                                <td>
-                                    OPTION itself
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p>テーブルの場合で説明します。たとえば、テーブルのあるセル、つまりTDタグで囲まれた中に、DIVタグ等で記述されたリンクノードがあったとします。そのリンクノードから上位のノードにたどって、TRをリピータとします。TRの1つ上位のノードはTBODYに必ずなります。そのTBODYがエンクロージャとなります。リンクノードに記述された情報からテーブルがわかり、そのテーブルへアクセスします。そして、レコードの値をリンクノードの定義に従って、ノードに反映されます。もし、レコードが複数あれば、リピータを複製して、その複製した一連のノードに対してリンクノードの処理を行います。ページファイルを作るときは、通常、TRタグによる要素が1つのテーブルを作りますが、レコードの数だけ行数が増えるということになります。なお、リピータとなるTRタグの要素は複数個あってもかまいません。レコードの数だけ複数のTRのセットが複製されて、データの反映が行われます。</p>
-
-                <h3>レコードがない場合の表示</h3>
-
-                <p>レコードがあれば、リピーターを複製していくつかのオブジェクトがページに見えますが、そのままだと、レコードがない場合、リピーターが全くない状態になってしまいます。そこで、リピーターの1つのdata-im-control属性を「noresult」にするか、あるいはclass属性を「_im_for_noresult_」とします。すると、このリピータはレコードが存在すれば単に消しさられますが、レコードがないときにはこのリピータが1つだけエンクロージャーの中に配置されます。「レコードがありません」などの記述をこの方法で組み込めます。</p>
-
-                <h3>エンクロージャやリピーターの動作をキャンセルする</h3>
-
-                <p>リンクノードを含むテーブルは、自動的に展開してしまいます。その展開をさせないようにするには、data-im-control属性の値を「ignore_enc_rep」とします。たとえば、1つのテーブルの中に複数のコンテキストからのフィールドを展開したい場合は、次のように記述して、TRをリピータとして認識しないようにします。</p>
-
-                <div class="code">
-                    <pre><code>&lt;table&gt;
-    &lt;tr data-im-control=&quot;ignore_enc_rep&quot;&gt;
-        &lt;td&gt;
-            &lt;span data-im-control=&quot;enclosure&quot;&gt;
-            &lt;span data-im-control=&quot;repeater&quot;&gt;
-                &lt;input data-im=&quot;context1@field1&quot; /&gt;
-            &lt;/span&gt;
-            &lt;/span&gt;
-        &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr data-im-control=&quot;ignore_enc_rep&quot;&gt;
-        &lt;td&gt;
-            &lt;span data-im-control=&quot;enclosure&quot;&gt;
-            &lt;span data-im-control=&quot;repeater&quot;&gt;
-                &lt;input data-im=&quot;context2@field2&quot; /&gt;
-            &lt;/span&gt;
-            &lt;/span&gt;
-        &lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;</code></pre>
-                </div>
-
-            </section>
-            <section>
-
-                <h1>検索や並べ替えの動作と指定</h1>
-
-                <p>INTER-Mediatorは、検索に関して以下の3つの設定個所があります。あるいは、以下のような検索条件が付与されて、データベースの読み出しが行われます。</p>
-
-                <ol>
-                    <li>定義ファイルのコンテキストの中のqueryの設定</li>
-                    <li>INTERMediatorオブジェクトのadditionalConditionプロパティ（JavaScript）</li>
-                    <li>リレーションによって決まる外部キーと対応キーとの対応（定義ファイルのコンテキストの中のrelationの設定）</li>
-                </ol>
-
-                <p>定義ファイルのqueryでの設定は、「常に適用されたい検索条件」を与えるのに便利です。たとえば、あるフィールドの値が「3」のものだけをいつも選択するとか、消し込みのフィールドがあって消し込まれていないレコードだけをとってくるというような場合です。</p>
-                <p>一方、ユーザが入力した検索条件のようなデータは、INTERMediatorオブジェクトのadditionalConditionプロパティを使って指定ができます。テキストフィールドに入力したテキストやあるいは計算結果などを検索条件に与えたい場合は、この方法で指定をします。</p>
-                <p>そして、リレーションは、エンクロージャーとリピーターによる展開中に、さらに内包するエンクロージャーとリピーターが見つかったとき、内側のコンテキストのrelation設定を参照して、外側のレコードに対応した、つまり関連のあるレコードを取り出すための条件を与えます。</p>
-                <p>これら3つの条件は、無条件にANDで合成されます。</p>
-
-                <h3>コンテキストのqueryの指定方法</h3>
-                <p>定義ファイルのコンテキストのqueryは、キーとして、field、operator、valueを持つ配列を指定します。その指定を複数できるので、結果として、queryキーに対する値は配列の配列となります。</p>
-                <p>PDO対応のデータベースアクセスクラスを利用すると、単に「field operator 'value'」という形式での式が構築されます。値についてはquoteメソッドで処理をしてあります。従って、array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' )のような指定が一例です。文字列のワイルドカードを使う場合には、データベースエンジンに従った記述が必要です。たとえば、MySQLで前方一致させるには、array( 'field'=&gt;'name', 'operator'=&gt;'LIKE', 'value'=&gt;'%田太郎' ) のような配列を指定します。operatorを省略すると、= とみなします。</p>
-
-
-                <p>'field' の値が '__operation__' の項目があれば、そこで区切りを入れます。そして区切りで分割したそれぞれについて、AND条件が適用された式が作られ、区切りで分割された固まりについてはOR演算となります。また、'field' の値が '__operation__' の項目の 'operator' が 'ex' なら、ORとANDを入れ替えます。言い換えれば、特に何もしなければ、AND条件で結びつけられますが、ANDやORを組み合わせた条件指定も可能ということです。'field' の値が '__operation__' の項目はいくつあってもかまいません。</p>
-
-
-                <div class="code">
-
-
-                    <pre><code>'query' =&gt; array(
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ))
-
-
-       生成される条件文：age &gt; '19' AND year &gt; '1980'</code></pre>
-
-
-                </div>
-
-
-                <div class="code">
-
-
-                    <pre><code>'query' =&gt; array(
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'__operation__' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&lt;', 'value'=&gt;'39' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&lt;', 'value'=&gt;'2006' ))
-
-
-       生成される条件文：(age &gt; '19' AND year &gt; '1980') OR (age &lt; '39' AND year &lt; '2006')</code></pre>
-
-
-                </div>
-
-
-                <div class="code">
-
-
-                    <pre><code>'query' =&gt; array(
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'__operation__', 'operator'=>'ex' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&lt;', 'value'=&gt;'39' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&lt;', 'value'=&gt;'2006' ))
-
-
-       生成される条件文：(age &gt; '19' OR year &gt; '1980') AND (age &lt; '39' OR year &lt; '2006')</code></pre>
-
-
-                </div>
-
-
-                <div class="code">
-
-
-                    <pre><code>'query' =&gt; array(
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ),
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'__operation__', 'operator'=>'ex' ))
-
-
-       生成される条件文：age &gt; '19' OR year &gt; '1980'</code></pre>
-
-
-                </div>
-
-
-                <p>なお、ANDとORの組み合わせしかできないのかと思われるかもしれませんが、すべての論理式が論理和標準形ないしは論理積標準形で表現できるという定理があるので、この仕様ですべての論理式が記述できると言えるかと思われます。</p>
-
-
-                <p>FileMaker Serverの場合、FileMaker側の仕様の制限として、検索条件は全部ANDか全部ORかで結ぶしかできません。ANDとORを組み合わせることはできないのです。コンテキストのqueryキーの値、あるいはaddtionalConditionに「raray( 'field'=&gt;'__operation__', 'operator'=>'or' )」を加えれば、OR演算を行います。この指定がなければAND演算になります。OR演算を指定した場合、外部キーの検索条件もORになってしまい、リレーションが正確にとれませんので、その点は十分に注意が必要です。
-                </p>
-
-
-                <h3>INTERMediatorオブジェクトのadditionalConditionプロパティに指定する検索条件</h3>
-
-
-                <p>JavaScriptのプログラムで、INTERMediator.construct(true) を実行するよりも前に、例えば以下のようなプログラムを実行します。additionalConditionプロパティは配列で、最初のインデックスはコンテキスト名、つまり定義ファイルでの name キーに対応する値を指定します。右辺の条件は、もちろん、該当するコンテキストにしか適用されません。オブジェクトの値については前のqueryについての説明とおおむね共通です。OR条件とAND条件がどちらも出てくるような条件も記述できます。条件が一組の場合はオブジェクトとして記述できます。2つ以上あるときはオブジェクトの配列として記述します。
-                </p>
-
-
-                <div class="code">
-
-
-                    <pre><code>INTERMediator.additionalCondition[コンテキスト名] = {field:'age', operator:'&gt;', value: 19}
-
-       INTERMediator.additionalCondition[コンテキスト名] = [{field:'age', operator:'&gt;', value: 19}, {field:'year',
-       operator:'&gt;', value: 1999}]</code></pre>
-
-
-                </div>
-
-
-                <h3>コンテキストのrelationキーの値</h3>
-
-
-                <p>
-                    こちらもqueryと同様、配列の配列という形式をとります。キーはqueryと違います。外側のエンクロージャー／リピータとその内側のエンクロージャー／リピーターがあるとします。外側はmaster、内側はdetailというコンテキスト名で定義されているとします。</p>
-
-
-                <div class="code">
-
-
-                    <pre><code>array(
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array( 'name' => 'master', 'key' => 'id' )),
-
-       array(
-
-       &nbsp;&nbsp;&nbsp;&nbsp;array(
-
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'name' => 'detail',
-
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'relation' => array( array( 'foreign-field' => 'master_id',
-       'join-field' => 'id', 'operator' => '=' ))),</code></pre>
-
-
-                </div>
-
-
-                <p>
-                    外側のコンテキストの1レコードを処理すると、その内部にあるエンクロージャー／リピーターが見つかります。そのとき、コンテキスト名がdetailのrelationキーの値を参照します。そして、join-fieldキーについては、外側の1レコードに存在する値を取り出し、foreign-fieldキーの値とoperatorキーの値を使って検索条件を作ります。たとえば、外側のレコードのidフィールドの値が34だった場合、「master_id = '34'」という条件を作成し、AND条件として追加します。relationの配列は配列が複数あってもかまいません。その場合、すべての指定で生成される条件式のANDをとります。</p>
-
-
-                <p>なお、join-fieldの指定は必須です。不要と思われるかもしれませんが、必ずしも主キーとリンクしているとは限らないので指定は必須としました。</p>
-
-
-                <h3>検索結果の並べ替えに関して</h3>
-
-
-                <p>INTER-Mediatorは、検索結果の並べ替え関して以下の2つの設定個所があります。検索のクエリに対して、並べ替えの順序を決める基準となるフィールドを指定できます。</p>
-
-
-                <ol>
-
-
-                    <li>定義ファイルのコンテキストの中のsortの設定</li>
-
-
-                    <li>INTERMediatorオブジェクトのadditionalSortKeyプロパティ（JavaScript）</li>
-
-
-                </ol>
-
-
-                <p>
-                    定義ファイルのsortでの設定は、常に適用されるソートキーです。一方、additionalSortKeyプロパティはプログラムで状況に応じて設定されるソートキーです。検索時にはこれらが合成されて、並べ替えを行います。優先順位は、additionalSortKeyプロパティの方が上位になります。また、それぞれの設定の中で、指定した順序で上位の並べ替えフィールドとなります。いずれも、配列の形式で指定をし、fieldとdirectionというキーを指定します。fieldキーに対する値は1つのフィールド名を指定します。directionに対する値はデータベースエンジンに従います。たとえば、MySQLだと、ASCあるいはDESCを指定しますが、FileMaker Serverはascendあるいはdescendを指定します。additionalSortKeyプロパティについては、addtionalConditionプロパティと同様、最初のインデックスはコンテキスト名を指定し、その後にオブジェクトあるいはオブジェクトの配列を指定します。
-                </p>
-
-            </section>
-            <section>
-
-                <h1>ページ移動ナビゲーションの構築</h1>
-
-                <p>
-                    ページ移動のナビゲーションは、ページの中に、idが「IM_NAVIGATOR」のノードがあれば、そのノードの内容を置き換えてナビゲーションを作成します。「IM_NAVIGATOR」のidのノードがない場合には、ナビゲーションは表示されません。通常は、divタグの要素を「&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;」のように作っておくのがいいでしょう。
-                </p>
-
-                <p>
-                    INTER-Mediator.constructメソッドは、ノードを見つけて自動的にページナビゲーションにしますが、それらの要素に以下のようなクラス設定をしています。つまり、ページで、これらのクラスに対してスタイルシートで定義を行えば、見栄えについては自由に設定ができます。</p>
-
-                <div class="table">
-                    <table>
-                        <tr>
-                            <th>要素名.クラス名</th>
-                            <th>設定先</th>
-                        </tr>
-                        <tr>
-                            <td>.IM_NAV_panel</td>
-                            <td>ナビゲーションそのもの。つまり、idが「IM_NAVIGATOR」のノードに設定される</td>
-                        </tr>
-                        <tr>
-                            <td>span.IM_NAV_info</td>
-                            <td>文字情報を表示する部分に設定される</td>
-                        </tr>
-                        <tr>
-                            <td>span.IM_NAV_button</td>
-                            <td>クリックできるボタンに対して設定される</td>
-                        </tr>
-                        <tr>
-                            <td>span.IM_NAV_disabled</td>
-                            <td>クリックできないボタンに対して設定される</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <p>
-                    ナビゲーション領域の文言等は、INTERMediator.navigationLabelに配列を設定することで、任意に設定できます。配列のインデックスと対応する箇所は以下の表に示します。INTERMediator.navigationLabelに何も設定しない場合には、表の既定値が画面に見えます。</p>
-
-                <div class="table">
-                    <table>
-                        <tr>
-                            <th>インデックス</th>
-                            <th>設定対象</th>
-                            <th>既定値</th>
-                            <th>非表示</th>
-                        </tr>
-                        <tr>
-                            <td>0</td>
-                            <td>最初のレコードに戻る</td>
-                            <td>&lt;&lt;</td>
-                            <td>インデックス0〜3</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>前のページに戻る</td>
-                            <td>&lt;</td>
-                            <td>無関係</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>次のページに進む</td>
-                            <td>&gt;</td>
-                            <td>無関係</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>最後のレコードに進む</td>
-                            <td>&gt;&gt;</td>
-                            <td>無関係</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>レコード番号の直前</td>
-                            <td>レコード番号</td>
-                            <td>インデックス4〜7</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>レコード番号の範囲の間の文字列</td>
-                            <td>-</td>
-                            <td>無関係</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>レコード番号範囲と全レコード数の間の文字列</td>
-                            <td>/</td>
-                            <td>無関係</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>全レコード数の後の文字列</td>
-                            <td>（空文字列）</td>
-                            <td>無関係</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>更新ボタンの名称</td>
-                            <td>更新</td>
-                            <td>インデックス8</td>
-                        </tr>
-                    </table>
-                </div>
-                <p>
-                    INTERMediator.navigationLabelに指定する配列は9つの要素を指定します。それぞれ、インデックスに要素が対応します。要素がnullだと既定値のままになります。文字列を指定すると、その文字列に置き換わります。インデックスが0、4,、8の要素に関しては、「非表示」の列に示したインデックスのものが非表示になります。たとえば、以下の記述だと、Refreshボタンのみが消えて他は既定とおりのものが表示されます。</p>
-
-                <p>INTERMediator.navigationLabel = [null, null, null, null, null, null, null, null, false];</p>
-
-            </section>
-            <section>
-
-                <h1>HTMLのUIコンポーネントの扱い</h1>
-
-                <h3>テキストフィールド</h3>
-
-                <p>
-                    INPUTタグ要素のtype属性がtextの場合、ターゲット指定の3つ目の指定は省略できます。その場合、value属性に値が設定されます。また、onchange属性にINTERMediator.changeValue(*)の呼び出しプログラムが登録されるので、テキストを編集し、フォーカスを別のフィールドに移動したときなどに、テキストフィールドの内容がデータベースに書き戻されます。</p>
-
-                <h3>テキストエリア</h3>
-
-                <p>ターゲット指定の3つ目の指定は省略できます。すると、TEXTAREAタグ要素のテキストとして設定されます。</p>
-
-                <h3>ポップアップメニュー／リスト</h3>
-
-                <p>
-                    SELECTタグの要素自体が値を持つコンポーネントです。SELECTタグ要素のターゲット指定の3つ目の項目を省略すると、SELECT要素の選択値として指定されます。また、OPTIONタグは決められたものでもかまいませんが、データベースからも値を設定できます。このとき、自動的に、SELECT/OPTIONタグがエンクロージャー／リピータとなります。OPTIONタグはSELECTタグ要素の選択値に対応するvalue属性と、実際にメニュー項目として見えるOPTIONタグ要素のテキストの2つの設定が必要になるでしょう。従って、「&lt;option data-im="contact_way@id@value contact_way@name"&gt;&lt;/option&gt;」のようなターゲット指定が2つあるようなタグ要素をSELECTの中に1つだけ作っておき、ターゲット指定の1つ目の名前のコンテキスト定義を定義ファイルに記述しておきます。</p>
-
-                <h3>チェックボックス</h3>
-
-                <p>
-                    データベースから読み出された特定のフィールドのデータがチェックボックスのINPUTタグ要素とリンクされている場合、そのタグのvalue属性を調べます。そして、データとvalue属性が一致していればチェックを入れます。データの有無ではなく、valueとの一致を調べます。また、書き戻す場合は、チェックが入ったときはvalue属性の値、チェックがなくなった場合には空文字列を書き戻します。通常、数値フィールドで、1ならチェックあり、それ以外ならチェックなしといったデータの持たせ方をするのが順当でしょう。</p>
-
-                <h3>ラジオボタン</h3>
-
-                <p>
-                    ラジオボタンに展開したい場合、同一のターゲット指定のINPUTタグでtype属性が「radio」のものを並べます。すると、name属性を自動的に設定し、複数レコードが繰り返されたときでも、問題なく処理できるようになります。それぞれのINPUTタグ要素のvalue属性はおのおのが自分の値を持ちます。データベースのフィールドの値とvalue属性の値を比べて同一のものが選択されます。</p>
-
-                <h3>隠しフィールド</h3>
-
-                <p>
-                    INPUTタグ要素のtype属性が「hidden」のものがよく利用されますが、むしろ、divやspanを使っていちばん外側の要素のdisplayスタイルをnoneにしておくという手段が使えます。たとえば、マスターの値を見えないタグ要素としてページ上に展開し、JavaScriptでそれらを得るという手も使えます。</p>
-
-            </section>
-            <section>
-
-                <h1>入力フォーム型ページの作成</h1>
-
-                <p>アンケートの回答のような、入力フォームがあってその内容に従った新規レコードを作るだけのようなページの作り方をここで説明します。そのようなページを作るのに必要なことは以下の通りです。</p>
-                <ul>
-                    <li>HTMLでフォームを作るが、FORMタグは不要。必要なテキストフィールドと、登録ボタンを作成する。ただし、テキストフィールドなどは、1つのエンクロージャにまとめておく。</li>
-                    <li>定義ファイルに、レコードの作成が可能なコンテキストを定義する。</li>
-                    <li>入力フォームにしたいエンクロージャのdata-im-control属性を「post」とする。</li>
-                    <li>HTMLのフォームの入力要素をリンクノードにします。つまり、コンテキストの名前（context）と対応するテーブルのフィールド名（field）に対して、data-im="context@field" をタグの中に記述する。
-                    </li>
-                    <li>「登録」ボタンはBUTTONタグで作成し、data-im-control属性に「post」を指定する。ボタン名は任意。</li>
-                </ul>
-                <p>登録ボタンを押した後の動作については、コンテキストに定義できる「post-」で始まる3つの項目が用意されています。ボタンを何度も押す事を避けるために、ボタンをメッセージで置き換えたり、別のページに移動したり、ページの再描画ができます。</p>
-
-                <p>コンテキストに指定したバリデーションの設定についても設定されますが、編集時と異なり、登録ボタンを押したときに、入力項目に対してまとめて判定が行われて、ページ内にエラーを表示したり、ダイアログボックスを表示したりができます。</p>
-
-                <p>この機能を使う場合、data-im-control属性に「post」を指定したエンクロージャーの外部にあるエンクロージャーに対しては、普通にページ合成ができるので、データベースアクセスの結果と、入力フォームを混在させることもできます。また、入力フォームの内部のエンクロージャーも同様に通常通り処理されるので、マスターの内容からポップアップを構築する事ができます。</p>
-
-                <p>登録ボタンをクリックした後に独自のプログラムを追加したい場合は、以下のような記述の関数を定義します。メッセージ表示、ページ再合成、ページ移動が定義されていた場合、それらよりも前に、以下に定義した関数を実行します。processingBeforePostOnlyContextは、データベースへの書き込み前に実施され、返り値がfalseだとデータベース処理を行わず、ページ移動なども行いません。processingAfterPostOnlyContextはデータベース処理後に実行され、返り値は指定しません。</p>
-
-                <div class="code"><pre><code>INTERMediatorOnPage.processingBeforePostOnlyContext = function(node){
-    // any program here.
-};
-INTERMediatorOnPage.processingAfterPostOnlyContext = function(node){
-    // any program here.
-};</code></pre>
-                </div>
-
-            </section>
-            <section>
-
-                <h1>ブラウザのバージョンを調べる仕組み</h1>
-                <p>ブラウザのバージョンを調べて、一定のもの以外は表示できないようにしたいと思うこともあります。この機能を、必要に応じて利用できるようにしました。</p>
-                <p>まず、INTER-Mediator.phpと同じディレクトリにある$paramsファイルに、変数名$browserCompatibilityという変数を定義し、配列記述します。配列の記述方法は表に示します。作成例も紹介します。。</p>
-
-                <div class="table">
-                    <table>
-                        <tr>
-                            <th>次元</th>
-                            <th>指定内容</th>
-                            <th>指定する値の例</th>
-                        </tr>
-                        <tr>
-                            <td>第1次元</td>
-                            <td>ブラウザの種類</td>
-                            <td>msie, firefox, safari, chrome, opera</td>
-                        </tr>
-                        <tr>
-                            <td>第2次元</td>
-                            <td>配列（OSを示すキー）</td>
-                            <td>mac, win</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>バージョン記述文字列</td>
-                            <td>3+, 4-</td>
-                        </tr>
-                        <tr>
-                            <td>第3次元</td>
-                            <td>バージョン記述文字列（第2次元が配列のとき）</td>
-                            <td>3+, 4-</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="code"><pre><code>$browserCompatibility = array(
-    'msie' => '7+',
-    'firefox' => '2+',
-    'safari' => array( 'win' => '4+', 'mac' => '3+' ),
-    'chrome' => '1+',
-    'opera' => '1+',
-);</code></pre>
-                </div>
-
-                <p>「バージョン記述文字列」は、数字とプラスないしはマイナスで指定します。「3+」は3以上、「3-」は3以下のバージョンで利用できることを示します。プラスあるいはマイナスを付けないと、その数値のバージョンのみです。ブラウザ名やOSは、大文字小文字は関係ありません。</p>
-                <p>前の例だと、Safariのみ、OSごとに分岐しています。WindowsならVer.4以上、MacならVer.3以上は利用可能であることを示しています。</p>
-
-                <h3>ブラウザの互換性をメッセージとして表示する</h3>
-                <p>JavaScriptベースで動くINTER-Mediatorにとって、これがいちばん難しい仕事かもしれません。ブラウザによっては、JavaScriptが動かないこともあるかもしれないのです。こうした状況をうまく処理するために、以下のような点を考慮します。</p>
-                <ol>
-                    <li>ページファイルの中の、bodyタグ要素の直下あたりに、INTER-Mediatorが一切しない場合のメッセージを付けておく。たとえば、サンプルファイルの「WebSite」のindex.htmlにあるid=nonsupportedmessageのdivタグ要素。INTER-Mediatorの動作が成功すれば、このノードを削除するか表示しないようにする。これにより、JavaScriptが一切動かない状態でも、何らかのメッセージが見えるようになる。</li>
-                    <li>ページファイルの構築を以下のようなプログラムにする。INTERMediatorCheckBrowser関数で前に説明した$paramsファイルの変数の定義に従って、ブラウザの互換性をチェックする。もし、対応でないならfalseを返すので、ページ構築はしない。また、その場合は、body要素の中身をいちど全部クリアして、メッセージだけを表示する。もし、対応しているならnodeで示したノードを削除する。nodeはnullあるいは未指定でも構わない。</li>
-                </ol>
-                <p>上記の2つのうち、一方だけでもかまいませんし、両方をやってもかまいません。また、チェックは不要ということなら、単にINTERMediator.construct(true);を呼び出すだけでもいいでしょう。</p>
-
-                <div class="code"><pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
+</div>
+<p>In the sample, the sample_form_FMS_include.php and sample_form_MySQL_include.php files correspond to the definition file. The contents that can be described in the definition file are <a href="reference.html">here</a>.
+</p>
+<h3>Description of page file</h3>
+<p>In the page file, the definition file has to be red by the script tag in the header area. The definition file returns the JavaScript source, and there is a flow to retrieve database data when the page is opened.</p>
+<div class="code"><pre><code>&lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=UTF-8&quot;/&gt;
-    &lt;title&gt;Page Title&lt;/title&gt;
-    &lt;script type=&quot;text/javascript&quot; src=&quot;context.php&quot;&gt;&lt;/script&gt;
-    &lt;script type=&quot;text/javascript&quot;&gt;
-        window.onload = function () {
-            var nonSupportNode = document.getElementById('nonsupportmessage');
-            if (INTERMediatorOnPage.INTERMediatorCheckBrowser(nonSupportNode)) {
-                INTERMediator.construct(true);
-            }
-        }
-        INTERMediatorOnPage.doAfterConstruct = function () {
-            var contentNode = document.getElementById('container');
-            contentNode.style.display = &quot;block&quot;
-        }
-    &lt;/script&gt;
+&lt;script src="sample_form_MySQL_include.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;div id=&quot;nonsupportmessage&quot; style=&quot;background-color:#333333&quot;&gt;
-        &lt;div style=&quot;text-align:center;color:yellow&quot;&gt;If you see this, you must use any unsupported web browser. Or constructing the page.
-        &lt;/div&gt;
-        &lt;div style=&quot;text-align:center;color:yellow&quot;&gt;この表示が見えている場合、描画処理中です。しばらくお待ちください。長時間見えている場合は、非対応ブラウザで参照しています。&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div id=&quot;container&quot; style=&quot;display: none&quot;&gt;
-        // ページコンテンツ
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-                </div>
-
-            </section>
-            <section>
-
-                <h1>データコンバータクラスの利用方法</h1>
-
-                <p>
-                    IM_Entry関数の第2引数で、'formatter'を利用して、特定のコンテキストのフィールドに対して、データベースの読み書き前後にフィルタを設定することができます。このときに使うクラスをデータコンバータクラスと呼びます。自分で作成もできますが、以下のものが最初から組み込まれています。自分で作成する場合はDataConverter_template.phpを参照してください</p>
-
-                <div class="table">
-                    <table>
-                        <tr>
-                            <td>DataConverter_AppendPrefix.php</td>
-                            <td>parameterに指定した文字列を前につける</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_AppendSuffix.php</td>
-                            <td>parameterに指定した文字列を後につける</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_Currency.php</td>
-                            <td>parameterに指定した小数以下の桁数で、数値を通貨で表示する</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_FMDateTime.php</td>
-                            <td>FileMaker Serverの出力する「月/日/年」形式の日付や時刻を整える</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_HTMLString.php</td>
-                            <td>改行をBRタグ要素、そして&lt;や&gt;や&amp;を参照形式に変換する。parameterにautolinkと指定するとURLにAタグ要素を付加してリンクに変換する。バージョン4.2以降においてparameterにnoescapeと指定すると参照形式への変換を無効にする。データベースへの書き込み時はそのままの文字列</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_MySQLDateTime.php</td>
-                            <td>MySQLの出力する「年-月-日」形式の日付や時刻を整える</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_Number.php</td>
-                            <td>parameterに指定した小数以下の桁数で、数値をカンマ付きで表示する</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_NumberBase.php</td>
-                            <td>NumberやCurrencyの基底クラス</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_NullZeroString.php</td>
-                            <td>書き込み時にデータが''ならNULLとする、読み込み時は逆変換</td>
-                        </tr>
-                        <tr>
-                            <td>DataConverter_template.php</td>
-                            <td>データコンバータのクラスのテンプレート</td>
-                        </tr>
-                    </table>
-                </div>
-
-            </section>
-            <section>
-
-                <h1>データベースクラスを自作する</h1>
-
-                <p>
-                    データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-MediatorのDB_PDO.php、FileMaer Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。
-                </p>
-
-
-                <div class="code">
-
-
-                    <pre><code>require_once( "INTER-Mediator/DB_PDO.php" );
-
-
-       class DB_MyOriginalDB extends DB_PDO.php {
-
-
-       function getFromDB($dataSourceName) {
-
-       /*
-       ここにプログラムを追加できる
-       */
-
-       $result = super::getFromDB($dataSourceName);
-
-       /*
-       ここにプログラムを追加できる
-       */
-
-       $this->mainTableCount = count( $result ); //レコード数
-
-       return $result;
-       }
-
-       function setToDB($dataSourceName) {
-
-       /*
-       ここにプログラムを追加できる
-       */
-
-       super::setToDB($dataSourceName);
-
-       /*
-       ここにプログラムを追加できる
-       */
-
-       }
-
-       function newToDB($dataSourceName) {
-
-       /*
-       ここにプログラムを追加できる
-       */
-
-       $lastKeyValue = super::newToDB($dataSourceName);
-
-       /*
-       ここにプログラムを追加できる
-       */
-
-       return $lastKeyValue;
-
-       }
-
-       function deleteFromDB($dataSourceName) {
-
-       /*
-       ここにプログラムを追加できる
-       */
-
-       $result = super::deleteFromDB($dataSourceName)
-       ;
-       /*
-       ここにプログラムを追加できる
-       */
-
-       }
-
-       }</code></pre>
-
-
-                </div>
-
-
-                <p>
-                    自分で作るクラスでは、要はCRUDに対応した4つのメソッドをオーバーライドすることによって、独自の仕組みを組み込むことができます。また、4つのうち、特にプログラムの追加がない場合には、定義する必要はありません。いずれの関数も、コンテキスト名を引数に取ります。そして、現在処理しているコンテキスト名が設定されてこれらのメソッドを呼び出します。</p>
-
-
-                <p>
-                    getFromDBメソッドは、データベースからデータを取り出します。取り出し結果は連想配列の配列です。連想配列のキーがフィールド名になっています。そこから、特定のフィールドの値を元に集計をしたり、あるいは必要な値だけに取り除くなどの処理を、親クラスのgetFromDBメソッドを呼び出す後に入れればいいでしょう。リクエスト時と同じフィールド名を返す必要はなく（つまりINTER-Mediatorはそのチェックをしていない）、自由に連想配列の配列を作ります。そして、ページファイルの方で適切なフィールド名を指定すれば、集計結果が表示されます。なお、ページファイルで、一定レコード数ごとのページングをしているときには、mainTableCountメンバ変数にレコード数、つまり返す配列の要素数も指定します。何か問題が発生したのなら、array() を返します。以下のプログラムは売り上げのテーブルから集計を行う例です。
-                </p>
-
-
-                <div class="code">
-
-
-                    <pre><code>$result = super::getFromDB($dataSourceName);
-
-       if ( $dataSourceName == 'ItemsInvoice' ) {
-
-       $summary = array();
-
-       foreach( $returnValue as $record ) {
-
-       $summary[ $record[ 'itemNo' ]] += $record[ 'qty' ] * $record[ 'unitPrice' ];
-
-       }
-
-       return array( $summary );
-
-       }</code></pre>
-
-
-                </div>
-
-
-                <p>
-                    getFromDBメソッドを呼び出す前は、検索条件の追加なども可能です。たとえば、IM_Entry関数の第一引数に指定している配列が、$this->dataSourceで得られます。また、現在のコンテキストが$this->dataSourceで得られる配列の何番目かが$this->getIndexOfDataSource($dataSourceName)で得られます。例えば特定の名前のフィールドがあれば、それをFileMaker Serverのグローバルフィールドに設定して、検索条件から取り除くといったことも行えます。
-                </p>
-
-
-                <div class="code">
-
-
-                    <pre><code>$this->dataSource[ $this->getIndexOfDataSource($dataSourceName) ][ 'global' ] = array( ...
-        );</code></pre>
-
-
-                </div>
-
-
-                <p>setToDBとdeleteFromDBメソッドは、いずれも値の更新や削除のときに呼び出されるメソッドです。返り値は論理値で、処理が成功すればtrueで失敗ならfalseです。</p>
-
-
-                <p>newToDBは新規レコードの作成です。メソッドの返り値は、新たに作ったレコードのキーフィールドの値である必要があります。問題があれば返り値をfalseにします。</p>
-
-
-                <h3>データベースクラス内で便利なメソッド</h3>
-
-
-                <p>現状、未整理です。DB_Base.phpに多くは定義されています。以下は抜粋です。</p>
-
-
-                <div class="table">
-
-
-                    <table>
-
-
-                        <tr>
-                            <th>メンバ変数／メソッド</th>
-                            <th>役割</th>
-                        </tr>
-
-
-                        <tr>
-                            <td>$this->dataSource</td>
-                            <td>IM_Entry関数の第1引数の配列</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>$this->currentUser</td>
-                            <td>ログインしたユーザ名</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>$this->setDebugMessage($str)</td>
-                            <td>デバッグメッセージに追加する</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>$this->setErrorMessage($str)</td>
-                            <td>エラーメッセージに追加する</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>$this->setExtraCriteria($field, $operator, $value)</td>
-                            <td>検索条件の追加</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>$this->setExtraSortKey($field, $direction)</td>
-                            <td>ソート条件の追加</td>
-                        </tr>
-
-
-                    </table>
-
-
-                </div>
-
-            </section>
-            <section>
-
-                <h1>データベースアクセス処理の拡張クラスを定義する</h1>
-
-                <p>
-                    データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「拡張処理クラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「拡張処理クラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。</p>
-
-                <p>
-                    IM_Entry関数の第一引数、つまりコンテキストの中に「extending-class」でクラス名を指定します。ここで指定したクラス名は任意のものでかまいませんが、そのクラスをPHPが認識できる場所に記述しておく必要があります。クラスは以下のようなインタフェースをインプリメントする必要があります。つまり、CRUDに対応する4種類のデータアクセス処理の前後にメソッドを含めることができるのです。</p>
-
-                <div class="code">
-                    <pre><code>interface Extending_Interface_BeforeGet {
-    function doBeforeGetFromDB($dataSourceName);
-    }
-    interface Extending_Interface_AfterGet {
-    function doAfterGetFromDB($dataSourceName, $result);
-    // function countQueryResult($dataSourceName);
-    }
-    interface Extending_Interface_BeforeSet {
-    function doBeforeSetToDB($dataSourceName);
-    }
-    interface Extending_Interface_AfterSet {
-    function doAfterSetToDB($dataSourceName, $result);
-    }
-    interface Extending_Interface_BeforeNew {
-    function doBeforeNewToDB($dataSourceName);
-    }
-    interface Extending_Interface_AfterNew {
-    function doAfterNewToDB($dataSourceName, $result);
-    }
-    interface Extending_Interface_BeforeDelete {
-    function doBeforeDeleteFromDB($dataSourceName);
-    }
-    interface Extending_Interface_AfterDelete {
-    function doAfterDeleteFromDB($dataSourceName, $result);
-    }</code></pre>
-                </div>
-
-                <p>
-                    以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。引数$resultにはデータベースからの取得した結果が、連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。たとえば集計処理などを行い、同様に連想配列の配列にして結果を返します。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。PHPではoptionのメソッドの定義をインタフェースできないので、定義上はコメントでこのメソッドを記載しています。</p>
-
-                <div class="code">
-                    <pre><code>class MyProgram implements Extending_Interface_AfterGet
-    {
-    function doAfterGetFromDB($dataSourceName, $result) {
-    foreach( $result as $record ) {
-    foreach( $record as $field =&gt; $value ) {
-    :
-    }
-    }
-    $return result;
-    }
-    }</code></pre>
-                </div>
-
-                <p>
-                    countQueryResultメソッドを記述する場合の例を以下に示します。countQueryResultはdoAfterGetFromDBよりも後に呼び出されます。countQueryResultによって返されるのは、実際のレコード数ではなく、検索条件に合ったレコード数です。つまり、1万個のレコードのうち40個を表示している場合には、1万という数値を返す必要があります。doAfterGetFromDBで集計処理などをすると、1万レコードを取得して、それが20個などになると思います。その場合は20個を返さないといけません。この場合、自分でメンバ変数（dataCount）を定義して、そこに値を残しておくのが分かりやすい方法でしょう。</p>
-
-                <div class="code">
-                    <pre><code>class MyProgram implements Extending_Interface_AfterGet
-    {
-    var $dataCount;
-    function doAfterGetFromDB($dataSourceName, $result) {
-    :
-    $thisthis-&gt;dataCount = count( $result );
-    $return result;
-    }
-    function countQueryResult($dataSourceName) {
-    $return $thisthis-&gt;dataCount;
-    }
-    }</code></pre>
-                </div>
-
-                <p>
-                    それぞれのメソッドの$dataSourceNameはコンテキスト名の文字列が入っています。2つのコンテキストでクラスを共有するような場合には分岐のための手がかりになります。doAfterNewToDBの2つ目の引数$resultは、新たに作成したレコードのキーフィールドの値が設定されています。この値はdoAfterNewToDBメソッドでの返り値にしなければなりません。doAfterDeleteFromDBとdoAfterSetToDBメソッドの2つ目の引数はデータベース処理が失敗したかどうかをbooleanで示され、trueなら処理が成功です。これらのメソッドでもやはり引数で得られた値を返さないといけません。</p>
-
-                <p>開発者が作成するクラスで「DB_UseSharedObjects」クラスの子クラスにした場合は、他のオブジェクトへの参照が得られます。メソッドが呼び出された段階で、メンバ変数はオブジェクトを参照した状態になります。</p>
-
-
-                <div class="table">
-                    <div class="caption">DB_UseSharedObjectsを継承したときに利用できるメンバ変数</div>
-                    <table>
-                        <tr>
-                            <th>メンバ変数</th>
-                            <th>参照するもの</th>
-                        </tr>
-                        <tr>
-                            <td>$this-&gt;dbSettings</td>
-                            <td>DB_Settingsクラスのインスタンス</td>
-                        </tr>
-                        <tr>
-                            <td>$this-&gt;logger</td>
-                            <td>DB_Loggerクラスのインスタンス</td>
-                        </tr>
-                        <tr>
-                            <td>$this-&gt;authCommon</td>
-                            <td>DB_AuthCommonクラスのインスタンス</td>
-                        </tr>
-                        <tr>
-                            <td>$this-&gt;formatter</td>
-                            <td>DB_Formattersクラスのインスタンス</td>
-                        </tr>
-                    </table>
-                </div>
-
-            </section>
-            <section>
-
-                <h1>ユーザ認証とアクセス権の動作について</h1>
-
-                <p>ユーザ認証とアクセス権の設定をサポートします。</p>
-
-
-                <p>
-                    ユーザ認証ではセキュリティを高めるために、サーバーからクライアントに「チャレンジ」を送り、その値を利用して認証情報を作ります。そのため、サーバー側にチャレンジを残しておく必要があり、テーブルの定義が必要です。そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで読み書きの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（issuedhash）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
-
-
-                <div class="table">
-
-
-                    <div class="caption">チャレンジのテーブルに必要なフィールド</div>
-
-
-                    <table>
-
-
-                        <tr>
-                            <th>フィールド名</th>
-                            <th>型の例</th>
-                            <th>説明</th>
-                        </tr>
-
-
-                        <tr>
-                            <td>user_id</td>
-                            <td>INT,</td>
-                            <td>ユーザテーブルのキーフィールドとなるid値（ユーザをデータベース内のテーブルで管理する場合に利用）</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>username</td>
-                            <td>VARCHAR(48),</td>
-                            <td>ユーザテーブルのキーフィールドとなるid値（ユーザをデータベースエンジンが提供するもので運用する場合に利用）</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>clienthost</td>
-                            <td>VARCHAR(48),</td>
-                            <td>クライアントを識別するもの。Ver.1.0.5の実装では、クライアントのIPアドレスのみを記録している</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>hash</td>
-                            <td>VARCHAR(48),</td>
-                            <td>チャレンジに使うハッシュ値。実際には24バイトの16進数文字列。</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>expired</td>
-                            <td>DateTime,</td>
-                            <td>チャレンジの有効期限を示すタイムスタンプ値</td>
-                        </tr>
-
-
-                    </table>
-
-
-                </div>
-
-
-                <p>
-                    なお、このテーブルへの検索では、user_idとclienthostあるいはusernameとclienthostの2つのフィールドに対してAND演算での検索条件が与えられます。従って、高速化するためには、この2つのフィールドを合成したインデックスを作っておくなどの措置をとる事ができます。</p>
-
-
-                <p>
-                    認証のためのユーザは、データベース内にテーブルを作成する方法と、データベースエンジンが管理するユーザによる方法を利用できます。データベース内にテーブルを作る場合、そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで少なくとも読み出しの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（authuser）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
-
-
-                <div class="table">
-
-
-                    <div class="caption">ユーザテーブルに必要なフィールド</div>
-
-
-                    <table>
-
-
-                        <tr>
-                            <th>フィールド名</th>
-                            <th>型の例</th>
-                            <th>説明</th>
-                        </tr>
-
-
-                        <tr>
-                            <td>id</td>
-                            <td>INT AUTO_INCREMENT,</td>
-                            <td>連番の数値を入れて、キーフィールドとする</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>username</td>
-                            <td>VARCHAR(48),</td>
-                            <td>ユーザ名（特に制限はないが、重複した名前が定義されないようにするのが望ましい）</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>hashedpasswd</td>
-                            <td>VARCHAR(48),</td>
-                            <td>パスワードのハッシュ値</td>
-                        </tr>
-
-
-                    </table>
-
-
-                </div>
-
-
-                <p>
-                    ユーザの場合は、ユーザ名をキーフィールドに使えるとも考えられますが、大量のユーザになったときなどに処理速度を有利にするために、内部的には連番で与えた数値で処理をすることにします。なお、usernameを条件として検索をかけるので、高速化のためにはこのフィールドにインデックスを作成しておきます。パスワードはハッシュを保存しますが、ハッシュ値は、次の手順で計算をします。</p>
-
-
-                <ol>
-
-
-                    <li>パスワード（pw）と、4バイトのソルト（s）を用意します。</li>
-
-
-                    <li>パスワードとソルトをつなげた文字列のSHA-1を求めます（ sha1(pw+s) → H1）</li>
-
-
-                    <li>H1の16進数表現した文字列と、ソルトを16進数表現した文字列をつなげます（hex(H1)+hex(s)→H2）</li>
-
-
-                    <li>H2をフィールドに保存します。</li>
-
-
-                </ol>
-
-
-                <p>たとえば、Mac OS Xだと、pw=user1、s=TESTとすると、以下のコマンドで「d83eefa0a9bd7190c94e7911688503737a99db0154455354」というハッシュ値の16進数表現を求めることができます。
-                </p>
-
-
-                <div class="code">
-                    <pre>
-<code>
-pw=user1
-salt=TEST
-h1=`/bin/echo -n "${pw}${salt}" | openssl sha1 -sha1`
-h2=`/bin/echo -n "${salt}" | xxd -ps`
-echo ${h1}${h2}
-</code>
+:                
+&lt;td&gt;&lt;input type="text" data-im="contact@datetime"/&gt;&lt;/td&gt;</code></pre>
+</div>
+<p>If you prepare the above, adding a description to the data-im attribute of the tag in the page file will set the data retrieved from the database for that tag's value and other attributes I will. Attribute value is described as "contact @ datetime". I will call this description "target designation". Also, a tag with a target designation is called a "link node". Details of target specification will be explained later.</p>
+<p>In the sample, the sample_form_FMS.html and sample_form_MySQL.html files are equivalent to page files.</p>
+<h3>Display page</h3>
+<p>After preparing as above, we will access the page file from the browser. Then, based on the specification of the target of the link node and the specification in the definition file, the page is constructed by taking the data of the database. The contents of the database are displayed, but if there are multiple records, it will repeat list display etc.</p>
+</section>
+<section>
+<h1>Web page generation by INTER-Mediator</h1>
+<p>INTER-Mediator follows the DOM structure of the Web page and looks for a node (hereinafter referred to as "link node") to link with the database. Then, it follows the node above the link node and looks for a node that is "enclosure" and "repeater". Access the database by collecting all link nodes included in the repeater itself or repeaters. Then repeat the repeater for the number of records and display the contents of the database on the page.</p>
+<h3>Target specification at link node</h3>
+<ul>
+<li>Any element can be a link node.</li>
+<li>We regard the data-im attribute described in the description of "table @ field @ target" as a link node. Currently this method of description is recommended.</li>
+<li>When setting multiple settings, describe the value as a space separated by a space such as "table@field@target table@field@target ...".</li>
+</ul>
+<h3>About target designation</h3>
+<p>"table @ field @ target" becomes a target group specification.</p>
+<ul>
+<li>table describes the table name. The value of the name attribute of the array specified in the first argument of the IM_Entry function can be described.</li>
+<li>field specifies the field name. If a field is included in the table access corresponding to the name attribute in the array specified as the first argument of the IM_Entry function, the value of the field is used to change or set the value of the link node I will.</li>
+<li>target specifies which attribute of the node to insert the field value into.</li>
+</ul>
+<p>The target specification is as follows.</p>
+<ul>
+<li>If omitted, set it as the value of the node.</li>
+<li>For "innerHTML", set the value of the field to the innerHTML attribute of the node.</li>
+<li>For "nodeText", create a text node and add it as a child node.</li>
+<li>For "style.STYLENAME", add as a value to the style specified by STYLENAME. For example, "style.backgroundColor" specifies a value for the style attribute of the background color.</li>
+<li>If the first character of target is "#", if innerHTML or attribute is specified, it will be added to the existing node's data.</li>
+<li>If the first letter of target is "$", replace the $ part in the data of the existing node with the value of the database field.</li>
+</ul>
+<h3>Enclosure and Repeater</h3>
+<p>The following table shows combinations of possible enclosure and repeater nodes.</p>
+<div class = "table">
+<table>
+<thead>
+<tr>
+<th>form</th>
+<th>Enclosure</th>
+<th>Repeater</th>
+<th>Linked Element</th>
+</tr>
+</ thead>
+<tbody>
+<tr>
+<td>Table</td>
+<td>TBODY</td>
+<td>TR</td>
+<td>any elements</td>
+</tr>
+<tr>
+<td>Number List</td>
+<td>OL</td>
+<td>LI</td>
+<td>LI itself or inside of LI elements</td>
+</tr>
+<tr>
+<td>Bullets</td>
+<td>UL</td>
+<td>LI</td>
+<td>LI itself or inside of LI elements</td>
+</tr>
+<tr>
+<td>Popup, list</td>
+<td>SELECT</td>
+<td>OPTION</td>
+<td>OPTION itself</td>
+</tr>
+<tr>
+<td>Generic</td>
+<td>tag with data-im-control = "enclosure" specification</td>
+<td>tag with data-im-control = "repeater" specified</td>
+<td>any elements</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>I will explain it in the case of a table. For example, suppose that there is a link node described by a DIV tag etc. in a cell with a table, surrounded by a TD tag. From the link node to the upper node, let TR be a repeater. The node one level higher than TR is necessarily in TBODY. That TBODY is the enclosure. The table is known from the information described in the link node, and the table is accessed. The value of the record is reflected in the node according to the definition of the link node. If there are multiple records, duplicates the repeater and processes the link node to the duplicated series of nodes. When creating a page file, elements with TR tags usually make one table, but the number of rows will increase by the number of records. There may be more than one TR tag element that becomes a repeater. As many sets of TRs as the number of records are duplicated, the data is reflected.</p>
+<p>At the stage of Ver.5.3-dev, the function was expanded so that it can become an enclosure or repeater by specifying data-im-control attribute for arbitrary tag. That is, no attributes are specified for TBOD / TR, OL / LI, UL / LI, SELECT / OPTION, and if link nodes are included, it functions as an enclosure / repeater. For other tag combinations, specify the data-im-control attribute. In addition, it is necessary to describe a repeater as a child element directly under the enclosure.</p>
+<h3>Display when there is no record</h3>
+<p>If there is a record, duplicating repeaters makes some objects appear on the page, but if you do not have it, you will have no repeaters if you do not have it. Therefore, one data - im - control attribute of the repeater is set to "noresult", or the class attribute is "_im_for _ noresult -". Then, this repeater is simply deleted if there is a record, but when there is no record, only one repeater is placed in the enclosure. You can incorporate a description such as "There is no record" in this way.</p>
+<h3>Cancel the operation of enclosure and repeater</h3>
+<p>The table containing the link node will be expanded automatically. In order not to do that expansion, the value of the data-im-control attribute is set to "ignore_enc_rep". For example, if you want to expand fields from multiple contexts in one table, write TR as follows so that TR is not recognized as a repeater.</p>
+<div class="code"><pre><code>&lt;table&gt;
+&lt;tr data-im-control=&quot;ignore_enc_rep&quot;&gt;
+&lt;td&gt;
+&lt;span data-im-control=&quot;enclosure&quot;&gt;
+&lt;span data-im-control=&quot;repeater&quot;&gt;
+&lt;input data-im=&quot;context1@field1&quot; /&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;/td&gt; 
+&lt;/tr&gt;
+&lt;tr data-im-control=&quot;ignore_enc_rep&quot;&gt;
+&lt;td&gt;
+&lt;span data-im-control=&quot;enclosure&quot;&gt;
+&lt;span data-im-control=&quot;repeater&quot;&gt;
+&lt;input data-im=&quot;context2@field2&quot; /&gt;
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</code>
 </pre>
-                </div>
-
-
-                <div class="table">
-
-
-                    <div class="caption">グループテーブル（既定名：authgroup）のフィールド</div>
-
-
-                    <table>
-
-
-                        <tr>
-                            <th>フィールド名</th>
-                            <th>型の例</th>
-                            <th>説明</th>
-                        </tr>
-
-
-                        <tr>
-                            <td>id</td>
-                            <td>INT AUTO_INCREMENT,</td>
-                            <td>グループを識別するための番号</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>groupname</td>
-                            <td>VARCHAR(48),</td>
-                            <td>グループ名</td>
-                        </tr>
-
-
-                    </table>
-
-
-                </div>
-
-
-                <div class="table">
-
-
-                    <div class="caption">ユーザ・グループ対応付けテーブル（既定名：authcor）のフィールド</div>
-
-
-                    <table>
-
-
-                        <tr>
-                            <th>フィールド名</th>
-                            <th>型の例</th>
-                            <th>説明</th>
-                        </tr>
-
-
-                        <tr>
-                            <td>user_id</td>
-                            <td>INT,</td>
-                            <td>所属するユーザのidフィールドの値</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>group_id</td>
-                            <td>INT,</td>
-                            <td>所属するグループのidフィールドの値</td>
-                        </tr>
-
-
-                        <tr>
-                            <td>dest_group_id</td>
-                            <td>INT,</td>
-                            <td>所属されるグループのidフィールドの値</td>
-                        </tr>
-
-
-                    </table>
-
-
-                </div>
-
-
-                <h3>アクセス権に関する設定の評価</h3>
-
-
-                <p>
-                    認証の設定は基本的にコンテキストに行いますが、IM_Entryの2番目の引数にも行えます。つまり、2カ所の設定があるので、以下のように、コンテキストに設定する方を「コンテキストの認証設定」、2つ目の引数に設定するのを「オプションの認証設定」とします。また、いずれも、アクセス権の設定も行いますが、「認証とアクセス権」を合わせてここでは「認証」というネーミングをします。</p>
-
-
-                <div class="code">
-
-
-                    <pre><code>IM_Entry(
-
-       array(
-       array( "name"=>"context"
-
-       "authentication"=>array(
-       /* コンテキストの認証設定 */
-       )
-       )
-       ),
-
-       array(
-       "authentication"=>array(
-       /* オプションの認証設定 */
-       ),
-       ....);</code></pre>
-
-
-                </div>
-
-
-                <h4>コンテキストの認証設定なし、オプションの認証設定あり</h4>
-
-
-                <p>タイトル用な条件だと、コンテキストの認証設定のuserとgroupがアクセス権の設定に関係します。もし、userもgroupも設定されていない場合は、認証が通ったユーザは何でもできると考えてください。</p>
-
-
-                <p>userあるいはgroupが設定されている場合、認証が通ると同時に、そのユーザあるいはそのユーザを含むグループが、userあるいはgroupの設定に含まれている必要があります。</p>
-
-
-                <h4>コンテキストの認証設定あり、オプションの認証設定なし</h4>
-
-
-                <p>オプションの設定のうちuserとgroupの設定がないということです。この場合、特定のコンテキストのデータベース処理に対して、コンテキストの認証設定が適用されます。</p>
-
-
-                <h4>コンテキストの認証設定あり、オプションの認証設定あり</h4>
-
-
-                <p>両方の認証設定があれば、先にオプションの認証設定が評価されて、その後にコンテキストの認証設定が評価されます。</p>
-
-
-                <h4>コンテキストの認証設定の適用対象</h4>
-
-
-                <p>適用対象として、4つのデータベース処理、load/update/new/deleteに対する処理と、それらすべてに対してまとめて設定を行うallがあります。</p>
-
-
-                <h4>コンテキストの認証設定のtableとfleld</h4>
-
-
-                <p>
-                    "table"キーに対する値がfield-userあるいはfield-groupの場合は、そのテーブルにあるfieldに指定したフィールドに、ログインが成功したユーザあるいはそのユーザが含むグループの名前が設定されちているレコードだけに絞り込まれます。検索条件にANDでユーザないしはグループの値をfieldに指定したフィールドに対する条件を付け加えます。したがって、fieldで指定したフィールドのうち、空欄ものは認証すればいっさいアクセスできないということになります。</p>
-
-
-                <p>
-                    "table"キーに対する値がfield-useやfield-groupではない場合、アクセス権はすべてのテーブルに渡って適用されます。レコードごとのアクセス権を記録するフィールドは不要です。このとき、userあるいはgroup属性に含まれていないユーザで認証した場合、いっさいのアクセスはできないようになっています。オプションの認証設定と異なる動作ですので、注意してください。</p>
-
-
-                <p>
-                    load/update/deleteに関しては、アクセス権は「検索条件」として集約されます。一方、newの操作に対しては、アクセス権がある場合だけ、レコードの作成が可能です。レコードの作成により、fieldで指定したフィールドに、ユーザないしはグループが設定されます。ユーザの場合は1つに決まりますが、グループの場合は、グループ名を並べ替えたときのいちばん先頭のグループ名を記録するようにします。</p>
-
-        </article>
+</div>
+<h3>Special repeater</h3>
+<p>You can also specify tag elements with data-im-control attribute "header" "separator" "footer". Following the header, repeaters are repeated by the number of records, but the tag element of separartor is appended between repeaters, and the tag element of footer is displayed at the end.</p>
+<h3>HTML element not updating</h3>
+<p>In the HTML form element, if the target specification is given, the value of the field is displayed, and normally, when changing its value, the change result is updated to the database and overwritten. However, if you describe the attribute data-im-control = "unbind" on that element, the value of the field is displayed, but it is not updated. I want to reflect the contents of the database in the element, but you can use this method when you want to describe the later processing by JavaScript etc. independently.</p>
+</section>
+<section>
+<h1>Search and sort action and designation</h1>
+<p>INTER-Mediator has the following three setting parts regarding search. Alternatively, the following retrieval condition is given and the database is read out.</p>
+<ol>
+<li>Setting query in context of definition file</li>
+<li>additionalCondition property (JavaScript) of INTERMediator object</li>
+<li>Correspondence between foreign key and correspondence key determined by relation (setting relation in context of definition file)</li>
+</ol>
+<p>Setting in query in the definition file is useful for giving "search condition you want to apply at all times". For example, you always select only those whose value is "3", or if you only have records that are not deleted because there are erased fields.</p>
+<p>On the other hand, data like retrieval conditions entered by the user can be specified using the additionalCondition property of the INTERMediator object. If you want to give the text or the calculation results you entered in the text field to the search condition, specify it in this way.</p>
+<p>Then, when the enclosure and the repeater included are enclosed and expanded by the enclosure and the repeater, referring to the relation setting of the inner context, a relation corresponding to the outer record, that is, a related record It gives the condition for extracting.</p>
+<p>These three conditions are unconditionally combined with AND.</p>
+<h3>How to specify context query</h3>
+<p>query in the definition file context specifies an array with field, operator, value as the key. As multiple specifications can be specified, the value for the query key is an array of arrays as a result.</p>
+<p>Utilizing a PDO-enabled database access class, we simply build an expression with the form "field operator 'value'". The value is processed by the quote method. Thus, one such example is specified as array ('field' =>'age', 'operator' =>'>', 'value' =>'19'). When using a wildcard of a character string, it is necessary to describe according to the database engine. For example, to prefix with MySQL, specify an array like array ('field' =>'name', 'operator' =>'LIKE', 'value' =>'% Tataro') To do. If operator is omitted, it is regarded as =.</p>
+<p>If there is an item with '__operation__' in 'field', put a delimiter there. Then, for each divided partitions, an expression with AND condition is created, and an OR operation is applied to the chunks divided by the delimiter. Also, if 'operator' of 'field' value '__operation__' is 'ex', OR and AND are exchanged. In other words, if you do not do anything, it can be bound by an AND condition, but it is also possible to specify conditions combined with AND and OR. There can be any number of items with 'field' value of '__ operation__'.</p>
+<div class="code"><pre><code>'query' =&gt; array(
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ))
+
+Generated Condition Clause: age &gt; '19' AND year &gt; '1980'</code>
+</pre>
+</div>
+<div class="code"><pre><code>'query' =&gt; array(
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'__operation__' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&lt;', 'value'=&gt;'39' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&lt;', 'value'=&gt;'2006' ))
+
+Generated Condition Clause: (age &gt; '19' AND year &gt; '1980') OR (age &lt; '39' AND year &lt; '2006')</code>
+</pre>
+</div>
+<div class="code"><pre><code>'query' =&gt; array(
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'__operation__', 'operator'=>'ex' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&lt;', 'value'=&gt;'39' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&lt;', 'value'=&gt;'2006' ))
+
+Generated Condition Clause: (age &gt; '19' OR year &gt; '1980') AND (age &lt; '39' OR year &lt;'2006')</code>
+</pre>
+</div>
+<div class="code"><pre><code>'query' =&gt; array(
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'age', 'operator'=&gt;'&gt;', 'value'=&gt;'19' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'year', 'operator'=&gt;'&gt;', 'value'=&gt;'1980' ),
+&nbsp;&nbsp;&nbsp;&nbsp;array( 'field'=&gt;'__operation__', 'operator'=>'ex' ))
+
+Generated Condition Clause: age &gt; '19' OR year &gt; '1980'</code>
+</pre>
+</div>
+<p>Although it may seem that only combinations of AND and OR are possible, since there is the theorem that all logical expressions can be expressed in a logical OR standard form or a logical product standard form, It can be said that logical expression can be described.</p>
+<p>In the case of FileMaker Server, as a limitation on the specification of FileMaker side, it is possible only to connect all search conditions by AND or all OR. You can not combine AND and OR. If you add 'array (' field '=>' __ operation__ ',' operator '=>' or ') "to the context's query key value or addtionalCondition, OR operation is performed. If this is not specified, AND operation is performed. When OR operation is specified, the retrieval condition of the foreign key also becomes OR, and the relation can not be obtained accurately, so carefully that point is necessary.</p>
+<h3>Search condition specified in additionalCondition property of INTERMediator object</h3>
+<p>In a JavaScript program, for example, execute the following program before executing INTERMediator.construct (true). The additionalCondition property is an array, the first index specifies the context name, that is, the value corresponding to the name key in the definition file. However, since it is a property that defines a setter, use the addCondition method of the INTERMediator class to set the value. The condition on the right hand side, of course, only applies to the relevant context. The value of the object is generally in common with the description about the previous query. You can also describe such conditions that OR condition and AND condition both appear. If the condition is one set, it can be described as an object. When there are two or more, describe it as an array of objects.</p>
+<div class="code"><pre><code>INTERMediator.addCondition("contextName", {field:'age', operator:'&gt;', value: 19});
+INTERMediator.addCondition("contextName", [
+&nbsp;&nbsp;&nbsp;&nbsp;{field:'age', operator:'&gt;', value: 19},
+&nbsp;&nbsp;&nbsp;&nbsp;{field:'year', operator:'&gt;', value: 1999}
+]);</code>
+</pre>
+</div>
+<h3>Context relation key value</h3>
+<p>As with query, it takes the form of an array of arrays. The key is different from query. Suppose you have an outer enclosure / repeater and its inner enclosure / repeater. Suppose that the outside is defined as master and the inside is defined as context name.</p>
+<div class="code"><pre><code>array(
+&nbsp;&nbsp;&nbsp;&nbsp;array(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'name' =>'master',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'key' =>'id'
+&nbsp;&nbsp;&nbsp;&nbsp;),
+&nbsp;&nbsp;&nbsp;&nbsp;array(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'name' =>'detail',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'relation' =>array(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( 'foreign-field' =>'master_id','join-field' =>'id', 'operator' =>'=' )
+&nbsp;&nbsp;&nbsp;&nbsp;)
+), ....</code></pre></div>
+<p>When processing one record of the outer context, we find the enclosure / repeater inside it. At that time, it refers to the value of the relation key whose context name is detail. For the join - field key, retrieve the value that exists in the outer one record, and make the search condition using the value of the foreign - field key and the value of the operator key. For example, if the value of the id field of the outer record is 34, create the condition "master_id = '34'" and add it as an AND condition. There can be multiple arrays of relation arrays. In that case, AND of conditional expressions generated by all specifications is taken.</p>
+<p>The join-field specification is mandatory. Although it may seem unnecessary, designation is mandatory because it is not necessarily linked with the primary key.</p>
+<h3>About rearranging search results</h3>
+<p>INTER-Mediator has the following two setting parts for sorting search results. For search queries, you can specify a field on which to determine the order of sorting.</p>
+<ol>
+<li>Setting sort in the definition file context</li>
+<li>additionalSortKey property (JavaScript) of INTERMediator object</li>
+</ol>
+<p>The setting in sort of the definition file is always the sort key applied. On the other hand, the additionalSortKey property is a sort key that is programmatically set according to the situation. When searching, they are composited and rearranged. The priority is higher in the additionalSortKey property. Also, in each setting, it becomes a sort field of higher order in the specified order. In either case, specify in the form of an array and specify the key field and direction. The value for the field key specifies one field name. The value for direction follows the database engine. For example, MySQL specifies ASC or DESC, but FileMaker Server specifies ascend or descend. For the additionalSortKey property, like the addtionalCondition property, the first index specifies the context name, followed by the object or array of objects.</p>
+</section>
+<section>
+<h1>Construction of page movement navigation</h1>
+<p>Navigate page navigation, if there is a node with id "IM_NAVIGATOR" in the page, create the navigation by replacing the contents of that node. If there is no id node of "IM_NAVIGATOR", the navigation will not be displayed. In general, it is a good idea to make the elements of the div tag "<div id =" IM_NAVIGATOR "& gt; & lt; / div & gt;</p>
+<p>The INTER-Mediator.construct method finds the node and automatically makes page navigation, but we set the following classes for those elements. In other words, if you define these styles with style sheets on the page, you can freely set the appearance.</p>
+<div class = "table">
+<table>
+<tr>
+<th>Element name. Class name</th>
+<th>Setting destination</th>
+</tr>
+<tr>
+<td>.IM_NAV_panel</td>
+<td>Navigation itself. That is, it is set to a node whose id is "IM_NAVIGATOR"</td>
+</tr>
+<tr>
+<td>span.IM_NAV_info</td>
+<td>Set to display character information</td>
+</tr>
+<tr>
+<td>span.IM_NAV_button</td>
+<td>Set for clickable buttons</td>
+</tr>
+<tr>
+<td>span.IM_NAV_disabled</td>
+<td>Set for non-clickable buttons</td>
+</tr>
+</table>
+</div>
+<p>Words and phrases in the navigation area can be set arbitrarily by setting an array in INTERMediator.navigationLabel. The index of the array and the corresponding part are shown in the table below. If you do not set anything in INTERMediator.navigationLabel, the default value of the table will be visible on the screen.</p>
+<div class = "table">
+<table>
+<tr>
+<th>index</th>
+<th>Setting target</th>
+<th>Default value</th>
+<th>Hide</th>
+</tr>
+<tr>
+<td>0</td>
+<td>Back to the first record</td>
+<td>& lt; & lt;</td>
+<td>Index 0 - 3</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Back to the previous page</td>
+<td>& lt;</td>
+<td>irrelevant</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Go to the next page</td>
+<td>& gt;</td>
+<td>irrelevant</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Proceed to the last record</td>
+<td>& gt; & gt;</td>
+<td>irrelevant</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Just before the record number</td>
+<td>Record number</td>
+<td>Indexes 4 to 7</td>
+</tr>
+<tr>
+<td>5</td>
+<td>String between record number range</td>
+<td>-</td>
+<td>irrelevant</td>
+</tr>
+<tr>
+<td>6</td>
+<td>String between record number range and total number of records</td>
+<td>/</td>
+<td>irrelevant</td>
+</tr>
+<tr>
+<td>7</td>
+<td>String after the total number of records</td>
+<td>(empty string)</td>
+<td>irrelevant</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Name of update button</td>
+<td>Update</td>
+<td>Index 8</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Presence / absence of button display such as record creation</td>
+<td>Buttons for record operation such as creation and deletion</td>
+<td>Index 9</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Save as button</td>
+<td>Save</td>
+<td>Index 10</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Logout button name</td>
+<td>Logout</td>
+<td>Index 11</td>
+</tr>
+</table>
+</div>
+<p>The array specified in INTERMediator.navigationLabel specifies 12 elements. Each element corresponds to an index. If the element is null, it defaults to the default value. If you specify a character string, it will be replaced with that string. For elements with indices 0, 4, 8, 9, 10, and 11, setting the value to false hides what is shown in the "hidden" column. For example, in the following description, only the update button disappears and others are displayed as default. Customize buttons such as "create record" in index 9 with the button-names key in the context definition.</p>
+<p>INTERMediator.navigationLabel = [null, null, null, null, null, null, null, null, false];</p>
+</section>
+<section>
+<h1>Handling HTML UI components</ h1>
+<h3>Text field</h3>
+<p>If the type attribute of the INPUT tag element is text, the third specification of the target specification can be omitted. In that case, the value is set to the value attribute. Also, since the calling program of INTERMediator.changeValue (*) is registered in the onchange attribute, the contents of the text field are written back to the database when editing the text and moving the focus to another field.</p>
+<h3>Text area</h3>
+<p>The third specification of target specification can be omitted. It will be set as the text of the TEXTAREA tag element.</p>
+<h3>Popup menu / list</h3>
+<p>The element of the SELECT tag itself is a component with values. If you omit the third item of the target designation of the SELECT tag element, it is specified as the selection value of the SELECT element. Also, although OPTION tags can be decided, values ​​can also be set from the database. At this time, the SELECT / OPTION tag automatically becomes the enclosure / repeater. The OPTION tag will require two settings, the value attribute corresponding to the selection value of the SELECT tag element and the text of the OPTION tag element that actually appears as a menu item. Therefore, we create only one tag element in SELECT with two target specifications such as & lt; option data-im = "contact_way @ id @ value contact_way @ name" & lt; / option & gt; Then, describe the context definition of the first name of the target specification in the definition file.</p>
+<h3>check box</h3>
+<p>If the data of a specific field read from the database is linked with the INPUT tag element of the check box, check the value attribute of that tag. Then check if data and value attribute match. Check the match with value, not the presence or absence of data. When rewriting, when the check is entered, the value of the value attribute is written back, and if there is no check, the empty string is written back. Normally, in a numeric field, it is best to have data such as check if 1, otherwise no check.</p>
+<h3>radio button</h3>
+<p>If you want to expand to a radio button, arrange items with type attribute "radio" with the same target specification INPUT tag. Then, the name attribute is automatically set so that even when multiple records are repeated, it can be processed without problems. Each value attribute of each INPUT tag element has its own value. The same value is selected by comparing the value of the database field with the value of the value attribute.</p>
+<h3>Hidden field</h3>
+<p>Although the type attribute of the INPUT tag element "hidden" is often used, it is possible to use a means of keeping the display style of the outermost element at the most by using div or span. For example, you can use the hands of unpacking the value of the master as a tag element that is not visible, and getting them with JavaScript.</p>
+</section>
+<section>
+<h1>Creating an input form type page</h1>
+<p>Here we will explain how to create a page just like creating a new record with an input form like the questionnaire answer. The necessary items to create such a page are as follows.</p>
+<ul>
+<li>Make a form in HTML but do not need a FORM tag. Create necessary text fields and registration buttons. However, text fields etc. should be put together in one enclosure.</li>
+<li>In the definition file, define the context in which records can be created.</li>
+<li>Set the data-im-control attribute of the enclosure you want to be the input form to "post".</li>
+<li>Make the input element of HTML form a link node. That is, data - im = "context @ field" is described in the tag for the context name and the field name of the corresponding table.</li>
+<li>Create "Register" button with BUTTON tag and "post" as data-im-control attribute. Button name is optional.</li>
+</ul>
+<p>For the action after pressing the registration button, there are three items starting with "post-" that can be defined in the context. To avoid pressing the button many times, you can replace the button with a message, move to a different page, or redraw the page.</p>
+<p>The validation specified in the context is also set, but unlike at the time of editing, when the registration button is pressed, a determination is made for the input items at once, an error is displayed in the page You can also display dialog boxes.</p>
+<p>When using this function, page synthesis can be done normally for enclosures outside the enclosure where "post" is specified as the data-im-control attribute, so the result of database access and the input form It can also be mixed. Also, enclosures inside the input form are processed as usual as well, so you can build pop-ups from the contents of the master.</p>
+<p>If you want to add your own program after clicking the Register button, define the function as described below. If message display, page resynthesis, and page movement have been defined, execute the functions defined below before them. processingBeforePostOnlyContext is performed before writing to the database, if the return value is false, it will not do the database processing and do not move the page etc. processingAfterPostOnlyContext is executed after database processing and no return value is specified.</p>
+<div class="code"><pre><code>INTERMediatorOnPage.processingBeforePostOnlyContext = function(node){
+// any program here.
+};
+INTERMediatorOnPage.processingAfterPostOnlyContext = function(node){
+// any program here.
+};</code>
+</pre>
+</div>
+</section>
+<section>
+<h1>How to check the browser version</h1>
+<p>Sometimes I want to check the version of the browser so that it can not be displayed except certain ones. We made this function available as necessary.</p>
+<p>First, define a variable named $ browserCompatibility in the $ params file in the same directory as INTER-Mediator.php and describe it as an array. The method of describing the array is shown in the table. I will also introduce creation examples. .</p>
+<div class = "table">
+<table>
+<tr>
+<th>dimension</th>
+<th>Specified content</th>
+<th>Examples of values ​​to specify</th>
+</tr>
+<tr>
+<td>First dimension</td>
+<td>Browser type</td>
+<td>msie, firefox, safari, chrome, opera</td>
+</tr>
+<tr>
+<td>Second dimension</td>
+<td>Array (key indicating OS)</td>
+<td>mac, win</td>
+</tr>
+<tr>
+<td></td>
+<td>Version description character string</td>
+<td>3+, 4 -</td>
+</tr>
+<tr>
+<td>Third dimension</td>
+<td>Version description character string (when the second dimension is an array)</td>
+<td>3+, 4 -</td>
+</tr>
+</table>
+</div>
+<div class = "code"><pre><code>$ browserCompatibility = array (
+&nbsp;'chrome' =>'1+',
+&nbsp;'msie' =>'7+',
+&nbsp;'firefox' =>'2+',
+&nbsp;'safari' =>array ('win' =>'4+', 'mac' =>'3+'),
+&nbsp;'opera' =>'1+',
+);</code>
+</pre>
+</div>
+<p>Specify "Version description character string" with a number, plus or minus. "3+" means 3 or more, "3" means that it can be used with version 3 or less. If you do not add plus or minus, it is only that version version. Browser names and operating systems are not case sensitive.</p>
+<p>In the previous example, only Safari branches for each OS. It shows that it can be used if it is Ver.4 or higher on Windows and Ver.3 or higher on Mac.</p>
+<h3>Display browser compatibility as a message</h3>
+<p>For INTER-Mediator running on JavaScript basis, this may be the most difficult job. Depending on the browser, JavaScript may not work. In order to handle this situation well, consider the following points.</p>
+<ol>
+<li>Prepare a message in the page file that the INTER-Mediator is not done at all just under the body tag element. For example, the div tag element of id = nonsupportedmessage in index.html of "WebSite" in the sample file. If the operation of INTER-Mediator is successful, delete this node or do not display it. This makes it possible to see some message even when JavaScript does not move at all.</li>
+<li>Set up the page file as follows. Check the compatibility of the browser according to the definition of the variable in the $ params file described earlier in the INTERMediatorCheckBrowser function. If it is not compliant it will return false, so do not build a page. Also, in that case, clear the contents of the body element at once, and display only the message. Delete the node indicated by node if it supports it. The node may be null or unspecified.</li>
+</ol>
+<p>Of the two above, one may do it, and you can do both. Also, if you do not need to check it, you can simply call INTERMediator.construct (true);</p>
+<div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=UTF-8&quot;/&gt;
+&lt;title&gt;Page Title&lt;/title&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;context.php&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+INTERMediatorOnPage.doAfterConstruct = function () {
+&nbsp;&nbsp;var contentNode = document.getElementById('container');
+&nbsp;&nbsp;contentNode.style.display = &quot;block&quot;;
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;nonsupportmessage&quot; style=&quot;background-color:#333333&quot;&gt;
+&lt;div style=&quot;text-align:center;color:yellow&quot;&gt;
+If you see this, you must use any unsupported web browser. Or constructing the page.
+&lt;/div&gt;
+&lt;div style=&quot;text-align:center;color:yellow&quot;&gt;
+この表示が見えている場合、描画処理中です。しばらくお待ちください。長時間見えている場合は、非対応ブラウザで参照しています。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;container&quot; style=&quot;display: none&quot;&gt;
+// Contents of the page
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+</pre>
+</div>
+</section>
+</article>
 </body>
-
 </html>

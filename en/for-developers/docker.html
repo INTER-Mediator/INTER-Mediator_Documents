@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-programmers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article class="markdown-body entry-content" itemprop="text">
+            <section>
+                <h1>INTER-MediatorをDockerで動かす</h1>
+            </section>
+            <section>
+                <h1>Dockerとは</h1>
+                <blockquote>
+                    <p>Docker（ドッカー[2]）はソフトウェアコンテナ内のアプリケーションのデプロイメントを自動化するオープンソースソフトウェアである。
+                        <a href="https://ja.wikipedia.org/wiki/Docker">Wikipediaより</a>
+                    </p>
+                </blockquote>
+                <p>
+                    Dockerを使うことにより、例えば同じ設定内容のWebサーバーを素早く追加して並列化したり、プロダクション環境と同じWebサーバーを開発環境に用意することが迅速にできます。
+                    <br/> もちろんWebサーバーに限らずDBサーバーにも使うことが出来ます。
+                    <br/> ここではそんなDockerをINTER-Mediatorを動かす環境としてセットアップしてみます。
+                </p>
+            </section>
+            <section>
+                <h1>Dockerのインストール</h1>
+                <p>
+                    まずはローカルに Docker が実行できる環境を作りましょう。以下のドキュメントを参考にしてください。
+                    <br/> Mac では Docker Toolbox をインストールする方法と Docker for Mac をインストールする方法の2通りがあります。
+                    <br/> Windows では Docker Toolbox をインストールする方法と Docker for Windows をインストールする方法の2通りがあります。
+                    <br/> OSのバージョンによってはインストールの選択肢がDocker Toolboxのみとなります。
+                </p>
+                <h4>macOSにDockerをセットアップする場合</h4>
+                <p>
+                    macOSの場合、Docker Toolboxを入れる方法とDocker for Macを入れる方法があります。
+                    <br/> 既にVirtualBoxを使用している場合は
+                    <a href="https://www.docker.com/products/docker-toolbox">Docker Toolbox</a>をダウンロードしてインストールします(ダウンロードに結構時間がかかるかもしれません...)。
+                    <br/> 仮想化ソフトウェアを一度もインストールしたことがないのでしたらDocker Toolboxを入れてもいいですし、<a href="https://docs.docker.com/docker-for-mac/">Docker for Mac</a>を入れても構いません。
+                    <br/> ※Docker Toolboxのインストーラの中でVirtualboxのインストールが行われます。
+                    <br/>
+                    <div class="picture"><img style="width:70%; max-width: 70%" src="../../images/docker0001.png" /></div>
+                    Docker for Mac は、macOSのxhyveを使っています。
+                    <br/> よく分からない場合やxhyveが信用ならない場合はDocker Toolboxでのセットアップを採用してください。
+                    <br/> ここではDockerの詳しい説明は行いません。
+                </p>
+                <h4>WindowsにDockerをセットアップする場合</h4>
+                <p>
+                    Windows7(64bit)以降であればWindowsでもDockerを動かすことが出来ます。
+                    <br/>
+                    <a href="https://www.docker.com/products/docker-toolbox">Docker Toolbox</a>のwindows版をインストールします(ダウンロードに結構時間がかかるかもしれません...)。
+                    <br/> ※Docker Toolboxのインストーラの中でVirtualboxのインストールが行われます。
+                    <br/> Windows10 Proに限ってはHyper-Vを利用する<a href="https://docs.docker.com/docker-for-windows/">Docker for Windows</a>のインストールが簡単です。
+                    <br/> ※Docker for Windowsは2016/07/05時点ではWindows 10 Pro、Enterprise、Educationのみ対応ですが将来的には他のWindows10もサポートする予定だそうです。
+                    <br/> ※Docker for WindowsではHyper-Vを使います。お使いのPCの構成によってはHyper-Vの構成と再起動が入ります。
+                    <br/> ※Windows用のインストールでウィザード内でKitematicのインストールチェックボックスは外さないようにしてください。後で使います。
+                    <br/>
+                    <div class="picture"><img style="width:70%; max-width: 70%" src="../../images/docker0002.png" /></div>
+                    <div class="picture"><img style="width:70%; max-width: 70%" src="../../images/docker0003.png" /></div>
+                </p>
+                <h4>KitematicでDockerを試す</h4>
+                <p>
+                    Dockerの便利ツールの中にKitematicというものがあります。
+                    <br/> Dockerのお手軽さを体験するために、Kitematicを使ってみましょう。
+                    <br/> KitematicはDockerをGUIで操作するツールです。Dockerのインストール時に一緒に入ってるはずです。
+                    <br/>
+                    <div class="picture"><img style="width:70%; max-width: 70%" src="../../images/docker0004.png" /></div>
+                    ※Docker for mac の場合は別途ダウンロードが必要です。ダウンロードしたものをアプリケーションフォルダに入れてください。
+                    <br/>
+                    <div class="picture"><img style="width:50%; max-width: 50%" src="../../images/docker0005.png" /></div>
+                    <div class="picture"><img style="width:70%; max-width: 70%" src="../../images/docker0006.png" /></div>
+                    ※Docker for Windowsの場合は別途ダウンロードが必要な場合があります。ダウンロードしたものを任意の場所に解凍(展開)してください。
+                    <br/>
+                    <div class="picture"><img style="width:50%; max-width: 50%" src="../../images/docker0007.png" /></div>
+                    <div class="picture"><img style="width:50%; max-width: 50%" src="../../images/docker0008.png" /></div>
+                    <div class="picture"><img style="width:70%; max-width: 70%" src="../../images/docker0009.png" /></div>
+                    ※WindowsでDocker Toolboxをインストールした場合でKitematicの最初の起動に失敗した場合、Hyper-Vを使おうとしている時があります、選択肢にVirtualboxを使うがありますので、そちらで再度起動を試してください。
+                    <br/> Kitematicを起動すると真ん中にDockerHubで公開されているDockerイメージのお薦めなどが表示されています。
+                    <br/>
+                    <div class="picture"><img style="width:80%; max-width: 80%" src="../../images/docker0010.png" /></div>
+                    ここでは検索して任意のDockerイメージを探すことも出来ます。
+                    <br/> 虫眼鏡マークの検索欄に
+                </p>
+                <pre><code>sakadonohito/im</code></pre>
+                <p>
+                    と入力して検索してみましょう。INTER-Mediatorを動かすDockerのサンプルが出てきます。これをNewしましょう。
+                    <br/> ローカルにDockerイメージがダウンロードされますのでそれを起動してみましょう。
+                    <br/> 起動したらブラウザでアクセスしてみましょう。
+                    <br/> http://localhost/im/Samples
+                    <br/> INTER-MediatorのサンプルTOPページが表示されましたでしょうか。
+                </p>
+                <p>一体何がどうなったのでしょうか？仕組みを説明します。</p>
+                <ol>
+                    <li>INTGER-Mediatorが動く状態のPHP、MySQL、Apacheが組み込まれたDockerイメージがDockerHubにホストされていた。</li>
+                    <li>手元の環境にDockerやDockerのGUIツールKitematicをインストールした。</li>
+                    <li>KitematicからDOckerHubにアクセスし、INTER-MediatorのDockerイメージをダウンロードした。</li>
+                    <li>KitematicからダウンロードしたDockerイメージを起動した。</li>
+                    <li>ブラウザから起動したDockerイメージ上のINTER-Mediatorにアクセスした。</li>
+                </ol>
+                <p>という流れです。
+                    <br/> なぜ、先述のURLでDocker上のINTER-Mediatorにアクセス出来たのかは、そうなるようにDocker上のApacheの設定を行っているからです。
+                    <br/> お手軽ですね。
+                </p>
+            </section>
+            <section>
+                <h1>IMを動かすDockerイメージの作成</h1>
+                <p>
+                    前の項でKitematicを使って作成済みのDockerイメージを起動することが出来ました。
+                    <br/> 次に自作のINTER-MediatorアプリをDockerイメージ化するにはどうしたらよいでしょうか。
+                    <br/> 簡単に説明します。
+                </p>
+                <h4>Dockerイメージの設計書？Dockerfile</h4>
+                <p>詳しくはDockerの公式を参照して欲しいのですが、<strong>Dockerfile</strong>という名前のテキストファイルに</p>
+                <ol>
+                    <li>ベースとなるLinuxディストリビューションやDockerイメージ名の指定</li>
+                    <li>作成者の名前</li>
+                    <li>Dockerイメージにインストールしたいライブラリ等のインストールコマンド、事前に用意したファイルを取り込むコマンドなど</li>
+                </ol>
+                <p>といった内容を記述します。
+                    <br/> INTER-Mediator用のイメージを作りには
+                </p>
+                <ol>
+                    <li>ベースとなるLinuxディストリビューションやDockerイメージ名の指定</li>
+                    <li>作成者の名前</li>
+                    <li>PHPのインストールと設定</li>
+                    <li>MySQLのインストールと設定</li>
+                    <li>Apacheのインストールと設定</li>
+                    <li>INTER-MediatorディレクトリをWeb公開用の場所に配置</li>
+                </ol>
+                <p>のようになります。
+                    <br/> 終わったら記述したDockerfileからイメージを作成します。
+                    <br/> Dockerfileのあるディレクトリで以下のようなコマンドでイメージを作成します。
+                    <br/>
+                    <a href="https://github.com/sakadonohito/im-docker/blob/master/Dockerfile">参考Dockerfile</a>
+                </p>
+                <pre><code>docker build -t &lt;name&gt;/&lt;app&gt;:&lt;tag&gt;</code></pre>
+                <p>nameはDockerHubの登録アカウント名、appは今回ならINTER-Mediatorと分かるような名称がいいでしょう。
+                    <br/> tagはバージョン番号になります。
+                </p>
+                <p>注意点としては、Dockerは仮想サーバーではありません。Dockerイメージを起動したからといって、自動起動のサービスが勝手に起動したりはしません。
+                    <br/> Dockerイメージの起動時に渡すコマンドで目的のサービスを起動します。
+                </p>
+                <p>作成したDockerイメージは例として以下の様なコマンドで起動できます。</p>
+                <pre><code>docker run -d --name im -p 18880:80 myhoge/im:1.0</code></pre>
+                <p>例はDocker(以降 コンテナ)を「im」という名前でバックグラウンドプロセスで起動。ローカルの18880ポートをコンテナの80ポートにマッピング、Dockerイメージは「myhoge/im:1.0」という意味になります。
+                    <br/> 正しくDockerイメージが作成できていれば http://localhost:18880/ でコンテナ内で起動したApacheのルートが表示されます。
+                </p>
+                <p>これでいつでも手元でINTER-Mediatorを起動できるようになりました。</p>
+            </section>
+            <section>
+                <h1>DockerHubの登録手順</h1>
+                <p>手元でDockerのイメージが作成出来るようになって、ローカルで起動もできるようになりました。
+                    <br/> このイメージを他の環境でも使いたい場合はどうしたらよいでしょうか？
+                    <br/> DockerfileをGithubに置いておいて、都度DockerfileをpullしてDockerイメージをbuildして構いません。
+                    <br/> ですが、作成したイメージをDockerHubに登録しておいて、使いたい環境でpullするのが使う時はお手軽です。
+                </p>
+                <p>
+                    <a href="https://hub.docker.com/">Docker Hub</a>にアクセスし、アカウントを持っていない人は登録します。
+                    <br/> アカウントの登録ができていれば後は手元からDockerイメージをpushするだけです。
+                    <br/> 手元のターミナルで
+                </p>
+                <pre><code>docker login</code></pre>
+                <p>してでまずはターミナルでDockerHubにログインします。次に</p>
+                <pre><code>docker push myhoge/im:1.0</code></pre>
+                <p>のようにコマンドを入力します。myhoge/im:1.0は前項の例の流用です。
+                    <br/> dockerイメージ名:tagという構文です。
+                    <br/> ※latestというtagでイメージを作成してpushした場合はDockerHubからpullする際にtagを省略してDockerイメージをpull出来るようになります。
+                </p>
+            </section>
+            <section>
+                <h1>Dockerコンテナの中身を分割する</h1>
+                <p>
+                    1つのDockerイメージに全てを詰め込むのはポータビリティが高いですが、本当はDockerの思想に反します。
+                    <br/> 1つのDockerコンテナには一つの役割にするのが理想とされています。
+                    <br/> Webサーバー、DBサーバー、さらに分割するなら永続データとコンテナを分けてみましょう。
+                    <br/> ※PHPをApacheで動かす前提で説明しますので、ここではPHPとWebサーバー(Apache)は分けません。
+                </p>
+                <h3>docker-composeを使う</h3>
+                <p>
+                    上記のコンテナ分割を行うと、1つのアプリのために幾つものDockerコンテナをセットアップして起動しないといけなくなりちょっと煩雑になります。
+                    <br/> Dockerにはその煩雑さを解消するため、docker-composeというツールが有りますので、使ってみましょう。
+                    <br/> Dockerをインストールすると一緒についてきます。
+                    <br/> ※docker-composeのバージョンが1.7未満の場合はバージョンを上げてください。
+                </p>
+                <p>
+                    細かい内容説明はドキュメントを参照してください。完成形をpullしましょう。
+                    <br/> 任意のディレクトリで以下のコマンドを実行し、githubからサンプルのdocker-composeファイルをcloneします。
+                </p>
+                <pre><code>git clone https://github.com/sakadonohito/im-compose.git </code></pre>
+                <p>
+                    cloneした内容に<strong>docker-compose.yml</strong>という設定ファイルがあります。
+                    <br/> ここにどういったDockerコンテナの起動に関する設定を連携させたいコンテナ分だけ記述します。
+                    <br/> YAMLファイルについての説明はここでは割愛します。
+                    <br/> このdocker-compose.ymlで扱うMySQLとPHP(with Apache)のDocker起動設定を記載しています。
+                    <br/> また、データボリュームの設定も書いてあります。
+                    <br/> 実はこのcloneした内容には2つ足りないものが有りますので、別途用意してください、
+                </p>
+                <ul>
+                    <li>
+                        INTER-Mediatorで使うMySQLのサンプルデータを流し込むSQLファイル(sample_schema_mysql.sql)
+                        <ul>
+                            <li>INTER-Mediatorをダウンロードした際に内包しているsample_schema_mysql.txtファイルをsample_schema_mysql.sqlに拡張子変更してください。</li>
+                            <li>mysql/tmpというディレクトリがない場合は作成してください。</li>
+                            <li>sample_schema_mysql.sqlをmysql/tmpディレクトリに配置してください。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        INTER-Mediatorそのもの。
+                        <ul>
+                            <li>INTER-Mediatorをapache/webrootディレクトリに<em>im</em>という名前に変更して配置してください。</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>上記の追加作業を行ったら、以下のコマンドを実行してください。</p>
+                <pre><code>docker-compose up -d</code></pre>
+                <p>設定ファイルの内容に従って、イメージをpullしてデーモンで起動してくれます。
+                    <br/>
+                    <a href="http://192.168.99.100/im/Samples">http://192.168.99.100/im/Samples</a> にアクセスしてみてください。サンプルの画面が見えると思います。
+                    <br/> 今回の設定では、ローカルに配置したINTER-MediatorをDockerコンテナにマウントして使っていますので、ローカル上でINTER-Mediatorを編集すると、それが反映されます。htmlファイルを編集して画面を更新してみてください。
+                </p>
+                <p>コンテナを停止して削除するには以下のコマンドを実行します。</p>
+                <pre><code>docker-compose down -v</code></pre>
+                <p>コンテナの停止と削除、それからネットワーク設定とボリュームの削除が行われます。</p>
+            </section>
+            <section>
+                <h1>さいごに</h1>
+                <p>
+                    INTER-MediatorのDockerイメージの作成についての説明は以上になります。
+                    <br/> さてこうして作成したDockerイメージはどこで使えるのでしょうか？
+                    <br/> 以下の様な使い方ができます。
+                </p>
+                <ul>
+                    <li>手元でデモ環境として起動する。</li>
+                    <li>他の人にINTER-Mediatorを手軽に体験してもらうためにDockerHubに登録しておく</li>
+                    <li>作成したDockerイメージを本番用Linuxサーバー上で起動して使う</li>
+                    <li>AWSのElasticBeanstalk上で起動する。</li>
+                    <li>AWSのElasticContainerService上で起動する。</li>
+                    <li>HerokuというPaaSサービス上で起動する。</li>
+                    <li>ArukasというDocker専用のPaaSサービス上で起動する。</li>
+                    <li>Microsoft Azure上でDockerを起動する。</li>
+                    <li>Google Cloud Platform上でDockerを起動する。</li>
+                </ul>
+                <p>
+                    他にも、開発環境やテスト環境として利用することも可能です。INTER-Mediatorの開発ではCIでDockerを使っているそうです。
+                    <br/> 手軽にINTER-Mediatorを動かす環境としてDockerを是非活用してください。
+                </p>
+            </section>
+        </article>
+    </div>
+    <!--  -->
+    </div>
+</body>
+
+</html>

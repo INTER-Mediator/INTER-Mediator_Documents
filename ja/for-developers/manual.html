@@ -60,32 +60,29 @@
         <article>
             <section>
                 <h1>はじめに</h1>
-                <p class="lead">データベースにMySQLなど、PHPのPDOに対応したものを利用することを想定します。データベースが稼働しており、INTER-Mediatorがインストールされている状況であるとします。このとき、以下の2つのファイルを作成します。いずれのファイルについても原則はどこにあってもかまいませんが、定義ファイルはデータベースサーバーと同一のコンピュータにあるようにするのが一般的でしょう。</p>
+                <p class="lead">データベースにMySQLなど、PHPのPDOに対応したものを利用することを想定します。データベースが稼働しており、INTER-Mediatorがインストールされている状況であるとします。このとき、以下の2つのファイルを作成します。</p>
                 <ul>
                     <li>ブラウザにロードするHTMLファイル（「ページファイル」と名付けます）</li>
                     <li>データベース接続など設定を記述したPHPファイル（「定義ファイル」と名付けます</li>
                 </ul>
                 <h3>定義ファイルの記述</h3>
-                <p>定義ファイルは、PHPのファイルにします。したがって、PHPの処理が可能なサーバーに配置しないといけません。以下のように、INTER-Mediator.phpを読み込み、IM_Entry関数をコールします。この関数の引数の指定方法は、後で記述します。</p>
+                <p>定義ファイルは、PHPのファイルにします。したがって、PHPの処理が可能なサーバーに配置しないといけません。定義ファイルでは、以下のように、INTER-Mediator.phpを読み込み、IM_Entry関数をコールします。この関数の引数の指定方法は、後で記述します。サンプルで言えば、sample_form_FMS_include.phpやsample_form_MySQL_include.phpなどのファイルが、定義ファイルに相当します。定義ファイルに記述できる内容は<a href="reference.html">こちら</a> のページにまとめてあります。</p>
                 <div class="code"><pre><code>&lt;?php
 require_once ('INTER-Mediator/INTER-Mediator.php');
-IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );                
+IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
 ?&gt;</code></pre>
                 </div>
-                <p>サンプルで言えば、sample_form_FMS_include.phpや、sample_form_MySQL_include.phpのファイルが、定義ファイルに相当します。定義ファイルに記述できる内容は<a href="reference.html">こちら</a> のページにまとめてあります。
-                </p>
                 <h3>ページファイルの記述</h3>
-                <p>ページファイルでは、定義ファイルを、ヘッダエリアのscriptタグで読み込みます。定義ファイルは、JavaScriptのソースを返します。そして、典型的な方法として、ページを開いたときにデータベースのデータを取り出すという流れがあるかと思います。その場合、以下のように、bodyタグのonload属性に、NTERMediator.construct(true)というJavaScriptの呼び出しを記述します。基本的にはこれで、INTER-Mediatorが働き始めます。NTERMediator.construct(true)は、たとえばボタンをクリックして呼び出すという方法も取る事ができます。</p>
+                <p>ページファイルでは、定義ファイルを、ヘッダエリアのscriptタグで読み込みます。定義ファイルは、JavaScriptのソースを返します。サンプルで言えば、sample_form_FMS.htmlや、sample_form_MySQL.htmlのファイルが、ページファイルに相当します。</p>
                 <div class="code"><pre><code>&lt;html&gt;
 &lt;head&gt;
 &lt;script src="sample_form_MySQL_include.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
-&lt;body onload="INTERMediator.construct(true)"&gt;
+&lt;body&gt;
                 :                
 &lt;td&gt;&lt;input type="text" data-im="contact@datetime"/&gt;&lt;/td&gt;</code></pre>
                 </div>
                 <p>以上の準備をすれば、ページファイル内のタグのdata-im属性に記述を加えることで、そのタグの値や他の属性に対してデータベースから取り出したデータが設定されることになります。属性の値は「contact@datetime」といった記述を行います。この記述を「ターゲット指定」と呼ぶ事にします。また、ターゲット指定のあるタグのことを「リンクノード」と呼びます。ターゲット指定の詳細は、後で説明をします。</p>
-                <p>サンプルで言えば、sample_form_FMS.htmlや、sample_form_MySQL.htmlのファイルが、ページファイルに相当します。</p>
                 <h3>ページの表示</h3>
                 <p>以上のような準備をした上で、ブラウザより、ページファイルにアクセスをします。そうすれば、リンクノードのターゲット指定や、定義ファイルでの指定に基づいて、データベースのデータを取り込んでページを構成します。データベースの内容を表示しますが、複数のレコードがあれば繰り返して一覧表示などを行います。</p>
             </section>
@@ -98,7 +95,6 @@ IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
                     <li>data-im属性に「table@field@target」の記述で記載されいているものをリンクノードとみなします。現在はこの記述方法が推奨されます。</li>
                     <li>複数の設定を行う場合、値には「table@field@target table@field@target...」のように空白で区切って記述します。</li>
                 </ul>
-                <p>class属性に「IM[table@field@target]」の記述で記載される場合、title属性に「table@field@target」で記載されるものも、過去との互換性のためにリンクノードとみなします。複数の設定があってもかまいません。class属性の場合は、「IM[table@field@target|table@field@target|...]」と記述します。title属性の場合は「table@field@target|table@field@target|...」と記述します。title属性、class属性はいずれもリンクノードの指定にできなくすることができます。INTER-Mediatorのconstructメソッドの最初にあるtitleAsLinLinfo、classAsLinkInfo変数にfalseを入れれば、それぞれの属性に記述されたリンク指定は無視します。</p>
                 <h3>ターゲット指定について</h3>
                 <p>「table@field@target」がひとまとまりのターゲット指定となります。</p>
                 <ul>
@@ -486,12 +482,6 @@ INTERMediatorOnPage.processingAfterPostOnlyContext = function(node){
         &lt;title&gt;Page Title&lt;/title&gt;
         &lt;script type=&quot;text/javascript&quot; src=&quot;context.php&quot;&gt;&lt;/script&gt;
         &lt;script type=&quot;text/javascript&quot;&gt;
-            window.onload = function () {
-                var nonSupportNode = document.getElementById('nonsupportmessage');
-                if (INTERMediatorOnPage.INTERMediatorCheckBrowser(nonSupportNode)) {
-                    INTERMediator.construct(true);
-                    }
-                }
             INTERMediatorOnPage.doAfterConstruct = function () {
                 var contentNode = document.getElementById('container');
                 contentNode.style.display = &quot;block&quot; 
