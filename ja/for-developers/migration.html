@@ -65,6 +65,41 @@
             </section>
             <section>
                 <h1>Ver.5.7での変更</h1>
+                <h2>データベース更新処理の排他制御の変更</h2>
+                <p>Ver.5.4で、IMLibUI.lockUIElementなどのメソッドを用意して、独自に排他制御をかけていましたが、ある状況でうまく機能していない場合があることがわかり、データベースへの更新処理をキューを使ってシリアライズするように変更しました。キューを使うことで、キューに登録したタスクは1つ1つが完全に終了するまで、次のタスクは実行できなくなります。データベースへの更新処理をユーザーインタフェースから呼び出すときには、必ずキューを使うので、2つの更新処理が同時に発生してしまうなどの不具合は理屈の上では発生しなくなります。また、更新前のクエリーもキューに登録されて実行されるようになります。</p>
+<p>自分でJavaScriptでプログラムを作る場合には、キューへの登録を適切に行ってください。IMLibQueue.setTaskメソッドを使います。引数は実行するタスクを関数で指定しますが、関数には必ず引数を1つ設定してください。その引数はクロージャーが渡され、キューのタスクの終了をシステムに知らせるために、その引数のクロージャーを実行します。実行するタスクが非同期の処理を含む場合には、タスクの最後に引数のクロージャーを実行するのではなく、非同期処理の完了処理で呼び出すなどしないと、更新処理の前後が交錯して、認証の継続がうまく行かないなどのトラブルになります。以下はコードの例です。</p>
+<div class="code">
+<pre><code>IMLibQueue.setTask(function (completeTask) {
+     INTERMediator_DBAdapter.db_query_async(
+         {
+             name: "execute",
+             conditions: [{field: "id", operator: "=", value: id}],
+             uselimit: false,
+             records: 1
+         },
+         function (result) {
+             document.getElementById("result").innerHTML = result.dbresult[0].result;
+             INTERMediator.flushMessage();
+             completeTask();
+         },
+         function () {
+             INTERMediator.flushMessage();
+             completeTask();
+         });
+});</code></pre>
+</div>
+<p>なお、JavaScriptの以下のAPIは、内部でIMLibQueue.setTaskを呼び出しているので、キューへの設定は自動的に行われます。以下に含まれないようなINTERMediator_DBAdapter.db_query_asyncメソッドでは、上記のように、自分でキューへの登録やタスク終了の呼び出しを行う必要が発生します。</p>
+<ul>
+<li>IMLibUI.valueChange</li>
+<li>IMLibUI.copyButton</li>
+<li>IMLibUI.deleteButton</li>
+<li>IMLibUI.insertButton</li>
+<li>IMLibContext.prototype.setDataAtLastRecord</li>
+<li>IMLibContext.prototype.setDataWithKey</li>
+<li>IMLibPageNavigation.copyRecordFromNavi</li>
+<li>IMLibPageNavigation.deleteRecordFromNavi</li>
+<li>IMLibPageNavigation.insertRecordFromNavi</li>
+</ul>
                 <h2>データベースクラスに関してのリファクタリング</h2>
                 <p>DB_PDO.phpファイルなどのように、データベースクラスは非常に行数が大きくなり、保守しづらい状況になっていました。そこで、DB_Supportフォルダにいくつかのファイルを作り、異能の分離をしています。一般のアプリケーションに影響はないようになっているはずですが、自分でデータベースクラスを作っているような場合には、DB_Interface.phpに記述されたインタフェースに基づいて機能を分離している点をご理解いただきプログラムに反映させてください。データベースクラスからは、publicなポインタを利用して、別途定義された「ハンドラ」を参照するといった仕組みです。なお、例えば認証に関連する部分はDB_Auth_Handler_PDO.phpファイルに記述されていますが、あるデータベースクラスが認証の機能を使わないのなら、このハンドラは定義不要で、ポインタとなるプロパティはnullのままで構いません。</p>
             </section>
