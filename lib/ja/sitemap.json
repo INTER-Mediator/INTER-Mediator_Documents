@@ -98,6 +98,13 @@
     "breadcrumb": "一覧と詳細"
 },
 {
+    "id": 32,
+    "parent": "/ja/practices/",
+    "path": "/ja/practices/practice-step.html",
+    "title": "モバイルでよく見られるステップ動作のサイト",
+    "breadcrumb": "ステップ"
+},
+{
     "id": 15,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/manual.html",

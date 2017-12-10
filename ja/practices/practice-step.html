@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="practices">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>前提知識</h1>
+                <p>INTER-Mediatorに関して、以下の内容をすでに知っている事を前提とします。</p>
+                <ul>
+                    <li>data-im属性への記述によりフィールドの内容が表示されること</li>
+                    <li>TABLEタグを使った表の中で、複数のレコードが繰り返し表示されるようになっていること</li>
+                    <li>一定数ごとのレコードを表示する仕組みと、表示範囲を切り替えるページネーションの仕組みがあること</li>
+                    <li>定義ファイルのコンテキストにJavaScriptを利用して、検索条件が指定できること</li>
+                </ul>
+                <p>また、Webサイト作成について、以下の知識も知っていることを前提とします。</p>
+                <ul>
+                    <li>CSSに関する知識</li>
+                    <li>モバイルサイトの作成方法とタッチイベントの処理</li>
+                </ul>
+            </section>
+            <section>
+                <h1>作成例について</h1>
+<p>以下のビデオをご覧ください。Chromeのモバイル画面シミュレーションで見ています。データベースはサンプルにある東京都の郵便番号を使っているので、日本郵便が配布しているデータを単に1つのテーブルに入れたものです。最初の画面では東京都しかありませんが、都道府県を選択します。そして、セルをタップすると、タップした都道府県に存在する市区町村が一覧されます。そして、いずれかをタップすると、選択した市区町村に存在する町域名が一覧されます。さらにタップすると、その郵便番号が見えます。ここでは、4つの一覧画面があり、順次タップで進めたり、戻ったりができるということです。戻って異なる郵便番号を参照することもできます。</p>
+                <div class="picture"><iframe width="560" height="315" src="https://www.youtube.com/embed/029NpKxle8c" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe></div>
+
+<p>このページはサンプルに用意してありますので、そちらでもご覧いただけます。サンプルのページでは「Practices」の「Mobile」にある「step」から参照できます。デモサイトでのリンクは<a href="http://msyk.dyndns.org/INTER-Mediator/Samples/Sample_Mobile/step_MySQL.html" target="_blank">こちら</a>です。PCでご覧の方は、例えばChromeのデバッガをoption+command+Iなどで呼び出し、デバイスツールバーを表示してモバイルモードにして参照してみてください。ページファイルは<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Mobile/step_MySQL.html" target="_blank">/Samples/Sample_Mobile/step_MySQL.html</a>、定義ファイルは<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Mobile/step_MySQL.php" target="_blank">/Samples/Sample_Mobile/step_MySQL.php</a>です（リンク先はレポジトリ）。</p>
+            </section>
+<section>
+<h1>サイト設計</h1>
+<p>モバイルサイトでステップ動作をさせたい場合は、１画面で１つの項目を選択するのが一般的です。要求内容から基本的なナビゲーションの設計を行い、各ステップでどのようにデータをデータベースから取り出すかを検討します。そして、それらのコンテキストを定義ファイルに定義します。ここまでは、他のINTER-Mediatorで作成するサイトと変わりません。</p>
+<p>ステップ動作をさせたい場合、それぞれのコンテキスト定義に、navi-controlキーを指定します。最初のページは「step」、以降のページは「step-hide」とします。したがって、stepが指定されたページは1つだけにするようにしてください。加えて、定義ファイルの中での順序が非常に重要になります。定義ファイル内でのコンテキスト定義の上から順番にステップ動作の遷移に対応するように並べてください。</p>
+<h2>定義ファイルでのnavi-controlと順序</h2>
+<p>定義ファイルへのリンクはすでに掲載しているので、そちらから定義ファイルを開いて参照してください。nameキーがprefecture、city、town、wrapupという4つのコンテキストがあり、いずれもnavi-controlキーの指定があります。最初にprefectureコンテキストの一覧が表示されように、順序としては最初にあり、そしてstepという値がnavi-controlキーに指定されています。</p>
+<p>いずれも、aggrregation-*キーがあり、やや複雑なSQLステートメントの生成を行なっていますが、基本的にはいずれもpostalcodeテーブルから、それぞれの値を取り出しているということです。例えば、市区町村フィールドからデータを取り出すとき、日本郵便のデータのままだと、「中央区」のレコードはたくさんあります。DISTINCTを使う方法もありますが主キー値をどれかのレコードで代表させたいため、ここではGROUP BYで同じ名前の市区町村をまとめて1つにして、主キー値は同一市区町村のレコードの中の最小値を取得するようにしました。</p>
+<h2>ページファイルの構築</h2>
+<p>ページファイルへのリンクをクリックして、ページファイルを確認してください。それぞれのコンテキストは、並べて定義するのが混乱がなくて良いでしょう。ここではTABLEタグでテーブルとして作成しましたが、もちろん、div等を利用しても構いません。data-im属性でターゲット指定を行う点は大きな違いはありません。モバイルデバイスでは、セルをタップしますが、PCの場合は「詳細」ボタンが出てきます。このように、デバイスによってナビゲーション動作を呼び出すイベントはINTER-Mediatorの側で自動的に設定されます。</p>
+<p>ステップ動作のページで追加で必要なことは、クラスが「IM_Button_StepBack」の「戻る」ボタンを作成することです。単に、このクラスの要素が配置されて入ればよく、BUTTONタグでも構いませんが、サンプルのようにSPANタグでも構いません。このボタンの表示/非表示や、クリック時の動作についてはINTER-Mediatorが全て自動的に処理をします。最初のページでは表示しないなどの作業は自動的に行われています。</p>
+<p>ページファイルの作成で悩むところは、そのデザインでしょう。サンプルでは、ヘッダとフッタが固定された状態で、選択のためのリストだけがその間でスクロールするといった動作になりように、CSSを調整しています。このデザイン部分はINTER-Mediatorは関係なく、普通にモバイルサイトとして動作するように構築します。</p>
+<h2>ナビゲーション動作のカスタマイズ</h2>
+<p>ここまでの設定で、選択リクトを表示して、ステップ動作や戻る操作は実装できました。しかしながら、それだけでは望むサイトにはならないことが多いでしょう。そこで、タップ直後に独自に定義したメソッドを呼び出すことで汎用的な動作ができるようにしました。</p>
+<p>例えば、name属性が「prefecture」のコンテキストにあるbefore-move-nextstepキーには、「doAfterPrefSelection」という文字列が設定されています。このキーがあれば、「INTERMediatorOnPage.doAfterPrefSelection()」という呼び出しをタップ直後に行います。このメソッドの定義は、ページファイルのヘッダ部にあるscriptタグ内で記述されています。つまり、「東京都」をクリックすると、その情報を保持して、このメソッドを呼び出すということになります。</p>
+<p>INTERMediatorOnPage.doAfterPrefSelectionメソッドを見てみましょう。IMLibPageNavigation.getStepLastSelectedRecord()により、最後に選択した項目に対応するレコードが得られます。ここでは、prefプロパティを参照することにより、選択した項目の都道府県名が得られます。その値を利用して、次に表示されるcityコンテキストに対して、f7（都道府県名のフィールド）が選択した都道府県名と同一になるような検索条件を指定しています。その結果、cityコンテキストは、「SELECT MIN(id) AS city_id, f8 AS city FROM postalcode WHERE f7 = '東京都' GROUP BY f8」というSQLによって得られたリレーションを元に構築され、東京都の市区町村名だけが重複なくリストアップされます。</p>
+<p>wrapupコンテキストのセルをタップしても、何も起こりません。最後のステップでは先には進みませんが、before-move-nextstepキーで指定したメソッドの呼び出しだけは行います。IMLibPageNavigation.stepNavigationは、順番にタップした内容が得られます。東京都→世田谷区→上馬と選択して、最後のページでいずれかをタップした場合、IMLibPageNavigation.stepNavigationの値は以下のようになっています。</p>
+<div class="code">
+<pre><code>[
+  {context: IMLibContext {contextName: "prefecture",  …},
+   key: "pref_id=1"},
+  {context: IMLibContext {contextName: "city", …},
+   key: "city_id=2317"},
+  {context: IMLibContext {contextName: "town", …}
+   key: "town_id=2329"}
+]</code></pre>
+</div>
+<p>つまり、ステップで動作してきた各ページのコンテキストオブジェクトと、選択した項目のキーが得られます。コンテキストオブジェクトは、storeプロパティで一覧の値が全て得られます。例えば、以下のコードを実行すると、record変数には、{town_id: "2329", town: "上馬", _im_repeater: ""}という値が得られます。ここから、新たにデータベース処理をしたり、別のページに遷移するなどは、さらにプログラムを作成する必要があります。</p>
+<div class="code">
+<pre><code>var key = IMLibPageNavigation.stepNavigation[2].key;
+var record = IMLibPageNavigation.stepNavigation[2].context.store[key];</code></pre>
+</div>
+            </section>
+            <section>
+                <h1>まとめ</h1>
+                <p>ステップ動作を行うページを、コンテキストと絡めて作成する方法を説明しました。なお、選択時の処理は一般化しづらい点もあるため、ページ遷移以上の機能はJavaScriptでの実装を必要とします。</p>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>
