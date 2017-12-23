@@ -132,6 +132,24 @@
                             PostgreSQLにおいて、レコード追加を行うためには、シーケンスを利用してキーフィールドに連番を設定する必要がある。そのシーケンス名をここで指定をする。
                         </td>
                     </tr>
+                    <tr>
+                        <td class="keyword">'cache'</td>
+                        <td>
+                            trueを指定するとキャッシュが機能する。同一ページ内で、１つのコンテキストを複数箇所で利用する場合、それぞれが同一の検索結果の場合に利用できる。例えば、ポップアップメニューの選択など。
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'data'</td>
+                        <td>
+                            読み込み時のみ、サーバーへのデータ処理は行わず、この値がそのままデータベースから得られたものとしてペー上に展開する。データ形式は、1レコードを示す連想配列を、さらに配列に含めたもの。編集可能なコンテキストでは利用しないのが原則とする。
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'appending-data'</td>
+                        <td>
+                            読み込み時に、サーバーへクエリー結果の末尾に、さらにこの値を追加する。データ形式は、1レコードを示す連想配列を、さらに配列に含めたもの。
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <h3>
@@ -161,12 +179,6 @@
                     <tr>
                         <td class="keyword">'paging'</td>
                         <td>recordsで指定したレコード数ずつ表示するとき、前後のページに移動するナビゲーションを表示する場合、trueを指定する。既定値はfalse</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'cache'</td>
-                        <td>
-                            trueを指定するとキャッシュが機能する（Ver.3.0より順次組み込みのため、機能制限に注意）
-                        </td>
                     </tr>
                     <tr>
                         <td class="keyword">'soft-delete'</td>
@@ -247,7 +259,7 @@
                         <td rowspan="2" class="keyword">'default-values'</td>
                         <td rowspan="2" class="keyword">(なし)</td>
                         <td class="keyword">'field'</td>
-                        <td>新規レコード作成時の初期値指定のフィールド名</td>
+                        <td>新規レコード作成時、およびレコードコピー時の初期値指定のフィールド名</td>
                     </tr>
                     <tr>
                         <td class="keyword">'value'</td>
@@ -344,9 +356,24 @@
                         <td class="keyword">'navi-control'</td>
                         <td></td>
                         <td>
-                            2つのコンテキストを利用して、マスター/ディテール形式のユーザインタフェースを構築する。2つのコンテキストは、原則として同一のテーブルを元にした異なるコンテキストである必要がある。マスター側のコンテキストに指定できるのは「master」ないしは「master-hide」で、通常、こちらのコンテキストは複数のレコードを表示する。マスター側には詳細を表示するボタンが追加される。ディテール側のコンテキストは「detail」を指定して、1レコードを表示する。「master」だと、2つのコンテキストによる展開結果は常に見えている。「master-hide」にするといずれか一方のみ表示し、masterに戻るボタンがディテール側に追加される。「detail-bottom」ないしは「detail-top」でボタンの位置を指定できるが、「detail」は「detail-top」と同等である。「detail-update」により、ディテールからマスターに表示するとき、マスター側の更新を行う。なお、FileMaker
-                            Serverを利用する時には、detailを指定したコンテキストのidキーの値は「-recid」にする必要がある。
+                            2つのコンテキストを利用して、マスター/ディテール形式のユーザインタフェースを構築する。マスター側は複数のレコードを表示し、それぞれ対応するディテール側を表示するボタンが追加される。ディテール側では1レコードを表示する。2つのコンテキストは、原則として同一のテーブルを元にした異なるコンテキストである必要がある。FileMaker Serverを利用する時には、detailを指定したコンテキストのidキーの値は「-recid」にする必要がある。さらに、コンテキストを次々に移動できるステップ動作をするコンテキストも定義できる。
+<table>
+<tr><th>使用できるキーワード</th><th>動作</th><th>説明</th></tr>
+<tr><td>master</td><td>マスター側のコンテキスト</td><td>マスターとディテールを同時に表示</td></tr>
+<tr><td>master-hide</td><td>マスター側のコンテキスト</td><td>ディテール側に移動時にマスター側は非表示</td></tr>
+<tr><td>detail</td><td>ディテール側のコンテキスト</td><td>detail-topと同じ動作</td></tr>
+<tr><td>detail-top</td><td>ディテール側のコンテキスト</td><td>マスターに戻るボタンを上部に表示（マスター側がmaster-hide）</td></tr>
+<tr><td>detail-bottom</td><td>ディテール側のコンテキスト</td><td>マスターに戻るボタンを下部に表示（マスター側がmaster-hide）</td></tr>
+<tr><td>detail-update</td><td>ディテール側のコンテキスト</td><td>detail-topと同じ動作に加えて、マスター側を更新</td></tr>
+<tr><td>step</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時に見えている</td></tr>
+<tr><td>step-hide</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時には見えていない</td></tr>
+</table>
                         </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'before-move-nextstep'</td>
+                        <td></td>
+                        <td>ステップのセルをタップした時に呼び出されるメソッド名。INTERMediatorOnPageオブジェクトに、ここで指定した名前のメソッドを定義する</td>
                     </tr>
                     <tr>
                         <td rowspan="5" class="keyword">'button-names'</td>
@@ -363,7 +390,7 @@
                     </tr>
                     <tr>
                         <td class="keyword">'navi-detail'</td>
-                        <td>navi-controlに「master」を指定したときに追加されるボタンのボタン名。マスター側に追加されるディテール側へ移動するボタンの名前</td>
+                        <td>navi-controlに「master」あるいは「step」を指定したときに追加されるボタンのボタン名。マスター側に追加されるディテール側へ移動するボタン、あるいは次のステップに移動するためのボタンの名前</td>
                     </tr>
                     <tr>
                         <td class="keyword">'navi-back'</td>
@@ -760,11 +787,11 @@
                     </tr>
                     <tr>
                         <td class="keyword">'subject-constant'</td>
-                        <td class="keyword">件名を文字列で指定</td>
+                        <td class="keyword">件名を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
                     </tr>
                     <tr>
                         <td class="keyword">'body-constant'</td>
-                        <td>本文を文字列で指定</td>
+                        <td>本文を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
                     </tr>
                     <tr>
                         <td class="keyword">'body-template'</td>

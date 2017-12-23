@@ -170,7 +170,7 @@
                 <h1>数値の書式設定</h1>
                 <h4>INTERMediatorLib.toNumber( str );</h4>
                 <p>引数の文字列を数値に変換する</p>
-                <h4>INTERMediatorLib.numberFormat( str, digit );</h4>
+                <h4>INTERMediatorLib.numberFormat( str, digit );<br>IMLibFormat.numberFormat( str, digit );</h4>
                 <p>引数strの文字列を数値に変換し、カンマ区切りで表示する。小数点以下の桁数をdigitで指定する。</p>
             </section>
             <section>
@@ -237,6 +237,13 @@
                 <p>ディテール表示からマスター表示への切り替え前に呼び出される。引数はマスターおよびディテールのコンテキストオブジェクト。</p>
                 <h4>INTERMediatorOnPage.naviAfterMoveToMaster(masterContext, detailContext)</h4>
                 <p>ディテール表示からマスター表示への切り替え後に呼び出される。引数はマスターおよびディテールのコンテキストオブジェクト。</p>
+            </section>
+            <section>
+                <h1>ステップ動作</h1>
+                <h4>INTERMediatorOnPage.《コンテキストで指定した名前》()</h4>
+                <p>コンテキスト定義において、before-move-nextstepキーで指定した名前のメソッドをINTERMediatorOnPageオブジェクトに用意すると、ステップ移動時に呼び出される。このメソッドがない場合や、メソッドの返り値がnullの場合、コンテキスト定義の順序で次のステップに画面遷移する。次のステップが無い場合は、画面の遷移は行わない。このメソッドがfalseを返すと、前の画面に遷移する。コンテキスト名の文字列を返すと、そのコンテキストの画面を表示し、現在のコンテキストは表示しなくなる。</p>
+                <h4>IMLibPageNavigation.startStep()</h4>
+                <p>navi-controlにstep-hideをもつ最初のコンテキストを表示する。ステップ動作のコンテキストを全てstep-hideで定義して、ボタン操作で最初のステップに移動したいような場合に利用する。</p>
             </section>
             <section>
                 <h1>ローカルコンテキスト</h1>
@@ -459,6 +466,8 @@
                         </tr>
                     </table>
                 </div>
+                <h4>IMLibQueue.setTask(function(compleTask){...})</h4>
+                <p>INTER-Mediator内部での更新処理のためのサーバーへの通信は、全てキューに投入して処理されます。これにより、更新処理が複数同時に稼働してしまう問題を避けることができます。独自にJavaScriptでプログラムを組む時、非同期通信を上記のメソッドで実装する場合、通信処理自体をこのメソッドでキューへ登録するのが確実です。引数の関数の処理ブロック内で、非同期通信処理を呼び出します。なお、関数の引数はキューを終了することを示すためのクロージャーが設定されて呼び出されます。通信処理後などに「completeTask();」のように呼び出しを記述する必要があります。これが呼び出されないと、次のキューの処理に移行しません。</p>
             </section>
         </article>
     </div>
