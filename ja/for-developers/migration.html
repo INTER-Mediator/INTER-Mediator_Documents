@@ -64,6 +64,26 @@
                 <p class="lead">INTER-Mediatorもバージョンを重ねてきており、以前の引き継がなくなってしまった箇所が出てきています。Ver.3 (2012/12/10) 以降の大きな変更点、つまりアプリケーション側を書き換えないといけないような変更をここにまとめておきます。</p>
             </section>
             <section>
+                <h1>Ver.6.0での変更</h1>
+                <h2>対応ブラウザなどの変更</h2>
+                <p>Internet Explorer Ver.11以降となる予定です。PHPはVer.7以降としたいのですが、FileMaker Serverのことがあるため、現在、どのバージョン以降にするかは検討中です。</p>
+                <h2>完全非同期化に伴い使用できなくなるメソッド</h2>
+                <p>Ver.6.0より前は、一部の通信が同期通信でしたが、完全に非同期通信だけになったことから、同期通信関連のメソッドは非実装の状態にします。以下のメソッドがなくなります。これらのメソッドを呼び出しても該当する処理は行わず、エラーログ（ページ上部に赤いバックグランドで表示される）にメッセージ（例「INTERMediator_DBAdapter.server_access method was discontinued in Ver.6」）が追加されるだけになります。</p>
+<ul>
+<li>INTERMediator_DBAdapter.server_access</li>
+<li>INTERMediator_DBAdapter.db_query</li>
+<li>INTERMediator_DBAdapter.db_queryWithAuth</li>
+<li>INTERMediator_DBAdapter.db_update</li>
+<li>INTERMediator_DBAdapter.db_updateWithAuth</li>
+<li>INTERMediator_DBAdapter.db_delete method</li>
+<li>INTERMediator_DBAdapter.db_deleteWithAuth</li>
+<li>INTERMediator_DBAdapter.db_createRecord</li>
+<li>INTERMediator_DBAdapter.db_createRecordWithAuth</li>
+<li>INTERMediator_DBAdapter.db_copy method</li>
+<li>INTERMediator_DBAdapter.db_copyWithAuth</li>
+</ul>
+            </section>
+            <section>
                 <h1>Ver.5.7での変更</h1>
                 <h2>データベース更新処理の排他制御の変更</h2>
                 <p>Ver.5.4で、IMLibUI.lockUIElementなどのメソッドを用意して、独自に排他制御をかけていましたが、ある状況でうまく機能していない場合があることがわかり、データベースへの更新処理をキューを使ってシリアライズするように変更しました。キューを使うことで、キューに登録したタスクは1つ1つが完全に終了するまで、次のタスクは実行できなくなります。データベースへの更新処理をユーザーインタフェースから呼び出すときには、必ずキューを使うので、2つの更新処理が同時に発生してしまうなどの不具合は理屈の上では発生しなくなります。また、更新前のクエリーもキューに登録されて実行されるようになります。</p>
