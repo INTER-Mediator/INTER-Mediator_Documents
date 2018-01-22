@@ -292,7 +292,7 @@
                     </tr>
                     <tr>
                         <td class="keyword">'expression'</td>
-                        <td><a href="exp.html" target="_blank">計算式</a>。同一コンテキストのフィールド参照はフィールド名のみ記述する。他のコンテキストのフィールド参照は「コンテキスト名@フィールド名」の形式で記述する。
+                        <td><a href="exp.html" target="_blank">計算式</a>。同一コンテキストのフィールド参照はフィールド名のみ記述する。他のコンテキストのフィールド参照は「コンテキスト名@フィールド名」の形式で記述する
                         </td>
                     </tr>
                     </tbody>
@@ -371,9 +371,24 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="keyword">'navi-title'</td>
+                        <td></td>
+                        <td>ターゲット指定が「_@navi_title」の要素に、このキーで指定した文字列を設定する。</td>
+                    </tr>
+                    <tr>
                         <td class="keyword">'before-move-nextstep'</td>
                         <td></td>
                         <td>ステップのセルをタップした時に呼び出されるメソッド名。INTERMediatorOnPageオブジェクトに、ここで指定した名前のメソッドを定義する</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'just-move-thisstep'</td>
+                        <td></td>
+                        <td>ステップのエリアを生成した直後、つまりデータベース処理をしてページ合成が終わった直後に呼び出されるメソッド名。INTERMediatorOnPageオブジェクトに、ここで指定した名前のメソッドを定義する</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'just-leave-thisstep'</td>
+                        <td></td>
+                        <td>このステップから別のステップに以降する直前に呼び出されるメソッド名。INTERMediatorOnPageオブジェクトに、ここで指定した名前のメソッドを定義する</td>
                     </tr>
                     <tr>
                         <td rowspan="5" class="keyword">'button-names'</td>
