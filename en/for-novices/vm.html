@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2017 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2018 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -80,8 +80,8 @@
                     <!-- SHA-256 checksum: 4d9f04cb6037e41942a5c8d12086469194bc733fcc5dad99a028c26775db2bab -->
                 </li>
                 <li>
-                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.5.ova">INTER-Mediator-Server VM 5.5</a>（About 1.8GB, Latest update: 2016-10-13）
-                    <!-- SHA-256 checksum: 97c3c52f5bec9fccb6d361dd73a66da444e4d65a68c230b86b8030e90174d3d9 -->
+                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.7-RC1.ova">INTER-Mediator-Server VM 5.7-RC1</a>（About 750MB, Latest update: 2018-02-04）
+                    <!-- SHA-256 checksum: f6cdf372cb1885d26f53f3c0a3dc4a1b99d5f087579d811907999dc0f304a2cc -->
                 </li>
             </ul>
         </section>
@@ -89,7 +89,7 @@
             <h1>Preparing the VM</h1>
             <p>To create your own VM using scripts included in INTER-Mediator by yourself, you can refer the "Create your own VM and start it yourself" section. If you want to use the VM that someone already made, it's described on "Downloading and using VM" section. Of course, you can use the VM by doing one of the tasks, so use it according to the situation. </p>
             <h3> Download and use VM </h3>
-            <p> The following procedure assumes the initial state of VirtualBox. Procedures may be different if there are various settings due to other uses etc, but in principle, prepare a host-only network and set up the VM to start using it. The downloaded VM can be used regardless of platform regardless of OS X or Windows. However, in the case of FileMaker Server, the IP address of the VM and the host side must be the same as the setting done below. </p>
+            <p> The following procedure assumes the initial state of VirtualBox. Procedures may be different if there are various settings due to other uses etc, but in principle, prepare a host-only network and set up the VM to start using it. The downloaded VM can be used regardless of platform regardless of macOS or Windows. However, in the case of FileMaker Server, the IP address of the VM and the host side must be the same as the setting done below. </p>
             <h4>Preparing VirtualBox</h4>
             <p>There are several network environments of guests running on VirtualBox, but we use "host-only network". With this method, the guest OS itself can't be accessed from outside the host machine. It is just possible to connect from the guest OS to the host OS. Since it is assumed that the created VM is a host-only network, if you use it with other settings, you need to deal with it yourself by checking the status of the VM.</p>
             <p>On Windows, "Host-only network" has been created from the beginning. For confirmation, select "Preferences" from the "File" menu, select "Network" on the left side of the dialog box, and select the "Host Only Network" tab. Please check that there is "VirtualBox Host-Only Ethernet Adapter" from the beginning there.</p>
@@ -135,7 +135,7 @@
             <h3>Operate your own files</h3>
             <p>The login account is written at the end on the page connected to "http://192.168.56.101". Please use it. It seems easy to transfer files with SFTP. Also log in to the INTER-Mediator-Server VM itself and load your own database schema. The database management account is also described on the page connected to "http://192.168.56.101". </p>
             <h3>Update INTER-Mediator</h3>
-            <p>Please connect to "192.168.56.101" by ssh on the host machine. The user name is "developer" and the password is "im4135dev". For example, in case of OS X, enter the command "ssh developer@192.168.56.101" in the "terminal" application, and the password will be asked afterwards, so we will key type. For Windows, please use applications such as TeraTerm or PuTTY. </p>
+            <p>Please connect to "192.168.56.101" by ssh on the host machine. The user name is "developer" and the password is "im4135dev". For example, in case of macOS, enter the command "ssh developer@192.168.56.101" in the "terminal" application, and the password will be asked afterwards, so we will key type. For Windows, please use applications such as TeraTerm or PuTTY. </p>
             <p>For the INTER-Mediator-Server VM after INTER-Mediator Ver.5.2 (including Ver.5.2-RC3), enter the command as follows. </p>
             <div class="code">
 <pre> <code>cd /var/www/html/INTER-Mediator
@@ -155,7 +155,7 @@ git pull origin stable </code> </pre>
             <ol>
                 <li>Install Vagrant. Go to the <a href="https://www.vagrantup.com/" target="_blank">this page</a> and download and install the application corresponding to the OS you want to use. Just install it and it's okay.</li>
                 <li>Clone the latest version of INTER-Mediator. It's easy to use the "Clone in Desktop" button on the <a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">this page</a>.</li>
-                <li>As far as OS X goes, start the terminal application and move to the dist-docs/vm-for-trial folder in the clone of INTER-Mediator repository.</li>
+                <li>As far as macOS goes, start the terminal application and move to the dist-docs/vm-for-trial folder in the clone of INTER-Mediator repository.</li>
                 <li>Run "vagrant up" command. It takes time to download and create. It is about 20 minutes. It's ready when "INTER-Mediator-Server VM is ready." Is displayed.</li>
                 <li>Run "vagrant box remove INTER-Mediator-Server" command if you want to remove the downloaded box file.</li>
             </ol>
