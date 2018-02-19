@@ -243,6 +243,10 @@
                 <h4>INTERMediatorOnPage.《コンテキストで指定した名前》()</h4>
                 <p>コンテキスト定義において、before-move-nextstepキーで指定した名前のメソッドをINTERMediatorOnPageオブジェクトに用意すると、ステップ移動時に呼び出される。このメソッドがない場合や、メソッドの返り値がnullの場合、コンテキスト定義の順序で次のステップに画面遷移する。次のステップが無い場合は、画面の遷移は行わない。このメソッドがfalseを返すと、前の画面に遷移する。コンテキスト名の文字列を返すと、そのコンテキストの画面を表示し、現在のコンテキストは表示しなくなる。</p>
 <p>コンテキスト定義において、before-move-thisstepキーで指定した名前のメソッドは、ステップのコンテキストが合成された直後に呼び出される。after-leave-thisstepキーで指定した名前のメソッドは、次のステップが合成される直前に呼び出される。</p>
+<h4>IMLibPageNavigation.stepNavigation</h4>
+<p>ステップ動作で選択したそれぞれのセルが順番に入力された配列。最後の要素が、今表示されている画面での選択結果となる。要素は、key、contextの2つのプロパティを持つオブジェクトである。contextは、そのステップで利用されたコンテキストオブジェクト（IMLibContextクラス）を参照するので、選択したデータはもちろん、関連するフィールドや他のレコードを含めて参照できる。keyは、選択したレコードのキーで、「主キーフィールド名=主キー値」の形式を持つ。コンテキストのstoreプロパティで、keyの値をキーにすると、選択したレコードが取り出せる。</p>
+<h4>IMLibPageNavigation.getStepLastSelectedRecord()</h4>
+<p>現在のコンテキストで選択したレコードを得る。</p>
                 <h4>IMLibPageNavigation.startStep()</h4>
                 <p>navi-controlにstep-hideをもつ最初のコンテキストを表示する。ステップ動作のコンテキストを全てstep-hideで定義して、ボタン操作で最初のステップに移動したいような場合に利用する。</p>
 をするような場合に利用できるでしょう。</p>
@@ -251,6 +255,7 @@
 <h4>IMLibPageNavigation.moveNextStep(key)</h4>
 <p>セルをタップしたのと同じくステップを進める処理を行う。この時、引数keyが、IMLibPageNavigation.stepNavigationの要素のkeyプロパティに設定される。直後に、before-move-nextstepキーで指定した名前のメソッドが呼び出される。</p>
             </section>
+
             <section>
                 <h1>ローカルコンテキスト</h1>
                 <h4>IMLibLocalContext.clearAll()</h4>
