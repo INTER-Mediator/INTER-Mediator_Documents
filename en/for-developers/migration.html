@@ -64,9 +64,77 @@
                 <p class="lead">INTER-Mediatorもバージョンを重ねてきており、以前の引き継がなくなってしまった箇所が出てきています。Ver.3 (2012/12/10) 以降の大きな変更点、つまりアプリケーション側を書き換えないといけないような変更をここにまとめておきます。</p>
             </section>
             <section>
+                <h1>Ver.6.0での変更</h1>
+                <h2>対応ブラウザなどの変更</h2>
+                <p>Internet Explorer Ver.11以降となる予定です。PHPはVer.7以降としたいのですが、FileMaker Serverのことがあるため、現在、どのバージョン以降にするかは検討中です（PHP 5.2系統とPHP 5.3系統は少なくともサポート対象外になります）。</p>
+                <h2>完全非同期化に伴い使用できなくなるメソッド</h2>
+                <p>Ver.6.0より前は、一部の通信が同期通信でしたが、完全に非同期通信だけになったことから、同期通信関連のメソッドは非実装の状態にします。以下のメソッドがなくなります。これらのメソッドを呼び出しても該当する処理は行わず、エラーログ（ページ上部に赤いバックグランドで表示される）にメッセージ（例「INTERMediator_DBAdapter.server_access method was discontinued in Ver.6」）が追加されるだけになります。</p>
+<ul>
+<li>INTERMediator_DBAdapter.server_access</li>
+<li>INTERMediator_DBAdapter.db_query</li>
+<li>INTERMediator_DBAdapter.db_queryWithAuth</li>
+<li>INTERMediator_DBAdapter.db_update</li>
+<li>INTERMediator_DBAdapter.db_updateWithAuth</li>
+<li>INTERMediator_DBAdapter.db_delete method</li>
+<li>INTERMediator_DBAdapter.db_deleteWithAuth</li>
+<li>INTERMediator_DBAdapter.db_createRecord</li>
+<li>INTERMediator_DBAdapter.db_createRecordWithAuth</li>
+<li>INTERMediator_DBAdapter.db_copy method</li>
+<li>INTERMediator_DBAdapter.db_copyWithAuth</li>
+</ul>
+                <h2>廃止されるPHPのグローバル変数</h2>
+                <p>Ver.6.0ではINTER-Mediator.phpで定義されているグローバル変数（$g_dbInstanceと$g_serverSideCall）が廃止される予定です。</p>
+            </section>
+            <section>
                 <h1>Ver.5.7での変更</h1>
+                <h2>データベース更新処理の排他制御の変更</h2>
+                <p>Ver.5.4で、IMLibUI.lockUIElementなどのメソッドを用意して、独自に排他制御をかけていましたが、ある状況でうまく機能していない場合があることがわかり、データベースへの更新処理をキューを使ってシリアライズするように変更しました。キューを使うことで、キューに登録したタスクは1つ1つが完全に終了するまで、次のタスクは実行できなくなります。データベースへの更新処理をユーザーインタフェースから呼び出すときには、必ずキューを使うので、2つの更新処理が同時に発生してしまうなどの不具合は理屈の上では発生しなくなります。また、更新前のクエリーもキューに登録されて実行されるようになります。</p>
+<p>自分でJavaScriptでプログラムを作る場合には、キューへの登録を適切に行ってください。IMLibQueue.setTaskメソッドを使います。引数は実行するタスクを関数で指定しますが、関数には必ず引数を1つ設定してください。その引数はクロージャーが渡され、キューのタスクの終了をシステムに知らせるために、その引数のクロージャーを実行します。実行するタスクが非同期の処理を含む場合には、タスクの最後に引数のクロージャーを実行するのではなく、非同期処理の完了処理で呼び出すなどしないと、更新処理の前後が交錯して、認証の継続がうまく行かないなどのトラブルになります。以下はコードの例です。</p>
+<div class="code">
+<pre><code>IMLibQueue.setTask(function (completeTask) {
+     INTERMediator_DBAdapter.db_query_async(
+         {
+             name: "execute",
+             conditions: [{field: "id", operator: "=", value: id}],
+             uselimit: false,
+             records: 1
+         },
+         function (result) {
+             document.getElementById("result").innerHTML = result.dbresult[0].result;
+             INTERMediator.flushMessage();
+             completeTask();
+         },
+         function () {
+             INTERMediator.flushMessage();
+             completeTask();
+         });
+});</code></pre>
+</div>
+<p>なお、JavaScriptの以下のAPIは、内部でIMLibQueue.setTaskを呼び出しているので、キューへの設定は自動的に行われます。以下に含まれないようなINTERMediator_DBAdapter.db_query_asyncメソッドでは、上記のように、自分でキューへの登録やタスク終了の呼び出しを行う必要が発生します。</p>
+<ul>
+<li>IMLibUI.valueChange</li>
+<li>IMLibUI.copyButton</li>
+<li>IMLibUI.deleteButton</li>
+<li>IMLibUI.insertButton</li>
+<li>IMLibContext.prototype.setDataAtLastRecord</li>
+<li>IMLibContext.prototype.setDataWithKey</li>
+<li>IMLibPageNavigation.copyRecordFromNavi</li>
+<li>IMLibPageNavigation.deleteRecordFromNavi</li>
+<li>IMLibPageNavigation.insertRecordFromNavi</li>
+</ul>
                 <h2>データベースクラスに関してのリファクタリング</h2>
                 <p>DB_PDO.phpファイルなどのように、データベースクラスは非常に行数が大きくなり、保守しづらい状況になっていました。そこで、DB_Supportフォルダにいくつかのファイルを作り、異能の分離をしています。一般のアプリケーションに影響はないようになっているはずですが、自分でデータベースクラスを作っているような場合には、DB_Interface.phpに記述されたインタフェースに基づいて機能を分離している点をご理解いただきプログラムに反映させてください。データベースクラスからは、publicなポインタを利用して、別途定義された「ハンドラ」を参照するといった仕組みです。なお、例えば認証に関連する部分はDB_Auth_Handler_PDO.phpファイルに記述されていますが、あるデータベースクラスが認証の機能を使わないのなら、このハンドラは定義不要で、ポインタとなるプロパティはnullのままで構いません。</p>
+                <h2>一部プロパティの変更</h2>
+                <p>内部的にINTERMediatorLogオブジェクトを導入したことで、プログラミングガイドでは言及されていなかった一部のプロパティが変更されています。もしもこれらのプロパティを個別のJavaScriptで利用している場合には書き換えが必要になります。</p>
+                <ul>
+                    <li>（変更前） INTERMediator.debugMode （変更後） INTERMediatorLog.debugMode</li>
+                    <li>（変更前） INTERMediator.supressDebugMessageOnPage （変更後） INTERMediatorLog.suppressDebugMessageOnPage</li>
+                    <li>（変更前） INTERMediator.supressErrorMessageOnPage （変更後） INTERMediatorLog.suppressErrorMessageOnPage</li>
+                    <li>（変更前） INTERMediator.errorMessages （変更後） INTERMediatorLog.errorMessages</li>
+                    <li>（変更前） INTERMediator.debugMessages （変更後） INTERMediatorLog.debugMessages</li>
+                    <li>（変更前） INTERMediator.errorMessageByAlert （変更後） INTERMediatorLog.errorMessageByAlert</li>
+                    <li>（変更前） INTERMediator.errorMessageOnAlert （変更後） INTERMediatorLog.errorMessageOnAlert</li>
+                </ul>
             </section>
             <section>
                 <h1>Ver.5.6での変更</h1>
