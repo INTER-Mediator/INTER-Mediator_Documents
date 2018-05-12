@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Object-oriented class for the REST API in FileMaker Server 16/Cloud.
+ * Object-oriented class for the REST API in FileMaker Server 17/Cloud.
  *
  * @version 8.0
  * @author Masayuki Nii <nii@msyk.net>
@@ -10,7 +10,7 @@
 
 namespace INTERMediator\FileMakerServer\RESTAPI;
 /**
- * Class FMDataAPI is the wrapper of The REST API in FileMaker Server 16/Cloud.
+ * Class FMDataAPI is the wrapper of The REST API in FileMaker Server 17/Cloud.
  *
  * @package INTER-Mediator\FileMakerServer\RESTAPI
  * @link https://github.com/msyk/FMDataAPI GitHub Repository
