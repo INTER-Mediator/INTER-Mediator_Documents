@@ -114,7 +114,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">10</span>
+                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
                                 </a>
                             </li>
                             <li>
@@ -144,46 +144,46 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1990979705"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1062490683"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1990979705" class="accordion-body collapse in">
+            <div id="namespace-1062490683" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1951523445"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1277080259"></a>
                                 <a href="../namespaces/INTERMediator.html" style="margin-left: 30px; padding-left: 0">INTERMediator</a>
             </div>
-            <div id="namespace-1951523445" class="accordion-body collapse ">
+            <div id="namespace-1277080259" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1534997706"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-215420146"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.html" style="margin-left: 30px; padding-left: 0">FileMakerServer</a>
             </div>
-            <div id="namespace-1534997706" class="accordion-body collapse ">
+            <div id="namespace-215420146" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1220538553"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1500317780"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.RESTAPI.html" style="margin-left: 30px; padding-left: 0">RESTAPI</a>
             </div>
-            <div id="namespace-1220538553" class="accordion-body collapse ">
+            <div id="namespace-1500317780" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1086611346"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-948231667"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.RESTAPI.Supporting.html" style="margin-left: 30px; padding-left: 0">Supporting</a>
             </div>
-            <div id="namespace-1086611346" class="accordion-body collapse ">
+            <div id="namespace-948231667" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -420,7 +420,7 @@ and login with the target layout.</em></p>
             <article class="method">
                 <h3 class="public ">query()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">query(array  <span class="argument">$condition = NULL</span>, array  <span class="argument">$sort = NULL</span>, integer  <span class="argument">$offset = -1</span>, integer  <span class="argument">$range = -1</span>, array  <span class="argument">$portal = null</span>,   <span class="argument">$script = null</span>) : \INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation|null</pre>
+                <pre class="signature" style="margin-right: 54px;">query(array  <span class="argument">$condition = NULL</span>, array  <span class="argument">$sort = NULL</span>, integer  <span class="argument">$offset = -1</span>, integer  <span class="argument">$range = -1</span>, array  <span class="argument">$portal = null</span>, array  <span class="argument">$script = null</span>) : \INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation|null</pre>
                 <p><em>Query to the FileMaker Database and returns the result as FileMakerRelation object.</em></p>
                 
 
@@ -468,9 +468,17 @@ array('portal1' =&gt; array('offset'=&gt;1,'range'=&gt;5), 'portal2' =&gt; null)
 the query result, and also all records in portal2 do.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>array</td>
                                 <td>$script </td>
-                                <td></td>
+                                <td><p>scripts that should execute right timings.
+The most understandable description is an associated array with API's keywords &quot;script&quot;, &quot;script.param&quot;,
+&quot;script.prerequest&quot;, &quot;script.prerequest.param&quot;, &quot;script.presort&quot;, &quot;script.presort.param&quot;, &quot;layout.response.&quot;
+These keywords have to be a key, and the value is script name or script parameter,
+ex. {&quot;script&quot;=&gt;&quot;StartingOver&quot;, &quot;script.param&quot;=&gt;&quot;344|21|abcd&quot;}.
+If $script is array with one element, it's handled as the value of &quot;script.&quot;
+If $script is array with two elements, these are handled as values of &quot;script&quot; and &quot;layout.response.&quot;
+If it it's three elements, these are  &quot;script&quot;, &quot;script.param&quot; and &quot;layout.response.&quot;
+If it it's four elements, these are  &quot;script.prerequest&quot;, &quot;script.presort&quot;, &quot;script&quot; and &quot;layout.response.&quot;</p></td>
                             </tr>
                                             </table>
                 
@@ -503,7 +511,7 @@ the query result, and also all records in portal2 do.</p></td>
             <article class="method">
                 <h3 class="public ">getRecord()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getRecord(integer  <span class="argument">$recordId</span>, array  <span class="argument">$portal = null</span>,   <span class="argument">$script = null</span>) : \INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation|null</pre>
+                <pre class="signature" style="margin-right: 54px;">getRecord(integer  <span class="argument">$recordId</span>, array  <span class="argument">$portal = null</span>, array  <span class="argument">$script = null</span>) : \INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation|null</pre>
                 <p><em>Query to the FileMaker Database with recordId special field and returns the result as FileMakerRelation object.</em></p>
                 
 
@@ -520,9 +528,9 @@ the query result, and also all records in portal2 do.</p></td>
                                 <td><p>See the query() method's same parameter.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>array</td>
                                 <td>$script </td>
-                                <td></td>
+                                <td><p>scripts that should execute right timings. See FileMakerRelation::query().</p></td>
                             </tr>
                                             </table>
                 
@@ -555,7 +563,7 @@ the query result, and also all records in portal2 do.</p></td>
             <article class="method">
                 <h3 class="public ">create()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">create(array  <span class="argument">$data = null</span>, array  <span class="argument">$portal = null</span>,   <span class="argument">$script = null</span>) : integer</pre>
+                <pre class="signature" style="margin-right: 54px;">create(array  <span class="argument">$data = null</span>, array  <span class="argument">$portal = null</span>, array  <span class="argument">$script = null</span>) : integer</pre>
                 <p><em>Create a record on the target layout of the FileMaker database.</em></p>
                 
 
@@ -574,9 +582,9 @@ Keys are field names and values is these initial values.</p></td>
 Ex.: {&quot;<PortalName>&quot;=&gt;{&quot;<FieldName>&quot;=&gt;&quot;<Value>&quot;...}}. FieldName has to &quot;<TOCName>::<FieldName>&quot;.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>array</td>
                                 <td>$script </td>
-                                <td></td>
+                                <td><p>scripts that should execute right timings. See FileMakerRelation::query().</p></td>
                             </tr>
                                             </table>
                 
@@ -610,7 +618,7 @@ it shows one record was created.</p>
             <article class="method">
                 <h3 class="public ">delete()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">delete(integer  <span class="argument">$recordId</span>,   <span class="argument">$script = null</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">delete(integer  <span class="argument">$recordId</span>, array  <span class="argument">$script = null</span>) </pre>
                 <p><em>Delete on record.</em></p>
                 
 
@@ -622,9 +630,9 @@ it shows one record was created.</p>
                                 <td><p>The valid recordId value to delete.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>array</td>
                                 <td>$script </td>
-                                <td></td>
+                                <td><p>scripts that should execute right timings. See FileMakerRelation::query().</p></td>
                             </tr>
                                             </table>
                 
@@ -654,7 +662,7 @@ it shows one record was created.</p>
             <article class="method">
                 <h3 class="public ">update()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">update(integer  <span class="argument">$recordId</span>, array  <span class="argument">$data</span>, array  <span class="argument">$portal = null</span>, integer  <span class="argument">$modId = -1</span>,   <span class="argument">$script = null</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">update(integer  <span class="argument">$recordId</span>, array  <span class="argument">$data</span>, integer  <span class="argument">$modId = -1</span>, array  <span class="argument">$portal = null</span>, array  <span class="argument">$script = null</span>) </pre>
                 <p><em>Update fields in one record.</em></p>
                 
 
@@ -672,6 +680,12 @@ it shows one record was created.</p>
 Keys are field names and values is these initial values.</p></td>
                             </tr>
                                                     <tr>
+                                <td>integer</td>
+                                <td>$modId </td>
+                                <td><p>The modId to allow to update. This parameter is for detect to modifying other users.
+If you omit this parameter, update operation does not care the value of modId special field.</p></td>
+                            </tr>
+                                                    <tr>
                                 <td>array</td>
                                 <td>$portal </td>
                                 <td><p>Associated array contains the modifying values in portal.
@@ -679,15 +693,9 @@ Ex.: {&quot;<PortalName>&quot;=&gt;{&quot;<FieldName>&quot;=&gt;&quot;<Value>&qu
 The recordId key specifiy the record to edit in portal.</p></td>
                             </tr>
                                                     <tr>
-                                <td>integer</td>
-                                <td>$modId </td>
-                                <td><p>The modId to allow to update. This parameter is for detect to modifying other users.
-If you omit this parameter, update operation does not care the value of modId special field.</p></td>
-                            </tr>
-                                                    <tr>
-                                <td></td>
+                                <td>array</td>
                                 <td>$script </td>
-                                <td></td>
+                                <td><p>scripts that should execute right timings. See FileMakerRelation::query().</p></td>
                             </tr>
                                             </table>
                 
@@ -856,7 +864,7 @@ If omitted this, the number &quot;1&quot; is going to be specified.</p></td>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on May 12th, 2018 at 03:05.
+                    on May 12th, 2018 at 10:49.
                 </section>
             </section>
         </section>
