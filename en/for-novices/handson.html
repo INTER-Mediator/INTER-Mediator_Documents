@@ -484,7 +484,7 @@ repeat-control: confirm-insert confirm-delete
 records: 1
 maxrecords: 100
 Calculation:
-    [field: total_calc, expression: format(sum(item@amount_calc))]
+    [field: total_calc, expression: format(sum(item@amount_calc), 0)]
 
 name: item
 key: id
@@ -495,7 +495,7 @@ Relationship:
     [foreign-key: invoice_id, join-field: id, operator: =] 　// ←[MySQL]の場合
     [foreign-key: invoice_id, join-field: id, operator: eq]  // ←[FileMaker Server]の場合
 Calculation:
-    [field: amount_calc, expression: format(qty * product@unitprice)]
+    [field: amount_calc, expression: format(qty * product@unitprice, 0)]
 
 name: product
 key: id
