@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  * 
- *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2018 INTER-Mediator Directive Committee, All rights reserved.
  * 
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -29,7 +29,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -37,20 +37,21 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="../../lib/en/sitemap.min.js"></script>
-	<script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
     <script src="../../lib/pagebuilder-r2.php"></script>
     <script src="../../lib/highlight.pack.js"></script>
     <script>
     hljs.initHighlightingOnLoad()
     </script>
     <style>
-	.platform	{
-		color: rgba(109,123,44,0.92);
-	}
-	h1	{
-		background-color: #DDDDDD;
-	}
+    .platform {
+        color: rgba(109, 123, 44, 0.92);
+    }
+
+    strong {
+        font-weight: 900;
+        text-decoration: underline;
+    }
     </style>
 </head>
 
@@ -70,155 +71,144 @@
         <article>
             <section>
                 <h1>はじめに</h1>
-                <p class="lead">この手順書は、2015年4月11日の勉強会で利用するために作成したものです。個人で進めることもできますが、この手順書を利用して、2〜3時間のハンズオンをオフラインで開催することもできます。INTER-Mediatorをまったく触ったことがないが、どんな感じなのかを知りたい方、あるいはINTER-Mediator普及のために、活用していただけます。</p>
+                <p class="lead">この手順書は、2015年4月11日の勉強会で利用するために当初作成したものを、その後に改定してきたものです。個人で進めることもできますが、この手順書を利用して、2〜3時間のハンズオンをオフラインで開催することもできます。INTER-Mediatorをまったく触ったことがないが、どんな感じなのかを知りたい方、あるいはINTER-Mediator普及のために、活用していただけます。</p>
+                <p><a href="IM_Hands-On_Aug_2016.pdf">2016/8/6用PDF資料</a>なお、本ページの内容はこのPDFの内容から、細かな点では変わっています。</p>
+                <p>「<a href="movies.html">ビデオで始めるINTER-Mediator</a>」のページでは、ハンズオンを実際に行なったところをビデオでご覧いただけます。</p>
             </section>
             <section>
                 <h1>使用までの準備</h1>
-                <p><a href="vm.html">INTER-Mediatorがインストールされた動くサーバーのVirtual Machine</a>を参照して、INTER-Mediatorが稼働するVMを用意してください。すぐに稼働できるVMですので、この手順ではダウンロードしてすぐにINTER-Mediatorを稼働することができます。</p>
-                <p>MySQLをご利用される方は、上記のVMで準備完了です。FileMaker Serverを利用される方は、ホストOS側に、FileMaker Serverをインストールしてください。加えて、データベースファイル<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/dist-docs/TestDB.fmp12">TestDB</a>をダウンロードして、FileMaker Serverで公開をしておいてください。</p>
+                <p><a href="vm.html">INTER-Mediatorがインストールされた動くサーバのVirtual Machine</a>を参照して、INTER-Mediatorが稼働するVMを用意してください。ダウンロードしてすぐにINTER-Mediatorを稼働することができます。</p>
+                <p>MySQLをご利用される方は、上記のVMで準備完了です。FileMaker Serverを利用される方は、ホストOS側に、FileMaker Serverをインストールしてください。加えて、<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/dist-docs/TestDB.fmp12?raw=true">こちらのリンク先のデータベースファイルTestDB</a>をダウンロードして、FileMaker Serverで公開をしておいてください。</p>
                 <p>なお、以下の手順では、VirtualBoxのホストオンリーアダプターが、既定の設定（ホストのIPアドレスが192.168.56.1、ゲストが192.168.56.101）になっていることを前提として記述しています。</p>
-<p>VMの準備が整ったら、VMを起動します。そして、ホストOS側では、ブラウザを起動して、<a href="http://192.168.56.101/">http://192.168.56.101/</a> に接続します。</p>
-<p>http://192.168.56.101/ で表示されるページ＝「VMのホーム」と呼びます。</p>
+                <p>VMの準備が整ったら、VMを起動します。そして、ホストOS側では、ブラウザを起動して、<a href="http://192.168.56.101/">http://192.168.56.101/</a> に接続します。</p>
+                <p>http://192.168.56.101/ で表示されるページ＝「VMのホーム」と呼びます。</p>
             </section>
             <section>
-<h1>セッション1：入力専用ページ</h1>
-<h2>1-1：質問の入力ページを作る</h2>
-<h3>定義ファイルの作成（ファイル名：def01.html）</h3>
-<ol>
-	<li>VMのホームで、「def01.phpを編集」をクリックします。</li>
-	<li>Queryの下にある行の右側の「削除」をクリックして、Queryの下に行がないようにします。</li>
-	<li>Sortの下にある行の右側の「削除」をクリックして、Sortの下に行がないようにします。</li>
-	<li>nameに「survey」、keyに「id」と入力します。Contextsセクションには、この2つのテキストフィールドだけがあるようにします。</li>
-	<li>Optionsセクションには何も入力されていない状態のままでかまいません。</li>
-	<li>
-<ol type="a">
-	<li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
-	<li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには<br>mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=test_db;charset=utf8mb4<br>userには「web」、passwordには「password」と入力します。</li>
-</ol>
-</li>
-	<li>Debugのところは「false」と入力します。</li>
-</ol>
-
-<h3>ページファイルの作成（ファイル名：page01.html）</h3>
-
-<ul>
-	<li>VMのホームで、「page01.htmlを編集」をクリックします。</li>
-	<li>ページファイルエディタが起動します。以下のソースコードを入力します。</li>
-</ul>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
+                <h1>セッション1：入力専用ページ</h1>
+                <h2>1-1：質問の入力ページを作る</h2>
+                <h3>定義ファイルの作成（ファイル名：def01.php）</h3>
+                <ol>
+                    <li>VMのホームで、「def01.phpを編集」をクリックします。</li>
+                    <li>Queryの下にある行の右側の「削除」をクリックして、Queryの下に行がないようにします。</li>
+                    <li>Sortingの下にある行の右側の「削除」をクリックして、Sortingの下に行がないようにします。</li>
+                    <li>nameに「survey」、keyに「id」と入力します。Contextsセクションには、この2つのテキストフィールドだけがあるようにします。</li>
+                    <li>Optionsセクションには何も入力されていない状態のままでかまいません。</li>
+                    <li>Database Settingsセクションには以下のように入力します。</li>
+                    <li>
+                        <ol type="a">
+                            <li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
+                            <li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには
+                                <br>「mysql:host=localhost;dbname=test_db;charset=utf8mb4」
+                                <br>userには「web」、passwordには「password」と入力します。</li>
+                        </ol>
+                    </li>
+                    <li>Debugのところは「false」と入力します。</li>
+                </ol>
+                <h3>ページファイルの作成（ファイル名：page01.html）</h3>
+                <ol>
+                    <li>VMのホームで、「page01.htmlを編集」をクリックします。</li>
+                    <li>ページファイルエディターが起動します。以下のソースコードを入力します。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
     &lt;script type="text/javascript" src="def01.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
-&lt;body onload="INTERMediator.construct(true);"&gt;
-&lt;table&gt;
+&lt;body&gt;
+<strong>&lt;table&gt;
     &lt;tbody data-im-control="post"&gt;
     &lt;tr&gt;&lt;th&gt;名前&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th&gt;質問1&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q1"/&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;td&gt;&lt;button data-im-control="post"&gt;Answer&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;/table&gt;</strong>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
-
-<h3>ページを表示して、適当に内容を答える</h3>
-
-<ol>
-	<li>VMのホームで、「page01.htmlを表示する」をクリックします。</li>
-	<li>フォームが表示されます。適当に入力して、Answerボタンをクリックします。</li>
-	<li>
-<ol type="a">
-	<li><span class="platform">[FileMaker Server]</span> TestDBのsurveyレイアウトを確認して、データが入力されていることを確認します。</li>
-	<li><span class="platform">[MySQL]</span> test_dbのsurveyテーブルを確認して、データが入力されていることを確認します。以下、いちばん手軽な手順を示します。
-<ol>
-	<li>VirtualBoxのVMのウインドウ（真っ黒のウインドウ）をクリックして、ユーザ名「developer」、パスワード「im4135dev」でログインをします。</li>
-	<li>プロンプトで、「mysql -u web -p test_db -e 'select * from survey;'」と入力します。</li>
-	<li>パスワードをたずねられるので「password」と入力します。</li>
-</ol>
-</li>
-</ol>
-</li>
-	<li>適当にいくつかフォーム入力して、レコードが増えることを確認します。</li>
-</ol>
-
-<h2>1-2：入力フォームらしい感じにする</h2>
-
-<ol>
-	<li>VMのホームで、「def01.phpを編集」をクリックするか、すでに開いている定義ファイルエディタのページを参照します。</li>
-	<li>右上のShow Allボタンをクリックします。</li>
-	<li>post-reconstructに「true」と入力します。</li>
-	<li>post-dismiss-messageに「送信しました」と入力します。</li>
-	<li>post-move-urに「http://inter-mediator.org/」と入力します。URLは別のものでもかまいません。その後、入力を確定するために、Tabキーを押しておきます。</li>
-	<li>VMのホームで、「page01.htmlを表示する」をクリックするか、すでに開いているpage01.htmlを更新します。</li>
-	<li>フォームが表示されます。適当に入力して、Answerボタンをクリックします。今度は、Answerボタンが消え、数秒後に別のページにジャンプしました。</li>
-	<li>
-<ol type="a">
-	<li><span class="platform">[FileMaker Server]</span> TestDBのsurveyレイアウトを確認して、データが入力されていることを確認します。</li>
-	<li><span class="platform">[MySQL]</span> test_dbのsurveyテーブルを確認して、データが入力されていることを確認します。（手順はすでに説明しました。）</li>
-</ol>
-</li>
-</ol>
-
-<h2>1-3：テキストフィールド以外のフォーム要素</h2>
-
-<h3>チェックボックス</h3>
-
-<p>page01.htmlの中のTABLEタグの内容を以下の様に変更して、フォームを表示すると、チェックボックスが追加されます。フォームに入力して、Answerボタンを押してみて、データベースにどのように入力されるのかを確認しましょう。</p>
-
-<div class="code">
-<pre><code>&lt;table&gt;
+                </div>
+                <p>コード内で変更や追加をする箇所は、下線で示します。</p>
+                <h3>ページを表示してフォーム入力を行う</h3>
+                <ol>
+                    <li>VMのホームで、「page01.htmlを表示する」をクリックします。</li>
+                    <li>フォームが表示されます。適当に入力して、Answerボタンをクリックします。</li>
+                    <li>
+                        <ol type="a">
+                            <li><span class="platform">[FileMaker Server]</span> TestDBのsurveyレイアウトを確認して、データが入力されていることを確認します。</li>
+                            <li><span class="platform">[MySQL]</span> test_dbのsurveyテーブルを確認して、データが入力されていることを確認します。以下、いちばん手軽な手順を示します。
+                                <ol>
+                                    <li>VirtualBoxのVMのウインドウ（真っ黒のウインドウ）をクリックして、ユーザ名「developer」、パスワード「im4135dev」でログインをします。</li>
+                                    <li>プロンプトで、「mysql -u web -p test_db -e 'select * from survey;'」と入力します。</li>
+                                    <li>パスワードをたずねられるので「password」と入力します。</li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                    <li>適当にいくつかフォーム入力して、レコードが増えることを確認します。</li>
+                </ol>
+                <h2>1-2：入力フォームらしい感じにする</h2>
+                <ol>
+                    <li>VMのホームで、「def01.phpを編集」をクリックするか、すでに開いている定義ファイルエディターのページを参照します。</li>
+                    <li>右上のShow Allボタンをクリックします。</li>
+                    <li>post-reconstructに「true」と入力します。</li>
+                    <li>post-dismiss-messageに「送信しました」と入力します。</li>
+                    <li>post-move-urに「http://inter-mediator.org/」と入力します。URLは別のものでもかまいません。その後、入力を確定するために、Tabキーを押しておきます。</li>
+                    <li>VMのホームで、「page01.htmlを表示する」をクリックするか、すでに開いているpage01.htmlを更新します。</li>
+                    <li>フォームが表示されます。適当に入力して、Answerボタンをクリックします。今度は、Answerボタンが消え、数秒後に別のページにジャンプしました。</li>
+                    <li>
+                        <ol type="a">
+                            <li><span class="platform">[FileMaker Server]</span> TestDBのsurveyレイアウトを確認して、データが入力されていることを確認します。</li>
+                            <li><span class="platform">[MySQL]</span> test_dbのsurveyテーブルを確認して、データが入力されていることを確認します。（手順はすでに説明しました。）</li>
+                        </ol>
+                    </li>
+                </ol>
+                <h2>1-3：テキストフィールド以外のフォーム要素</h2>
+                <h3>チェックボックス</h3>
+                <p>page01.htmlの中のTABLEタグの内容を以下の様に変更して、フォームを表示すると、チェックボックスが追加されます。フォームに入力して、Answerボタンを押してみて、データベースにどのように入力されるのかを確認しましょう。</p>
+                <div class="code">
+                    <pre><code>&lt;table&gt;
     &lt;tbody data-im-control="post"&gt;
     &lt;tr&gt;&lt;th&gt;名前&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th&gt;質問1&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q1"/&gt;&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;th&gt;質問2&lt;/th&gt;
-    &lt;td&gt;&lt;input type="checkbox" value="1" data-im="survey@Q2"/&gt;はい&lt;/td&gt;
-    &lt;/tr&gt;
+    <strong>&lt;tr&gt;&lt;th&gt;質問2&lt;/th&gt;</strong>
+    <strong>&lt;td&gt;&lt;input type="checkbox" value="1" data-im="survey@Q2"/&gt;はい&lt;/td&gt;</strong>
+    <strong>&lt;/tr&gt;</strong>
     &lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;td&gt;&lt;button data-im-control="post"&gt;Answer&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
-
-<h3>ラジオボタン</h3>
-
-<p>page01.htmlの中のTABLEタグの内容を以下の様に変更して、フォームを表示すると、ラジオボタンが追加されます。フォームに入力して、Answerボタンを押してみて、データベースにどのように入力されるのかを確認しましょう。</p>
-
-<div class="code">
-<pre><code>&lt;table&gt;
+                </div>
+                <h3>ラジオボタン</h3>
+                <p>page01.htmlの中のTABLEタグの内容を以下の様に変更して、フォームを表示すると、ラジオボタンが追加されます。フォームに入力して、Answerボタンを押してみて、データベースにどのように入力されるのかを確認しましょう。</p>
+                <div class="code">
+                    <pre><code>&lt;table&gt;
     &lt;tbody data-im-control="post"&gt;
     &lt;tr&gt;&lt;th&gt;名前&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th&gt;質問1&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q1"/&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th&gt;質問2&lt;/th&gt;
     &lt;td&gt;&lt;input type="checkbox" value="1" data-im="survey@Q2"/&gt;はい&lt;/td&gt;
     &lt;/tr&gt;
-    &lt;tr&gt;&lt;th&gt;質問3&lt;/th&gt;
-    &lt;td&gt;&lt;div&gt;
-    &lt;input type="radio" value="11" name="q3" data-im="survey@Q3"/&gt;東
-    &lt;input type="radio" value="12" name="q3" data-im="survey@Q3"/&gt;西
-    &lt;input type="radio" value="13" name="q3" data-im="survey@Q3"/&gt;南
-    &lt;input type="radio" value="14" name="q3" data-im="survey@Q3"/&gt;北
-    &lt;/div&gt;&lt;/td&gt;
-    &lt;/tr&gt;
+    <strong>&lt;tr&gt;&lt;th&gt;質問3&lt;/th&gt;</strong>
+    <strong>&lt;td&gt;&lt;div&gt;</strong>
+    <strong>&lt;input type="radio" value="11" name="q3" data-im="survey@Q3"/&gt;東</strong>
+    <strong>&lt;input type="radio" value="12" name="q3" data-im="survey@Q3"/&gt;西</strong>
+    <strong>&lt;input type="radio" value="13" name="q3" data-im="survey@Q3"/&gt;南</strong>
+    <strong>&lt;input type="radio" value="14" name="q3" data-im="survey@Q3"/&gt;北</strong>
+    <strong>&lt;/div&gt;&lt;/td&gt;</strong>
+    <strong>&lt;/tr&gt;</strong>
     &lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;td&gt;&lt;button data-im-control="post"&gt;Answer&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
-
-<h3>チェックボックスセット</h3>
-
-<p>page01.htmlの中のTABLEタグの内容を以下の様に変更して、フォームを表示すると、チェックボックスセットが追加されます。フォームに入力して、Answerボタンを押してみて、データベースにどのように入力されるのかを確認しましょう。</p>
-
-<div class="code">
-<pre><code>&lt;table&gt;
+                </div>
+                <h3>チェックボックスセット</h3>
+                <p>page01.htmlの中のTABLEタグの内容を以下の様に変更して、フォームを表示すると、チェックボックスセットが追加されます。フォームに入力して、Answerボタンを押してみて、データベースにどのように入力されるのかを確認しましょう。</p>
+                <div class="code">
+                    <pre><code>&lt;table&gt;
     &lt;tbody data-im-control="post"&gt;
     &lt;tr&gt;&lt;th&gt;名前&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th&gt;質問1&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="survey@Q1"/&gt;&lt;/td&gt;&lt;/tr&gt;
@@ -233,58 +223,54 @@
     &lt;input type="radio" value="14" name="q3" data-im="survey@Q3"/&gt;北
     &lt;/div&gt;&lt;/td&gt;
     &lt;/tr&gt;
-    &lt;tr&gt;&lt;th&gt;質問4&lt;/th&gt;
-    &lt;td&gt;&lt;div data-im-group="survey@Q4"&gt;
-    &lt;input type="checkbox" value="21"/&gt;Docomo
-    &lt;input type="checkbox" value="22"/&gt;au
-    &lt;input type="checkbox" value="23"/&gt;Softbank
-    &lt;input type="checkbox" value="24"/&gt;Willcom
-    &lt;/div&gt;&lt;/td&gt;
-    &lt;/tr&gt;
+    <strong>&lt;tr&gt;&lt;th&gt;質問4&lt;/th&gt;</strong>
+    <strong>&lt;td&gt;&lt;div data-im-group="survey@Q4"&gt;</strong>
+    <strong>&lt;input type="checkbox" value="21"/&gt;Docomo</strong>
+    <strong>&lt;input type="checkbox" value="22"/&gt;au</strong>
+    <strong>&lt;input type="checkbox" value="23"/&gt;Softbank</strong>
+    <strong>&lt;input type="checkbox" value="24"/&gt;Willcom</strong>
+    <strong>&lt;/div&gt;&lt;/td&gt;</strong>
+    <strong>&lt;/tr&gt;</strong>
     &lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;td&gt;&lt;button data-im-control="post"&gt;Answer&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;</code></pre>
-</div>
-
-<h2>1-4：回答を一覧表示する</h2>
-
-<h3>定義ファイルの作成（ファイル名：def02.html）</h3>
-
-<ol>
-	<li>VMのホームで、「def02.phpを編集」をクリックします。</li>
-	<li>Queryの下にある行の右側の「削除」をクリックして、Queryの下に行がないようにします。</li>
-	<li>Sortの下にある行の右側の「削除」をクリックして、Sortの下に行がないようにします。</li>
-	<li>nameに「survey」、keyに「id」と入力します。recordsには「10」、maxrecordsにも「10」と入力します。</li>
-	<li>Optionsセクションには何も入力されていない状態のままでかまいません。</li>
-	<li>
-<ol type="a">
-	<li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
-	<li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには「mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=test_db;charset=utf8mb4」、userには「web」、passwordには「password」と入力します。</li>
-</ol>
-</li>
-	<li>Debugのところは「false」と入力します。</li>
-</ol>
-
-<h3>ページファイルの作成（ファイル名：page02.html）</h3>
-
-<ol>
-	<li>VMのホームで、「page02.htmlを編集」をクリックします。</li>
-	<li>ページファイルエディタが起動します。以下のソースコードを入力します。</li>
-</ol>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
+                </div>
+                <h2>1-4：回答を一覧表示する</h2>
+                <h3>定義ファイルの作成（ファイル名：def02.php）</h3>
+                <ol>
+                    <li>VMのホームで、「def02.phpを編集」をクリックします。</li>
+                    <li>Queryの下にある行の右側の「削除」をクリックして、Queryの下に行がないようにします。</li>
+                    <li>Sortingの下にある行の右側の「削除」をクリックして、Sortingの下に行がないようにします。</li>
+                    <li>nameに「survey」、keyに「id」と入力します。recordsには「10」、maxrecordsにも「10」と入力します。</li>
+                    <li>Optionsセクションには何も入力されていない状態のままでかまいません。</li>
+                    <li>
+                        <ol type="a">
+                            <li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
+                            <li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには「mysql:host=localhost;dbname=test_db;charset=utf8mb4」、userには「web」、passwordには「password」と入力します。</li>
+                        </ol>
+                    </li>
+                    <li>Debugのところは「false」と入力します。</li>
+                </ol>
+                <h3>ページファイルの作成（ファイル名：page02.html）</h3>
+                <ol>
+                    <li>VMのホームで、「page02.htmlを編集」をクリックします。</li>
+                    <li>ページファイルエディターが起動します。以下のソースコードを入力します。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
     &lt;script type="text/javascript" src="def02.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
-&lt;body onload="INTERMediator.construct(true);"&gt;
-&lt;table&gt;
+&lt;body&gt;
+<strong>&lt;table&gt;
     &lt;thead&gt;
-        &lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;名前&lt;/th&gt;&lt;th&gt;質問1&lt;/th&gt;&lt;th&gt;質問2&lt;/th&gt;&lt;th&gt;質問3&lt;/th&gt;&lt;th&gt;質問4&lt;/th&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;名前&lt;/th&gt;
+        &lt;th&gt;質問1&lt;/th&gt;&lt;th&gt;質問2&lt;/th&gt;
+        &lt;th&gt;質問3&lt;/th&gt;&lt;th&gt;質問4&lt;/th&gt;&lt;/tr&gt;
     &lt;/thead&gt;
     &lt;tbody&gt;
         &lt;tr&gt;
@@ -296,242 +282,241 @@
             &lt;td data-im="survey@Q4"&gt;&lt;/td&gt;
         &lt;/tr&gt;
     &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;/table&gt;</strong>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
-
-<ol value="3">
-	<li>VMのホームで、「page02.htmlを表示する」をクリックします。回答一覧が表示されました。</li>
-</ol>
-
-<h3>ページネーション、追加、削除</h3>
-
-<ol>
-	<li>VMのホームで、「def021.phpを編集」をクリックするか、すでに開いている定義ファイルエディタのページを参照します。</li>
-	<li>pageに「true」、repeat-controlに「confirm-insert confirm-delete」と入力します。</li>
-	<li>VMのホームで、「page02.htmlを編集」をクリックするか、あるいはすでに開いているページファイルエディタを表示して。以下のソースコードを入力します。「名前」の列はテキストフィールドにします。</li>
-</ol>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
+                </div>
+                <ol value="3">
+                    <li>VMのホームで、「page02.htmlを表示する」をクリックします。回答一覧が表示されました。</li>
+                </ol>
+                <h3>ページネーション、追加、削除</h3>
+                <ol>
+                    <li>VMのホームで、「def02.phpを編集」をクリックするか、すでに開いている定義ファイルエディターのページを参照します。</li>
+                    <li>pagingに「true」、repeat-controlに「confirm-insert confirm-delete」と入力します。</li>
+                    <li>VMのホームで、「page02.htmlを編集」をクリックするか、あるいはすでに開いているページファイルエディターを表示して。以下のソースコードを入力します。「名前」の列はテキストフィールドにします。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
-   &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
     &lt;script type="text/javascript" src="def02.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
-&lt;body onload="INTERMediator.construct(true);"&gt;
-  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;body&gt;
+<string>&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;</string>
 &lt;table&gt;
     &lt;thead&gt;
-        &lt;tr&gt;&lt;td&gt;名前&lt;/td&gt;&lt;td&gt;質問1&lt;/td&gt;&lt;td&gt;質問2&lt;/td&gt;&lt;td&gt;質問3&lt;/td&gt;&lt;td&gt;質問4&lt;/td&gt;&lt;/tr&gt;
+        <strong>&lt;tr&gt;&lt;th&gt;名前&lt;/th&gt;&lt;th&gt;質問1&lt;/th&gt;&lt;th&gt;質問2&lt;/th&gt;
+        &lt;th&gt;質問3&lt;/th&gt;&lt;th&gt;質問4&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;</strong>
     &lt;/thead&gt;
     &lt;tbody&gt;
         &lt;tr&gt;
-            &lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;
+            <strong>&lt;td&gt;&lt;input type="text" data-im="survey@Q5"/&gt;&lt;/td&gt;</strong>
             &lt;td data-im="survey@Q1"&gt;&lt;/td&gt;
             &lt;td data-im="survey@Q2"&gt;&lt;/td&gt;
             &lt;td data-im="survey@Q3"&gt;&lt;/td&gt;
             &lt;td data-im="survey@Q4"&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;/td&gt;
+            <strong>&lt;td&gt;&lt;/td&gt;</strong>
         &lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
-
-<ol>
-	<li value="4">VMのホームで、「page02.htmlを表示する」をクリックするか、すでに表示されているのならそのページを更新します。回答一覧が表示されました。</li>
-	<li>レコードの追加削除ができることを確認します。</li>
-	<li>名前の文字列を修正して、Tabキーを押し、データベースの内容を確認して、データの修正ができることを確認します。</li>
-	<li>10レコード以上に増やしてみて、10レコードずつ表示されることを確認します。</li>
-</ol>
-
-</section>
-
-<section>
-
-<h1>セッション2：住所録</h1>
-
-<h2>定義ファイルの作成（ファイル名：def03.php）</h2>
-
-<ol>
-	<li>VMのホームで、「def03.phpを編集」をクリックします。</li>
-	<li>Queryの下にある行の右側の「削除」をクリックして、Queryの下に行がないようにします。</li>
-	<li>Sortの下にある行の右側の「削除」をクリックして、Sortの下に行がないようにします。</li>
-	<li>
-<ol type="a">
-	<li><span class="platform">[FileMaker Server]</span> nameに「person_list」、tableを「person_layout」、viewに「person_layout」、keyに「-recid」、pagingに「true」、repeat-controlに「insert」、recordsに「10」、maxrecordsに「100」と入力します。他は空白にします。</li>
-	<li><span class="platform">[MySQL]</span> nameに「person_list」、keyに「id」、viewに「person」、pagingに「true」、repeat-controlに「insert」、recordsに「10」、maxrecordsに「100」と入力します。他は空白にします。</li>
-</ol>
-</li>
-	<li>Optionsセクションには何も入力されていない状態のままでかまいません。</li>
-	<li>
-<ol type="a">
-	<li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
-	<li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには「mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=test_db;charset=utf8mb4」、userには「web」、passwordには「password」と入力します。</li>
-</ol>
-</li>
-	<li>Debugのところは「false」と入力します。</li>
-</ol>
-
-<h2>ページファイルの作成（ファイル名：page03.html）</h2>
-
-<ol>
-	<li>VMのホームで、「page03.htmlを編集」をクリックします。</li>
-	<li>ページファイルエディタが起動します。以下のソースコードを入力します。</li>
-</ol>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
+                </div>
+                <ol>
+                    <li value="4">VMのホームで、「page02.htmlを表示する」をクリックするか、すでに表示されているのならそのページを更新します。回答一覧が表示されました。</li>
+                    <li>レコードの追加削除ができることを確認します。</li>
+                    <li>名前の文字列を修正して、Tabキーを押し、データベースの内容を確認して、データの修正ができることを確認します。</li>
+                    <li>10レコード以上に増やしてみて、10レコードずつ表示されることを確認します。</li>
+                </ol>
+            </section>
+            <section>
+                <h1>セッション2：住所録</h1>
+                <h2>定義ファイルの作成（ファイル名：def03.php）</h2>
+                <ol>
+                    <li>VMのホームで、「def03.phpを編集」をクリックします。</li>
+                    <li>Queryの下にある行の右側の「削除」をクリックして、Queryの下に行がないようにします。</li>
+                    <li>Sortingの下にある行の右側の「削除」をクリックして、Sortingの下に行がないようにします。</li>
+                    <li>
+                        <ol type="a">
+                            <li><span class="platform">[FileMaker Server]</span> nameに「person_list」、tableを「person_layout」、viewに「person_layout」、keyに「-recid」、pagingに「true」、repeat-controlに「insert」、recordsに「10」、maxrecordsに「100」と入力します。他は空白にします。</li>
+                            <li><span class="platform">[MySQL]</span> nameに「person_list」、keyに「id」、viewに「person」、pagingに「true」、repeat-controlに「insert」、recordsに「10」、maxrecordsに「100」と入力します。他は空白にします。</li>
+                        </ol>
+                    </li>
+                    <li>Optionsセクションには何も入力されていない状態のままでかまいません。</li>
+                    <li>
+                        <ol type="a">
+                            <li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
+                            <li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには「mysql:host=localhost;dbname=test_db;charset=utf8mb4」、userには「web」、passwordには「password」と入力します。</li>
+                        </ol>
+                    </li>
+                    <li>Debugのところは「false」と入力します。</li>
+                </ol>
+                <h2>ページファイルの作成（ファイル名：page03.html）</h2>
+                <ol>
+                    <li>VMのホームで、「page03.htmlを編集」をクリックします。</li>
+                    <li>ページファイルエディターが起動します。以下のソースコードを入力します。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
-   &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
+    &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
     &lt;script type="text/javascript" src="def03.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
-&lt;body onload="INTERMediator.construct(true);"&gt;
-&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;body&gt;
+<strong>&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
 &lt;table&gt;
     &lt;tbody&gt;
         &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td data-im="person_list@name"&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;/table&gt;</strong>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
-
-<ol>
-	<li>VMのホームで、「page03.htmlを表示する」をクリックします。適当な一覧が見えています。</li>
-</ol>
-
-<h2>コンテキストの追加（ファイル名：def03.php）</h2>
-
-<ol>
-	<li>VMのホームで、「def03.phpを編集」をクリックするか、すでに開いている定義ファイルエディタのページを参照します。</li>
-	<li>Contextsの下の「追加」ボタンをクリックします。nameが「= new context =」の項目が増えました。</li>
-	<li>
-<ol>
-	<li><span class="platform">[FileMaker Server]</span> 増えた項目で、nameを「person_detail」、tableを「person_layout」、viewを「person_layout」、keyを「-recid」、recordsを「1」、maxrecordsを「100」として、あとは空白のままにします。</li>
-	<li><span class="platform">[MySQL]</span> 増えた項目で、nameを「person_detail」、viewを「person」、keyを「id」、recordsを「1」、maxrecordsを「100」として、あとは空白のままにします。</li>
-</ol>
-</li>
-</ol>
-
-<h2>ページファイルの作成（ファイル名：page03.html）</h2>
-
-<ol>
-	<li>VMのホームで、「page03.htmlを編集」をクリックするか、すでに開いている場合にはそのページを更新します。</li>
-	<li>ページファイルエディタで、以下のソースコードを変更します。</li>
-</ol>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
+                </div>
+                <ol>
+                    <li>VMのホームで、「page03.htmlを表示する」をクリックします。適当な一覧が見えています。</li>
+                </ol>
+                <h2>コンテキストの追加（ファイル名：def03.php）</h2>
+                <ol>
+                    <li>VMのホームで、「def03.phpを編集」をクリックするか、すでに開いている定義ファイルエディターのページを参照します。</li>
+                    <li>Contextsの下の「追加」ボタンをクリックします。nameが「= new context =」の項目が増えました。</li>
+                    <li>
+                        <ol>
+                            <li><span class="platform">[FileMaker Server]</span> 増えた項目で、nameを「person_detail」、tableを「person_layout」、viewを「person_layout」、keyを「-recid」、recordsを「1」、maxrecordsを「100」として、あとは空白のままにします。</li>
+                            <li><span class="platform">[MySQL]</span> 増えた項目で、nameを「person_detail」、viewを「person」、keyを「id」、recordsを「1」、maxrecordsを「100」として、あとは空白のままにします。</li>
+                        </ol>
+                    </li>
+                </ol>
+                <h2>ページファイルの作成（ファイル名：page03.html）</h2>
+                <ol>
+                    <li>VMのホームで、「page03.htmlを編集」をクリックするか、すでに開いている場合にはそのページを更新します。</li>
+                    <li>ページファイルエディターで、以下のソースコードを変更します。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"&gt;
+    &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
     &lt;title&gt;INTER-Mediator Demo&lt;/title&gt;
-     &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
+    &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
     &lt;script type="text/javascript" src="def03.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
-&lt;body onload="INTERMediator.construct(true);"&gt;
+&lt;body&gt;
 &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
-&lt;table&gt;
+  &lt;table&gt;
     &lt;tbody&gt;
         &lt;tr&gt;&lt;td data-im="person_list@name"&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;table&gt;
+  &lt;/table&gt;
+<strong>  &lt;table&gt;
     &lt;tbody&gt;
-      &lt;tr&gt;&lt;th&gt;名前&lt;/th&gt;&lt;td&gt;&lt;input type="text" data-im="person_detail@name"/&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th&gt;住所&lt;/th&gt;&lt;td&gt;&lt;input type="text"  data-im="person_detail@address"/&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th&gt;メール&lt;/th&gt;&lt;td&gt;&lt;input type="text"  data-im="person_detail@mail"/&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th&gt;地域&lt;/th&gt;&lt;td&gt;&lt;input type="text"  data-im="person_detail@location"/&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th&gt;分類&lt;/th&gt;&lt;td&gt;&lt;input type="text"  data-im="person_detail@category"/&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th&gt;メモ&lt;/th&gt;&lt;td&gt;&lt;textarea data-im="person_detail@memo"&gt;&lt;/textarea&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt;名前&lt;/th&gt;
+        &lt;td&gt;&lt;input type="text" data-im="person_detail@name"/&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt;住所&lt;/th&gt;
+        &lt;td&gt;&lt;input type="text" data-im="person_detail@address"/&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt;メール&lt;/th&gt;
+        &lt;td&gt;&lt;input type="text" data-im="person_detail@mail"/&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt;地域&lt;/th&gt;
+        &lt;td&gt;&lt;input type="text" data-im="person_detail@location"/&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt;分類&lt;/th&gt;
+        &lt;td&gt;&lt;input type="text" data-im="person_detail@category"/&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;th&gt;メモ&lt;/th&gt;
+        &lt;td&gt;&lt;textarea data-im="person_detail@memo"&gt;&lt;/textarea&gt;&lt;/td&gt;
+      &lt;/tr&gt;
     &lt;/tbody&gt;
-&lt;/table&gt;
+  &lt;/table&gt;</strong>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
-
-<ol value="3">
-	<li>VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。一覧の下に、なんとなく、編集フォームのようなものが登場しました。</li>
-</ol>
-
-<h2>iPadのようなナビゲーションを実現する</h2>
-
-<ol>
-	<li>page03.htmlの編集ページを表示します。以下の様に、2つあるTABLEタグにstyle属性を設定します。また、最後のTABLE閉じタグのあとに、BRタグを追加します。</li>
-</ol>
-
-<div class="code">
-<pre><code>&lt;table style="float: left"&gt;
-	:
+                </div>
+                <ol value="3">
+                    <li>VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。一覧の下に、なんとなく、編集フォームのようなものが登場しました。</li>
+                </ol>
+                <h2>iPadのようなナビゲーションを実現する</h2>
+                <ol>
+                    <li>page03.htmlの編集ページを表示します。以下の様に、2つあるTABLEタグにstyle属性を設定します。また、最後のTABLE閉じタグのあとに、BRタグを追加します。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;table <strong>style="float: left"</strong>&gt;
+    :
 &lt;/table&gt;
-&lt;table style="float: left; margin-left: 12px"&gt;
-	:
+&lt;table <strong>style="float: left; margin-left: 12px"</strong>&gt;
+    :
 &lt;/table&gt;
 &lt;br clear="all"/&gt;</code></pre>
-</div>
-
-<ol >
-	<li value="2">VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。一覧と詳細が左右に分離しました。</li>
-	<li>VMのホームで、「def03.phpを編集」をクリックするか、すでに開いている定義ファイルエディタのページを参照します。</li>
-	<li>nameが「person_list」の方のnavi-controlを「master-hide」にします。</li>
-	<li>nameが「person_detail」の方のnavi-controlを「detail」にします。</li>
-	<li>VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。一覧と詳細を行き来するユーザインタフェースができあがりました。＜バグ発見…＞</li>
-	<li>nameが「person_list」の方のnavi-controlを「master」にします。</li>
-	<li>VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。スプリットビュー的な表示になりました。＜バグ発見…＞</li>
-</ol>
-
-</section>
-
-<section>
-
-<h1>セッション3：伝票とリレーションシップ</h1>
-
-<ol>
-	<li>def04.phpに、以下の様に3つのようにコンテキストの定義を行います。定義ファイルエディタで開き、Show Allボタンを押して、全項目を表示しながら作業をしましょう。なお、Database Settingsの設定は、前のセッションと同一にします。</li>
-</ol>
-
-<div class="code">
-<pre><code>name: invoice
+                </div>
+                <ol>
+                    <li value="2">VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。一覧と詳細が左右に分離しました。</li>
+                    <li>VMのホームで、「def03.phpを編集」をクリックするか、すでに開いている定義ファイルエディターのページを参照します。</li>
+                    <li>nameが「person_list」の方のnavi-controlを「master-hide」にします。</li>
+                    <li>nameが「person_detail」の方のnavi-controlを「detail」にします。</li>
+                    <li>VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。一覧と詳細を行き来するユーザインタフェースができあがりました。</li>
+                    <li>nameが「person_list」の方のnavi-controlを「master」にします。</li>
+                    <li>VMのホームで、「page03.htmlを表示する」をクリックするか、すでに表示されているページを更新します。スプリットビュー的な表示になりました。</li>
+                </ol>
+            </section>
+            <section>
+                <h1>セッション3：伝票とリレーションシップ</h1>
+                <ol>
+                    <li>def04.phpに、以下の様に3つのコンテキストの定義を行います。このセッションから、細かな手順の説明は行いません。定義ファイルエディターで開き、Show Allボタンを押して、全項目を表示しながら作業をしましょう。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>name: invoice
 key: id
 paging: true
 repeat-control: confirm-insert confirm-delete
 records: 1
 maxrecords: 100
-Calculation: [field: total_calc, expression: format(sum(item@amount_calc))]
+Calculation:
+    [field: total_calc, expression: format(sum(item@amount_calc), 0)]
 
 name: item
 key: id
 repeat-control: confirm-insert confirm-delete
 records: 100
 maxrecords: 100
-Relationship: [foreign-key: invoice_id, join-field: id, operator: eq]
-Calculation: [field: amount_calc, expression: format(qty * product@unitprice)]
+Relationship:
+    [foreign-key: invoice_id, join-field: id, operator: =] 　// ←[MySQL]の場合
+    [foreign-key: invoice_id, join-field: id, operator: eq]  // ←[FileMaker Server]の場合
+Calculation:
+    [field: amount_calc, expression: format(qty * product@unitprice, 0)]
 
 name: product
 key: id
 records: 100
 maxrecords: 100
-Relationship: [foreign-key: id, join-field: product_id, operator: eq]</code></pre>
-</div>
-
-<ol>
-	<li value="2">page04.htmlは以下の様に入力します。</li>
-</ol>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
+Relationship:
+    [foreign-key: id, join-field: product_id, operator: =] 　// ←[MySQL]の場合
+    [foreign-key: id, join-field: product_id, operator: eq]  // ←[FileMaker Server]の場合</code></pre>
+                </div>
+                <ol>
+                    <li value="2">Database Settingsの設定は、前のセッションと同一にします。</li>
+                    <ol type="a">
+                        <li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
+                        <li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには「mysql:host=localhost;dbname=test_db;charset=utf8mb4」、userには「web」、passwordには「password」と入力します。</li>
+                    </ol>
+                </ol>
+                <ol>
+                    <li value="3">page04.htmlは以下の様に入力します。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="ja"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -540,8 +525,8 @@ Relationship: [foreign-key: id, join-field: product_id, operator: eq]</code></pr
     &lt;link rel="stylesheet" type="text/css" href="INTER-Mediator/Samples/sample.css"&gt;
      &lt;script type="text/javascript" src="def04.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
-&lt;body onload="INTERMediator.construct()"&gt;
-&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;body&gt;
+<strong>&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
 &lt;table border="1"&gt;
     &lt;tbody&gt;
     &lt;tr&gt;
@@ -571,7 +556,7 @@ Relationship: [foreign-key: id, join-field: product_id, operator: eq]</code></pr
                 &lt;tbody&gt;
                 &lt;tr&gt;
                     &lt;td&gt;
-                        &lt;input type="text" data-im="item@product_id" size="2"&gt;
+                       &lt;input type="text" data-im="item@product_id" size="2"&gt;
                        &lt;span class="inline" data-im-control="enclosure"&gt;
                             &lt;span class="inline" data-im-control="repeater" data-im="product@name"&gt;&lt;/span&gt;
                         &lt;/span&gt;
@@ -596,20 +581,309 @@ Relationship: [foreign-key: id, join-field: product_id, operator: eq]</code></pr
         &lt;td data-im="invoice@total_calc"&gt;&lt;/td&gt;
     &lt;/tr&gt;
     &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;/table&gt;</strong>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-</div>
+                </div>
+                <ol>
+                    <li value="3">実行します。以下の点を確認しましょう。</li>
+                </ol>
+                <ul>
+                    <li>伝票での明細行に相当する仕組みがリレーションシップにより取り出されています。</li>
+                    <li>明細の各行では、商品マスターからの商品名と単価の取り出しが行われています。</li>
+                    <li>productの数字を書き換えると、商品マスターの違うレコードが取り出されます。</li>
+                    <li>qtyを変更すると、単価x個数が計算され直され、トータルも再計算されています。</li>
+                </ul>
+            </section>
+            <section>
+                <h1>セッション4：資産管理</h1>
+                <h2>アプリケーションの動作の確認</h2>
+                <p>このセッションでは、INTER-Mediatorのサンプルにあるアプリケーションの動作を調べて、アプリケーションの改変を行います。</p>
+                <ol>
+                    <li>VMのホーム（http://192.168.56.101/ で表示されるページ）開きます。</li>
+                    <li>「リンク」の中に、「サンプルプログラム」というリンク文字列があります。こちらをクリックします。</li>
+                    <li>「INTER-Mediator Samples」というページが表示されます。この中の、Asset Management Sampleという行を特定します。</li>
+                    <li>MySQLあるいはFileMakerの列の「Improved」というリンクをクリックします。</li>
+                    <li>どこかの会社の機材の管理データベースのようです。まず、このファイルのファイル名をメモしてください。
+                        <br>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</li>
+                    <li>「詳細」ボタンを押してみます。詳細部分が表示されました。</li>
+                    <li>その機材の貸出履歴が出てきました。</li>
+                    <li>「追加」ボタンをクリックすると、現在の日付が「貸出日」に設定されて新たなレコードが追加されます。担当者やメモは適当に設定します。</li>
+                    <li>「本日返却」ボタンをクリックすると、返却日が空欄の貸出履歴に、本日の日付が設定されました。</li>
+                    <li>いくつかのレコードをみて、動作を確認します。</li>
+                </ol>
+                <h2>ページファイルの確認</h2>
+                <ol>
+                    <li>このアプリケーションのソースプログラムは、<a href="https://github.com/INTER-Mediator/INTER-Mediator/tree/stable/Samples/Sample_Asset">こちら</a>で参照できます。</li>
+                    <li>ページファイルを開いて内容を参照してください。</li>
+                    <li>定義ファイルのファイル名はなんでしょうか？
+                        <br>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</li>
+                    <li>それぞれのTABLEタグによるテーブル内で使用されているコンテキスト名はなんでしょうか？
+                        <br>1つ目のTABLEタグ内＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+                        <br>2つ目のTABLEタグ内＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+                        <br>上記の内部のTABLEタグ内＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+                        <br>上記の内部のSELECTタグ内＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</li>
+                    <li>JavaScriptのプログラムにあるsetBackDate関数は、「本日返却」ボタンをクリックしたときに呼び出されます。以下の情報手掛かりにプログラムを解析しましょう。
+                        <ul>
+                            <li>generateToday関数は現在の日付を文字列で返す関数です。</li>
+                            <li>IMLibContextPool.getContextFromName(contextName)は、引数に指定したコンテキスト名のコンテキストオブジェクトを返します。コンテキストオブジェクトは、そのコンテキストに対する取得したデータを保持している「モデル」相当のオブジェクトです。</li>
+                            <li>コンテキストオブジェクトに対して、setDataAtLastRecord(field, value)を実行すると、コンテキストの最後のレコードのfieldの値をvalueにして、それを参照している箇所を更新するとともに、データベースへの書き込みを行います。</li>
+                        </ul>
+                    </li>
+                </ol>
+                <h2>定義ファイルの確認</h2>
+                <ol>
+                    <li><a href="https://github.com/INTER-Mediator/INTER-Mediator/tree/stable/Samples/Sample_Asset">こちら</a>のページに戻ります。</li>
+                    <li>前に調べた名称の定義ファイルを開きます。定義ファイルエディターで開く場合には、<a href="http://192.168.56.101/INTER-Mediator/INTER-Mediator-Support/defedit.html?target=../Samples/Sample_Asset/asset_contexts.php">こちら</a>をクリックします。</li>
+                    <li>navi-controlキーが設定されているコンテキストを確認します。実際の動作と比べて、このキーによる設定がどのように適用されているのかを検討してみましょう。</li>
+                    <li>使用されていないコンテキストがあります。どれでしょうか？
+                        <br>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</li>
+                    <li>使用されていないコンテキストがあります。どれでしょうか？
+                        <br>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</li>
+                    <li>nameキーがrentのコンテキストの定義を参照してください。ここにあるrelationの設定により上位のコンテキストの値を元に検索を行っています。</li>
+                    <li>rentコンテキストのcalculationキーにある計算式を参照してください。計算式の意味を考えてください。そして、そのfieldキーの値を書き出しておきます。
+                        <br>fieldキー：＿＿＿＿＿＿＿＿式の意味：＿＿＿＿＿＿＿＿＿＿</li>
+                    <li>assetdetailコンテキストのcalculationキーにある計算式を参照してください。計算式の意味を考えてください。そして、そのfieldキーの値を書き出しておきます。
+                        <br>fieldキー：＿＿＿＿＿＿＿＿式の意味：＿＿＿＿＿＿＿＿＿＿</li>
+                </ol>
+                <h2>アプリケーションの改造</h2>
+                <ol>
+                    <li>ページファイルエディターで開きます。<a href="http://192.168.56.101/INTER-Mediator/INTER-Mediator-Support/pageedit.html?target=../Samples/Sample_Asset/asset.html">こちらより</a>開くことができます。</li>
+                    <li>これまでに調べたことを応用して、次の設定を行ってください。
+                        <ul>
+                            <li>貸出履歴のそれぞれの項目に、貸出期間の日数を表示してください。</li>
+                            <li>それぞれの機材に対する平均貸出日数を表示してください。</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+            <section>
+                <h1>セッション5：BBS</h1>
+                <ol>
+                    <li>def05.phpに2つのコンテキストの定義を行います。定義ファイルエディターで開き、Show Allボタンを押して、全項目を表示しながら作業をしましょう。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>name: message
+table: chat
+view: chat
+key: id
+post-reconstruct: true
+post-dismiss-message: 投稿しました
+query: 
+    [field: groupname , operator: IS NULL, value:]　// ←[MySQL]の場合
+    [field: groupname, operator: eq, value: =]  // ←[FileMaker Server]の場合
+sorting:
+    [field: postdt, direction: desc]
+validation: 
+    [field: user, rule: value !=  '', message: 入力してください。]
+    [field: message, rule: value !=  '', message: 入力してください。]
 
-<ol>
-	<li value="3">実行します。以下の点を確認しましょう。</li>
-</ol>
-<ul>
-	<li>伝票での明細行に相当する仕組みがリレーションシップにより取り出されています。</li>
-	<li>明細の各行では、商品マスターからの商品名と単価の取り出しが行われています。</li>
-	<li>productの数字を書き換えると、商品マスターの違うレコードが取り出されます。</li>
-	<li>qtyを変更すると、単価x個数が計算され直され、トータルも再計算されています。</li>
-</ul>
+name:comment
+table: chat
+view: chat
+key: id
+post-reconstruct: true
+post-dismiss-message: 投稿しました
+relationship:
+    [foreign-key: groupname, join-field: id, operator: =]　// ←[MySQL]の場合
+    [foreign-key: groupname, join-field: id, operator: eq]　// ←[FileMaker Server]の場合
+sorting:
+    [field: postdt, direction: desc]
+validation: 
+    [field: user, rule: value !=  '', message: 入力してください。]
+    [field: message, rule: value !=  '', message: 入力してください。]</code></pre>
+                </div>
+                <ol>
+                    <li value="2">定義ファイルエディターで開いたdef05.phpに対して、以下のようにOptionsの設定を行います。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>formatters:
+   [field: chat@message, converter-class: HTMLString]</code></pre>
+                </div>
+                <ol>
+                    <li value="3">Database Settingsの設定は、前のセッションと同一にします。
+                        <ol type="a">
+                            <li><span class="platform">[FileMaker Server]</span> Database Settingsセクションのdb-classには「FileMaker_FX」、databaseには「TestDB」、userには「web」、passwordには「password」、serverには「192.168.56.1」、portには「80」、protocolには「http」、datatypeには「FMPro12」と入力します。</li>
+                            <li><span class="platform">[MySQL]</span> Database Settingsセクションのdb-classには「PDO」、dsnには「mysql:host=localhost;dbname=test_db;charset=utf8mb4」、userには「web」、passwordには「password」と入力します。</li>
+                        </ol>
+                    </li>
+                </ol>
+                <ol>
+                    <li value="4">page05.htmlは以下の様に入力します。</li>
+                </ol>
+                <div class="code">
+                    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="def05.php"&gt;&lt;/script&gt;
+<strong>    &lt;script type="text/javascript"&gt;
+        INTERMediatorOnPage.processingBeforePostOnlyContext = function (node) {
+            var dtString, nodeIds, idValue, aNode;
+            dtString = INTERMediatorLib.dateTimeStringISO();　// ←[MySQL]の場合
+            dtString = INTERMediatorLib.dateTimeStringFileMaker(); // ←[FileMaker Server]の場合
+            nodeIds = INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(node, "message@postdt");
+            if (nodeIds.length &gt; 0) {
+                document.getElementById(nodeIds[0]).value = dtString;
+            }
+            nodeIds = INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(node, "comment@message");
+            if (nodeIds.length &gt; 0) {
+                aNode = node.parentNode.parentNode.parentNode;
+                nodeIds = INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(aNode, "message@id");
+                idValue = document.getElementById(nodeIds[0]).value;
+                INTERMediator.additionalFieldValueOnNewRecord = {};
+                INTERMediator.additionalFieldValueOnNewRecord['comment'] = [
+                    {field: "groupname", value: idValue},
+                    {field: "postdt", value: dtString}
+                ];
+            }
+            return true;
+        };
+    &lt;/script&gt;
+    &lt;style&gt;
+        TEXTAREA {
+            width: 400px;
+            height: 60px;
+        }
+    &lt;/style&gt;</strong>
+&lt;/head&gt;
+&lt;body&gt;
+<strong>&lt;table&gt;
+    &lt;tbody data-im-control="post"&gt;
+    &lt;tr&gt;
+        &lt;th&gt;From:&lt;/th&gt;
+        &lt;td&gt;
+            &lt;input type="text" data-im="message@user"&gt;
+            &lt;input type="hidden" data-im="message@postdt"&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td colspan="2"&gt;
+            &lt;textarea data-im="message@message"&gt;&lt;/textarea&gt;
+            &lt;button data-im-control="post"&gt;投稿&lt;/button&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+    &lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td colspan="4"&gt;
+            &lt;hr/&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;th&gt;From:&lt;/th&gt;
+        &lt;td data-im="message@user"&gt;&lt;/td&gt;
+        &lt;th&gt;Date:&lt;/th&gt;
+        &lt;td data-im="message@postdt"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td colspan="4" data-im="message@message@innerHTML"
+            style="background-color: #CCCCCC"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td style="width: 50px; background-color: gray"&gt;Comment&lt;/td&gt;
+        &lt;td colspan="3"&gt;
+            &lt;input type="hidden" data-im="message@id"/&gt;
+            &lt;table&gt;
+                &lt;tbody data-im-control="post"&gt;
+                &lt;tr&gt;
+                    &lt;th&gt;From:&lt;/th&gt;
+                    &lt;td&gt;
+                        &lt;input type="text" data-im="comment@user"&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;td colspan="2"&gt;&lt;textarea data-im="comment@message"&gt;&lt;/textarea&gt;
+                        &lt;button data-im-control="post"&gt;投稿&lt;/button&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+            &lt;table&gt;
+                &lt;tbody&gt;
+                &lt;tr&gt;
+                    &lt;th&gt;From:&lt;/th&gt;
+                    &lt;td data-im="comment@user"&gt;&lt;/td&gt;
+                    &lt;th&gt;Date:&lt;/th&gt;
+                    &lt;td data-im="comment@postdt"&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;td colspan="4" data-im="comment@message@innerHTML"
+                        style="background-color: #CCCCCC"&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+                <ol>
+                    <li value="3">実行します。以下の点を確認しましょう。</li>
+                </ol>
+                <ul>
+                    <li>最初は単にフォームだけが表示されています。「投稿」ボタンをクリックしても、何も入力しないと警告が表示され、メッセージは追加されません。</li>
+                    <li>Fromに自分の名前、messageに適当なメッセージを入力して「投稿」ボタンをクリックします。入力したメッセージが表示されましたが、同時に投稿ボタンを押した日時も設定されています。</li>
+                    <li>ページの最初のテキスト領域を利用して、メッセージを3つほど入力します。メッセージは、日付の逆順に表示されています。</li>
+                    <li>2つ目のメッセージの直後にも、Formとメッセージの記入部分があります。こちらにも入力をして「投稿」ボタンをクリックします。こちらは、該当メッセージへのコメントになります。いくつかコメントを追加してください。コメントも、日付が自動的に設定され、日付の逆順で表示されます。異なるルートメセージにコメントを記入し、正しいメッセージの後に付随していることを確認します。</li>
+                    <li>メッセージはテキストエリアです。改行を含むメッセージを入力してみてください。正しく、改行も表示されています。</li>
+                    <li>メッセージにJavaScriptのプログラムを、たとえば「&lt;script&gt;alert(9)&lt;/script&gt;」のように記述して投稿してみます。タグはHTMLのタグとして解釈はされず、記述した通りの文字列で表示されます。</li>
+                    <li>ページファイルには少し長いプログラムが入力されています。INTERMediatorOnPage.processingBeforePostOnlyContextは、「投稿」ボタンを押した直後で、データベース処理を行う前に呼び出されます。何をしているのかを以下の手がかりをもとに検討してみましょう。
+                        <ul>
+                            <li>INTERMediatorLib.dateTimeStringISO()、INTERMediatorLib.dateTimeStringFileMaker()：現在の日時を返す</li>
+                            <li>INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(node, target)：node以下、指定されたtargetを持つ要素のid属性値を配列で返す</li>
+                            <li>document.getElementById(idValue)：指定したid属性値の要素への参照を得る</li>
+                            <li>node.parentNode：nodeの親ノードへの参照を得る</li>
+                            <li>INTERMediator.additionalFieldValueOnNewRecord：新規レコードを作ったときの既定値を定める。最初のプロパティはコンテキスト名で、それに対してフィールド名と値を指定したオブジェクトの配列を与える</li>
+                        </ul>
+                    </li>
+                    <li>
+                        最小限の機能ですが、あっという間にBBSが完成しました。HTMLコードはコピペして作っていただきましたが、15分から30分くらいでできたのではないでしょうか？　INTER-Mediatorを使えば、Webアプリケーションが簡単に構築できることがお分かりいただけたでしょうか？
+                    </li>
+                </ul>
+                <h2>アプリケーションの改造</h2>
+                <h3>コメントの並び方を改良</h3>
+                <p>先ほど作ったBBSのページを開きます。<a href="http://192.168.56.101/page05.html">こちらより</a>開くことができます。試しにメッセージを二つ以上投稿し、さらに、一番上に表示されているメッセージに二つ以上のコメントを投稿してみてください。</p>
+                <p>どうでしょうか。投稿されたコメントは読みやすい並びに表示されていますか？　</p>
+                <p>メッセージは新しいものほど上の方に表示されていて話の流れについて行きやすくなっていますが、コメントも同じように上から新しいものが並んでいます。誰かの発言に関連するコメントは、古いものから順番に読んで行かなければ話の流れをつかむことができません。Facebookなどのタイムラインも、メッセージは新しいものから、コメントは古いものから順に並んでいますよね。</p>
+                <p>では、これまで学んだことから、どこをどのようの修正すればいいか、考えてみてください。</p>
+                <p>コメントを表示させているコンテキストは何でしょう？＿＿＿＿＿＿＿＿＿＿＿＿</p>
+                <p>Sortingの方向（direction）を降順に指定するパラメーターは英語のdescendingを略したdescでした。昇順は英語でascendingと言います。パラメータはどう指定すればいいでしょうか？＿＿＿＿＿＿＿＿＿＿＿＿</p>
+                <p>実際に改修作業を進めて行きましょう。
+                    <br> あるコンテキストの中に表示されるデータベース項目の順序は定義ファイルを設定することでコントロールできます。
+                </p>
+                <ol>
+                    <li><a href="http://192.168.56.101/">INTER-Mediatorトライアルのトップページ</a>に戻ります。</li>
+                    <li>定義ファイル def05.php を特定し、クリックします。定義ファイルエディターが開きます。 </li>
+                    <li>コンテキスト「name: comment」を特定し、Sorting項目のdirectionを昇順を意味するascに変更します。タブキーを押して変更したことを定義ファイルエディターにしっかりと伝えてください。</li>
+                    <li>では、再びBBSのページを表示させてください。一旦画面をリフレッシュします。
+                        <br> どうでしょうか、メッセージの並びは登録日時の降順に、コメントは昇順になったでしょうか？
+                    </li>
+                </ol>
+                <p>簡単な作業でデータベースから取得した項目の表示順を切替えることができましたね。他に何か不都合なことはありませんでしょうか？</p>
+                <h3>コメント入力の位置をコメントの後に移動</h3>
+                <p>メッセージにコメントを付け加えるための入力フィールドが、コメントの並びの一番上に位置しています。これはちょっと不便ですね。コメントは通常、たくさん付いたコメントの一番最新のコメントに対してさらに続けるという使い方が一般的です。そのような使い方をするときに、たくさん付いたコメントの一番先頭にコメント入力フィールドがあると、上下にスクロールさせながら入力しなければならなくなります。</p>
+                <p>これも、少し改造してみましょう。</p>
+                <p>コメントの入力フィールドの位置を、コメントの並びの最下段に移動させてみましょう。画面の表示場所などの指定はページファイルで行います。</p>
+                <ol>
+                    <li><a href="http://192.168.56.101/">INTER-Mediatorトライアルのトップページ</a>に戻ります。</li>
+                    <li>ページファイル page05.html を特定し、クリックします。ページファイルエディターが開きます。</li>
+                    <li>HTMLファイルの中身をざーっと眺めて、どの部分がどこの表示を担当しているのか、確認してください。コメントの詳細を表示している部分がどこなのか、分かりますね？　ヒントはコメントを投稿するためのテーブルタグ内に納められている、というところです。
+                        <br> 見つけましたか？　ではそのテーブルタグごと、位置を移動させてください。
+                    </li>
+                    <li>さて、作業完了しましたね？　再びBBSのページを表示させてください。一旦ブラウザーに見えている画面をリフレッシュします。
+                        <br> どうでしょうか、コメントの入力フィールドはコメントの並びの最下段になったでしょうか？
+                </ol>
+                <p>INTER-Mediatorを使ったWebアプリケーション開発はいかがだったでしょうか？
+                    <br> このようにして基本の骨格を作り上げ、要望に応じて徐々に改良していく。とても効率的な開発プラットフォームですね。
+                </p>
+                <p>今日学んだことをベースに、こんなことはできないだろうか、あんな形式に変更はできないだろうか、といろいろと工夫をしながら開発スキルを深めて行ってください。</p>
             </section>
         </article>
     </div>
