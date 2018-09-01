@@ -436,6 +436,52 @@ INTERMediator.additionalSortKey = sortKeys;</code></pre>
                         </tr>
                     </table>
                 </div>
+                <h2>非同期通信によるネットワーク処理</h2>
+                <p>以下のメソッドはいずれも、ネットワーク処理を非同期で行います。通信のためのパラメータは、argsに指定します。それぞれ、直前に示した、同期通信の対応するAPIと同じように、argsを指定します。successProcとfailProcはそれぞれ、通信が成功した時、エラーが発生した時に呼び出されるメソッドを指定します。何もしないなら、nullを指定します。通信処理は非同期で実行されるため、これらのメソッドの直後にステートメントは、通常は通信終了前に実施されるでしょう。原則として、このメソッド以降はプログラムを何も書かない、つまり、一連の処理がこのメソッドの呼出で終わるように記述する必要があります。これらのメソッドは認証が必要な場合でも、不要な場合でも利用されます。認証が必要な場合、認証が失敗すると、繰り返しログインパネルが表示する仕組みも組み込んであります。</p>
+                <h4>INTERMediator_DBAdapter.db_query_async(args, successProc, failProc)</h4>
+                <h4>INTERMediator_DBAdapter.db_update_async(args, successProc, failProc)</h4>
+                <h4>INTERMediator_DBAdapter.db_delete_async(args, successProc, failProc)</h4>
+                <h4>INTERMediator_DBAdapter.db_createRecord_async(args, successProc, failProc)</h4>
+                <h4>INTERMediator_DBAdapter.db_copy_async(args, successProc, failProc)</h4>
+                <p>通信が失敗した時に呼び出されるfailProcの関数は引数がありません。成功した時に呼び出されるメソッドは、引数が1つあり、通信結果を含むオブジェクトを引数で得られます。そのオブジェクトは、以下のプロパティを持っています。このsuccessProcに、通信結果をもとにした処理を記述することが可能です。</p>
+                <div class="table">
+                    <table>
+                        <tr>
+                            <th>プロパティ</th>
+                            <th>内容</th>
+                        </tr>
+                        <tr>
+                            <td>dbresult</td>
+                            <td>検索結果あるいは処理したレコードを示すオブジェクトの配列</td>
+                        </tr>
+                        <tr>
+                            <td>resultCount</td>
+                            <td>検索あるいは処理したレコード数</td>
+                        </tr>
+                        <tr>
+                            <td>totalCount</td>
+                            <td>現在の検索条件で得られる総レコード数</td>
+                        </tr>
+                        <tr>
+                            <td>newRecordKeyValue</td>
+                            <td>新しいレコードを作ったり複製をした時、新しいレコードのキーフィールドの値</td>
+                        </tr>
+                        <tr>
+                            <td>newPasswordResult</td>
+                            <td>パスワードの変更が成功したかどうかを示す論理値</td>
+                        </tr>
+                        <tr>
+                            <td>registeredId</td>
+                            <td>クライアント間連携で利用する登録ID</td>
+                        </tr>
+                        <tr>
+                            <td>nullAcceptable</td>
+                            <td>フィールドの値にnullが許可されているかどうか</td>
+                        </tr>
+                    </table>
+                </div>
+                <h4>IMLibQueue.setTask(function(completeTask){...})</h4>
+                <p>INTER-Mediator内部での更新処理のためのサーバーへの通信は、全てキューに投入して処理されます。これにより、更新処理が複数同時に稼働してしまう問題を避けることができます。独自にJavaScriptでプログラムを組む時、非同期通信を上記のメソッドで実装する場合、通信処理自体をこのメソッドでキューへ登録するのが確実です。引数の関数の処理ブロック内で、非同期通信処理を呼び出します。なお、関数の引数はキューを終了することを示すためのクロージャーが設定されて呼び出されます。通信処理後などに「completeTask();」のように呼び出しを記述する必要があります。これが呼び出されないと、次のキューの処理に移行しません。</p>
             </section>
         </article>
     </div>
