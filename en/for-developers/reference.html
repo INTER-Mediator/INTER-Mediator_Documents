@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2016 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2018 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -654,7 +654,7 @@
                     <tr>
                         <td class="keyword">'db-class'</td>
                         <td>
-                            このコンテキストで使うデータアクセスクラスの名前（例：PDO、FileMaker_FX）この指定がなければ、IM_Entry関数の第3引数あるいはparams.phpの値が使われます。以下、'datatype'まで同様
+                            このコンテキストで使うデータアクセスクラスの名前（例：PDO、FileMaker_FX、FileMaker_DataAPI）この指定がなければ、IM_Entry関数の第3引数あるいはparams.phpの値が使われます。以下、'datatype'まで同様
                         </td>
                     </tr>
                     <tr>
@@ -667,19 +667,19 @@
                     </tr>
                     <tr>
                         <td class="keyword">'database'</td>
-                        <td>[FileMaker_FX]このコンテキストで使うデータベース名</td>
+                        <td>[FileMaker_FX][FileMaker_DataAPI]このコンテキストで使うデータベース名</td>
                     </tr>
                     <tr>
                         <td class="keyword">'user'</td>
-                        <td>[PDO][FileMaker_FX]このコンテキストで使うユーザ名</td>
+                        <td>[PDO][FileMaker_FX][FileMaker_DataAPI]このコンテキストで使うユーザ名</td>
                     </tr>
                     <tr>
                         <td class="keyword">'password'</td>
-                        <td>[PDO][FileMaker_FX]このコンテキストで使うパスワード</td>
+                        <td>[PDO][FileMaker_FX][FileMaker_DataAPI]このコンテキストで使うパスワード</td>
                     </tr>
                     <tr>
                         <td class="keyword">'server'</td>
-                        <td>[FileMaker_FX]このコンテキストで使うサーバーアドレス（例：127.0.0.1）</td>
+                        <td>[FileMaker_FX][FileMaker_DataAPI]このコンテキストで使うサーバーアドレス（例：127.0.0.1）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'port'</td>
@@ -1225,7 +1225,7 @@
                             'db-class'
                         </td>
                         <td>
-                            データアクセスクラスの名前（例：PDO、FileMaker_FX）
+                            データアクセスクラスの名前（例：PDO、FileMaker_FX、FileMaker_DataAPI）
                         </td>
                         <td>
                             $dbClass
@@ -1258,7 +1258,7 @@
                             'database'
                         </td>
                         <td>
-                            [FileMaker_FX]データベース名
+                            [FileMaker_FX][FileMaker_DataAPI]データベース名
                         </td>
                         <td>
                             $dbDatabase
@@ -1269,7 +1269,7 @@
                             'user'
                         </td>
                         <td>
-                            [PDO][FileMaker_FX]ユーザ名
+                            [PDO][FileMaker_FX][FileMaker_DataAPI]ユーザ名
                         </td>
                         <td>
                             $dbUser
@@ -1280,7 +1280,7 @@
                             'password'
                         </td>
                         <td>
-                            [PDO][FileMaker_FX]パスワード
+                            [PDO][FileMaker_FX][FileMaker_DataAPI]パスワード
                         </td>
                         <td>
                             $dbPassword
@@ -1291,7 +1291,7 @@
                             'server'
                         </td>
                         <td>
-                            [FileMaker_FX]サーバーアドレス（例：127.0.0.1）
+                            [FileMaker_FX][FileMaker_DataAPI]サーバーアドレス（例：127.0.0.1）
                         </td>
                         <td>
                             $dbServer
