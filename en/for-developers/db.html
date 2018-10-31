@@ -64,7 +64,7 @@
                 <p>FileMakerは、テーブル、TO（テーブルオカレンス）、レイアウトといったオブジェクトを利用する。Web共有からテーブルを直接指定はできない。また、TOも指定できない。指定できるのはレイアウトのみである。レイアウトが事実上のテーブルに相当するエンティティとなる。したがって、定義ファイルのnameキー、viewキー、tableキーには、レイアウト名を指定する。たまたま、同じ名前のテーブルやTOがあっても、FileMakerのWebアクセス時に実際に利用するのはその名前のレイアウトである。</p>
                 <p>フィールドのタイプで、日時の記録用に「日付」「時刻」「タイムスタンプ」の3つがある。Web経由では、「月/日/年 時:分:秒」のフォーマットにしなければならない。また、日付フィールドに時刻を含む文字列を入力したり、時刻フィールドに日付を含む文字列を入力すると、エラーになり処理は何もなされない。その「日付等の書式エラー」の番号が500なので、余計なことを考えてしまいそうだが、この500はFileMakerが規定したエラー番号である。</p>
                 <h3>データベース側の設定</h3>
-                <p>FileMaker Serverでは、INTER-MediatorからはFileMaker ServerのXML Web公開機能もしくはFileMaker Data APIを使用しているため、XML Web公開もしくはFileMaker Data APIでのアクセスを許可する必要があります。INTER-Mediatorが使用するアカウントを用意し、XML Web公開もしくはFileMaker Data APIでのアクセスを許可するようにしてください（XML Web公開の拡張アクセス権のキーワードは「fmxml」、FileMaker Data APIの拡張アクセス権のキーワードは「fmxml」「fmrest」）。</p>
+                <p>FileMaker Serverでは、INTER-MediatorからはFileMaker ServerのXML Web公開機能もしくはFileMaker Data APIを使用しているため、XML Web公開もしくはFileMaker Data APIでのアクセスを許可する必要があります。INTER-Mediatorが使用するアカウントを用意し、XML Web公開もしくはFileMaker Data APIでのアクセスを許可するようにしてください（XML Web公開の拡張アクセス権のキーワードは「fmxml」、FileMaker Data APIの拡張アクセス権のキーワードは「fmrest」）。</p>
                 <h3>FileMaker Data APIを利用する場合</h3>
                 <p>INTER-Mediator 5.8以降でFileMaker Data APIに対応しています。FileMaker Data APIを利用するにはFileMaker Server 17が必要であり、Data API ライセンスが必要になるほか、Admin ConsoleでFileMaker Data APIを有効にする必要があります。db-classキーで指定するデータアクセスクラスの名前は「DB_FileMaker_FX」の代わりに「DB_FileMaker_DataAPI」を使用します。serverキーで「127.0.0.1」や「localhost」を指定していた場合には「localserver」を指定するように変更します。</p>
                 <h3>Windows版FileMaker Serverにおける注意点</h3>
