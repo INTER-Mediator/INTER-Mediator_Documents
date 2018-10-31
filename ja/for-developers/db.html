@@ -61,22 +61,30 @@
         <article>
             <section>
                 <h1>FileMaker Server</h1>
-                <p>FileMakerは、テーブル、TO、レイアウトといったオブジェクトを利用する。Web共有からテーブルを直接指定はできない。また、TOも指定できない。指定できるのはレイアウトのみである。レイアウトが事実上のテーブルに相当するエンティティとなる。したがって、定義ファイルのnameキー、viewキー、tableキーには、レイアウト名を指定する。たまたま、同じ名前のテーブルやTOがあっても、FileMakerのWebアクセス時に実際に利用するのはその名前のレイアウトである。</p>
+                <p>FileMakerは、テーブル、TO（テーブルオカレンス）、レイアウトといったオブジェクトを利用する。Web共有からテーブルを直接指定はできない。また、TOも指定できない。指定できるのはレイアウトのみである。レイアウトが事実上のテーブルに相当するエンティティとなる。したがって、定義ファイルのnameキー、viewキー、tableキーには、レイアウト名を指定する。たまたま、同じ名前のテーブルやTOがあっても、FileMakerのWebアクセス時に実際に利用するのはその名前のレイアウトである。</p>
                 <p>フィールドのタイプで、日時の記録用に「日付」「時刻」「タイムスタンプ」の3つがある。Web経由では、「月/日/年 時:分:秒」のフォーマットにしなければならない。また、日付フィールドに時刻を含む文字列を入力したり、時刻フィールドに日付を含む文字列を入力すると、エラーになり処理は何もなされない。その「日付等の書式エラー」の番号が500なので、余計なことを考えてしまいそうだが、この500はFileMakerが規定したエラー番号である。</p>
                 <h3>データベース側の設定</h3>
-                <p>FileMaker Serverでは、INTER-MediatorからはFileMaker ServerのXML Web公開機能を使用しているため、XML Web公開でのアクセスを許可する必要があります。INTER-Mediatorが使用するアカウントを用意し、XML Web公開でのアクセスを許可するようにしてください（拡張アクセス権のキーワードは「fmxml」）。</p>
+                <p>FileMaker Serverでは、INTER-MediatorからはFileMaker ServerのXML Web公開機能もしくはFileMaker Data APIを使用しているため、XML Web公開もしくはFileMaker Data APIでのアクセスを許可する必要があります。INTER-Mediatorが使用するアカウントを用意し、XML Web公開もしくはFileMaker Data APIでのアクセスを許可するようにしてください（XML Web公開の拡張アクセス権のキーワードは「fmxml」、FileMaker Data APIの拡張アクセス権のキーワードは「fmxml」「fmrest」）。</p>
+                <h3>FileMaker Data APIを利用する場合</h3>
+                <p>INTER-Mediator 5.8以降でFileMaker Data APIに対応しています。FileMaker Data APIを利用するにはFileMaker Server 17が必要であり、Data API ライセンスが必要になるほか、Admin ConsoleでFileMaker Data APIを有効にする必要があります。db-classキーで指定するデータアクセスクラスの名前は「DB_FileMaker_FX」の代わりに「DB_FileMaker_DataAPI」を使用します。serverキーで「127.0.0.1」や「localhost」を指定していた場合には「localserver」を指定するように変更します。</p>
                 <h3>Windows版FileMaker Serverにおける注意点</h3>
-                <p>Windows版FileMaker Server（バージョン13、14、15）ではmbstring拡張モジュールが標準で有効になっていません。FileMaker Serverフォルダ内のWeb Publishing > publishing engine > phpフォルダ以下にある「php.ini」ファイルにおいて「;extension=php_mbstring.dll」を「extension=php_mbstring.dll」に変更した上でIISの再起動を行い、mbstring拡張モジュールを有効にする必要があります。</p>
+                <p>Windows版FileMaker Serverではmbstring拡張モジュールが標準で有効になっていません。FileMaker Serverフォルダ内のWeb Publishing > publishing engine > phpフォルダ以下にある「php.ini」ファイルにおいて「;extension=php_mbstring.dll」を「extension=php_mbstring.dll」に変更した上でIISの再起動を行い、mbstring拡張モジュールを有効にする必要があります。</p>
                 <h3>定義ファイルに記述するテーブル名</h3>
                 <p>FileMaker Serverでは、定義ファイルに記述するテーブル名（nameキーの値）は、FileMakerデータベースのレイアウト名を指定する必要があります。</p>
                 <h3>各コンテキストにはレイアウトが必要</h3>
                 <p>FileMaker Serverでは、カスタムWeb公開機能の仕様上、各テーブル／コンテキストごとにレイアウトを用意して、表示や更新に必要なフィールドを各レイアウト上に配置する必要があります。</p>
                 <h3>主キーを省略できる場合</h3>
                 <p>リレーションを設定していない場合、テーブル内の主キーや定義ファイルでの主キーの指定（keyキー）は不要です。リレーションを設定している場合、下記で説明するポータルアクセスモードを有効にすることで主キーの指定を省略できる場合があります。</p>
+                <h3>内部レコードIDのフィールド名</h3>
+                <p>内部レコードIDのフィールド名は、XML Web公開では「-recid」、FileMaker Data APIでは「recordId」です。</p>
+                <h3>FileMaker Data APIでスクリプトを利用する場合</h3>
+                <p>実行するFileMakerスクリプトの最後に、「Get (対象レコード数) &amp; "/" &amp; Get (レコード総数)」を結果として返すように［現在のスクリプト終了］スクリプトステップを入れる必要があります。こうすることでスクリプトが複数回実行されないようになります。</p>
+                <h3>FileMaker Data APIでグローバルフィールドを利用する場合</h3>
+                <p>FileMaker Data APIでグローバルフィールド値を設定する場合、レイアウト名とTO名が一致しない場合には、globalキー内のfieldキーの値は「TO名::フィールド名」の形式で指定する必要する必要があります。</p>
                 <h3>ポータルアクセスモード</h3>
                 <p>関連テーブルのデータをレイアウト上にあるポータルから取得する場合、定義ファイルでrelationキーの下位キーでportalキーの値をtrueとすることで、ポータルアクセスモードを利用できます。ポータルアクセスモードを利用することで、関連テーブル用の別レイアウトを作成する必要がなくなり、動作が若干高速化されます。</p>
                 <p>定義ファイルでは、relationキーのあるコンテキストのnameキーにテーブルオカレンス名（リレーションシップグラフで確認できる名称）を、viewキーにはポータルがあるレイアウト名を指定します。ページファイルでフィールドを指定する際には、「(nameキーの値)@(nameキーの値)::(フィールド名)」という形式で記述する必要があります。</p>
-                <p>なお、FileMaker Server 11およびそれ以前の場合には、FileMakerデータベースのレイアウト上において、ポータル内に関連テーブルの主キーフィールドを配置する必要があります。</p>
+                <p>なお、関連テーブルのレコードを追加できるようにするためには、FileMakerデータベースのレイアウト上においてポータル内に関連テーブルの主キーフィールドを配置した上で、FileMakerデータベースのリレーションシップグラフにおいて「このリレーションシップを使用して、このテーブルでのレコードの作成を許可」にチェックをつける必要があります。</p>
                 <h3>未サポートの機能</h3>
                 <p>以下の機能は、現在のバージョンでは未サポートです。</p>
                 <ul>
