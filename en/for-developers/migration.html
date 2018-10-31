@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2017 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2018 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -84,6 +84,11 @@
 </ul>
                 <h2>廃止されるPHPのグローバル変数</h2>
                 <p>Ver.6.0ではINTER-Mediator.phpで定義されているグローバル変数（$g_dbInstanceと$g_serverSideCall）が廃止される予定です。</p>
+            </section>
+            <section>
+                <h1>Ver.5.8での変更</h1>
+                <h2>要求されるプライベートキーの鍵長</h2>
+                <p>セキュリティ上の理由から、プライベートキーの鍵長が2048bit未満のものを非推奨にしました。ネイティブ認証やLDAP認証を利用している場合には、プライベートキー（params.phpファイル内の変数 $generatedPrivateKey の値）を更新する必要があります。</p>
             </section>
             <section>
                 <h1>Ver.5.7での変更</h1>
