@@ -45,8 +45,15 @@
     "id": 7,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/deploy.html",
-    "title": "ダウンロードとインストール",
-    "breadcrumb": "ダウンロードとインストール"
+    "title": "ダウンロードとインストール(Ver.5まで)",
+    "breadcrumb": "ダウンロードとインストール(Ver.5まで)"
+},
+{
+    "id": 32,
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/deploy6.html",
+    "title": "ダウンロードとインストール(Ver.6以降)",
+    "breadcrumb": "ダウンロードとインストール(Ver.6以降)"
 },
 {
     "id": 8,
