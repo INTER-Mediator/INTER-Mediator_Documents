@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   Copyright (c) 2010-2017 INTER-Mediator Directive Committee, All rights reserved.
+ *
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-novices">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h2>はじめに</h2>
+                 <p class="lead">この文書では、リリース版のダウンロード情報と、Ver 6以降のINTER-Mediatorを使って開発をする場合のINTER-Mediatorの準備方法と、さらに作成したWebアプリケーションで使用するINTER-Mediatorを作成する方法をまとめたものです（INTER-Mediator Ver.5以前は<a href="deployt.html">こちらの文書</a>をご覧ください）。INTER-MediatorはGitHubでソースを公開しています。通常の開発時は、リポジトリにあるものをインストールしておくのがおすすめです。そして、アプリケーション完成後は、JavaScriptに圧縮をかけた実稼働用のINTER-Mediatorを利用するのが少しの事ですが、効率よくなります。これらの方法を説明します。
+                </p>
+            </section>
+            <section>
+                <h2>INTER-Mediatorを稼働する準備</h2>
+                 <p>INTER-Mediatorを稼働するコンピューターは、大別して、開発用のものと、運用用のものがあります。また、目的等により自由にセットアップができますが、説明の都合上、標準的な手順として、開発用のコンピューターでコード作成を行い、それを運用用のコンピューターに随時コピーすることを想定します。また、実際にアプリケーションを稼働させるためには、データベースも必要になると思われるので、運用用コンピューター上で稼働テストを行うのが一般的と考えられますが、開発用コンピューターにデータベースをセットアップしたりあるいは開発用コンピューターからデータベースへのアクセスを可能にすれば、開発用コンピューターの中だけでアプリケーションの動作テストは行えます。</p>
+                 <p>開発用のコンピューターに必要なものは、以下の通りです。</p>
+                 <ul>
+                 <li>PHP Ver.7：サーバーコードを実行する必要があります</li>
+                 <li>git：ソースコードの取得に必要です</li>
+                 <li>composer：ライブラリの取得や稼働環境を整えるのに必要です</li>
+                 <li>開発環境：IDEあるいはテキストエディタで、コード作成のために必要です</li>
+                 </ul>
+                <p>運用用のコンピューターに必要なものは、前記の開発用コンピューターに用意するもののうち、開発環境以外のものに加えて以下の通りです。つまり、運用用コンピューターでも、PHP、git、composerのセットアップはおこなってください。</p>
+                <ul>
+                 <li>データベース：稼働はもちろん、アプリケーションのスキーマを適用している</li>
+                 <li>Webサーバー（Apache、IIS、nginx等）：PHPが稼働するように設定する</li>
+                 </ul>
+                 <h3>WebサーバーとPHP 7.xのセットアップ</h3>
+                 <p>PHPは、開発用と運用用のいずれのコンピューターにも必須ですが、Webサーバーに関しては、運用用のみ必須となります。開発用コンピューターでは、PHPのWebサーバー機能を利用して稼働できるので、必ずしもサーバーは必要ありません。</p>
+                 <h4>Ubuntu18.02でのApache2とPHP 7.xのセットアップ</h4>
+                 <p>Ubuntu18.02は、PHP 7.2がパッケージとして用意されています。これらのインストールを行い、さらに、MySQL、PostgreSQL、SQLiteをセットアップするまでは以下のようにコマンドを入れれば可能です。INTER-MEdiatorに必要なPHPのモジュールについても、以下の通りで必要なものはインストールされます。</p>
+                 <div class="code"><pre><code>sudo apt-get install -y apache2 php7.2 libapache2-mod-php7.2
+sudo apt-get install -y php7.2-mbstring php7.2-bcmath php7.2-curl php7.2-xml
+sudo apt-get install -y mysql-server-5.7 mysql-client-core-5.7 php7.2-pdo-mysql
+sudo apt-get install -y postgresql php7.2-pdo-pgsql
+sudo apt-get install -y sqlite3 php7.2-pdo-sqlite</code></pre></div>
+<p>ドキュメントルートは「/var/www/html」、セットアップ関連ファイルは「/etc/apache2」、ログファイルは「/var/log/apache2」のそれぞれのディレクトリにあります。exi</p>
+                <p>インストール後は、次のコマンドでApache2を再起動できます。インストール作業で試行錯誤した場合には、インストール作業の後にこのコマンドを入れれば良いでしょう。</p>
+                 <div class="code"><pre><code>sudo systemctl restart apache2</code></pre></div>
+                 <h3>macOSでのApache2とPHP 7.xのセットアップ</h3>
+                 <p>macOSはApacheもPHPも最初から含まれていますが、PHPのバージョンが長らく7.1であるなど、ほとんどメンテナンスしている感じがありません。そのため、PHPはHomebrewでインストールすることで、新しいバージョンが早く入手して確認ができます。そうなれば、Apache2もHomebrewからインストールするのが色々な意味で手軽であると考えられます。以下は、Homebrewをインストールしている状態を想定します。Homebrewのインストール方法は<a href="https://brew.sh/index_ja" target="_blank">こちらのページ</a>をご覧ください。</p>
+                 <p>まず、macOSを開発用コンピューターにしている場合が多いと思われるので、PHPのインストールを先に説明します。PHPをインストーするコマンドは以下の通りです。比較的多くのモジュールが最初から組み込まれており、INTER-Mediatorは追加でインストールすることなく、これだけで必要なものがインストールされます。</p>
+                  <div class="code"><pre><code>brew install php</code></pre></div>
+                  <p>macOS Mojaveでは、標準のPHP 7.1は「/usr/bin/php」で起動されますが、HomebrewのPHPをインストーすると「/usr/local/bin/php」というコマンドが追加され、Ver.7.3系列のPHPが利用できます。なお、「/usr/local/bin/php」は「/usr/local/Cellar/php/7.3.2/bin/php」へのショートカットリンクになっています。つまり、Homebrewによって管理されるPHPの様々なファイルは、/usr/local/Cellar/php以下のディレクトリに存在します。php.iniファイルのパスは「/usr/local/etc/php/7.3/php.ini」になります。</p>
+                  <p>さらに、HomebrewでApache2をインストールする方法も説明します。なお、開発用コンピューターであれば、わざわざApache2のセットアップまではする必要はありません。また、標準のApache2を使う場合と、いろいろ勝手が違うこともあるので、計画的にセットアップを進めてください。インストールは以下のコマンドです。</p>
+                  <div class="code"><pre><code>brew install apache2</code></pre></div>
+                  <p>主要なバイナリであるhttpdファイルの様子もPHPと似ており、標準の「/usr/sbin/httpd」に対して、「/usr/local/bin/httpd」が作られ、「/usr/local/Cellar/httpd/2.4.39/bin/httpd」にリンクされています。なお、macOS Mojaveでは標準のApache2のバージョンは2.4.34であり、Homebrewでインストールしたものも執筆時点で2.4.39とバージョンはかなり近いものが入っています。HomebrewのApache2のドキュメントルートは「/usr/local/var/www」、ログファイルは「/usr/local/var/log/httpd」、設定ファイルは「/usr/local/etc/httpd」のそれぞれのディレクトリが利用されています。いずれも、標準のApache2とは異なります。</p>
+                  <p>Apacheは常駐が必要なサーバーソフトウエアですが、インストールするだけでは起動しません。つどつど手作業で起動するなら「apachectl start」とコマンドを入力します。また、起動時に自動的に起動するようにするためには「brew services start httpd」とコマンドを入力します。いずれの場合も、その時のユーザーの権限でhttpdが起動します。そのこともあって、Homebrewで開かれるポートは、8080と8443になっています。通常通り80と443のポートで運用したい場合には、設定ファイルのディレクトリにあるhttpd.confとextra/httpd-ssl.confについて、それぞれポート番号の定義部分を変更する必要があります。また、rootとしてApache2を起動したい場合には「sudo brew services start httpd」とコマンドを入力します。sudoの有無で、デーモンのユーザーに影響があります。</p>
+                  <p>HomebrewでセットアップしたAapche2でPHPを稼働させたい場合、以下の記述を設定ファイルのどこかに記述する必要があります。設定ファイルのディレクトリにあるhttpd.confの末尾に追加するなどの方法で構いません。</p>
+                  <div class="code"><pre><code>LoadModule php7_module /usr/local/opt/php/lib/httpd/modules/libphp7.so
+                  
+&lt;FilesMatch \.php$&gt;
+    SetHandler application/x-httpd-php
+&lt;/FilesMatch&gt;</code></pre></div>
+                 <h4>Windows 10でのIISとPHPのセットアップ</h4>
+                 <p>PHPのサイトでのWindows向けインストール情報では、Microsoft Web Platform Installer（WebPI）を使うのが簡単と書いてあります。執筆時点では、<a href="https://www.microsoft.com/web/downloads/platform.aspx" target="_blank">Ver.5.0のダウンロード</a>が可能とMicrosoftのサイトでは表示されていますが、実際にはVer.5.1がダウンロードされます。インストーラでインストールをし、その後、スタートメニューから「Microsoft Web Platform Installer」を選択して、セットアップ用のアプリケーションを選択します。そして、検索窓で「PHP 7.3」などと入力して項目を探します。執筆時点では、PHP 7.3.4がリリースされていますが、WebPIでは最新ではないものの7.3.1がダウンロードできました。PHPだけ、あるいはIIS Express用のものがあるので、状況に応じて選択すれば良いでしょう。</p>
+                 <p>Windows 10でのWebサーバーであるIISを利用するには、スタートメニューの左側のギアのアイコンなどから「設定」アプリを開きます。そして、「アプリ」をクリックし、右側の関連設定にある「プログラムと機能」を選択します。ここからはウインドウが開いてコントロールパネルの作業になります。左側にある「Windowsの機能の有効化または無効化」を選択すると、ダイアログボックスが開きます。その中の「インターネットインフォメーションサービス」にある「World Wide Webサービス」と、「Web管理ツール」の「IIS管理コンソール」をオンにして、OKボタンをクリックします。PHPを使う場合には、「World Wide Webサービス」の「アプリケーション開発機能」にある「CGI」のチェックは必ず入れておきます。これでIISがインストールされます。</p>
+                 <p>PHPのサイトには、Windowsに手作業でインストールする方法も記載されています。<a href="https://windows.php.net/download/" target="_blank">ダウンロードのページ</a>には、4種類のファイルがアップロードされていますが、32ビット/64ビット以外に、スレッドセーフとそうでないものもあります。IISの場合はスレッドセーフでないもの、Apacheの場合はスレッドセーフのものを選択します。ファイルをダウンロードすると、フォルダにファイルが入ったものが得られるので、そこからは自分で適切な位置に移動して、php.exeなどにパスが通るように、展開したルートフォルダに当たるphpのフォルダを環境変数のPathを設定します。</p>
+                 <p>手作業でインストールしたPHPをIISで利用できるようにするには、エクスプローラーを使って、phpのフォルダに対して、IIS_IUSRSグループに対する「読み取りと実行」「フォルダーの内容の一覧表示」の権限を与えます。さらに、IISマネージャーで、新たにハンドラーマッピングを追加します。設定は、*.phpという要求パスに対して、FastCgiModleのモジュールを適用し、実行するファイルとして、phpのフォルダ以下にあるphp-cgi.exeを指定します。実行ファイルは絶対パスを指定します。</p>
+                 <h3>composerのインストール</h3>
+                 <p>composerは、PHPのライブラリ管理ツールです。INTER-Mediator Ver.6より、composerの利用は必須となりました。インストールは<a href="https://getcomposer.org/" target="_block">composerのページ</a>に記載があります。macOSやLinuxでは、そのページの「Download」の先のページに書いてある数行のコマンドラインをコピーして、ターミナルにペーストして、インストールを行うのが1つの方法です。この方法は、https://getcomposer.org/installerから得られるPHPのスクリプトをcomposer-setup.phpというファイルに保存し、チェックサムを調べてOKであれば、ダウンロードしたスクリプトをphpコマンドで動かし、終わればそのファイルを消すというものです。なお、macOSではHomebrew、Linuxではapt-getなどでインストールすることもできますが、最新版でないことも時折あるので、コマンドでインストーするのが良いでしょう。なお、コマンドを実行するには、phpがコマンドラインで利用可能になっている必要があります。Windowsについては、<a href="https://getcomposer.org/doc/00-intro.md#installation-windows" target="_blank">composerのサイトのGetting Startedのページ内</a>にインストーラーがあるのでそれを利用するのが便利でしょう。なお、composer自身のアップデートは「composer selfupdate」とコマンドライン入力をします。</p>
+                 <h3>その他のツールのセットアップ</h3>
+                 <p>いずれのOSでも、gitコマンドが稼働できるようにしておいてください。macOSは、Xcodeをインストールして、１度起動すると開発むけコマンドラインのインストーラーが動くので、その中にgitが入っています。Linuxではapt-get等で取得をしましょう。また、Linuxではzipについてもインストールをしておきましょう。Windowsでは、<a href="https://gitforwindows.org" target="_blank">Git for Windows</a>をインストールします。これで、Windowsでもgitコマンドが利用できるようになります。また、Git BashというUNIXで使われるシェルも稼動できるので便利です。</p>
+                 <p>さらに、<a href="https://desktop.github.com/" target="_blank">GitHub Desktop</a>についてもインストールしておくと便利です。レポジトリからの取り出しなど、基本的な作業はコマンドを使わなくてもアプリケーション上でできるようになります。</p>
+            </section>
+            <section>
+                <h2>リポジトリからINTER-Mediatorをダウンロードしてセットアップ</h2>
+                <p>GitのレポジトリにあるINTER-Mediatorをダウンロードし、さらにセットアップする手順を示します。コマンドラインを使う方法と、アプリケーションを使う方法を説明します。</p>
+                <h3>コマンドラインを使った方法</h3>
+                <p>まず、開発用コンピューターのあるフォルダに作成するWebアプリケーションのファイルをまとめておくとします。そのフォルダを作ります。このフォルダは、ファイルを単にまとめておくだけなので、Webサーバーの公開ディレクトリの中でなくても良いでしょう。以下は、Documentsの下にmywebappフォルダを作りました。</p>
+                <div class="picture">
+                    <img src="../../images/shot0034.png">
+                </div>
+                 <h4>コマンドを使ってクローンを作成</h4>
+               <p>そして、ターミナルを開いてください。次のように作業をします。#以降はコメントで、入力は不要です。ファイルパスはもちろん、ご自分の作られているフォルダ構成に従って指定をしてください。</p>
+                <div class="code">
+                    <pre><code>cd ~/Documents/mywebapp  # Webアプリケーションのフォルダをカレントにする
+git clone https://github.com/INTER-Mediator/INTER-Mediator.git  # サーバーからリポジトリを複製する</code></pre>
+                </div>
+                <p>すると、mywebappフォルダに、INTER-Mediatorフォルダが作られます。このINTER-Mediatorフォルダがフレームワーク本体となります。この階層に、たとえば、index.htmlファイルや、アプリケーションのhtml/phpファイル（ページファイルと定義ファイル）を作って行けばOKです。</p>
+                <div class="picture"><img src="../../images/shot0035.png">
+                </div>
+                <h4>定義ファイルの記述方法</h4>
+                <p>定義ファイルで、リポジトリからクローンしたINTER-Mediatorを参照するには、定義ファイルのcontexts.phpはたとえば、次のように記述をします。</p>
+                <div class="code">
+                    <pre><code>&lt;?php
+require_once('INTER-Mediator/INTER-Mediator.php');
+IM_Entry( .... );</code></pre>
+                </div>
+                <p>なお、サンプルファイルは、INTER-Mediatorフォルダ内のsamplesフォルダにあります。</p>
+                <h4>レポジトリの更新</h4>
+                <p>もし、リポジトリ側に新しいソースコードが加わっていれば、以下のようにコマンドを入れれば、最新版を取得できます。INTER-Mediatorフォルダをカレントにして、git pullとすればいいです。</p>
+                <div class="code">
+                    <pre><code>cd ~/Documents/mywebapp/INTER-Mediator
+git pull</code></pre>
+                </div>
+                <p>念のために説明しておきますが、pullは最新版に更新するという使い方は非常に稀で、正しくは別のリポジトリの修正を取り込むという意味合いがあります。ソースコードをメンテする上では単なる更新ではないのですが、ソースを利用する側の方から見れば更新コマンドと思っていただいて概ねいいかと思います。もし、自分でフレームワーク側のソースを修正された場合には、単純ではありませんので、ここではソースは参照だけでタッチしないという前提で、説明をここまでとします。</p>
+                <h3>GitHubアプリケーションを使う場合</h3>
+                <p>レポジトリに対する操作は、アプリケーションとして利用できる<a href="https://desktop.github.com/" target="_blank">GitHub Desktop</a>がありますので、それを使ってクローンを作り、更新するということが可能です。インストーラーがあるのでインストールは簡単です。また、WindowsとmacOSで操作方法に大きな違いはありません。</p>
+                <h4>GitHub Desktopでクローンを作成する</h4>
+                <p>最初に行う操作はコマンドラインの場合と同様に「クローン」です。初めて使う場合には、次のような画面になると思われるので、右側の「Clone a repository from the Internet...」をクリックします。あるいは、FileメニューからClone Repositoryを選択します。</p>
+                <div class="picture"><img src="../../images/gd01.PNG" style="border: 1px #AAAAAA solid"></div>
+                <p>続いて、クローンに関する設定を行います。Clone a repositoryのボックス上部にある「URL」を選択します。INTER-MediatorのレポジトリはGitHubにあるので、最初のテキストフィールドには、「INTER-Mediator/INTER-Mediator」と入力します。最後に.gitは不要です。Local pathは、クローンを行うフォルダを指定します。Chooseボタンで選択できるので、もし、すでにフォルダが決まっているのなら、そのフォルダを指定します。そして、Cloneボタンをクリックします。</p>
+                <div class="picture"><img src="../../images/gd02.PNG" style="border: 1px #AAAAAA solid"></div>
+                <h4>GitHubのサイトから直接クローンを作成</h4>
+                <p>クローンを作成する場合、GitHubのページにある「Clone or download」のドロップダウンから「Open in Desktop」をクリックすることでも可能です。その前に、GitHub Desktopのインストールが必要です。</p>
+                 <div class="picture"><img src="../../images/shot0037.png"></div>
+                 <p>「Open in Desktop」をクリックしてしばらく待つと、GitHub Desktopが起動し、Clone a Repositoryのパネルが開きます。URLは正しいものが入力されているので、Local Pathを望む場所に指定して、Cloneをクリックして進めれば良いでしょう。</p>
+                 <div class="picture"><img src="../../images/shot0036.png"></div>
+                <h4>クローンを作成後のGitHub Desktop</h4>
+                <p>クローンが完了すると、レポジトリを表示する画面になります。ウインドウ上部の黒い部分が主要な操作を行う箇所でCurrent Repositoryおよび「INTER-Meidator」と見えている部分が、現在、INTER-Mediatorのクローンしたレポジトリを参照している状態であることを示しています。複数のレポジトリを扱うようになった場合はここをクリックして、切り替えるレポジトリを選択することなどを行います。その右には、Current Branchとして「master」が見えていますが、これはレポジトリの中の異なるソースコードの状態を管理できるブランチの機能の選択です。右側に「Fetch origin」と見えている部分は、これをクリックすることで、GitHub上の最新のレポジトリの状態に更新できます。GitHubのレポジトリの内容は、頻繁に更新されるので、バグが修正されたりリリースのタイミングで手元のINTER-Mediatorを最新のものにするには、このFetch originのボタンは手軽に利用できます。白い背景で見えているのは、レポジトリの更新履歴などです。</p>
+                <div class="picture"><img src="../../images/gd03.PNG" style="border: 1px #AAAAAA solid"></div>
+                <h3>ダウンロードしたバージョンを開発時に利用する</h3>
+                <p>GitHubのINTER-Mdiatorのページで、右側の「Donwload ZIP」ボタンをクリックすると、現状のリポジトリの各ファイルを圧縮・アーカイブしてダウンロードします。ブランチがmasterであれば、ダウンロードして展開したフォルダは、INTER-Mediator-masterという名前になっています。フォルダ名を適当に変更して、開発中のアプリケーションのフォルダ等へ移動します。</p>
+                <p>もちろん、こちらの方が当初は手軽なのですが、リポジトリとは切り離されることになるので、リポジトリの更新があれば、その都度、同じ作業を繰り返さないといけません。</p>
+</section>
+<section>
+               <h2>composerを使って稼働できるようにする</h2>
+				<p>ファイルをレポジトリからダウンロードした後、ターミナル等でフレームワークのルート、つまりINTER-Mediatorフォルダの直下をカレントディレクトリにして、以下のようにcomposerのコマンドを入力し、しばらく待ちます。この作業によって、必要なライフラリをダウンロードします。</p>
+                <div class="code"><pre><code>cd INTER-Mediator  # INTER-Mediatorフォルダをカレントにする
+composer update # 必要なライブラリをセットアップする</code></pre></div>
+                <p>かなり時間がかかりますが、しばらく待っていてください。途中、警告が出る場合もありますが、概ねそのまま進めても問題がないものが多いと思われます。PHPのライブラリだけでなく、npmを使ったJavaScriptのライブラリのインストールも同時に行います。個別に行うこともできますが、「レポジトリのルートでcomposer updateをする」というシンプルな作業で進めることができるようになっているので、composerをインストールしてライブラリのインストールを行ってください。</p>
+                <div class="picture"><img src="../../images/gd04.PNG"></div>
+                <h3>サービスサーバー稼働の確認</h3>
+                <p>実際にアプリケーションが稼働するようになったとき、ページの最後に出てくるINTER-Mediatorのフッター表示にある「Service Server Status」を確認してください。図のように、緑色になっていれば稼働していますが、赤の場合は稼働していません。</p>
+                <div class="picture"><img src="../../images/shot0042.png"></div>
+                <p>このサービスサーバーは、Ver.6現在、サーバーサイドでのバリデーションのために利用していますが、今後のバージョンで利用は拡大する予定です。PHPではなく、Node.jsを使ったサーバーであり、サーバー上で常駐します。サーバーへのリクエストは、PHP側からのみに行い、クライアントから直接は行いません。なんらかの理由でサービスサーバーを止めたい場合は、例えば、次のようにコマンドを入力します。INTER-Mediatorフォルダがカレントディレクトになっているとします。</p>
+                 <div class="code"><pre><code>node_modules/forever/bin/forever stopall</code></pre></div>
+                <h3>サービスサーバーが稼働しない場合</h3>
+                <p>セットアップ時にどうしても１点、手作業が必要な箇所があります。npmでインストールしたforever（Windowsの場合はforever-win）の起動モジュールに関して、書き込み可能になっている必要があるからです。INTER-Mediator/node_modules/forever/bin/foreverというファイルに関して、書き込み可能かどうかを調べます。以下は、INTER-Mediatorフォルダがカレントフォルダとして、コマンドを入れた例です。foreverファイルはmsykユーザーだけに権限があります。</p>
+                 <div class="code"><pre><code>$ ls -l node_modules/forever/bin/forever
+-rwxr-xr-x  1 msyk  staff  125  4 28 14:18 node_modules/forever/bin/forever</code></pre></div>
+<p>Webサーバーがどんなユーザーであるかによって対応が変わります。もし、開発用マシンでphpをWebサーバーとして使う場合は、おそらくログインしているユーザー（ここでのmsyk）でWebサーバーも動くので何もしなくても大丈夫です。しかし、これが、Ubuntu Serverの場合だと、Webサーバーはwww-dataユーザー（www-dataグループ）で稼働します。したがって、書き込み権限がない状態になります。書き込み権限の指定は色々な方法がありますが、ライブラリの更新処理がある場合などを考えると、グループにWebサーバーのユーザーを指定して、グループの書き込み権限を与えるのが適切だと考えられます。例えば、以下は、Ubuntu ServerでINTER-Mediatorフォルダをカレントにした時のコマンド例です。</p>
+                <div class="code"><pre><code>chgrp www-data node_modules/forever/bin/forever
+chmod g+w node_modules/forever/bin/forever</code></pre></div>
+<p>書き込み権限がない状態でアプリケーションを利用しようとしても、ギアが出たままになります。ここで、デベロッパーモードになってコンソールを参照してください。すると、「INTER-Mediator[ERROR]: [ServiceServerProxy] The Forever script file is NOT writable: ...」のようなエラーメッセージが見え、foreverスクリプトへの書き込み権限がないことがわかります。このメッセージが見えていたら、パスで記載されているファイルのアクセス権を変更してください。</p>
+               <div class="picture"><img src="../../images/shot0041.png"></div>
+                <p>コマンドラインでforeverを実行する場合、node.jsのコマンドにパスが通っている前提があります。そうなると、composerでインストールしたnpmを利用できるとは限りません。そこで、foreverが動かない場合が発生するので、foreverのスクリプトの中にあるnode.jsへのパスを、composerでインストールしたものの絶対パスに変更しています。そのため、書き換えが必要になります。Ver.6では、パスを通すにしても、現状のように書き込み可能にするにせよ、管理者権限で一手間必要であることは違いないので、「やり方がシンプルで良い」と判断可能な書き込み権限指定で進めることにしました。</p>
+                <h3>サービスサーバーに関するトラブルシューティング</h3>
+<p>Ver.6現在、INTER-Mediatorフォルダを移動すると、node.jsへのパスも変化することになるため、foreverのスクリプトの改変結果が正しく無くなります。この場合、node_modules以下のforeverフォルダを消して、再度、INTER-Mediatorフォルダをカレントにしてcomposer updateコマンドを実行してください。これで、一連のファイルが再度インストールされます。その後、foreverのスクリプトの書き込み権限を改めて確認してください。</p>               
+            </section>
+<section>
+               <h2>開発用コンピューターでテスト稼動する</h2>
+				<p>開発用のコンピューター上で稼動テストをする場合は、phpのWebサーバー機能を使うのが便利です。なお、データベースへの接続が可能な状態になっている必要があります。そして、例えば、次のようなコマンドを入力します。前の例の通り、mywebappフォルダにアプリケーションがある場合、例えば次のようにコマンドを入力します。</p>
+                <div class="code"><pre><code>cd ~/Documents/mywebapp  # アプリケーションのフォルダをカレントにする
+php -S localhost:9000 # phpのWebサーバーを稼動する</code></pre></div>
+                <p>最初のコマンドで、phpのWebサーバーのルートをカレントフォルダにします。カレントフォルダを指定することも可能ですが、カレントにして次のphpコマンドを実行するのが手軽です。そして、-Sオプションを付けてphpコマンドを実行します。-Sオプションは、応答するIPアドレスとポートを指定します。例のように指定すると、phpが実行しているコンピューター内であれば、「http://localhost:9000」のURLで、mywebappフォルダの内容を参照できます。したがって、他のコンピューターからは参照できません。他のコンピューターから参照したい場合には、localhostではなく、自分自身のEthernetのIPアドレスなど、外部接続可能なホスト名を指定してください。ポート番号は、Webサーバー等の利用ポートを避けるのが一般的かと思われますが、もちろん、9000である必要はありません。使われていないポートであればOKです。これで、mywebappフォルダにあるanylist.htmlファイルは、ブラウザのアドレス欄に「http://localhost:9000/anylist.html」と入力することでアクセスでき、PHPが稼動してINTER-Mediatorは正しく動作します。</p>
+                <h3>サンプルを実際に稼働させる</h3>
+                <p>サンプルを実際に稼働させるには、まず、データベースにサンプル用のデータを追加する必要があります。MySQLとFileMakerのサンプルは豊富なので、どちらかを稼働させるのが良いでしょう。PostgreSQL、SQLiteのサンプルは限られています。データベース稼働の方法は、このページでは割愛します。</p>
+                <p>MySQLを利用する場合、サンプルを利用するためのデータベーススキーマが、INTER-Mediatorフォルダ内のdist-docsフォルダにある「sample_schema_mysql.txt」ファイルに記載されています。これを例えば、以下のコマンドで入力します。ファイルの内容はSQLコマンドなので、状況に合わせて修正して読み込ませてください。</p>
+                 <div class="code"><pre><code>cd INTER-Mediator/dist-docs #カレントフォルダの移動
+mysql -uroot < sample_schema_mysql.txt #スキーマの読み込み</code></pre></div>
+                <p>FileMakerのサンプルファイルは、INTER-Mediatorフォルダ内のdist-docsフォルダにある「TestDB.fmp12」です。このファイルをFileMaker Serverで公開してください。</p>
+                <p>データベースの準備ができれば、実際にWebサーバーで公開しますが、これも、phpで公開するのが手軽でしょう。また、他のファイルとの混乱を避ける意味でも、INTER-Mediatorフォルダを公開するのが良いでしょう。例えば、以下のようにコマンドを入力して、INTER-Mediatorフォルダをphpコマンドで公開します。</p>
+                 <div class="code"><pre><code>cd ~/Documents/mywebapp/INTER-Mediator  # INTER-Mediatorのフォルダをカレントにする
+php -S localhost:9000 # phpのWebサーバーを稼動する</code></pre></div>
+               <p>そして、ブラウザからは、「http://localhost:9000/samples/」と入力してください。サンプルの一覧のページが見えるはずです。ここで、samplesの後のスラッシュも入力してください。Apacheだと、フォルダ参照の場合の最後のスラッシュは必要に応じて補完しますが、phpのWebサーバー機能はそうした機能はないので/を入れておく必要があります。これがないと、スタイルシートの読み込みなどがうまく行かないなど、意図しない見え方になります。</p>
+            </section>
+　           <section>
+                <h2>実稼働向けINTER-Mediatorを生成する</h2>
+                <p>リポジトリから取り出した結果で開発しているので、その状態で稼働はできるはずです。また、以下の方法でビルドすれば、サンプルなど実稼働に不要な素材が取り除かれると同時に、JavaScriptのプログラムを1つのファイルに圧縮してまとめるので、動作のパフォーマンスは有利になります。</p>
+                <h3>実行用のINTER-Mediatorを作成する</h3>
+                <p>独自のバージョンと本日の日付を組み込んだ現状のINTER-Mediatorを作るには、dist-docs/buildup.shというスクリプトを使ってください。たとえば、INTER-Mediatorのディレクトリがカレントディレクトリであれば、MacあるいはUNIX系OSなら、以下のように入力します。Windowsの場合、PowerShellで稼動します。すると、おそらくGit Bashが別のウインドウを開いて稼動するので、どのOSでもUNIXのシェル環境で稼動することになると思われます。Cygwindでの稼働もできます。</p>
+                <div class="code"><pre><code>cd INTER-Mediator/dist-docs/
+./buildup.sh</code></pre></div>
+                <p>すると以下のようなメッセージがターミナルに表示されます。ここで、キーボードから、1、2、3のいずれかをキータイプしてreturnキーを押してください。3種類のビルド形式が選択できますが、(2)が最小の構成で、通常はこちらでいいかと思われます。(3)についてはこの後説明します。</p>
+                <div class="code">
+                    <pre><code>$ ./buildup.sh
+=================================================
+ Start to build the INTER-Mediator Ver.6-dev
+-------------------------------------------------
+ Original: /Users/msyk/Documents/mywebapp/INTER-Mediator
+ Build to: /Users/msyk/Documents/mywebapp/im_build/INTER-Mediator
+ Path of minifyer (installed by composer): /Users/msyk/Documents/mywebapp/INTER-Mediator/vendor/matthiasmullie/minify
+-------------------------------------------------
+Choose the build result from these:
+ (1) Complete (everything contains)
+ (2) Core only (the least set to work web applications)
+ (3) Core only, and move it to 3-up directory (the ancestor of original INTER-Mediator)
+Type 1, 2 or 3, and then type return----&gt; </code></pre>
+                </div>
+                <p>その後、メッセージ通り、INTER-Mediatorフォルダと同じ階層に、「im_build」フォルダが作られ、その中に、INTER-Mediatorフォルダがあります。こちらのファイルの中は、動作実行上必要なものだけに絞られています。また、このフォルダ内でcomposer updateも自動的に実行されるので、PHPやJavaScriptのライブラリはすでにインストールされた状態になります。このim_build/INTER-Mediatorフォルダを、現状のINTER-Mediatorフォルダと置き換えればOKです。</p>
+                 <div class="picture"><img src="../../images/shot0038.png"></div>
+                <h3></h3>
+                <p>前記の手法ではビルド後のINTER-Mediatorの移動が面倒であるとも考えられますし、元のINTER-Mediatorフォルダを上書きすると、レポジトリからの更新ができないなどの問題もあります。オリジナルのINTER-Mediatorを残しつつ、実行用のINTER-Mediatorを効率的に管理するために、アプリケーションのフォルダのルートにlibフォルダ、そしてその中にsrcフォルダを作り、そこにクローンを作成しておくという方法があります。クローンの作業から説明すると、例えば次のようなコマンドで作成が可能です。作成結果の例も示します。</p>
+                <div class="code"><pre><code>cd ~/Documents/mywebapp
+mkdir lib
+cd lib
+mkdir src
+cd src
+git clone https://github.com/INTER-Mediator/INTER-Mediator.git</code></pre></div>
+                 <div class="picture"><img src="../../images/shot0039.png"></div>
+<p>そして、buildup.shスクリプトを稼働します。INTER-Mediatorフォルダがカレントの場合は、「dist-docs/buildup.sh」のように相対パスでスクリプトを指定して起動しても構いません。ここで、「 (3) Core only, and move it to 3-up directory」を選択します。これを選択すると、「(2) Core only」に加えて、im_buildフォルダに作られた実行用INTER-Mediatorフォルダを、3つ上位のディレクトリに移動させます。つまり、srcにあるオリジナルのINTER-Mediatorからビルドした実行用INTER-Mediatorを、libの直下に移動するまでを自動的に行っているということです。src内部はそのまま変更はされません。</p>
+<div class="code"><pre><code>$ pwd
+/Users/msyk/Documents/mywebapp/lib/src/INTER-Mediator
+$ dist-docs/buildup.sh 
+=================================================
+ Start to build the INTER-Mediator Ver.6-dev
+-------------------------------------------------
+ Original: /Users/msyk/Documents/mywebapp/lib/src/INTER-Mediator
+ Build to: /Users/msyk/Documents/mywebapp/lib/src/im_build/INTER-Mediator
+ Path of minifyer (installed by composer): /Users/msyk/Documents/mywebapp/lib/src/INTER-Mediator/vendor/matthiasmullie/minify
+-------------------------------------------------
+Choose the build result from these:
+ (1) Complete (everything contains)
+ (2) Core only (the least set to work web applications)
+ (3) Core only, and move it to 3-up directory (the ancestor of original INTER-Mediator)
+Type 1, 2 or 3, and then type return----&gt; </code></pre></div>
+
+                 <div class="picture"><img src="../../images/shot0040.png"></div>
+<p>この方法だと、フォルダの移動はしなくても済みます。もし、INTER-Mediatorのアップデートを取り込みたい場合は、srcフォルダ側のINTER-Mediatorをカレントにして「git pull」を実行し、その後、dist-docs/buildup.shを起動して(3)を選択すれば、自動的にlib直下のINTER-Mediatorが更新されるということになります。</p>
+                <h3>開発用と運用用のコンピューターが別々の場合</h3>
+                <p>ここでさらに実用的な場合を考えます。現状では、開発用クライアントはmacOSやWindowsを使うことが一般的である一方、運用用サーバーはLinuxあるいはWindowsであることが一般的でしょう。通常は、運用サーバー側に必要なファイルを開発用のクライアント側で整えて、全部アップロードするということがよく行われます。しかしながら、composerやその背後で動いているnpmを用いてインストールを行うと、ライブラリのファイル数が半端なく多く、アップロードに大変時間がかかります。また、一部のライブリは、プラットフォームによる違いがある場合も考えられるので、そのままアップロードして良いかどうかは検討の余地があると思われます。何れにしても、最初の１回でもかなり時間がかかるのはあまり気持ちの良いものではありません。</p>
+                <p>この問題を解決する方法は、開発用クライアントと運用用サーバーそれぞれで、composer updateコマンドを実行することです。また、クライアントでの実行をしないのなら、サーバー側にINTER-Mediatorフォルダをコピーした後に、サーバー側でcomposer updateコマンドを実行すれば良いでしょう。さらに、buildup.shで(3)のビルドをする場合、buildup.shを運用用のサーバーがで実行するのが良いと思われます。ただ、開発ツールでは参照したファイルが存在しないとエラーを出すので、開発用と運用用でそれぞれでbuildup.shを動かすのが現実的かもしれません。何れにしても、大量のライブラリのファイルの移動を避けるように開発作業を進めるという点が重要です。</p>
+                <p>例えば、開発用クライアントでの実行はせず、運用用あるいはテスト用のサーバーがあって、そちらでもっぱら稼働するとしたら、作業フローは次のようになると思われます。</p>
+                <ol>
+                <li>クライアントにフォルダを用意し、その中にlib、srcフォルダを用意する</li>
+                <li>srcフォルダにINTER-Mediatorをレポジトリからクローンする</li>
+                <li>lib以下をサーバーにコピーする。src以下もコピーする</li>
+                <li>サーバーにログインする。以下の作業はサーバーにログインして進める</li>
+                <li>INTER-Mediatorフォルダをカレントにして、composer updateを実行する</li>
+                <li>INTER-Mediatorフォルダをカレントにして、dist-docs/buildup.shを起動し、(3)を選択する</li>
+                <li>lib以下にINTER-Mediatorがあることを確認する</li>
+                <li>lib以下のINTER-Mediatorにある、node_modules/forever/bin/foreverが、Webサーバーのユーザーに書き込み権限があることを確認し、ない場合は権限を与えておく</li>
+                <li>プログラムをクライアント側で作成する。定義ファイルでのINTER-Mediatorの参照先パスは「/lib/INTER-Mediator/INTER-Mediator.php」とする</li>
+                <li>作成した定義ファイルやページファイルなどを、その都度クライアントからサーバーにアップロードして、テストする</li>
+                </ol>
+                <p>INTER-Mediatorフォルダを、composer updateを行う前の状態にしたい場合には、INTER-Mediatorフォルダ直下のnode_modulesとvendorの2つのフォルダを単に削除するだけで構いません。</p>
+                <h3>バージョン番号を独自に設定する</h3>
+                <p>バージョン番号については、buildup.shファイルの最初の方に記述があるので、それを変更すれば、独自のバージョンを設定することができます。なお、バージョンのルールは次のようにします。なお、以下のルールはVer.6以降に適用します。</p>
+                <ul>
+                    <li>バージョン番号は、整数のみをピリオドで区切ることとする（例：6、3.4、3.11）</li>
+                    <li>バージョン表記は、Ver.を基本とするが、vでもVersionでもversionでも基本的には構わない</li>
+                    <li>整数が1つのものを「正式バージョン」とする（例：6、11）</li>
+                    <li>開発者が独自にバージョンを付ける場合、2つ目以降の整数を必ず付ける（例：6.2、7.1.11）</li>
+                    <li>開発者が独自にバージョンを付ける場合、さらに追加してもいい（例：3.4.1-rev.21）</li>
+                </ul>
+                <p>つまり、INTER-Mediatorをダウンロードして、実際にアプリケーションに搭載する上で少し修正したとしたら、2つ目の整数で枝番号を付けてくださいということです。できれば、その状態をコミット/プッシュした上で、そのバージョンタグをつけていただけると、自分のバックアップ用にもなると思います。他の人とバージョンが重ならないように、リポジトリをチェックして異なる番号を付けてください。また、2桁目以降は飛び番号でもいいとします。</p>
+            </section>
+        </article>
+</body>
+
+</html>
