@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <meta charset="utf-8"/>
-    <title>FMDataAPI Documentation</title>
+    <title>API Documentation</title>
     <meta name="author" content=""/>
     <meta name="description" content=""/>
 
@@ -83,7 +83,7 @@
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <i class="icon-ellipsis-vertical"></i>
             </a>
-            <a class="brand" href="../index.html">FMDataAPI Documentation</a>
+            <a class="brand" href="../index.html">API Documentation</a>
 
             <div class="nav-collapse">
                 <ul class="nav pull-right">
@@ -144,46 +144,46 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1669591466"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1906029108"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1669591466" class="accordion-body collapse in">
+            <div id="namespace-1906029108" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-511725081"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-994830966"></a>
                                 <a href="../namespaces/INTERMediator.html" style="margin-left: 30px; padding-left: 0">INTERMediator</a>
             </div>
-            <div id="namespace-511725081" class="accordion-body collapse ">
+            <div id="namespace-994830966" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1075735515"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1384411238"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.html" style="margin-left: 30px; padding-left: 0">FileMakerServer</a>
             </div>
-            <div id="namespace-1075735515" class="accordion-body collapse ">
+            <div id="namespace-1384411238" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-610755654"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-731487003"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.RESTAPI.html" style="margin-left: 30px; padding-left: 0">RESTAPI</a>
             </div>
-            <div id="namespace-610755654" class="accordion-body collapse ">
+            <div id="namespace-731487003" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1962641609"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1419262041"></a>
                                 <a href="../namespaces/INTERMediator.FileMakerServer.RESTAPI.Supporting.html" style="margin-left: 30px; padding-left: 0">Supporting</a>
             </div>
-            <div id="namespace-1962641609" class="accordion-body collapse ">
+            <div id="namespace-1419262041" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -355,7 +355,7 @@ and you shouldn't call the constructor of this class.</p>
                                 copyright
                             </th>
                             <td>
-                                                                    <p>2017-2018 Masayuki Nii (FileMaker is registered trademarks of FileMaker, Inc. in the U.S. and other countries.)</p>
+                                                                    <p>2017-2019 Masayuki Nii (FileMaker is registered trademarks of FileMaker, Inc. in the U.S. and other countries.)</p>
                                                             </td>
                         </tr>
                                         </table>
@@ -842,8 +842,8 @@ If omitted this, the number &quot;1&quot; is going to be specified.</p></td>
             <article class="method">
                 <h3 class="public ">getMetadataOld()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getMetadataOld() </pre>
-                <p><em>Get metadata information of the layout. Until ver.16 this method was &#039;getMetadata&#039;.</em></p>
+                <pre class="signature" style="margin-right: 54px;">getMetadataOld() : object</pre>
+                <p><em>Get the metadata information of the layout. Until ver.16 this method was &#039;getMetadata&#039;.</em></p>
                 
 
                 
@@ -853,7 +853,13 @@ If omitted this, the number &quot;1&quot; is going to be specified.</p></td>
                             <dd><p>In case of any error, an exception arises.</p></dd>
                                                                     </dl>
                 
-                				
+                                    <h4>Returns</h4>
+                    object
+                                            &mdash; <p>The metadata information of the layout. It has just 1 property 'metaData' the array of the field
+information is set under the 'metaData' property. There is no information about portals. Ex.:
+{&quot;metaData&quot;: [{&quot;name&quot;: &quot;id&quot;,&quot;type&quot;: &quot;normal&quot;,&quot;result&quot;: &quot;number&quot;,&quot;global&quot;: &quot;false&quot;,&quot;repetitions&quot;: 1,&quot;id&quot;: &quot;1&quot;},
+{&quot;name&quot;: &quot;name&quot;,&quot;type&quot;: &quot;normal&quot;,&quot;result&quot;: &quot;text&quot;,&quot;global&quot;: &quot;false&quot;,&quot;repetitions&quot;: 1,&quot;id&quot;: &quot;2&quot;},,....,]}</p>
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -873,7 +879,7 @@ If omitted this, the number &quot;1&quot; is going to be specified.</p></td>
             <article class="method">
                 <h3 class="public ">getMetadata()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getMetadata() </pre>
+                <pre class="signature" style="margin-right: 54px;">getMetadata() : object</pre>
                 <p><em>Get metadata information of the layout.</em></p>
                 
 
@@ -884,7 +890,17 @@ If omitted this, the number &quot;1&quot; is going to be specified.</p></td>
                             <dd><p>In case of any error, an exception arises.</p></dd>
                                                                     </dl>
                 
-                				
+                                    <h4>Returns</h4>
+                    object
+                                            &mdash; <p>The metadata information of the layout. It has 2 properties 'fieldMetaData' and  'fieldMetaData'.
+The later one has properties having portal object name of TO name. The array of the field information is set under
+'fieldMetaData' and the portal named properties.
+Ex.: {&quot;fieldMetaData&quot;: [{&quot;name&quot;: &quot;id&quot;,&quot;type&quot;: &quot;normal&quot;,&quot;displayType&quot;: &quot;editText&quot;,&quot;result&quot;: &quot;number&quot;,&quot;global&quot;: false,
+&quot;autoEnter&quot;: true,&quot;fourDigitYear&quot;: false,&quot;maxRepeat&quot;: 1,&quot;maxCharacters&quot;: 0,&quot;notEmpty&quot;: false,&quot;numeric&quot;: false,
+&quot;timeOfDay&quot;: false,&quot;repetitionStart&quot;: 1,&quot;repetitionEnd&quot;: 1},....,],&quot;portalMetaData&quot;: {&quot;Contact&quot;: [{
+&quot;name&quot;: &quot;contact_to::id&quot;,&quot;type&quot;: &quot;normal&quot;,...},...], &quot;history_to&quot;: [{&quot;name&quot;: &quot;history_to::id&quot;,&quot;type&quot;: &quot;normal&quot;,
+...}...]}</p>
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -1184,7 +1200,7 @@ If any script wasn't called, returns null.</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on May 19th, 2019 at 06:26.
+                    on May 26th, 2019 at 02:00.
                 </section>
             </section>
         </section>
