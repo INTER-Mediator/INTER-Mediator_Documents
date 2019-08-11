@@ -95,75 +95,72 @@ sudo apt-get install -y mysql-server-5.7 mysql-client-core-5.7 php7.2-pdo-mysql
 sudo apt-get install -y postgresql php7.2-pdo-pgsql
 sudo apt-get install -y sqlite3 php7.2-pdo-sqlite</code></pre>
                 </div>
-                <p>ドキュメントルートは「/var/www/html」、セットアップ関連ファイルは「/etc/apache2」、ログファイルは「/var/log/apache2」のそれぞれのディレクトリにあります。exi
+                <p>ドキュメントルートは「/var/www/html」、セットアップ関連ファイルは「/etc/apache2」、ログファイルは「/var/log/apache2」のそれぞれのディレクトリにあります。</p>
+                <p>Ubuntuでは、Webサーバのプロセスは、www-dataという名前のユーザで稼働します。INTER-Mediator Ver.6では、このwww-dataユーザが自身のホームディレクトリに書き込み権限を持っている必要があります。通常のユーザはもちろん自分のホームに書き込みできますが、www-dataはプロセス稼働用なので、ログインができなくなっています。ホームは、/var/wwwになっていますが、このフォルダはwww-dataには書き込み権限が与えられていません。ここで、Webのドキュメントフォルダ以下を、developerというユーザ（developerグループにも自動的に所属しているとする）でログインして管理することも考慮して、以下のようにコマンドをいれておくとよいでしょう。
                 </p>
+                <div class="code">
+                    <pre><code>sudo chown -R www-data:developer /var/www
+sudo chmod -R g+w /var/www</code></pre>
+                </div>
                 <p>インストール後は、次のコマンドでApache2を再起動できます。インストール作業で試行錯誤した場合には、インストール作業の後にこのコマンドを入れれば良いでしょう。</p>
                 <div class="code">
                     <pre><code>sudo systemctl restart apache2</code></pre>
                 </div>
-                <h3>macOSでのApache2とPHP 7.xのセットアップ</h3>
-                <p>macOSはApacheもPHPも最初から含まれていますが、PHPのバージョンが長らく7.1であるなど、ほとんどメンテナンスしている感じがありません。そのため、PHPはHomebrewでインストールすることで、新しいバージョンが早く入手して確認ができます。そうなれば、Apache2もHomebrewからインストールするのが色々な意味で手軽であると考えられます。以下は、Homebrewをインストールしている状態を想定します。Homebrewのインストール方法は<a
-                        href="https://brew.sh/index_ja" target="_blank">こちらのページ</a>をご覧ください。</p>
+                <h4>macOSでのApache2とPHP 7.xのセットアップ</h4>
+                <p>macOSはApacheもPHPも最初から含まれています。しかしながら、更新のサイクルを考えれば、homebrewを使いたいと考えるかもしれません。また、ハイブリットな管理も考えられます。ここでは、 macOSでのApache2とPHPを使う場合と、homebrewを使う場合で分けて、インストール方法を説明します。</p>
+                <h5>macOSの標準機能を使う</h5>
+                <p>まず、設定ファイルは、/etc/apache2/httpd.confです。このファイルをsudo nanoなどで開いて必要に応じて編集をしてください。このファイル内にある「#LoadModule php7module ...」の行の最初の#を消して、php7moduleがロードされるようにします。ほかに、このファイルでは、Apache2のプロセスのユーザーが_wwwであることや、ドキュメントルートが/Library/WebServer/Documentsであることが分かります。</p>
+                <p>初期状態ではphp.iniは用意されていませんが、/etcディレクトリに用意すると認識されます。なお、INTER-Mediatorの稼働には、基本的にOSに組み込まれたPHPのモジュールだけで利用できます。</p>
+                <p>INTER-Mediator Ver.6では、この_wwwユーザが自身のホームディレクトリに書き込み権限を持っている必要があります。通常のユーザはもちろん自分のホームに書き込みできますが、_wwwはプロセス稼働用なので、ログインができなくなっています（dscl . /Users/_www というコマンドで確認できます）。ホームは、/Library/WebServerになっていますが、このフォルダは_wwwには書き込み権限が与えられていません。ここで、Webのドキュメントフォルダ以下を、developerというユーザ（developerグループにも自動的に所属しているとする）でログインして管理することも考慮して、以下のようにコマンドをいれておくとよいでしょう。</p>
+                <div class="code">
+                    <pre><code>sudo chown -R _www:developer /Library/WebServer
+sudo chmod -R g+w /Library/WebServer</code></pre>
+                </div>
+                <p>Webサーバを稼働するには以下のようにコマンドを入れます。Apache2が起動するともに、macOS起動時にapache2も起動します。なお、Apache2を止める場合は、loadの代わりにunloadというサブコマンドを指定します。そのとき、-wがあれば、macOS起動時の自動起動もオフになります。</p>
+                <div class="code">
+                    <pre><code>sudo launchctl load -w /System/Library/LaunchDaemons/org.apache.httpd.plist</code></pre>
+                </div>
+                <h5>Homebrewを使う</h5>
+                <p>Homebrewのインストール方法は<a href="https://brew.sh/index_ja" target="_blank">こちらのページ</a>をご覧ください。</p>
                 <p>まず、macOSを開発用コンピューターにしている場合が多いと思われるので、PHPのインストールを先に説明します。PHPをインストーするコマンドは以下の通りです。比較的多くのモジュールが最初から組み込まれており、INTER-Mediatorは追加でインストールすることなく、これだけで必要なものがインストールされます。
                 </p>
                 <div class="code">
                     <pre><code>brew install php</code></pre>
                 </div>
-                <p>macOS Mojaveでは、標準のPHP
-                    7.1は「/usr/bin/php」で起動されますが、HomebrewのPHPをインストーすると「/usr/local/bin/php」というコマンドが追加され、Ver.7.3系列のPHPが利用できます。なお、「/usr/local/bin/php」は「/usr/local/Cellar/php/7.3.2/bin/php」へのショートカットリンクになっています。つまり、Homebrewによって管理されるPHPの様々なファイルは、/usr/local/Cellar/php以下のディレクトリに存在します。php.iniファイルのパスは「/usr/local/etc/php/7.3/php.ini」になります。
+                <p>macOS Mojaveでは、標準のPHP 7.1は「/usr/bin/php」で起動されますが、HomebrewのPHPをインストーすると「/usr/local/bin/php」というコマンドが追加され、Ver.7.3系列のPHPが利用できます。なお、「/usr/local/bin/php」は「/usr/local/Cellar/php/7.3.2/bin/php」へのショートカットリンクになっています。つまり、Homebrewによって管理されるPHPの様々なファイルは、/usr/local/Cellar/php以下のディレクトリに存在します。php.iniファイルのパスは「/usr/local/etc/php/7.3/php.ini」になります。
                 </p>
-                <p>さらに、HomebrewでApache2をインストールする方法も説明します。なお、開発用コンピューターであれば、わざわざApache2のセットアップまではする必要はありません。また、標準のApache2を使う場合と、いろいろ勝手が違うこともあるので、計画的にセットアップを進めてください。インストールは以下のコマンドです。
+                <p>さらに、HomebrewでApache2をインストールする方法も説明します。なお、開発用コンピューターであれば、わざわざApache2のセットアップまではする必要はありません。標準のApache2を使う場合と、いろいろ勝手が違うこともあるので、計画的にセットアップを進めてください。インストールは以下のコマンドです。
                 </p>
                 <div class="code">
                     <pre><code>brew install apache2</code></pre>
                 </div>
-                <p>主要なバイナリであるhttpdファイルの様子もPHPと似ており、標準の「/usr/sbin/httpd」に対して、「/usr/local/bin/httpd」が作られ、「/usr/local/Cellar/httpd/2.4.39/bin/httpd」にリンクされています。なお、macOS
-                    Mojaveでは標準のApache2のバージョンは2.4.34であり、Homebrewでインストールしたものも執筆時点で2.4.39とバージョンはかなり近いものが入っています。HomebrewのApache2のドキュメントルートは「/usr/local/var/www」、ログファイルは「/usr/local/var/log/httpd」、設定ファイルは「/usr/local/etc/httpd」のそれぞれのディレクトリが利用されています。いずれも、標準のApache2とは異なります。
-                </p>
-                <p>Apacheは常駐が必要なサーバーソフトウエアですが、インストールするだけでは起動しません。つどつど手作業で起動するなら「apachectl
-                    start」とコマンドを入力します。また、起動時に自動的に起動するようにするためには「brew services start
-                    httpd」とコマンドを入力します。いずれの場合も、その時のユーザーの権限でhttpdが起動します。そのこともあって、Homebrewで開かれるポートは、8080と8443になっています。通常通り80と443のポートで運用したい場合には、設定ファイルのディレクトリにあるhttpd.confとextra/httpd-ssl.confについて、それぞれポート番号の定義部分を変更する必要があります。また、rootとしてApache2を起動したい場合には「sudo
-                    brew services start httpd」とコマンドを入力します。sudoの有無で、デーモンのユーザーに影響があります。</p>
-                <p>HomebrewでセットアップしたAapche2でPHPを稼働させたい場合、以下の記述を設定ファイルのどこかに記述する必要があります。設定ファイルのディレクトリにあるhttpd.confの末尾に追加するなどの方法で構いません。
-                </p>
+                <p>主要なバイナリであるhttpdファイルの様子もPHPと似ており、標準の「/usr/sbin/httpd」に対して、「/usr/local/bin/httpd」が作られ、「/usr/local/Cellar/httpd/2.4.39/bin/httpd」にリンクされています。HomebrewのApache2のドキュメントルートは「/usr/local/var/www」、ログファイルは「/usr/local/var/log/httpd」、設定ファイルは「/usr/local/etc/httpd」のそれぞれのディレクトリが利用されています。いずれも、標準のApache2とは異なります。</p>
+                <p>HomebrewでセットアップしたAapche2でPHPを稼働させたい場合、以下の記述を設定ファイルのどこかに記述する必要があります。設定ファイルのディレクトリにあるhttpd.confの末尾に追加するなどの方法で構いません。</p>
                 <div class="code">
                     <pre><code>LoadModule php7_module /usr/local/opt/php/lib/httpd/modules/libphp7.so
-
+    
 &lt;FilesMatch \.php$&gt;
     SetHandler application/x-httpd-php
 &lt;/FilesMatch&gt;</code></pre>
-                </div>
+                    </div>
+                <p>Homebrewのapache2を利用した場合でも、標準のapache2と同様、_wwwというユーザでプロセスを稼働します。INTER-Mediator Ver.6では、_wwwユーザが自身のホームディレクトリに書き込み権限を持っている必要があります。通常のユーザはもちろん自分のホームに書き込みできますが、_wwwはプロセス稼働用なので、ログインができなくなっています（dscl . /Users/_www というコマンドで確認できます）。ホームは、OS標準のドキュメントルートの直上である/Library/WebServerになっていますが、このフォルダは_wwwには書き込み権限が与えられていません。ここで、Webのドキュメントフォルダ以下を、developerというユーザ（developerグループにも自動的に所属しているとする）でログインして管理することも考慮して、以下のようにコマンドをいれておくとよいでしょう。</p>
+                    <div class="code">
+                        <pre><code>sudo chown -R _www:developer /Library/WebServer
+sudo chown -R _www:developer /usr/local/var/www
+sudo chmod -R g+w /usr/local/var/www</code></pre>
+                    </div>
+                <p>Apache2を起動するには、「sudo brew services start httpd」とコマンドを入力します。終了する場合はstartの代わりにstopサブコマンドを指定します。Homebrewで開かれるポートは、規定値では8080と8443になっています。通常通り80と443のポートで運用したい場合には、設定ファイルのディレクトリにあるhttpd.confとextra/httpd-ssl.confについて、それぞれポート番号の定義部分を変更する必要があります。</p>
                 <h4>Windows 10でのIISとPHPのセットアップ</h4>
-                <p>PHPのサイトでのWindows向けインストール情報では、Microsoft Web Platform Installer（WebPI）を使うのが簡単と書いてあります。執筆時点では、<a
-                        href="https://www.microsoft.com/web/downloads/platform.aspx"
-                        target="_blank">Ver.5.0のダウンロード</a>が可能とMicrosoftのサイトでは表示されていますが、実際にはVer.5.1がダウンロードされます。インストーラでインストールをし、その後、スタートメニューから「Microsoft
-                    Web Platform Installer」を選択して、セットアップ用のアプリケーションを選択します。そして、検索窓で「PHP 7.3」などと入力して項目を探します。執筆時点では、PHP
-                    7.3.4がリリースされていますが、WebPIでは最新ではないものの7.3.1がダウンロードできました。PHPだけ、あるいはIIS
-                    Express用のものがあるので、状況に応じて選択すれば良いでしょう。</p>
-                <p>Windows
-                    10でのWebサーバーであるIISを利用するには、スタートメニューの左側のギアのアイコンなどから「設定」アプリを開きます。そして、「アプリ」をクリックし、右側の関連設定にある「プログラムと機能」を選択します。ここからはウインドウが開いてコントロールパネルの作業になります。左側にある「Windowsの機能の有効化または無効化」を選択すると、ダイアログボックスが開きます。その中の「インターネットインフォメーションサービス」にある「World
-                    Wide Webサービス」と、「Web管理ツール」の「IIS管理コンソール」をオンにして、OKボタンをクリックします。PHPを使う場合には、「World Wide
-                    Webサービス」の「アプリケーション開発機能」にある「CGI」のチェックは必ず入れておきます。これでIISがインストールされます。</p>
-                <p>PHPのサイトには、Windowsに手作業でインストールする方法も記載されています。<a href="https://windows.php.net/download/"
-                        target="_blank">ダウンロードのページ</a>には、4種類のファイルがアップロードされていますが、32ビット/64ビット以外に、スレッドセーフとそうでないものもあります。IISの場合はスレッドセーフでないもの、Apacheの場合はスレッドセーフのものを選択します。ファイルをダウンロードすると、フォルダにファイルが入ったものが得られるので、そこからは自分で適切な位置に移動して、php.exeなどにパスが通るように、展開したルートフォルダに当たるphpのフォルダを環境変数のPathを設定します。
-                </p>
-                <p>手作業でインストールしたPHPをIISで利用できるようにするには、エクスプローラーを使って、phpのフォルダに対して、IIS_IUSRSグループに対する「読み取りと実行」「フォルダーの内容の一覧表示」の権限を与えます。さらに、IISマネージャーで、新たにハンドラーマッピングを追加します。設定は、*.phpという要求パスに対して、FastCgiModleのモジュールを適用し、実行するファイルとして、phpのフォルダ以下にあるphp-cgi.exeを指定します。実行ファイルは絶対パスを指定します。
-                </p>
+                <p>PHPのサイトでのWindows向けインストール情報では、Microsoft Web Platform Installer（WebPI）を使うのが簡単と書いてあります。執筆時点では、<a href="https://www.microsoft.com/web/downloads/platform.aspx" target="_blank">Ver.5.0のダウンロード</a>が可能とMicrosoftのサイトでは表示されていますが、実際にはVer.5.1がダウンロードされます。インストーラでインストールをし、その後、スタートメニューから「Microsoft Web Platform Installer」を選択して、セットアップ用のアプリケーションを選択します。そして、検索窓で「PHP 7.3」などと入力して項目を探します。執筆時点では、PHP7.3.4がリリースされていますが、WebPIでは最新ではないものの7.3.1がダウンロードできました。PHPだけ、あるいはIIS Express用のものがあるので、状況に応じて選択すれば良いでしょう。</p>
+                <p>Windows 10でのWebサーバーであるIISを利用するには、スタートメニューの左側のギアのアイコンなどから「設定」アプリを開きます。そして、「アプリ」をクリックし、右側の関連設定にある「プログラムと機能」を選択します。ここからはウインドウが開いてコントロールパネルの作業になります。左側にある「Windowsの機能の有効化または無効化」を選択すると、ダイアログボックスが開きます。その中の「インターネットインフォメーションサービス」にある「World Wide Webサービス」と、「Web管理ツール」の「IIS管理コンソール」をオンにして、OKボタンをクリックします。PHPを使う場合には、「World Wide Webサービス」の「アプリケーション開発機能」にある「CGI」のチェックは必ず入れておきます。これでIISがインストールされます。</p>
+                <p>PHPのサイトには、Windowsに手作業でインストールする方法も記載されています。<a href="https://windows.php.net/download/" target="_blank">ダウンロードのページ</a>には、4種類のファイルがアップロードされていますが、32ビット/64ビット以外に、スレッドセーフとそうでないものもあります。IISの場合はスレッドセーフでないもの、Apacheの場合はスレッドセーフのものを選択します。ファイルをダウンロードすると、フォルダにファイルが入ったものが得られるので、そこからは自分で適切な位置に移動して、php.exeなどにパスが通るように、展開したルートフォルダに当たるphpのフォルダを環境変数のPathを設定します。</p>
+                <p>手作業でインストールしたPHPをIISで利用できるようにするには、エクスプローラーを使って、phpのフォルダに対して、IIS_IUSRSグループに対する「読み取りと実行」「フォルダーの内容の一覧表示」の権限を与えます。さらに、IISマネージャーで、新たにハンドラーマッピングを追加します。設定は、*.phpという要求パスに対して、FastCgiModleのモジュールを適用し、実行するファイルとして、phpのフォルダ以下にあるphp-cgi.exeを指定します。実行ファイルは絶対パスを指定します。</p>
                 <h3>composerのインストール</h3>
-                <p>composerは、PHPのライブラリ管理ツールです。INTER-Mediator Ver.6より、composerの利用は必須となりました。インストールは<a
-                        href="https://getcomposer.org/"
-                        target="_block">composerのページ</a>に記載があります。macOSやLinuxでは、そのページの「Download」の先のページに書いてある数行のコマンドラインをコピーして、ターミナルにペーストして、インストールを行うのが1つの方法です。この方法は、https://getcomposer.org/installerから得られるPHPのスクリプトをcomposer-setup.phpというファイルに保存し、チェックサムを調べてOKであれば、ダウンロードしたスクリプトをphpコマンドで動かし、終わればそのファイルを消すというものです。なお、macOSではHomebrew、Linuxではapt-getなどでインストールすることもできますが、最新版でないことも時折あるので、コマンドでインストーするのが良いでしょう。なお、コマンドを実行するには、phpがコマンドラインで利用可能になっている必要があります。Windowsについては、<a
-                        href="https://getcomposer.org/doc/00-intro.md#installation-windows"
-                        target="_blank">composerのサイトのGetting
-                        Startedのページ内</a>にインストーラーがあるのでそれを利用するのが便利でしょう。なお、composer自身のアップデートは「composer
-                    selfupdate」とコマンドライン入力をします。</p>
+                <p>composerは、PHPのライブラリ管理ツールです。INTER-Mediator Ver.6より、composerの利用は必須となりました。インストールは<a href="https://getcomposer.org/" target="_block">composerのページ</a>に記載があります。macOSやLinuxでは、そのページの「Download」の先のページに書いてある数行のコマンドラインをコピーして、ターミナルにペーストして、インストールを行うのが1つの方法です。この方法は、https://getcomposer.org/installerから得られるPHPのスクリプトをcomposer-setup.phpというファイルに保存し、チェックサムを調べてOKであれば、ダウンロードしたスクリプトをphpコマンドで動かし、終わればそのファイルを消すというものです。なお、macOSではHomebrew、Linuxではapt-getなどでインストールすることもできますが、最新版でないことも時折あるので、コマンドでインストーするのが良いでしょう。なお、コマンドを実行するには、phpがコマンドラインで利用可能になっている必要があります。Windowsについては、<a href="https://getcomposer.org/doc/00-intro.md#installation-windows" target="_blank">composerのサイトのGetting Startedのページ内</a>にインストーラーがあるのでそれを利用するのが便利でしょう。なお、composer自身のアップデートは「composer selfupdate」とコマンドライン入力をします。</p>
                 <h3>その他のツールのセットアップ</h3>
-                <p>いずれのOSでも、gitコマンドが稼働できるようにしておいてください。macOSは、Xcodeをインストールして、１度起動すると開発むけコマンドラインのインストーラーが動くので、その中にgitが入っています。Linuxではapt-get等で取得をしましょう。また、Linuxではzipについてもインストールをしておきましょう。Windowsでは、<a
-                        href="https://gitforwindows.org" target="_blank">Git for
-                        Windows</a>をインストールします。これで、Windowsでもgitコマンドが利用できるようになります。また、Git BashというUNIXで使われるシェルも稼動できるので便利です。
+                <p>いずれのOSでも、gitコマンドが稼働できるようにしておいてください。macOSは、Xcodeをインストールして、１度起動すると開発むけコマンドラインのインストーラーが動くので、その中にgitが入っています。Linuxではapt-get等で取得をしましょう。また、Linuxではzipについてもインストールをしておきましょう。Windowsでは、<a href="https://gitforwindows.org" target="_blank">Git for Windows</a>をインストールします。これで、Windowsでもgitコマンドが利用できるようになります。また、Git BashというUNIXで使われるシェルも稼動できるので便利です。
                 </p>
-                <p>さらに、<a href="https://desktop.github.com/" target="_blank">GitHub
-                        Desktop</a>についてもインストールしておくと便利です。レポジトリからの取り出しなど、基本的な作業はコマンドを使わなくてもアプリケーション上でできるようになります。</p>
+                <p>さらに、<a href="https://desktop.github.com/" target="_blank">GitHub Desktop</a>についてもインストールしておくと便利です。レポジトリからの取り出しなど、基本的な作業はコマンドを使わなくてもアプリケーション上でできるようになります。</p>
             </section>
             <section>
                 <h1>リポジトリからINTER-Mediatorをダウンロードしてセットアップ</h1>
