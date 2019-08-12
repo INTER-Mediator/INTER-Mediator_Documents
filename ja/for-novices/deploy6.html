@@ -150,11 +150,22 @@ sudo chown -R _www:developer /usr/local/var/www
 sudo chmod -R g+w /usr/local/var/www</code></pre>
                     </div>
                 <p>Apache2を起動するには、「sudo brew services start httpd」とコマンドを入力します。終了する場合はstartの代わりにstopサブコマンドを指定します。Homebrewで開かれるポートは、規定値では8080と8443になっています。通常通り80と443のポートで運用したい場合には、設定ファイルのディレクトリにあるhttpd.confとextra/httpd-ssl.confについて、それぞれポート番号の定義部分を変更する必要があります。</p>
+
                 <h4>Windows 10でのIISとPHPのセットアップ</h4>
                 <p>PHPのサイトでのWindows向けインストール情報では、Microsoft Web Platform Installer（WebPI）を使うのが簡単と書いてあります。執筆時点では、<a href="https://www.microsoft.com/web/downloads/platform.aspx" target="_blank">Ver.5.0のダウンロード</a>が可能とMicrosoftのサイトでは表示されていますが、実際にはVer.5.1がダウンロードされます。インストーラでインストールをし、その後、スタートメニューから「Microsoft Web Platform Installer」を選択して、セットアップ用のアプリケーションを選択します。そして、検索窓で「PHP 7.3」などと入力して項目を探します。執筆時点では、PHP7.3.4がリリースされていますが、WebPIでは最新ではないものの7.3.1がダウンロードできました。PHPだけ、あるいはIIS Express用のものがあるので、状況に応じて選択すれば良いでしょう。</p>
                 <p>Windows 10でのWebサーバーであるIISを利用するには、スタートメニューの左側のギアのアイコンなどから「設定」アプリを開きます。そして、「アプリ」をクリックし、右側の関連設定にある「プログラムと機能」を選択します。ここからはウインドウが開いてコントロールパネルの作業になります。左側にある「Windowsの機能の有効化または無効化」を選択すると、ダイアログボックスが開きます。その中の「インターネットインフォメーションサービス」にある「World Wide Webサービス」と、「Web管理ツール」の「IIS管理コンソール」をオンにして、OKボタンをクリックします。PHPを使う場合には、「World Wide Webサービス」の「アプリケーション開発機能」にある「CGI」のチェックは必ず入れておきます。これでIISがインストールされます。</p>
                 <p>PHPのサイトには、Windowsに手作業でインストールする方法も記載されています。<a href="https://windows.php.net/download/" target="_blank">ダウンロードのページ</a>には、4種類のファイルがアップロードされていますが、32ビット/64ビット以外に、スレッドセーフとそうでないものもあります。IISの場合はスレッドセーフでないもの、Apacheの場合はスレッドセーフのものを選択します。ファイルをダウンロードすると、フォルダにファイルが入ったものが得られるので、そこからは自分で適切な位置に移動して、php.exeなどにパスが通るように、展開したルートフォルダに当たるphpのフォルダを環境変数のPathを設定します。</p>
                 <p>手作業でインストールしたPHPをIISで利用できるようにするには、エクスプローラーを使って、phpのフォルダに対して、IIS_IUSRSグループに対する「読み取りと実行」「フォルダーの内容の一覧表示」の権限を与えます。さらに、IISマネージャーで、新たにハンドラーマッピングを追加します。設定は、*.phpという要求パスに対して、FastCgiModleのモジュールを適用し、実行するファイルとして、phpのフォルダ以下にあるphp-cgi.exeを指定します。実行ファイルは絶対パスを指定します。</p>
+                <h4>Windows ServerでのIISとPHPのセットアップ</h4>
+                <p>Windows Serverをインストール後、サーバマネージャーの役割と機能の追加で、「Webサーバー(IIS)」を選択し、「役割」で、Webサーバー＞アプリケーション開発＞CGIのチェックを入れて、役割の追加を行います。これで、C:\inetpub\wwwrootをドキュメントルートとして、Webサーバーが起動します。</p>
+                <p>PHPを利用できるようにするには、PHPのサイトに記載された手作業でインストールする方法で行います。<a href="https://windows.php.net/download/" target="_blank">ダウンロードのページ</a>には、4種類のファイルがアップロードされていますが、32ビット/64ビット以外に、スレッドセーフとそうでないものもあります。IISの場合はスレッドセーフでないもの、Apacheの場合はスレッドセーフのものを選択します。ダウンロードしたPHPのフォルダを、例えば、C:\などにおいて利用します。ここで、一度、php.exeをダブルクリックして、コマンドプロンプトのウインドウが出るかを確認します。それが出ずに、「VCRUNTIME140.dll」というファイルがないというメッセージが出てくれば、「Visual Studio 2015のC++再配布パッケージ」をインストールします。DLLのファイル名が違っている場合は、それらに対応した別のバージョンの再配布パッケージをインストールします。</p>
+                <p>続いて、インターネットインフォメーションサービス（IIS）マネージャーを利用します。サーバーの項目を選択して、「ハンドラマッピング」のところに新たに項目を作成します。要求パスは「*.php」、モジュールは「FastCgiModule」、実行可能ファイルはPHPのフォルダにある「php-cgi.exe」を選択し、名前は「PHP」としておきます。IISの設定は以上のとおりです。</p>
+                <p>さらに、php.iniファイルを用意します。PHPのフォルダにあるphp.ini-productionファイルをコピーして、ファイル名をphp.iniに変更します。そして、次のextensionを有効にします。</p>
+                <div class="code">
+                    <pre><code>curl, mbstring, pdp_mysql, pdf_pgsql, pdo_sqlite</code></pre>
+                </div>
+                <p>こうして稼働するIISでのPHPは、ここでは、DefaultAppPoolというユーザでプロセスを稼働します。INTER-Mediator Ver.6では、PHPを稼働しているユーザが自身のプロファイルのに書き込み権限を持っている必要があります。そのために、C:\Windows\System32\config\systemprofileというフォルダに対して、IIS_IUSRSグループに対する書き込みの権限を、フォルダのプロパティの「セキュリティ」のタブで付与しておきます。このグループはIISに関係するユーザーが自動的に登録されるので、アクセス権の設定に便利です。</p>
+
                 <h3>composerのインストール</h3>
                 <p>composerは、PHPのライブラリ管理ツールです。INTER-Mediator Ver.6より、composerの利用は必須となりました。インストールは<a href="https://getcomposer.org/" target="_block">composerのページ</a>に記載があります。macOSやLinuxでは、そのページの「Download」の先のページに書いてある数行のコマンドラインをコピーして、ターミナルにペーストして、インストールを行うのが1つの方法です。この方法は、https://getcomposer.org/installerから得られるPHPのスクリプトをcomposer-setup.phpというファイルに保存し、チェックサムを調べてOKであれば、ダウンロードしたスクリプトをphpコマンドで動かし、終わればそのファイルを消すというものです。なお、macOSではHomebrew、Linuxではapt-getなどでインストールすることもできますが、最新版でないことも時折あるので、コマンドでインストーするのが良いでしょう。なお、コマンドを実行するには、phpがコマンドラインで利用可能になっている必要があります。Windowsについては、<a href="https://getcomposer.org/doc/00-intro.md#installation-windows" target="_blank">composerのサイトのGetting Startedのページ内</a>にインストーラーがあるのでそれを利用するのが便利でしょう。なお、composer自身のアップデートは「composer selfupdate」とコマンドライン入力をします。</p>
                 <h3>その他のツールのセットアップ</h3>
