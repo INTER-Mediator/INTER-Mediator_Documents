@@ -164,7 +164,10 @@ sudo chmod -R g+w /usr/local/var/www</code></pre>
                 <div class="code">
                     <pre><code>curl, mbstring, pdp_mysql, pdf_pgsql, pdo_sqlite</code></pre>
                 </div>
-                <p>こうして稼働するIISでのPHPは、ここでは、DefaultAppPoolというユーザでプロセスを稼働します。INTER-Mediator Ver.6では、PHPを稼働しているユーザが自身のプロファイルのに書き込み権限を持っている必要があります。そのために、C:\Windows\System32\config\systemprofileというフォルダに対して、IIS_IUSRSグループに対する書き込みの権限を、フォルダのプロパティの「セキュリティ」のタブで付与しておきます。このグループはIISに関係するユーザーが自動的に登録されるので、アクセス権の設定に便利です。</p>
+                <p>こうして稼働するIISでのPHPは、ここでは、DefaultAppPoolというユーザでプロセスを稼働します。INTER-Mediator Ver.6では、PHPを稼働しているユーザが自身のプロファイルのに書き込み権限を持っている必要があります。そのために、C:\Windows\System32\config\systemprofileというフォルダに対して、IIS_IUSRSグループに対する「書き込み」と「変更」の権限を、フォルダのプロパティの「セキュリティ」のタブで付与しておきます。このグループはIISに関係するユーザーが自動的に登録されるので、アクセス権の設定に便利です。</p>
+                <div class="picture">
+                    <img src="../../images/profile_property.png" style="max-width: 288px">
+                </div>
 
                 <h3>composerのインストール</h3>
                 <p>composerは、PHPのライブラリ管理ツールです。INTER-Mediator Ver.6より、composerの利用は必須となりました。インストールは<a href="https://getcomposer.org/" target="_block">composerのページ</a>に記載があります。macOSやLinuxでは、そのページの「Download」の先のページに書いてある数行のコマンドラインをコピーして、ターミナルにペーストして、インストールを行うのが1つの方法です。この方法は、https://getcomposer.org/installerから得られるPHPのスクリプトをcomposer-setup.phpというファイルに保存し、チェックサムを調べてOKであれば、ダウンロードしたスクリプトをphpコマンドで動かし、終わればそのファイルを消すというものです。なお、macOSではHomebrew、Linuxではapt-getなどでインストールすることもできますが、最新版でないことも時折あるので、コマンドでインストーするのが良いでしょう。なお、コマンドを実行するには、phpがコマンドラインで利用可能になっている必要があります。Windowsについては、<a href="https://getcomposer.org/doc/00-intro.md#installation-windows" target="_blank">composerのサイトのGetting Startedのページ内</a>にインストーラーがあるのでそれを利用するのが便利でしょう。なお、composer自身のアップデートは「composer selfupdate」とコマンドライン入力をします。</p>
