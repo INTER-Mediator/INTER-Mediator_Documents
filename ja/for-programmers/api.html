@@ -193,7 +193,11 @@
                 <ul>
                     <li>注記：バージョン4.5でINTERMediator.valueChange(idValue)からIMLibUI.valueChange(idValue)に変更されました。</li>
                 </ul>
-            </section>
+                <h4>INTERMediatorOnPage.doBeforeValueChange = function(idValue)</h4>
+                <p>INTERMediatorOnPageオブジェクトにdoBeforeValueChangeメソッドを実装することで、ユーザーが値を変更しバリデーションが通った直後で、データベース等への書き込みが行われる前にこのメソッドが実行される。あらゆる要素の変更時にこのメソッドを通過するようになる。引数は変更のあったUI要素のid属性が得られるので、これを手がかりにして、処理をしたい要素を判定できる。返り値は不要で無視される。</p>
+                <h4>INTERMediatorOnPage.doAfterValueChange = function(idValue)</h4>
+                <p>NTERMediatorOnPageオブジェクトにdoAfterValueChangeメソッドを実装することで、ユーザーが値を変更しバリデーションが通り、データベース等への書き込みが成功した後に、このメソッドが実行される。あらゆる要素の変更時にこのメソッドを通過するようになる。引数は変更のあったUI要素のid属性が得られるので、これを手がかりにして、処理をしたい要素を判定できる。返り値は不要で無視される。</p>
+           </section>
             <section>
                 <h1>INTERMediatorクラスのプロパティ</h1>
                 <h4>INTERMediator.debugMode = true | false</h4>
