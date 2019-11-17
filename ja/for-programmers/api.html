@@ -67,18 +67,24 @@
                 <h1>ページ合成処理</h1>
                 <h4>INTERMediator.construct(targetContext)</h4>
                 <ul>
-                    <li>解説：実際のページ合成処理は、非同期にスタートするが、並行度合いはブラウザ依存し、さらに言えば、あまりパラレル動作している感覚は薄い。なお、この呼び出しの直後のステートメントは、ページ合成終了前に呼び出されてしまうので注意が必要である。ページ合成語の処理は、INTERMediatorOnPage.doAfterConstructに記述する。</li>
-                    <li>引数：targetContext：省略あるいはtrueで、ページファイルのすべての要素に対して合成を行う。引数にコンテキストのオブジェクト（IMLibContext）を指定すれば、そのオブジェクトに対応したエンクロージャー内部のみを合成する。</li>
-                    <li>返り値：なし</li>
+                    <li>解説：INTERMediator.constructMainと同じ</li>
                 </ul>
                 <h4>INTERMediator.constructMain(targetContext)</h4>
                 <ul>
-                    <li>解説：非同期処理を呼び出さないので、引き続いてページ合成を行う。</li>
+                    <li>解説：ページ合成を行う。asyncで定義されている。</li>
                     <li>引数：targetContext：省略あるいはtrueで、ページファイルのすべての要素に対して合成を行う。引数にコンテキストのオブジェクト（IMLibContext）を指定すれば、そのオブジェクトに対応したエンクロージャー内部のみを合成する。</li>
                     <li>返り値：なし</li>
                 </ul>
+                <h4>INTERMediatorOnPage.doBeforeConstruct = function() { }</h4>
+                <p>ページの合成処理が実行される関数を定義します。引数のない関数を代入します。INTERMediator.constructMain(true)でページ合成を行いますが、その処理の最初に関数が実行されます。例えば、URLのパラメータを取り出して、検索条件として設定するなどの処理を組み込めます。</p>
                 <h4>INTERMediatorOnPage.doAfterConstruct = function() { }</h4>
-                <p>ページの合成処理が終わったときに呼び出す関数を指定します。引数のない関数を代入します。INTERMediator.construct(true)でページ合成を行いますが、非同期に処理を進めるため、このステートメントの次に書かれた命令は、通常は合成途中に実行されるなど、少なくともページを作り終える前になってしまいます。ページができていないと取得できないような情報もあるので、このようなコールバックの仕組みを用意してあります。</p>
+                <p>ページの合成処理が終わったときに実行される関数を定義します。引数のない関数を代入します。INTERMediator.constructMain(true)でページ合成を行いますが、非同期に処理を進めるため、このステートメントの次に書かれた命令は、通常は合成途中に実行されるなど、少なくともページを作り終える前になってしまいます。ページができていないと取得できないような情報もあるので、このようなコールバックの仕組みを用意してあります。</p>
+                 <h4>INTERMediatorOnPage.doBeforePartialConstruct = function(context) { }</h4>
+                <p>INTERMediator.constructMain(context)のように、コンテキストを与えてページの合成処理を実施して部分的に合成する場合に、ページ合成処理よりも前に実行される関数を定義します。引数にはconstructMainの引数に指定したコンテキストへの参照が設定されます。</p>
+                <h4>INTERMediatorOnPage.doAfterPartialConstruct = function(context) { }</h4>
+                <p>INTERMediator.constructMain(context)のように、コンテキストを与えてページの合成処理を実施して部分的に合成する場合に、ページ合成処理よりも後に実行される関数を定義します。引数にはconstructMainの引数に指定したコンテキストへの参照が設定されます。</p>
+                <h4>INTERMediatorOnPage.isAutoConstruct</h4>
+                <p>このプロパティをfalseにすると、ページの合成を行わなくなります。doBeforeConstructに指定した関数の中などで、条件に応じてページ合成をしたくない場合は、このプロパティにfalseを代入してください。初期値はtrueです。</p>
             </section>
             <section>
                 <h1>検索条件やソート条件の追加</h1>
