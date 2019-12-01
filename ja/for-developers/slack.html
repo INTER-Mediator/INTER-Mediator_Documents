@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+    <style>
+        td {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .keyword {
+            white-space: nowrap;
+        }
+
+        .subtitle {
+            font-size: 70%;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle">Slackにメッセージを追加する</h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>はじめに</h1>
+                <p class="lead">INTER-Mediatorは以前からメール送信は可能でしたが、Slackのメッセージ送信についても可能にしました。メールと同様に、データベースへの書き込み、更新、読み出しの後に、それらのデータを用いてのメッセージ送信が可能です。Slack側の仕組みは簡単で、Slack Appという設定を行い、ワークスペースにインストールするだけです。Slack Appは単にボットからの書き込みを許可する設定だけです。（設定のリファレンスは本ページの末尾にあります。）</p>
+            </section>
+            <section>
+                <h1>Slackでメッセージを受け付けるようにする</h1>
+                <p>Slackのメッセージングを行うには、ワークスペース単位にSlack Appのインストールを行います。ここで使うSlack Appは単なる設定です。Slack Appを設定すれば、認証用のトークンが発行されます。そして、メッセージを投入するときに、どのチャンネルなのかと、どんなメッセージなのかを指定します。つまり、Slack Appを作成後は、トークン、チャンネル、メッセージの3つの情報があれば、SlackのAPIコールが可能ということになります。以下、メッセージを受け付けるようにするまでのSlack側の設定を紹介します。</p>
+                <p><a href="https://api.slack.com/apps" target="_blank">SlackのAPIのページ</a>に移動します。ログインしていない場合は、「sign in to your Slack account」の部分をクリックして、まずはログインをします。</p>
+                <div class="picture"><img src="../../images/shot0065.png"></div>
+                <p>ログインのページで、ワークスペースにログインをします。</p>
+                <div class="picture"><img src="../../images/shot0066.png"></div>
+                <div class="picture"><img src="../../images/shot0067.png"></div>
+                <p><a href="https://api.slack.com/apps" target="_blank">SlackのAPIのページ</a>に移動すると、Create New Appボタンが見えています。このボタンをクリックします。</p>
+                <div class="picture"><img src="../../images/shot0068.png"></div>
+                <p>パネルが表示されます。ここで、App Nameを入力し、使用するワークスペースを選択します。App Nameはメッセージの送信者として、投稿したメッセージの中で見えるようになります。そして、Create Appをクリックします。</p>
+                <div class="picture"><img src="../../images/shot0069.png"></div>
+                <p>作成したSlack Appの編集画面に入ります。以後は、必要に応じて、保存を行ってください。まず、Add features and functionalityのところにある「Permissions」のボックスをクリックします。必要ならスクロールするなどして探してください。</p>
+                <div class="picture"><img src="../../images/shot0070.png"></div>
+                <div class="picture"><img src="../../images/shot0071.png"></div>
+                <p>移動したOauth & Permissionsのページで、Scopesのボックスを見つけます。そこにあるAdd an OAuth Scopeボタンをクリックします。</p>
+                <div class="picture"><img src="../../images/shot0072.png"></div>
+                <p>ドロップダウンの枠が出てくるので、ここで、「chat:write:bot」を選択します。</p>
+                <div class="picture"><img src="../../images/shot0073.png"></div>
+                <p>Scopsのリストに、「chat:write:bot」の項目が追加されました。</p>
+                <div class="picture"><img src="../../images/shot0074.png"></div>
+                <p>ページをスクロールして前の方に移動すると、Install App to Workspaceというボタンがあります。このボタンをクリックします。</p>
+                <div class="picture"><img src="../../images/shot0075.png"></div>
+                <p>OAuthでやりとりするメッセージの設定を行います。そのままAllowボタンをクリックするので構いませんが、必要ならば設定の変更を行います。</p>
+                <div class="picture"><img src="../../images/shot0076.png"></div>
+                <p>OAuth Access Tokenとして、認証トークンが得られました。本稿では、以後はアクセストークンの例は、「xoxp-XXXXXXXXXXX-XXXXXXXXXXX-XXXXXXXXXXXX-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx」と記載します。Copyボタンをクリックするとクリップボードに文字列がコピーされます。</p>
+                <div class="picture"><img src="../../images/shot0077.png"></div>
+                <p>設定したことがメールでも送信されています。</p>
+                <div class="picture"><img src="../../images/shot0078.png"></div>
+                <p>Slack側の設定は以上です。</p>
+            </section>
+            <section>
+                <h1>INTER-Mediatorで開発する定義ファイルの設定</h1>
+                <p>サンプルファイルでは、samples/Sample_chatにあるinclude_MySQL.phpファイルに設定例があります。まず、こちらは、定義ファイルの設定例です。</p>
+                <div class="code">
+                    <pre><code>&lt;?php
+require_once(dirname(__FILE__) . '/../../INTER-Mediator.php');
+
+IM_Entry(
+    array(
+        array(
+            'records' =&gt; 100000000,
+            'name' =&gt; 'chat',
+            'key' =&gt; 'id',
+            'sort' =&gt; array(
+                array('field' =&gt; 'postdt', 'direction' =&gt; 'desc'),
+            ),
+            'default-values' =&gt; array(
+                array('field' =&gt; 'postdt', 'value' =&gt; date("Y-m-d H:i:s")),
+            ),
+            'authentication' =&gt; array(
+                'all' =&gt; array( // load, update, new, delete
+                    'target' =&gt; 'field-user',
+                    'field' =&gt; 'user',
+                ),
+            ),
+            'messaging' =&gt; [
+                'driver' =&gt; 'slack',
+                'create' =&gt; [
+                    'subject-constant' =&gt; 'message-posting-test',
+                    'body' =&gt; 'message',
+                ]
+            ]
+        ),
+    ),
+    array(
+        'authentication' =&gt; array( ... ),
+        'slack' =&gt; array(
+            'token' =&gt; 'xoxp-XXXXXXXXXXX-XXXXXXXXXXX-XXXXXXXXXXXX-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+            'channel =&gt; '',
+        ),
+    ),
+    array('db-class' =&gt; 'PDO'),
+    false
+);</code></pre>
+                </div>
+              
+                <p>こちらは、params.phpファイルの例です。</p>
+
+<div class="code">
+                    <pre><code>$slackParameters = [
+    "token"=>'xoxp-XXXXXXXXXXX-XXXXXXXXXXX-XXXXXXXXXXXX-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    "channel" => 'message-posting-test',
+];</code></pre>
+                </div>
+                <p>認証トークンとチャンネルは、params.phpファイル、あるいは定義ファイルの2つ目の引数であるオプション指定に記述が可能です。両方に定義があると、params.php側が優先されます。params.phpファイルでは、変数$slackParametersに配列を代入し、配列はキーがtokenとchannelの連想配列になるようにしておきます。定義ファイルのオプション領域では、slackキーに対する連想配列で、tokenキーとchannelキーでそれぞれの指定を行います。</p>
+                <p>そして、定義ファイルのコンテキストと定義に、messagingキーを記述することで、データベース処理に対するメッセージング処理の動作を記述できます。messagingキーの直下は、driver、create、update、readのいずれかのキーを記述しますが、driverは必ず指定して、値はslackにしてください。これを省略するとメール送信とみなします。create、update、readの1つは必ず指定することになると思われます。そのデータベース処理が行われた後に、Slackへメッセージが飛びます。ここで、それぞれの操作の配列に使えるキーは、subject、subject-constat、body、body-constantのいずれかになります。subjectの2つのキーは、チャンネルを示します。チャンネルは3箇所に指定できますが、優先順位はコンテキスト内のものが最優先となります。bodyの2つのキーはメッセージです。subject、bodyは、いずれもコンテキストに存在するフィールド名を1つだけ記述します。一定の文字列で良い場合は、body-constantに文字列を記述します。なお、body-constantではテンプレート処理も行い、その中の「@@フィールド名@@」の記述部分が、コンテキストで得られるデータベースのフィールドの値に置き換わります。なお、コンテキストで複数のレコードが得られる場合、それぞれのレコードに対してメッセージが送信されます。</p>
+                <p>メッセージが送られる様子は、<a href="https://www.facebook.com/msyknii/videos/10156850044492992/" target="_blank">こちらのビデオ</a>でご確認できます。</p>
+                <p>以下、設定可能な項目について、まとめておきます。</p>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    Slackメッセージ送信
+                </h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="keyword">キー</th>
+                        <th class="keyword">インデックス</th>
+                        <th class="keyword">下位のキー</th>
+                        <th>値</th>
+                    </tr>
+                   <thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="8" class="keyword">'messaging'</td>
+                         <td class="keyword">'driver'</td>
+                        <td></td>
+                        <td>'slack' と指定する</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5" class="keyword">'read'</td>
+                        <td></td>
+                        <td>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'subject'</td>
+                        <td>チャンネルが含まれるフィールド名</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'subject-constant'</td>
+                        <td>チャンネルを文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'body'</td>
+                        <td>メッセージが含まれるフィールド名</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'body-constant'</td>
+                        <td>メッセージを文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'create'</td>
+                        <td></td>
+                        <td>コンテキストに対してレコード作成を行った後にメールを送信する。下位のキーはreadと同じ</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'update'</td>
+                        <td></td>
+                        <td>コンテキストに対してレコードの更新を行った後にメールを送信する。下位のキーはreadと同じ</td>
+                    </tr>
+                    </tbody>
+                               </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>Slackメッセージング
+                </h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="2">配列指定</th>
+                        <th rowspan="2">値</th>
+                        <th rowspan="2">params.phpで変数名</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="2" class="keyword">'slack'</td>
+                        <td class="keyword">'token'</td>
+                        <td>Slackの認証トークン</td>
+                        <td rowspan="2">$slackParameters</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'channel'</td>
+                        <td>メッセージを送信するサーバ<br>連想配列、キーは第2次元のキーワードと同一</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+    </div>
+</body>
+</html>

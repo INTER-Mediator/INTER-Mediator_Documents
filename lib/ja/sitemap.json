@@ -105,7 +105,7 @@
     "breadcrumb": "一覧と詳細"
 },
 {
-    "id": 32,
+    "id": 33,
     "parent": "/ja/practices/",
     "path": "/ja/practices/practice-step.html",
     "title": "モバイルでよく見られるステップ動作のサイト",
@@ -157,8 +157,22 @@
     "id": 21,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/sendmail.html",
-    "title": "メール送信",
-    "breadcrumb": "メール送信"
+    "title": "メール送信(Ver.5)",
+    "breadcrumb": "メール送信(Ver.5)"
+},
+{
+    "id": 34,
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/sendmail6.html",
+    "title": "メール送信(Ver.6)",
+    "breadcrumb": "メール送信(Ver.6)"
+},
+{
+    "id": 35,
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/slack.html",
+    "title": "Slackにメッセージを送信する",
+    "breadcrumb": "Slackにメッセージを送信する"
 },
 {
     "id": 22,

@@ -21,3 +21,8 @@ http://inter-mediator.com/
 Sample pages with this archived file are published at below.
 You don't have to deploy the samples if you just want to just a glance.
 http://msyk.dyndns.org/im-sample.html
+
+## for staff
+The following page describes how to update the site in case of modification and addition of pages.
+
+https://github.com/INTER-Mediator/INTER-Mediator_Documents/pull/18

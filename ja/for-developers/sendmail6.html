@@ -63,7 +63,7 @@
 <body class="docs" data-page-title="for-developers">
     <div class="container clearfix">
         <div class="page-title">
-            <h1 id="pageTitle">メール送信(Ver.5)</h1>
+            <h1 id="pageTitle">メール送信(Ver.6)</h1>
         </div>
         <ol id="breadcrumb" class="breadcrumb clearfix">
         </ol>
@@ -76,31 +76,21 @@
         <article>
             <section>
                 <h1>はじめに</h1>
-                <p class="lead">メールはサーバーで送ります。送信方法は、PHPのmail関数を使う方法なので、UNIX系ならsendmailコマンドをたたく方法になります。一方、これだとSMTPサーバーへの転送ができないので、<a href="http://hal456.net/qdsmtp/">qdsmtp</a>も組み込みました（Thanks to Mr. Spok）。SMTP認証はPlainのみの対応となっています。Windowsの場合はmail関数がすでにSMTPですので、php.iniにサーバー情報などを書くことで対処できます。なお、Windows環境はチェックしていないので、何かあれば知らせてもらえると助かります。（設定のリファレンスは本ページの末尾にあります。）</p>
-                <p>ただ、これだけではだめだろうというのはご存知の方はお分かりかと思いますが、昔作っていたOMEというメールソフトにはPHPのクラスもあったので、それをUTF-8で動くように改造してエンコードなどをさせるようにしました。ちなみに、さらにその前に『<a href="http://msyk.net/emailbool/">メール送信システムの作り方大全</a>』という書籍も書いていて、その中の一部のクラスを使いやすいようにしたのがOME.phpです。この本、もう10年以上前なのですね…。</p>
-                <p>定義ファイルに指定可能なキーワードは以下の通り全て列挙します。しかしながら、すべてを記述することはないです。</p>
+                <p class="lead">メールはサーバーで送ります。送信方法は、PHPのmail関数を使う方法なので、UNIX系ならsendmailコマンドをたたく方法になります。一方、これだとSMTPサーバーへの転送ができないので、<a href="https://swiftmailer.symfony.com/">swiftmailer</a>も組み込みました。Windowsの場合はmail関数がすでにSMTPですので、php.iniにサーバー情報などを書くことで対処できます。（設定のリファレンスは本ページの末尾にあります。）</p>
+                <p>定義ファイルでの指定例を以下に示します。なお、Ver.5の動作とVer.6の動作の兼ね合いがあるので、後半の記事もご覧ください。</p>
                 <div class="code">
-                    <pre><code>IM_Entry(
+<pre><code>IM_Entry(
         array(   // Contexts
             array(
                 'name' =&gt; 'request',
                 'send-mail' =&gt; array(
-                    'new' =&gt; array(
-                        'from' =&gt; '',
-                       'to' =&gt; 'email',
-                        'cc' =&gt; '',
-                        'bcc' =&gt; '',
-                        'subject' =&gt; '',
-                        'body' =&gt; '',
-                       'from-constant' =&gt; 'Officer &lt;info@msyk.net&gt;',
-                        'to-constant' =&gt; 'msyk@me.com',
-                       'cc-constant' =&gt; 'businessmatching@cocoa-study.com',
-                        'bcc-constant' =&gt; '',
-                       'subject-constant' =&gt; 'Cocoa勉強会ビジネスマッチング申し込み',
-                        'body-constant' =&gt; 'テストメール',
-                       'body-template' =&gt; 'welcome.txt',
-                       'body-fields' =&gt; 'name,compnay,email,tel',
-                       'f-option' =&gt; true,
+                    'create' =&gt; array(
+                        'from-constant' =&gt; 'info@msyk.net',
+                        'to' =&gt; 'email',
+                        'cc-constant' =&gt; 'msyk@me.com',
+                        'subject-constant' =&gt; 'ビジネスマッチング申し込み',
+                        'body-constant' =&gt; '受け付けました。\n本当です。',
+                        'f-option' =&gt; true,
                         'body-wrap' =&gt; 68,
                     )
                 )
@@ -111,7 +101,7 @@
             'smtp' =&gt; array(
                 'server' =&gt; 'mysmtp.msyk.net',
                 'port' =&gt; 587,
-              　　　'username' =&gt; 'msyktest@msyk.net',
+                'username' =&gt; 'msyktest@msyk.net',
                 'password' =&gt; 'oshienai',
             )
         ),
@@ -122,7 +112,7 @@
             </section>
             <section>
                 <h1>メールを送信するタイミングの指定</h1>
-                <p>'send-mail'キーの配列の次のレベルのキーとして、'load' 'edit' 'new'のいずれかを指定できます。それぞれ、データベースからの読み込み時、更新時、新規レコード作成時を意味し、コンテキストに対するそれぞれのタイミングでメールを送信します。いずれも、データベース処理が終了してからメールの送信にかかります。上記の例では、新規レコード作成時に、メールが送信されます。</p>
+                <p>'send-mail'キーの配列の次のレベルのキーとして、'read' 'update' 'create'のいずれかを指定できます。それぞれ、データベースからの読み込み時、更新時、新規レコード作成時を意味し、コンテキストに対するそれぞれのタイミングでメールを送信します。いずれも、データベース処理が終了してからメールの送信にかかります。上記の例では、新規レコード作成時に、メールが送信されます。</p>
             </section>
             <section>
                 <h1>宛先や送信者の指定</h1>
@@ -154,8 +144,51 @@
             </section>
             <section>
                 <h1>Gmailのアカウントでメール送信する場合</h1>
-                <p>"server"キーの値は、"ssl://smtp.gmail.com" としてください。"port"キーの値は、"465"としてください。"username"キーの値は、ユーザー名を指定しますが、メールアドレスそのものを指定します。"password"キーはパスワードそのものを指定します。</p>
+                <p>"server"キーの値は、"smtp.gmail.com" としてください。"port"キーの値は、"587"としてください。さらに"encription"キーは、"tls"とします。"username"キーの値は、ユーザー名を指定しますが、メールアドレスそのものを指定します。"password"キーはパスワードそのものを指定します。params.phpファイルに指定する場合の例を示します。</p>
+<div class="code"><pre><code>$sendMailSMTP = array(
+    "server" => "smtp.gmail.com",
+    "port" => 587,
+    "encryption" => "tls",
+    "username" => "msyk.nii83@gmail.com",
+    "password" => "himitsunopassword",
+);</code></pre></div>
                 <p>定義ファイルやparams.phpに上記の2つのSMTP送信に関するパラメータを設定するとメールが送信できますが、できない場合には、<a href="https://support.google.com/accounts/answer/6010255?hl=ja" target="_blank">こちら</a>の記述に従って、「安全性の低いアプリのアクセス」を有効にします。この設定が「有効」になっていないと、SMTPサーバーが受け付けません。相当以前はこれが既定値で「有効」になっていましたが、ある時期からは「無効」が既定値になっているようですので、以前は送ることができたという方も、この設定は必ず確認をしてみてください。</p>
+           </section>
+            <section>
+                <h1>INTER-Mediator Ver.5とVer.6との相互運用</h1>
+                <p>Ver.6の開発時に、様々な機能を追加しましたが、そのための互換性が微妙な感じになってきたので、何もしない場合はVer.5と同じ動作になることを目指し、次のようなルールでバージョン間の動作を切り分けられるようにしました。以下の方法で切り分けるのは、メールの文面を作成する動作です。メール送信は、以下の方法でVer.5の動作にしている時でも、SMTPサーバーを指定するとswiftmailerを利用するなど、送信処理はVer.6で置き換わったものになります。</p>
+                <p>まず、params.phpに$sendMailCompatibilityModeという変数を記述することができるようにしました。これがtrueならVer.5の動作、falseならVer.6の動作となります。この変数は省略した場合trueになります。しかしながら、コンテキストのsend-mailキーに、template-contextキーの値がある場合には、無条件にVer.6の動作になります。</p>
+                <p>Ver.5と6の動作の違いは以下のとおりです。</p>
+                <ul>
+                <li>template-contextキーによる、メール文面をデータベースから取り出す処理はVer.6動作が必須。一方、body-template、body-fieldsによるテンプレート処理は、Ver.5互換にしないと利用できない。</li>
+                <li>文字列中の@@フィールド名@@をフィールドの値に置き換える機能は、Ver.5ではsubject-constant、body-constantのみ。Ver.6では、from、to、bcc、cc、body、subjectについて置き換えが可能になった。</li>
+                <li>Ver.6では、from-constant、to-constant、cc-constant、bcc-constant、subject-constant、body-constantは無視するようにした。</li>
+                <li>HTMLの送信はVer.6のみ。</li>
+                </ul>
+            </section>
+            <section>
+                <h1>ファイルを添付する</h1>
+                <p>ファイルを1つだけ追加できます。添付するには、media-root-dirキーの指定が必要です。そして、media-root-dirキーと、attachmentキーから得られるパスを繋いだ絶対パスのファイルを添付します。attachmentキーにフィールド名を指定した場合、そのフィールドは、ファイルのアップロードコンポーネントを利用してアップロードした場合に自動的に設定されるパス名であることを想定していますが、状況によってはテンプレートの仕組みでパスを合成すれば良いでしょう。</p>
+            </section>
+            <section>
+                <h1>送信結果をデータベースに残す</h1>
+                <p>storeキーには、同じ定義ファイル内に定義した、レコード作成可能なコンテキストを指定します。そのコンテキストに、新たにレコードを作って送信した結果を残せます。エラーがあって送れない場合でも結果を残します。なお、指定したコンテキストには、以下のフィールドがあるものとします。フィールド名は固定でカスタマイズはできません。フィールド名から、何が入力されるかは判別可能だと思います。</p>
+                <p>to_field、bcc_field、cc_field、from_field、subject、body、errors</p>
+                <p>あるテーブルの関連テーブルに送信結果を残す場合、relationキーを指定します。すると、上位のコンテキストの主キー値を自分自身の外部キーフィールドに設定できるので、作られたメール送信レコードに元のテーブルとの関連を残すことができます。ただし、operatorが=のものだけです。また、送信結果を残すコンテキストにqueryキーがあり、operatorが=のものがある場合、その値も初期値として設定されます。</p>
+            </section>
+            <section>
+                <h1>データベースに入れたテンプレートにある文面でメールを作成する</h1>
+                <p>メールの文面や送り先などをデータベースに入れておき、それを元にメールを作成して送付するには、template-contextキーを指定します。例えば、「mail_template@id=3」のように記述します。mail_templateは、同じ定義ファイルにある読み込み可能なコンテキストで、このコンテキストから以下のようなフィールドがあるものとします。フィールド名は固定でカスタマイズはできません。フィールド名から、何が入力されているかは判別可能だと思います。</p>
+                 <p>to_field、bcc_field、cc_field、from_field、subject、body</p>
+                 <p>@以降は、コンテキストの中の検索条件を指定しますが、条件そのものではなく、=の前後で分離して、WHERE id = 3 のような検索条件で検索をします。実際には最初の1つのレコードだけを利用します。そのレコードからそれぞれのフィールドを取り出しますが、値そのままの場合もありますが、@@フィールド@@を置き換えることも可能です。</p>
+           </section>
+            <section>
+                <h1>HTMLメールの送信</h1>
+                <p>メールの文面の最初の文字列が &lt;html&gt; である場合、HTMLメールトとして送信します。添付ファイルも一緒に送れますが、添付ファイルをHTMLに埋め込みたい場合、本文の文面内で##image## と記述すればOKです。ただし、画像ファイルであるという前提で文面を作成してください。</p>
+            </section>
+            <section>
+                <h1>メッセージングとしてメール送信</h1>
+                <p>send-mailキーはVer.6でも利用できますが、メッセージ送信機能を拡張するにあたり、send-mailキーの代わりにmessagingキーを指定することもできます。その場合は、配列にdriverキーで値がmailのエントリーを入れるか、drivierキーを省略することでも構いません。</p>
             </section>
             <section>
                 <h1>リファレンス</h1>
@@ -177,66 +210,71 @@
                     <thead>
                     <tbody>
                     <tr>
-                        <td rowspan="19" class="keyword">'send-mail'</td>
-                        <td rowspan="17" class="keyword">'read'</td>
+                        <td rowspan="23" class="keyword">'send-mail'<br>あるいは<br>'messaging'</td>
+                        <td class="keyword">'driver'</td>
+                        <td></td>
+                        <td>メールを送信する場合は、値は'mail'、あるいはこのエントリーごと省略する（send-mailキーの場合は記述してはいけない）</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="20" class="keyword">'read'</td>
                         <td></td>
                         <td>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
                     </tr>
                     <tr>
                         <td class="keyword">'from'</td>
-                        <td>送信者名や送信者アドレスが含まれるフィールド名</td>
+                        <td>送信者名や送信者アドレスが含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
                     </tr>
                     <tr>
                         <td class="keyword">'to'</td>
-                        <td>送信先が含まれるフィールド名</td>
+                        <td>送信先が含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる。複数の送信先はカンマで区切る</td>
                     </tr>
                     <tr>
                         <td class="keyword">'cc'</td>
-                        <td>Cc先が含まれるフィールド名</td>
+                        <td>Cc先が含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる。複数の送信先はカンマで区切る</td>
                     </tr>
                     <tr>
                         <td class="keyword">'bcc'</td>
-                        <td>Bcc先が含まれるフィールド名</td>
+                        <td>Bcc先が含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる。複数の送信先はカンマで区切る</td>
                     </tr>
                     <tr>
                         <td class="keyword">'subject'</td>
-                        <td>件名が含まれるフィールド名</td>
+                        <td>件名が含まれるフィールド名、あるいは件名の文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
                     </tr>
                     <tr>
                         <td class="keyword">'body'</td>
-                        <td>メール本文が含まれるフィールド名</td>
+                        <td>メール本文が含まれるフィールド名、あるいは本文の文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
                     </tr>
                     <tr>
                         <td class="keyword">'from-constant'</td>
-                        <td>送信者やアドレスを文字列で指定</td>
+                        <td>送信者やアドレスを文字列で指定（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'to-constant'</td>
-                        <td>送信先を文字列で指定</td>
+                        <td>送信先を文字列で指定（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'cc-constant'</td>
-                        <td>Cc先を文字列で指定</td>
+                        <td>Cc先を文字列で指定（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'bcc-constant'</td>
-                        <td>Bcc先を文字列で指定</td>
+                        <td>Bcc先を文字列で指定（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'subject-constant'</td>
-                        <td>件名を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                        <td>件名を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'body-constant'</td>
-                        <td>本文を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                        <td>本文を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'body-template'</td>
-                        <td>本文のテンプレートとなるファイルのファイル名</td>
+                        <td>本文のテンプレートとなるファイルのファイル名（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'body-fields'</td>
-                        <td>テンプレートに差し込むフィールドの順序をカンマで区切る</td>
+                        <td>テンプレートに差し込むフィールドの順序をカンマで区切る（Ver.5互換動作の場合のみ）</td>
                     </tr>
                     <tr>
                         <td class="keyword">'f-option'</td>
@@ -247,14 +285,26 @@
                         <td>右端の折り返しのバイト数</td>
                     </tr>
                     <tr>
+                        <td class="keyword">'template-context'</td>
+                        <td>メールの文面を得られるコンテキスト名と検索条件。テーブルに文面のテンプレートをセットしているものとする</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'store'</td>
+                        <td>送信したメールをここで指定したコンテキストに対して新規レコードを作成して保存する</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'attachment'</td>
+                        <td>添付するファイルへの相対パスの文字列、あるいはそれを含むフィールド名。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                    </tr>
+                    <tr>
                         <td class="keyword">'update'</td>
                         <td></td>
-                        <td>コンテキストに対してレコードの更新処理を行った後にメールを送信する。第3次元については、readと同様。</td>
+                        <td>コンテキストに対してレコードの更新処理を行った後にメールを送信する。第3次元については、readと同様</td>
                     </tr>
                     <tr>
                         <td class="keyword">'create'</td>
                         <td></td>
-                        <td>コンテキストに対して新たなレコードを作るアクションを起こした後にメールを送信する。第3次元については、readと同様。</td>
+                        <td>コンテキストに対して新たなレコードを作るアクションを起こした後にメールを送信する。第3次元については、readと同様</td>
                     </tr>
                     </tbody>
                 </table>
@@ -275,10 +325,10 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td rowspan="4" class="keyword">'smtp'</td>
+                        <td rowspan="5" class="keyword">'smtp'</td>
                         <td class="keyword">'server'</td>
                         <td>メール送信時に使用するサーバのホスト</td>
-                        <td rowspan="4">$sendMailSMTP</td>
+                        <td rowspan="5">$sendMailSMTP</td>
                     </tr>
                     <tr>
                         <td class="keyword">'port'</td>
@@ -291,6 +341,10 @@
                     <tr>
                         <td class="keyword">'password'</td>
                         <td>メール送信時に認証で使用するパスワード</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'encryption'</td>
+                        <td>通信処理の暗号化をする場合にその方法を指定する。'ssl'、あるいは'tls'を指定する</td>
                     </tr>
                     </tbody>
                 </table>

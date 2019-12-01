@@ -741,102 +741,10 @@
                     <div class="subtitle">[第1引数, コンテキスト定義]</div>
                     メール送信
                 </h3>
-                <table>
-                    <thead>
-                    <tr>
-                        <th colspan="3">配列指定</th>
-                        <th rowspan="2">値</th>
-                    </tr>
-                    <tr>
-                        <th class="keyword">キー</th>
-                        <th class="keyword">インデックス</th>
-                        <th class="keyword">下位のキー</th>
-                    </tr>
-                    <thead>
-                    <tbody>
-                    <tr>
-                        <td rowspan="19" class="keyword">'send-mail'</td>
-                        <td rowspan="17" class="keyword">'read'</td>
-                        <td></td>
-                        <td>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'from'</td>
-                        <td>送信者名や送信者アドレスが含まれるフィールド名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'to'</td>
-                        <td>送信先が含まれるフィールド名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'cc'</td>
-                        <td>Cc先が含まれるフィールド名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'bcc'</td>
-                        <td>Bcc先が含まれるフィールド名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'subject'</td>
-                        <td>件名が含まれるフィールド名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'body'</td>
-                        <td>メール本文が含まれるフィールド名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'from-constant'</td>
-                        <td>送信者やアドレスを文字列で指定</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'to-constant'</td>
-                        <td>送信先を文字列で指定</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'cc-constant'</td>
-                        <td>Cc先を文字列で指定</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'bcc-constant'</td>
-                        <td class="keyword">Bcc先を文字列で指定</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'subject-constant'</td>
-                        <td class="keyword">件名を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'body-constant'</td>
-                        <td>本文を文字列で指定。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'body-template'</td>
-                        <td>本文のテンプレートとなるファイルのファイル名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'body-fields'</td>
-                        <td>テンプレートに差し込むフィールドの順序をカンマで区切る</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'f-option'</td>
-                        <td>UNIXでSMTPサーバを経由しない場合にtrueを指定すると、fromの指定が有効</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'body-wrap'</td>
-                        <td>右端の折り返しのバイト数</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'update'</td>
-                        <td></td>
-                        <td>コンテキストに対してレコードの更新処理を行った後にメールを送信する。第3次元については、readと同様。</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'create'</td>
-                        <td></td>
-                        <td>コンテキストに対して新たなレコードを作るアクションを起こした後にメールを送信する。第3次元については、readと同様。</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <h3>
+                <p>メール送信については、<a href="sendmail.html" target="_blank">メール送信(Ver.5)</a>あるいは<a href="sendmail.html" target="_blank">メール送信(Ver.6)</a>のページに記載しました。
+                <p>Slackによるメッセージングについては、<a href="slack.html" target="_blank">Slackにメッセージを追加する</a>のページに記載しました。
+
+                 <h3>
                     <div class="subtitle">[第1引数, コンテキスト定義]</div>
                     複雑なSQL文によるビュー生成
                 </h3>
@@ -1197,42 +1105,11 @@
                     </tr>
                     </tbody>
                 </table>
-                <h3>
+                                                <h3>
                     <div class="subtitle">[第2引数, オプション設定]</div>メール送信サーバー
                 </h3>
-                <table>
-                    <thead>
-                    <tr>
-                        <th colspan="2">配列指定</th>
-                        <th rowspan="2">値</th>
-<th rowspan="2">params.phpで変数名</th>
-                    </tr>
-                    <tr>
-                        <th class="keyword">第1次元</th>
-                        <th class="keyword">第2次元</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td rowspan="4" class="keyword">'smtp'</td>
-                        <td class="keyword">'server'</td>
-                        <td>メール送信時に使用するサーバのホスト</td>
-                        <td rowspan="4">$sendMailSMTP</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'port'</td>
-                        <td>メール送信時に使用するサーバのポート</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'username'</td>
-                        <td>メール送信時に認証で使用するユーザー名</td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'password'</td>
-                        <td>メール送信時に認証で使用するパスワード</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <p>メール送信については、<a href="sendmail.html" target="_blank">メール送信(Ver.5)</a>あるいは<a href="sendmail.html" target="_blank">メール送信(Ver.6)</a>のページに記載しました。
+                <p>Slackによるメッセージングについては、<a href="slack.html" target="_blank">Slackにメッセージを追加する</a>のページに記載しました。
             </div>
             <p>
                 認証についは別項目「ユーザ認証とアクセス権の動作について」も参照してください。
