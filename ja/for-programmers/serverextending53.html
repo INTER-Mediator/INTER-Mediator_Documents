@@ -227,7 +227,8 @@ interface Extending_Interface_AfterDelete {
 }</code>
 </pre>
                 </div>
-                <p>以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。引数$resultにはデータベースからの取得した結果が、連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。たとえば集計処理などを行い、同様に連想配列の配列にして結果を返します。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。PHPではoptionのメソッドの定義をインタフェースできないので、定義上はコメントでこのメソッドを記載しています。</p>
+                <p>Deleteを除くdoAfter____FromDBメソッドの$result引数は、対象レコードが連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。doAfterGetFromDBでは複数のレコードが得られますが、doAfterSetToDBやdoAfterNewToDBでは1レコードだけが返されます。基本的に、これらのメソッドでは、2つ目の引数をそのまま返すようにプログラムを作成しますが、ここで、データベースからの取得結果を加工して返しても構いません。たとえば、doAfterGetFromDBメソッドで集計処理などを行い、同様に連想配列の配列にして結果を返します。また、新たなフィールドを追加するなども行えます。新たなフィールドを追加するには、$this->dbClass->setUpdatedRecord(フィールド名, データ, レコード番号) で可能ですが、レコード番号を省略すると最初のレコードにセットされます。なお、setUpdatedRecordで変更した場合、返り値は、$this->dbClass->updatedRecord()としてください。</p>
+                <p>以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。PHPではoptionのメソッドの定義をインタフェースできないので、定義上はコメントでこのメソッドを記載しています。</p>
                 <div class="code"><pre><code>class MyProgram implements Extending_Interface_AfterGet {
     function doAfterGetFromDB($dataSourceName, $result) {
         foreach( $result as $record ) {
@@ -256,7 +257,7 @@ interface Extending_Interface_AfterDelete {
 }</code>
 </pre>
                 </div>
-                <p>それぞれのメソッドの$dataSourceNameはコンテキスト名の文字列が入っています。2つのコンテキストでクラスを共有するような場合には分岐のための手がかりになります。doAfterNewToDBの2つ目の引数$resultは、新たに作成したレコードのキーフィールドの値が設定されています。この値はdoAfterNewToDBメソッドでの返り値にしなければなりません。doAfterDeleteFromDBとdoAfterSetToDBメソッドの2つ目の引数はデータベース処理が失敗したかどうかをbooleanで示され、trueなら処理が成功です。これらのメソッドでもやはり引数で得られた値を返さないといけません。</p>
+                <p>それぞれのメソッドの$dataSourceNameはコンテキスト名の文字列が入っています。2つのコンテキストでクラスを共有するような場合には分岐のための手がかりになります。doAfterDeleteFromDBとdoAfterSetToDBメソッドの2つ目の引数はデータベース処理が失敗したかどうかをbooleanで示され、trueなら処理が成功です。これらのメソッドでもやはり引数で得られた値を返さないといけません。</p>
                 <p>開発者が作成するクラスで「DB_UseSharedObjects」クラスの子クラスにした場合は、他のオブジェクトへの参照が得られます。メソッドが呼び出された段階で、メンバ変数はオブジェクトを参照した状態になります。</p>
                 <div class="table">
                     <div class="caption">DB_UseSharedObjectsを継承したときに利用できるメンバ変数</div>
