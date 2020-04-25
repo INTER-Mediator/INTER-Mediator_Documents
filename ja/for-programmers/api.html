@@ -81,9 +81,9 @@
         <p>INTERMediator.constructMain(context)のように、コンテキストを与えてページの合成処理を実施して部分的に合成する場合に、ページ合成処理よりも後に実行される関数を定義します。引数にはconstructMainの引数に指定したコンテキストへの参照が設定されます。</p>
         <h4>INTERMediatorOnPage.isAutoConstruct</h4>
         <p>このプロパティをfalseにすると、ページの合成を行わなくなります。doBeforeConstructに指定した関数の中などで、条件に応じてページ合成をしたくない場合は、このプロパティにfalseを代入してください。初期値はtrueです。</p>
-        <h4>INTERMediatorOnPage.isFinishToConstruct: false,</h4>
+        <h4>INTERMediatorOnPage.isFinishToConstruct</h4>
         <p>ページ生成中（つまり、constractMainメソッド実行中）であれば、trueになる。</p>
-        </h4>INTERMediator.partialConstructing</h4>
+        <h4>INTERMediator.partialConstructing</h4>
         <p>ページ構築中に参照することで、現在の構築がページ全体なのか、ページの一部分なのかが判定できる。</p>
       </section>
       <section>
@@ -189,15 +189,15 @@
       </section>
       <section>
         <h1>ブラウザのバージョンや種類の判定</h1>
-        </h4>INTERMediator.isTablet</h4>
+        <h4>INTERMediator.isTablet</h4>
         <p>クライアントのUserAgentから判定したタブレットかどうかのチェック結果。</p>
-        </h4>INTERMediator.isMobile</h4>
+        <h4>INTERMediator.isMobile</h4>
         <p>クライアントのUserAgentから判定したモバイルデバイスかどうかのチェック結果。</p>
-        </h4>INTERMediator.isIE</h4>
+        <h4>INTERMediator.isIE</h4>
         <p>クライアントのUserAgentから判定したInternet Explorerかどうかのチェック結果。「MSIE/」が含まれているかをチェック。</p>
-        </h4>INTERMediator.isTrident</h4>
+        <h4>INTERMediator.isTrident</h4>
         <p>クライアントのUserAgentから判定したTridentエンジンかどうかのチェック結果。「Trident/」が含まれているかをチェック。</p>
-        </h4>INTERMediator.isEdge</h4>
+        <h4>INTERMediator.isEdge</h4>
         <p>クライアントのUserAgentから判定したEdgeエンジンかどうかのチェック結果。「Edge/」が含まれているかをチェック。</p>
         <h4>INTERMediatorOnPage.browserCompatibility</h4>
         <p>接続してきたブラウザの種類やバージョンから、アプリケーションが利用可能かどうかを判定するための情報をオブジェクトで指定する。詳細は、<a href="http://inter-mediator.info/ja/for-developers/manual.html" target="_blank">INTER-MediatorによるWebアプリケーションの概要</a>にある「ブラウザのバージョンを調べる仕組み」を参照。</p>
@@ -236,7 +236,7 @@
         <p>バリデーションが完了し、データベースへの書き込み前に呼び出される。falseを返すとデータベースの書き込み処理はキャンセルされる。引数targetにはPost Onlyモードのエンクロージャーへの参照が設定される。</p>
         <h4>INTERMediatorOnPage.processingAfterPostOnlyContext = function(targetNode, idValue) {}</h4>
         <p>新規レコードを作成した直後に呼び出される。引数targetにはPost Onlyモードのエンクロージャーへの参照が設定される。引数idValueは新たに作成されたレコードの主キー値が設定される。設定されていない場合は、レコード作成ができなかったことを示す。</p>
-        </h4>INTERMediator.waitSecondsAfterPostMessage
+        <h4>INTERMediator.waitSecondsAfterPostMessage
         <p>ポストオンリーモードで、送信後の処理を何秒後に開始するかを秒数で指定。既定値は4秒後。</p>
       </section>
       <section>
@@ -289,15 +289,6 @@
         <p>class属性にあるIM[ ] でかこった箇所をリンク設定として解釈する。既定値はtrue</p>
       </section>
       <section>
-        <h1>エラーメッセージ、デバッグメッセージ</h1>
-        <h4>INTERMediator.setDebugMessage(message, level)</h4>
-        <p>でバッグメッセージを設定する。引数messageが実際のメッセージで、levelはそのレベル。定義ファイルでのIM_Entry関数の4つ目の引数の数値より低いレベルのデバッグメッセージが画面あるいはコンソールに表示される。</p>
-        <h4>INTERMediator.setErrorMessage(ex, moreMessage)</h4>
-        <p>単にエラーメッセージを表示するだけなら第1引数に文字列を指定するだけでよい。フレームワーク内では、exにExceptionクラスのオブジェクト、第2引数に付加的なメッセージを設定している。</p>
-        <h4>INTERMediator.flushMessage()</h4>
-        <p>エラーメッセージやデバッグメッセージを表示する</p>
-      </section>
-      <section>
         <h1>バリデーション処理後に呼び出される関数</h1>
         <h4>INTERMediatorOnPage.doAfterValidationSucceed(target,linkInfo)</h4>
         <p>バリデーションの設定がされていて、ルールの結果がtrueとなった直後に呼び出される。引数targetは調べたノードへの参照、linkInfoは対照となったリンク定義の文字列が得られる</p>
@@ -342,31 +333,31 @@
       </section>
       <section>
         <h1>認証に関連する情報</h1>
-        </h4>INTERMediatorOnPage.authCountLimit: 4,</h4>
+        <h4>INTERMediatorOnPage.authCountLimit</h4>
         <p>認証を行うとき、失敗を許す回数。既定値は4。</p>
         <h4>INTERMediatorOnPage.authCount</h4>
         <p>認証を行うときに、ここまでに失敗した回数。</p>
         <h4>INTERMediatorOnPage.authUser</h4>
-        <p>認証に使用されているユーザー名・</p>
+        <p>認証に使用されているユーザー名。</p>
         <h4>INTERMediatorOnPage.requireAuthentication</h4>
         <p>通信処理後、ユーザー認証が必要な場合にtrueが設定されている。</p>
-        <h4>INTERMediatorOnPage.authStoring: 'cookie',</h4>
+        <h4>INTERMediatorOnPage.authStoring</h4>
         <p>認証情報のキャッシュスル場合で、cookie、sessionstrageなど。設定はサーバー側で行われている。</p>
-        <h4>INTERMediatorOnPage.authExpired: 3600,</h4>
+        <h4>INTERMediatorOnPage.authExpired</h4>
         <p>認証情報のキャッシュ時間の秒数。設定はサーバー側で行われている。</p>
-        <h4>INTERMediatorOnPage.isNativeAuth: false,</h4>
+        <h4>INTERMediatorOnPage.isNativeAuth</h4>
         <p>データベースのアカウントによって認証を行うネイティブ認証を行なっていればtrue。設定はサーバー側で行われている。</p>
         <h4>INTERMediatorOnPage.realm</h4>
         <p>認証のレルム。同一レルムのページは、認証のキャッシュ情報を共有できる。設定はサーバー側で行われている。</p>
         <h4>INTERMediatorOnPage.isShowChangePassword</h4>
         <p>ログインパネルにパスワード変更のためのテキストフィールドを追加し、パスワード変更機能を追加する。既定値はtrue。</p>
-        <h4>INTERMediatorOnPage.isSetDefaultStyle: false,</h4>
+        <h4>INTERMediatorOnPage.isSetDefaultStyle</h4>
         <p>認証パネルにおいて、スタイルの設定を古いバージョンと同じにする。既定値はfalseで、既にこのプロパティはtrueにする理由はない。もし、認証パネルのスタイルを変更したい場合は、テーマの修正をするのが適切である。</p>
         <h4>INTERMediatorOnPage.authPanelTitle</h4>
         <p>認証パネルのタイトルを文字列で指定する。既定値のnullの場合、タイトルには、realmの文字列が設定される。</p>
         <h4>INTERMediatorOnPage.isOAuthAvailable</h4>
         <p>OAuthによる認証を行なっている場合にはtrueになる。既定値はfalse。</p>
-        <h4>INTERMediatorOnPage.isLDAP: null,</h4>
+        <h4>INTERMediatorOnPage.isLDAP</h4>
         <p>LDAP認証が設定されている場合にtrueになる。既定値はnull。</p>
         <h4>INTERMediatorOnPage.passwordPolicy</h4>
         <p>サーバー側の設定で定めたパスワードポリシーの定義文字列。</p>
@@ -374,16 +365,16 @@
         <p>認証時のユーザー名にメールアドレスが使えるかどうかを示す論理値。</p>
       </section>
       <section>
-        <h1>ログに関する処理</h1>
-        </h4>INTERMediatorLog.setDebugMessage (message, level)</h4>
-        <p>デバッグメッセージをため込む。messageはメッセージの文字列。levelは0,1,2のどれか。</p>
-        </h4>INTERMediatorLog.setErrorMessage (ex, moreMessage)</h4>
-        <p>エラーメッセージをため込む。exは文字列か例外オブジェクト。ex自身もしくはmessageプロパティに、moreMessageが追加されてエラーメッセージとなる。</p>
-        </h4>INTERMediatorLog.flushMessage()</h4>
-        <p>ため込んだログを全て表示する。</p>
-        </h4>INTERMediatorLog.errorMessageByAlert</h4>
+        <h1>エラーメッセージ、デバッグメッセージ</h1>
+        <h4>INTERMediator.setDebugMessage(message, level)</h4>
+        <p>でバッグメッセージを設定する。引数messageが実際のメッセージで、levelはそのレベル。定義ファイルでのIM_Entry関数の4つ目の引数の数値より低いレベルのデバッグメッセージが画面あるいはコンソールに表示される。</p>
+        <h4>INTERMediator.setErrorMessage(ex, moreMessage)</h4>
+        <p>単にエラーメッセージを表示するだけなら第1引数に文字列を指定するだけでよい。フレームワーク内では、exに文字列ないしはExceptionクラスのオブジェクト、第2引数に付加的なメッセージを設定している。ex自身もしくはmessageプロパティに、moreMessageが追加されてエラーメッセージとなる。</p>
+        <h4>INTERMediator.flushMessage()</h4>
+        <p>エラーメッセージやデバッグメッセージを表示する</p>
+        <h4>INTERMediatorLog.errorMessageByAlert</h4>
         <p>trueにするとエラーメッセージが登録されるとき、その内容をダイアログボックスで表示する。既定値はfalse。</p>
-        </h4>INTERMediatorLog.errorMessageOnAlert</h4>
+        <h4>INTERMediatorLog.errorMessageOnAlert</h4>
         <p>エラ〜メッセージをダイアログボックスで表示するとき、このプロパティに文字列を与えると、システム側からのメッセージは無視して、その文字列のみを表示する。既定値のnullのままだと、setErrorMessageの引数がダイアログボックスに表示される。</p>
         </h4>INTERMediatorLog.suppressDebugMessageOnPage</h4>
         <p>デバッグログを表示した場合でも、デバッグログをページ上に表示することはしないで、コンソールのみにデバッグ情報を表示する。</p>
@@ -404,7 +395,7 @@
         <p>セッションストレージ（またはクッキー）に記録したデータからローカルコンテキストを復元する</p>
         <h4>IMLibLocalContext.update(idValue)</h4>
         <p>引数に指定したid属性値のノードがローカルコンテキストにバインドされていれば、その要素の値をコンテキストに反映させる。通常はchangeイベントで自動的にコンテキストに値が設定されるが、changeイベント以外での動作時に利用する必要が出る</p>
-        </h4>INTERMediator.useSessionStorage</h4>
+        <h4>INTERMediator.useSessionStorage</h4>
         <p>ローカルコンテキストをセッションストレージに保持する。既定値はtrue。</p>
       </section>
       <section>
@@ -632,7 +623,7 @@
         <h4>INTERMediator_DBAdapter.db_createRecord(args)</h4>
         <h4>INTERMediator_DBAdapter.db_createRecordWithAuth(args, completion)</h4>
         <p>上記の関数は、Ver.5までに搭載されていた同期通信でクライアントからサーバーに対してデータベース処理が可能なものです。Ver.6では利用できなくなっています。非同期の近い名前の関数から、引数を調べてください。</p>
-        </h4>INTERMediator.ignoreOptimisticLocking</h4>
+        <h4>INTERMediator.ignoreOptimisticLocking</h4>
         <p>trueの場合データベース更新時に楽観的ロック（ページ構築時から値が変化していないかを検出）の処理を行わない。既定値はfalse。</p>
         <h4>INTERMediatorOnPage.newRecordId</h4>
         <p>直前に行ったデータベース処理がレコード作成の場合、作成したレコードのキーフィールドの値が設定されている。</p>
