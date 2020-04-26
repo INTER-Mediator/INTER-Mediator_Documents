@@ -289,11 +289,13 @@
         <p>class属性にあるIM[ ] でかこった箇所をリンク設定として解釈する。既定値はtrue</p>
       </section>
       <section>
-        <h1>バリデーション処理後に呼び出される関数</h1>
-        <h4>INTERMediatorOnPage.doAfterValidationSucceed(target,linkInfo)</h4>
+        <h1>バリデーション後およびレコード作成後に呼び出される関数</h1>
+        <h4>INTERMediatorOnPage.doAfterValidationSucceed = function(target,linkInfo){}</h4>
         <p>バリデーションの設定がされていて、ルールの結果がtrueとなった直後に呼び出される。引数targetは調べたノードへの参照、linkInfoは対照となったリンク定義の文字列が得られる</p>
-        <h4>INTERMediatorOnPage.doAfterValidationFailure(target,linkInfo)</h4>
+        <h4>INTERMediatorOnPage.doAfterValidationFailure = function(target,linkInfo){}</h4>
         <p>バリデーションの設定がされていて、ルールの結果がfalseとなった直後に呼び出される。引数targetは調べたノードへの参照、linkInfoは対照となったリンク定義の文字列が得られる。テキストフィールドの値をもとにして計算処理をしている場合、間違えた値で再計算をしてしまっているかもしれないが、この関数は、元の値に戻された後に呼び出されるので、さらに再計算などを組み込むことができる。</p>
+        <h4>INTERMediatorOnPage.doAfterCreateRecord = function(newRedId){}</h4>
+        <p>レコード作成が成功した後に呼び出される。引数には、作成したレコードのキーフィールドの値が設定される。</p>
       </section>
       <section>
         <h1>マスター/ディテール形式のユーザーインタフェース</h1>
