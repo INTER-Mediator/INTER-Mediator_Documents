@@ -692,13 +692,57 @@
                     </tr>
                     <tr>
                         <td class="keyword">'container'</td>
-                        <td>この指定があると、オブジェクトフィールドにファイルを格納する（FileMaker Serverのみ）。INTER-Mediator 5.1以降で利用可能であり、FileMaker
-                            Serverのバージョン13以降が必要、かつデータベースのフィールドオプションにおいて［入力値の自動化］オプションをあらかじめ設定しておく必要があります。
-                            詳細は<a href="/ja/for-programmers/jscomponent.html">ファイルのアップロードコンポーネント</a>
-                            の「FileMakerのオブジェクトフィールドにファイルをアップロードする」を参照
+                        <td>アップロードしたファイルの置き場所を指定する。指定可能なキーワードは、"FileSystem"、"FileMakerContainer"、"S3"で、指定なしの場合は"FileSystem"が利用される。過去との互換性のために、値がTRUEの場合には"FileMakerContainer"が選択される。Amazon S3の場合は、params.phpファイルへの設定が必要になります。FileMakerについては、FileMaker Serverのバージョン13以降が必要、かつデータベースのフィールドオプションにおいて［入力値の自動化］オプションをあらかじめ設定しておく必要があります。詳細は<a href="/ja/for-programmers/jscomponent.html">ファイルのアップロードコンポーネント</a>の「FileMakerのオブジェクトフィールドにファイルをアップロードする」を参照
                         </td>
                     </tr>
                     </tbody>
+                </table>
+                <h3>Amazon S3の場合にparams.phpファイルに指定する変数</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>変数名</th>
+                        <th>既定値</th>
+                        <th>指定内容</th>
+                    </tr>
+                    <thead>
+                    <tbody>
+                     <tr>
+                        <td>$accessRegion</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>接続するAWSのエンドポイントを指定する。東京なら"ap-northeast-1"。一覧は<a href="https://docs.aws.amazon.com/general/latest/gr/rande.html" target="_blank">こちら</a></td>
+                    </tr>
+                     <tr>
+                        <td>$rootBucket</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>S3のバケット名</td>
+                    </tr>
+                     <tr>
+                        <td>$applyingACL</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>オブジェクトをPutObjectメソッドで書き込むときに指定するオブジェクトのACL。指定できる値は次の通り：private、public-read、public-read-write、authenticated-read、aws-exec-read、bucket-owner-read、bucket-owner-full-control。例えば、アップロードしたファイルが即座に誰でも参照できるようにした場合はpublic-read、INTER-Mediatorでアクセス権管理をする場合にはbucket-owner-read。</td>
+                    </tr>
+                     <tr>
+                        <td>$s3AccessProfile</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>S3へのアクセスのための認証情報としては、一般にIAMを使ってユーザーを作成し、AmazonS3FullAccessのポリシーをユーザあるいはグループに設定し、そのユーザに対するアクセスキーとシークレットを生成し、それらを利用します。認証情報を記録するために、<a href="https://docs.aws.amazon.com/ja_jp/sdk-for-php/v3/developer-guide/guide_credentials_profiles.html" target="_blank">AWSのクライアントのプロファイル</a>を利用する場合は、ここにプロファイル名を記入します。変数がないあるいはプロファイル名が""など、プロファイル名が指定されていない場合、以下のアクセスキーとシークレットを利用します。このparams.phpファイルにアクセスキーとシークレットを記述する方法については、パブリックなレポジトリではもちろん、共用レポジトリでも問題になるかもしれません。つまり、レポジトリ外にセンシティブな情報を記録する方法として、プロファイルを活用できるようになっています。</td>
+                    </tr>
+                     <tr>
+                        <td>$s3AccessKey</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>$s3AccessProfileを参照してください。アクセスキーを直接指定する場合にはここに指定しますが、こちらの値を使うには、$s3AccessProfileの値を""にします。</td>
+                    </tr>
+                     <tr>
+                        <td>$s3AccessSecret</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>$s3AccessProfileを参照してください。シークレットを直接指定する場合にはここに指定しますが、こちらの値を使うには、$s3AccessProfileの値を""にします。</td>
+                    </tr>
+                     <tr>
+                        <td>$s3urlCustomize</td>
+                        <td>TRUE</td>
+                        <td>アップロード後にオブジェクトにアクセスするためのURLがS3より返されます。ファイルの読み出しを無制限に行う場合にはそのままのURLをフィールドに保存しますが、INTER-Mediatorのアクセス権設定を有効にするために、MediaAccessクラスを使う場合（「定義ファイル.php?media=URL」でメディア参照ができる仕組み）は、この設定をTRUEにします。すると、S3から得られたURLの冒頭のhttps://をs3://に変えます。変わったURLをそのままフィールドに保存し、mediaパラメータの値として指定すると、S3へはGetObjectメソッドを使って認証アクセスを行うようになります。つまり、INTER-Mediatorでアクセス権の管理を完全に行なっている状態になっています。</td>
+                    </tr>
+                   </tbody>
                 </table>
                 <h2>
                     <div class="subtitle">[第1引数, コンテキスト定義]</div>
