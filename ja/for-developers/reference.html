@@ -1137,8 +1137,49 @@
                     </tbody>
                 </table>
                 <h2>
+                    <div class="subtitle">[第2引数, オプション設定]</div>CSVファイル等からのインポート
+                </h2>
+                <p>ファイルのインポートを行うユーザーインタフェースは『<a href="manual.html">INTER-MediatorによるWebアプリケーションの概要</a>』にある『入力フォーム型ページの作成』に従ったページを作成してください。その時、ファイルアップロードを受け付ける要素で、deta-im属性を「コンテキスト@_im_csv_upload」にします。@以下は固定のキーワードです。そうすると、CSVファイルの1行ずつをコンテキストに対してレコード追加します。作成方法は、INTER-Mediatorのレポジトリにあるサンプルのうち、samples/Sample_webpage/fileuploadCSV_MySQL.html（定義ファイルは同じフォルダのinclude_MySQL.php）を参考にしてください。</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="2">配列指定</th>
+                        <th rowspan="2">値</th>
+<th rowspan="2">params.phpで変数名</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="4" class="keyword">'import'</td>
+                        <td class="keyword">'1st-line'</td>
+                        <td>指定なし、あるいはtrueなら1行目をフィールド指定行と見なす。フィールド指定行がない場合には、'フィールド1,フィールド2, ....'といった文字列を指定する</td>
+                        <td>$import1stLine</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'skip-lines'</td>
+                        <td>先頭から指定した数の行数を無視する。指定なしの場合は0と見なす。フィールド指定行は、ここで指定した行数を省いた最初の行と見なす。</td>
+                        <td>$importSkipLines</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'format'</td>
+                        <td>読み込むファイルのフォーマットとして"CSV"あるいは"TSV"を指定する。省略すると"CSV"</td>
+                        <td>$importFormat</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'use-replace'</td>
+                        <td>データベースがMySQLの場合、trueにすると、INSERTではなくREPLACEコマンドを利用してファイルの各行のレコードを挿入あるいは更新する。MySQLでない場合は常にINSERTを利用する。省略するとfalseと見なす。</td>
+                        <td>$useReplace</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h2>
                     <div class="subtitle">[第2引数, オプション設定]</div>Pusherの設定
                 </h2>
+                <p>Pusher対応はVer.5までです。</p>
                 <table>
                     <thead>
                     <tr>
@@ -1168,9 +1209,7 @@
                     </tr>
                     </tbody>
                 </table>
-                                                <h2>
-                    <div class="subtitle">[第2引数, オプション設定]</div>メール送信サーバー
-                </h2>
+                <h2><div class="subtitle">[第2引数, オプション設定]</div>メール送信サーバー</h2>
                 <p>メール送信については、<a href="sendmail.html" target="_blank">メール送信(Ver.5)</a>あるいは<a href="sendmail.html" target="_blank">メール送信(Ver.6)</a>のページに記載しました。
                 <p>Slackによるメッセージングについては、<a href="slack.html" target="_blank">Slackにメッセージを追加する</a>のページに記載しました。
             </div>
