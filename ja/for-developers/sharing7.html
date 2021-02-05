@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>はじめに</h1>
+                <p class="lead">
+                    コンテキストの共有化をマルチクライアントで実現する仕組みが稼働します。つまり、同一のページを複数のクライアントで参照しているとき、誰かがデータを変更すると、その結果は他のユーザのページにも反映されるという動作が典型的です。従って、1つのフィールドを単一の要素にバインドしている場合でも、マルチユーザつまり複数のブラウザで同一のエンティティをバインドしているという点で「共有化」されていると言えるわけです。コンテキストの共有化を実現するために、ページファイル上でのターゲット指定や、定義ファイルでのコンテキスト定義以外に何をしなければならないかをこの文書にまとめておきます。なお、このページに記載の内容は、Ver.5まで適用できます。Ver.6ではこの機能を廃止、Ver.7以降で別の実装に移行します。</p>
+            </section>
+            <section>
+                <h1>機能の概要と実現手法</h1>
+                <p>
+                    INTER-Mediatorでは、「コンテキスト」は、データベースに対するデータの出入り口的なイメージのものであり、検索条件などでの意味づけされたデータソースを意味します。その「共有化」とは、同一エンティティが複数のページ上のオブジェクトに展開されているとき、1つのエンティティを変更すると、その結果が他のオブジェクトにも反映される仕組みと定義します。Ver.4.4までに、単一ページ内のコンテキストの共有化が実現しています。つまり、あるページ上に、同一フィールドとバインドした要素があるとすると、一方を変更すると、もう一方は自動的に更新します。この動作を実現するためのプログラミングは必要なく、バインドの設定（ターゲット指定の付与）だけで可能です。しかしながら、マルチクライアントでのコンテキストの共有化では、WebRTCを利用した<a href="http://pusher.com/" target="_blank">Pusher</a>というサービスを利用することにしました。試用程度なら無償ですが、実運用には有償となってしまうものの、開発の効率化のために利用することにしました。
+                </p>
+            </section>
+            <section>
+                <h1>設定方法</h1>
+                <p> </p>
+            </section>
+            <section>
+                <h1>実際の動作</h1>
+                <p></p>
+                <h2>パターンA：リスト形式のトップレベルコンテキスト</h2>
+                <p></p>
+                <table>
+                <tr>
+                <th>コンテキスト定義での設定</th><th>動作</th>
+                </tr>
+                <tr>
+                <td>更新：update</td><td></td>
+                </tr>
+                <tr>
+                <td>更新：update-notify</td><td></td>
+                </tr>
+                <tr>
+                <td>挿入：create</td><td></td>
+                </tr>
+                <tr>
+                <td>挿入：create-notify</td><td></td>
+                </tr>
+                <tr>
+                <td>削除：delete</td><td></td>
+                </tr>
+                </table>
+                <h2>パターンB：カード形式のトップレベルコンテキスト</h2>
+                <p></p>
+                <table>
+                <tr>
+                <th>コンテキスト定義での設定</th><th>動作</th>
+                </tr>
+                <tr>
+                <td>更新：update</td><td></td>
+                </tr>
+                <tr>
+                <td>更新：update-notify</td><td></td>
+                </tr>
+                <tr>
+                <td>挿入：create</td><td></td>
+                </tr>
+                <tr>
+                <td>挿入：create-notify</td><td></td>
+                </tr>
+                <tr>
+                <td>削除：delete</td><td></td>
+                </tr>
+                </table>
+                <h2>パターンC：関連コンテキスト</h2>
+                <p></p>
+                <table>
+                <tr>
+                <th>コンテキスト定義での設定</th><th>動作</th>
+                </tr>
+                <tr>
+                <td>更新：update</td><td></td>
+                </tr>
+                <tr>
+                <td>更新：update-notify</td><td></td>
+                </tr>
+                <tr>
+                <td>挿入：create</td><td></td>
+                </tr>
+                <tr>
+                <td>挿入：create-notify</td><td></td>
+                </tr>
+                <tr>
+                <td>削除：delete</td><td></td>
+                </tr>
+                </table>
+            </section>
+            </article>
+    </div>
+</body>
+
+</html>

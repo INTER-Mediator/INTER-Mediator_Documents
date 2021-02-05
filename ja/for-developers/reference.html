@@ -355,7 +355,20 @@
                         <td class="keyword">'repeat-control'</td>
                         <td></td>
                         <td>
-                            繰り返し表示する部分に、レコードの追加や削除の機能を追加する。値には文字列として「insert」「insert-top」「delete」「confirm-insert」「confirm-insert-top」「confirm-delete」の文字で。confirmがあれば確認ダイアログが表示される。複数を指定する場合はそれぞれの文字列を空白で区切って書き並べる。なお「insert-confirm」や「delete-confirm」は、それぞれinsertとdeleteと同様に扱われる
+                            繰り返し表示する部分に、レコードの追加や削除の機能を追加する。値には以下の文字列を与える。confirmがあれば確認ダイアログが表示される。複数を指定する場合はそれぞれの文字列を空白で区切って書き並べる。
+<table>
+<tr><th>使用できるキーワード</th><th>動作</th><th>説明</th></tr>
+<tr><td>insert</td><td>レコード追加ボタン</td><td>レコード追加ボタンを、レコードリストの直下、あるいは1レコード単位の場合はページネーションバーに表示する</td></tr>
+<tr><td>insert-top</td><td>レコード追加ボタン</td><td>同上だが、レコードリストの直上にボタンが表示される</td></tr>
+<tr><td>insert-confirm</td><td>レコード追加ボタン</td><td>ボタンを押すと、本当にレコード作成して良いかをダイアログボックスでたずねる</td></tr>
+<tr><td>insert-top-confirm</td><td>レコード追加ボタン</td><td>同上、かつボタンはリストの場合その直上に配置</td></tr>
+<tr><td>delete</td><td>レコード削除ボタン</td><td>レコード削除ボタンをリピータの最後の要素に追加する</td></tr>
+<tr><td>delete-confirm</td><td>レコード削除ボタン</td><td>ボタンを押すと、本当にレコード削除して良いかをダイアログボックスでたずねる</td></tr>
+<tr><td>copy</td><td>レコード複製ボタン</td><td>レコード複製ボタンをリピータの最後の要素に追加する</td></tr>
+<tr><td>copy-confirm</td><td>レコード複製ボタン</td><td>ボタンを押すと、本当にレコード複製して良いかをダイアログボックスでたずねる</td></tr>
+<tr><td>copy-xxxx</td><td>レコード複製ボタン</td><td>xxxxには関連レコードのコンテキストを指定する。これにより、関連レコード群も外部キーを考慮して複製される</td></tr>
+<tr><td>copy-confirm-xxxx</td><td>レコード複製ボタン</td><td>ボタンを押すと、本当にレコード複製して良いかをダイアログボックスでたずねる</td></tr>
+</table>
                         </td>
                     </tr>
                     <tr>
