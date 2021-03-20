@@ -62,19 +62,78 @@
             <section>
                 <h1>はじめに</h1>
                 <p class="lead">
-                    コンテキストの共有化をマルチクライアントで実現する仕組みが稼働します。つまり、同一のページを複数のクライアントで参照しているとき、誰かがデータを変更すると、その結果は他のユーザのページにも反映されるという動作が典型的です。従って、1つのフィールドを単一の要素にバインドしている場合でも、マルチユーザつまり複数のブラウザで同一のエンティティをバインドしているという点で「共有化」されていると言えるわけです。コンテキストの共有化を実現するために、ページファイル上でのターゲット指定や、定義ファイルでのコンテキスト定義以外に何をしなければならないかをこの文書にまとめておきます。なお、このページに記載の内容は、Ver.5まで適用できます。Ver.6ではこの機能を廃止、Ver.7以降で別の実装に移行します。</p>
+                    コンテキストの共有化をマルチクライアントで実現する仕組みが稼働します。つまり、同一のページを複数のクライアントで参照しているとき、誰かがデータを変更すると、その結果は他のユーザのページにも反映されるという動作です。この仕組みを「クライアント同期」と呼ぶことにします。従って、1つのフィールドを単一の要素にバインドしている場合でも、マルチユーザつまり複数のブラウザで同一のエンティティをバインドしているという点で共有化されていると言えるわけです。コンテキストの共有化を実現するために、ページファイル上でのターゲット指定や、定義ファイルでのコンテキスト定義以外に何をしなければならないかをこの文書にまとめておきます。</p>
             </section>
             <section>
                 <h1>機能の概要と実現手法</h1>
                 <p>
-                    INTER-Mediatorでは、「コンテキスト」は、データベースに対するデータの出入り口的なイメージのものであり、検索条件などでの意味づけされたデータソースを意味します。その「共有化」とは、同一エンティティが複数のページ上のオブジェクトに展開されているとき、1つのエンティティを変更すると、その結果が他のオブジェクトにも反映される仕組みと定義します。Ver.4.4までに、単一ページ内のコンテキストの共有化が実現しています。つまり、あるページ上に、同一フィールドとバインドした要素があるとすると、一方を変更すると、もう一方は自動的に更新します。この動作を実現するためのプログラミングは必要なく、バインドの設定（ターゲット指定の付与）だけで可能です。しかしながら、マルチクライアントでのコンテキストの共有化では、WebRTCを利用した<a href="http://pusher.com/" target="_blank">Pusher</a>というサービスを利用することにしました。試用程度なら無償ですが、実運用には有償となってしまうものの、開発の効率化のために利用することにしました。
+                    INTER-Mediatorでは、「コンテキスト」は、データベースに対するデータの出入り口的なイメージのものであり、検索条件などでの意味づけされたデータソースを意味します。クライアント同期の仕組みにより、同一エンティティが複数のページ上のオブジェクトに展開されているとき、1つのエンティティを変更すると、その結果が他のオブジェクトにも反映されます。この動作を実現するためのプログラミングは必要なく、バインドの設定（ターゲット指定の付与）とコンテキスト定義へのsync-controlキーの値の追加だけで可能です。この機能はVer.5まではPusherと言うサービスを利用して実装していましたが、Ver.7ではINTER-Mediator単体で実装しています。背後では、Node.jsによるサーバー（サービスサーバ）を稼働させ、Socket.ioやExpressなどを使って実現しています。
                 </p>
             </section>
             <section>
-                <h1>設定方法</h1>
-                <p> </p>
+                <h1>サンプルサイト</h1>
+                <p><a href="https://demo.inter-mediator.com/INTER-Mediator/samples">INTER-Mediatorのサンプルサイト</a>にある、「Any kinds of Saples」の「<a href="https://demo.inter-mediator.com/INTER-Mediator/samples/Sample_realtime/invoice_MySQL.html">Realtime Multi-Client Update</a>」が、クライアント同期を使ったサンプルです。2つのウインドウで開いたり、別々のクライアントで開いてみて、それぞれで編集作業をして、もう一方に反映されるのを確認できると思います。</p>
+                <h2>動作の特徴</h2>
+                <p>少し複雑になりますが、クライアント同期の動作をステップで記載したのが下の図です。黒い矢印線は、通常のINTER-Mediatorの処理です。クライアント同期を有効にすると、赤い矢印線や赤い点線の処理が加わります。</p>
+                <div class="picture">
+                    <img src="/images/sync-clients.png">
+                </div>
+                <p>クライアント同期では、Webアプリケーションが利用するデータベースに2つのテーブルを定義します。テーブル定義の詳細は、INTER-Mediatorのdist-docsディレクトリにある各データベースごとのサンプルスキーマを参照してください。クライアントやコンテキストの情報を保存するregisteredcontextテーブルと、現在そのクライアントで表示しているレコードの主キー値を集めたregisteredpksテーブルを使います。もちろん、1対多でこれらのテーブルは関連しています。</p>
+                <p>Node.jsベースのService Serverが常駐している点もポイントです。このサーバは、クライアント同期以外に、バリデーションの設定がある場合に、クライアントからサーバに来たデータに対してチェックをかける作業もおこないます。通常、自動的に起動しますが、その辺りのポイントは、「<a href="/ja/for-novices/deploy6.html">ダウンロードとインストール(Ver.6以降)</a>」の記載も参照してください。</p>
             </section>
             <section>
+                <h1>定義ファイル作成</h1>
+                <p>クライアント同期を使うためには、コンテキスト定義にsync-controlキーを追加します。Create/Update/Deleteのそれぞれのオペレーションがクライアント同期で伝達されるかを記載します。設定できる値は、create update deteleで、複数記載する場合はスペースで区切って記述しましょう。以下は設定例です。これみより、invoiceコンテキストで変更やレコード作成・削除が行われれば、それがsync-controlキーを設置したコンテキストに対して、伝達が行われます。単に同一コンテキストということではなく、そのコンテキストが使うテーブル名のレベルでマッチングを取るようにしていますが、SQLのビューの場合には必ずしもうまくいくわけではありません。そこは若干の制限があります。</p>
+                <div class="code"><pre><code>IM_Entry(
+   [
+       [
+           'name' => 'invoice',
+           'records' => 1,
+           'paging' => true,
+           'key' => 'id',
+           'sort' => [['field' => 'id', 'direction' => 'asc'],],
+           'repeat-control' => 'insert delete',
+           'sync-control' => 'create update delete', // これがあれば同期を設定
+           'calculation' => [[
+               'field' => 'total_calc',
+               'expression' => 'format(sum(item@amount_calc) * (1 + _@taxRate ))',
+           ],],
+       ],…</code></pre></div>
+
+            </section>
+            <section>
+                <h1>同期処理への割り込み</h1>
+                <p>クライアント同期により、伝達してきたクライアント側では、以下の6つの関数を定義できます。メソッド名を見てわかるように、Create/Update/Deleteのそれぞれのオペレーションの前後つまりBefore/Afterに呼び出されます。クライアントでは、Beforeが呼び出され、更新処理を行い、Afterが呼び出されるようになります。Beforeが付くメソッドでは、引き続く処理を実行するためにはtrueを返します。逆にfalseを返すと、そこでクライアント同期の処理は停止します。引数dは、同期情報に関するオブジェクト（例：{entity: "item", field: ["product_unitprice"], 'justnotify: false, pkvalue: ["3"], value: ["30"]}）が設定されて呼び出されます。</p>
+                <div class="code"><pre><code>INTERMediatorOnPage.syncBeforeUpdate = (d) => {}
+INTERMediatorOnPage.syncAfterUpdate = (d) => {}
+INTERMediatorOnPage.syncBeforeCreate = (d) => {}
+INTERMediatorOnPage.syncAfterCreate = (d) => {}
+INTERMediatorOnPage.syncBeforeDelete = (d) => {}
+INTERMediatorOnPage.syncAfterDelete = (d) => {}</code></pre></div>
+            </section>
+            <section>
+                <h1>params.phpファイルへの設定方法</h1>
+                <p>クライアント同期は既定値で稼働するようになっています。その場合、sync-controlの定義がどのコンテキストにも存在しないのであれば、クライアント同期のための接続などは一切行いません。クライアント同期は、INTER-MediatorのサーバであるPHPとサービスサーバ、クライアントとサービスサーバの2つの通信経路が確立されていなければなりません。前者は、$serviceServerConnectでURL、$serviceServerPort変数でポート番号が決まります。後者は、$serviceServerProtocol、$serviceServerHost、$serviceServerPortの3つの変数で決まります。TLSを使わないのであれば、通常は既定値で動作すると思われますが、サーバのセットアップに応じて、設定を見直してください。また、クライアントからは、11478などのポートで通信をしますので、レンタルサーバなどではファイアウォールの設定を見直す必要があるのが通常です。</p>
+                <div class="table">
+<table>
+<tr><th>変数</th><th>既定値</th><th>動作</th></tr>
+<tr><td>$notUseServiceServer</td><td>false</td><td>trueの場合Service Serverを起動しない、falseの場合起動する。逆っぽいので注意</td></tr>
+<tr><td>$activateClientService</td><td>true</td><td>trueの場合クライアント側の同期機能を使用する、falseの場合使用しない</td></tr>
+<tr><td>$serviceServerProtocol</td><td>ws</td><td>Service Serverを受け付けるプロトコル。wsあるいはwss</td></tr>
+<tr><td>$serviceServerHost</td><td>""</td><td>Service Serverのホスト名で、""にすると公開IPアドレスになる。クライアントから接続する先のホスト名を指定する</td></tr>
+<tr><td>$serviceServerPort</td><td>11478</td><td>Serviceサーバが使用するポート</td></tr>
+<tr><td>$serviceServerKey</td><td>""</td><td>証明書のキーファイルへの絶対パス</td></tr>
+<tr><td>$serviceServerCert</td><td>""</td><td>サーバ証明書への絶対パス</td></tr>
+<tr><td>$serviceServerCA</td><td>""</td><td>中間証明書への絶対パス</td></tr>
+<tr><td>$serviceServerConnect</td><td>http://localhost</td><td>PHPのサーバからService Serverに接続するときのプロトコルとホスト名</td></tr>
+<tr><td>$bootWithInstalledNode</td><td>false</td><td>Service Serverの起動にサーバにあるnodeを使う</td></tr>
+<tr><td>$preventSSAutoBoot</td><td>false</td><td>trueの場合Service Serverの自動起動をやらない、falseの場合自動起動する</td></tr>
+<tr><td>$foreverLog</td><td>/etc以下にランダム</td><td>Service Serverのコンソール出力を収めるログファイル</td></tr>
+</table>
+<h2>TLSベースのhttps://サーバで運用する</h2>
+<p>WebサーバをTLSベースで運用しているならば、サービスサーバをTLSベースで稼働させる必要があります。そうしないと、httpsの中からhttpへのアクセスに相当すると判断され、ブラウザはサービスサーバへの接続を拒否します。そのためには、$serviceServerKey、$serviceServerCertそして$serviceServerCAにそれぞれ.pemファイルへの絶対パスを記述します。Let's Encryptでは、ファイルが2つですが、$serviceServerKeyにprivkey.pem、$serviceServerCertと$serviceServerCAにfullchain.pemを指定すれば良いようです。なお、その時、本来のキーファイルの位置は/etc/ca-certificates以下にあり、rootしか参照できないため、Webサーバのプロセスのユーザ（Ubuntuならwww-data、CentOSならapache2）はファイルを直接参照できません。仕方ないので、該当ファイルをどこかのディレクトリにコピーして（もちろん、キーファイルなのでWeb公開されていないなど安全な場所である必要があります）、そのファイルへのパスを指定します。$serviceServerProtocolはwssを指定します。$serviceServerHostにはクライアントから見えていて証明書に記述されているホスト名を指定しなければなりません。さらに、$serviceServerConnectは、「https://証明書のホスト名」にします。PHPのサーバと同じサーバでサービスサーバを稼働させていても、wws://でサービスサーバを運用する場合、ws://のポートは開かないですし、証明書の検証もあるので、同一ホストからでもホスト名を利用したアクセスにしなければなりません。</p>
+            </section>
+<!--            <section>
                 <h1>実際の動作</h1>
                 <p></p>
                 <h2>パターンA：リスト形式のトップレベルコンテキスト</h2>
@@ -143,7 +202,7 @@
                 <td>削除：delete</td><td></td>
                 </tr>
                 </table>
-            </section>
+            </section>-->
             </article>
     </div>
 </body>
