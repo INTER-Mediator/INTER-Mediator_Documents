@@ -337,15 +337,20 @@
                         <td class="keyword">'repeat-control'</td>
                         <td></td>
                         <td>
-                            繰り返し表示する部分に、レコードの追加や削除の機能を追加する。値には文字列として「insert」「insert-top」「delete」「confirm-insert」「confirm-insert-top」「confirm-delete」の文字で。confirmがあれば確認ダイアログが表示される。複数を指定する場合はそれぞれの文字列を空白で区切って書き並べる。なお「insert-confirm」や「delete-confirm」は、それぞれinsertとdeleteと同様に扱われる
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="keyword">'navi-control'</td>
-                        <td></td>
-                        <td>
-                            2つのコンテキストを利用して、マスター/ディテール形式のユーザインタフェースを構築する。2つのコンテキストは、原則として同一のテーブルを元にした異なるコンテキストである必要がある。マスター側のコンテキストに指定できるのは「master」ないしは「master-hide」で、通常、こちらのコンテキストは複数のレコードを表示する。マスター側には詳細を表示するボタンが追加される。ディテール側のコンテキストは「detail」を指定して、1レコードを表示する。「master」だと、2つのコンテキストによる展開結果は常に見えている。「master-hide」にするといずれか一方のみ表示し、masterに戻るボタンがディテール側に追加される。「detail-bottom」ないしは「detail-top」でボタンの位置を指定できるが、「detail」は「detail-top」と同等である。「detail-update」により、ディテールからマスターに表示するとき、マスター側の更新を行う。なお、FileMaker
-                            Serverを利用する時には、detailを指定したコンテキストのidキーの値は「-recid」にする必要がある。
+                            繰り返し表示する部分に、レコードの追加や削除の機能を追加する。値には以下の文字列を与える。confirmがあれば確認ダイアログが表示される。複数を指定する場合はそれぞれの文字列を空白で区切って書き並べる。
+<table>
+<tr><th>使用できるキーワード</th><th>動作</th><th>説明</th></tr>
+<tr><td>insert</td><td>レコード追加ボタン</td><td>レコード追加ボタンを、レコードリストの直下、あるいは1レコード単位の場合はページネーションバーに表示する</td></tr>
+<tr><td>insert-top</td><td>レコード追加ボタン</td><td>同上だが、レコードリストの直上にボタンが表示される</td></tr>
+<tr><td>confirm-insert</td><td>レコード追加ボタン</td><td>ボタンを押すと、本当にレコード作成して良いかをダイアログボックスでたずねる</td></tr>
+<tr><td>confirm-insert-top</td><td>レコード追加ボタン</td><td>同上、かつボタンはリストの場合その直上に配置</td></tr>
+<tr><td>delete</td><td>レコード削除ボタン</td><td>レコード削除ボタンをリピータの最後の要素に追加する</td></tr>
+<tr><td>confirm-delete</td><td>レコード削除ボタン</td><td>ボタンを押すと、本当にレコード削除して良いかをダイアログボックスでたずねる</td></tr>
+<tr><td>copy</td><td>レコード複製ボタン</td><td>レコード複製ボタンをリピータの最後の要素に追加する</td></tr>
+<tr><td>confirm-copy</td><td>レコード複製ボタン</td><td>ボタンを押すと、本当にレコード複製して良いかをダイアログボックスでたずねる</td></tr>
+<tr><td>copy-xxxx</td><td>レコード複製ボタン</td><td>xxxxには関連レコードのコンテキストを指定する。これにより、関連レコード群も外部キーを考慮して複製される</td></tr>
+<tr><td>confirm-copy-xxxx</td><td>レコード複製ボタン</td><td>ボタンを押すと、本当にレコード複製して良いかをダイアログボックスでたずねる</td></tr>
+</table>
                         </td>
                     </tr>
                     <tr>
