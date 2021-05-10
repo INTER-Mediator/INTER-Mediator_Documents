@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2019 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2021 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -69,19 +69,19 @@
             <h1>Preparation to use</h1>
             <p>VM provides for VirtualBox. Please install the application type VirtualBox on your personal computer as below. </p>
             <h3>Installing VirtualBox</h3>
-            <p>"VirtualBox" of Virtual Machine execution environment available on Windows, Mac, Linux, Solaris is developed by Oracle Corporation and is distributed freely in some circumstance. Please download VirtualBox corresponding to your host computer from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">this page</a>. </p>
+            <p>"VirtualBox" of Virtual Machine execution environment available on Windows, Mac, Linux, Solaris is developed by Oracle Corporation and is distributed freely in some circumstance. Please download VirtualBox corresponding to your host computer from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noreferrer noopener">this page</a>. </p>
         </section>
         <section>
             <h1>INTER-Mediator-Server VM download</h1>
             <p>Please download INTER-Mediator-Server VM from the link below.<!-- There is about 570MB.--></p>
             <ul>
                 <li>
-                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.11.ova">INTER-Mediator-Server VM 5.11</a>（About 830MB, Latest update: 2019-11-17）
-                        <!-- SHA-256 checksum: eb3bff9c3619d65c19cca37ec29f3d323e75b99537c35be305ff65af78afe2ef -->
+                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-7.ova">INTER-Mediator-Server VM 7</a>（About 1.37GB, Latest update: 2021-03-21）
+                    <!-- SHA-256 checksum: f6c5ab23d9aa628e6470663c18478a0e0af45ef9900e53ae04c95ad5d68405e3 -->
                 </li>
                 <li>
-                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.10.ova">INTER-Mediator-Server VM 5.10</a>（About 570MB, Latest update: 2019-04-17）
-                    <!-- SHA-256 checksum: b081d086bab21bd5651b3a2b20221b34f5180ef02e439a84814f15d1e5c4122c -->
+                    <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.11.ova">INTER-Mediator-Server VM 5.11</a>（About 830MB, Latest update: 2019-11-17）
+                        <!-- SHA-256 checksum: eb3bff9c3619d65c19cca37ec29f3d323e75b99537c35be305ff65af78afe2ef -->
                 </li>
             </ul>
         </section>
@@ -115,7 +115,7 @@
         </section>
         <section>
             <h1>Using INTER-Mediator-Server VM</h1>
-            <p>Once you are ready, select the INTER-Mediator-Server VM item in the VirtualBox Manager and click on the "Launch" button. Characters start flowing on the black console screen. The login prompt is displayed. Please connect to <a href="http://192.168.56.101" target="_blank"> http://192.168.56.101 </a> from the web browser. Then, there are pages that you can see the functions available in this INTER-Mediator-Server VM. </p>
+            <p>Once you are ready, select the INTER-Mediator-Server VM item in the VirtualBox Manager and click on the "Launch" button. Characters start flowing on the black console screen. The login prompt is displayed. Please connect to <a href="http://192.168.56.101" target="_blank" rel="noreferrer noopener"> http://192.168.56.101 </a> from the web browser. Then, there are pages that you can see the functions available in this INTER-Mediator-Server VM. </p>
             <p>From the "Sample Program" link, you can immediately activate the contents of INTER-Mediator's Samples folder. If FileMaker Server is running on the host side, you have to upload the dist-docs/TestDB.fmp12 in the INTER-Mediator distribution, and XML and PHP Sharing is available. If FileMaker Server is not running, FileMaker Server sample will show any errors. </p>
             <div class="picture">
                 <img class="picture-small" src="/images/shot9633.png">
@@ -153,8 +153,8 @@ git pull origin stable </code> </pre>
             <h1>(FYI) Create and run the VM yourself </h1>
             <p>The INTER-Mediator distribution file contains scripts etc. for generating VMs. This is the best way to create a VM with the latest INTER-Mediator. Please note that the script does not run even when Vagrant is installed under Windows in the standard environment (you need to install an application such as Git for Windows separately and run ssh). </p>
             <ol>
-                <li>Install Vagrant. Go to the <a href="https://www.vagrantup.com/" target="_blank">this page</a> and download and install the application corresponding to the OS you want to use. Just install it and it's okay.</li>
-                <li>Clone the latest version of INTER-Mediator. It's easy to use the "Clone in Desktop" button on the <a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">this page</a>.</li>
+                <li>Install Vagrant. Go to the <a href="https://www.vagrantup.com/" target="_blank" rel="noreferrer noopener">this page</a> and download and install the application corresponding to the OS you want to use. Just install it and it's okay.</li>
+                <li>Clone the latest version of INTER-Mediator. It's easy to use the "Clone in Desktop" button on the <a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank" rel="noreferrer noopener">this page</a>.</li>
                 <li>As far as macOS goes, start the terminal application and move to the dist-docs/vm-for-trial folder in the clone of INTER-Mediator repository.</li>
                 <li>Run "vagrant up" command. It takes time to download and create. It is about 20 minutes. It's ready when "INTER-Mediator-Server VM is ready." Is displayed.</li>
                 <li>Run "vagrant box remove INTER-Mediator-Server" command if you want to remove the downloaded box file.</li>

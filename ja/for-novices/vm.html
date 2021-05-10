@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2019 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2021 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -71,23 +71,19 @@
                 <h1>使用までの準備</h1>
                 <p>VMは、VirtualBox用を提供します。アプリケーション形式のVirtualBoxを以下の方法で、ご自分のパソコンにインストールしておいてください。</p>
                 <h3>VirtualBoxのインストール</h3>
-                <p>Windows、Mac、Linux、Solarisで利用できるVirtual Machine実行環境の「VirtualBox」は、Oracle社が開発してフリーで配布しているものです。<a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">こちらのページ</a>より、ご利用のホストコンピュータに対応したVirtualBoxをダウンロードしてご利用ください。</p>
+                <p>Windows、Mac、Linux、Solarisで利用できるVirtual Machine実行環境の「VirtualBox」は、Oracle社が開発してフリーで配布しているものです。<a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noreferrer noopener">こちらのページ</a>より、ご利用のホストコンピュータに対応したVirtualBoxをダウンロードしてご利用ください。</p>
             </section>
             <section>
                 <h1>INTER-Mediator-Server VMのダウンロード</h1>
-                <p>INTER-Mediator-Server VMは以下のリンクよりダウンロードしてください。いずれも、Intelプラットフォーム向けのLinuxをベースにしているため、Intel版Mac、通常のWindowsでは稼働しますが、M1搭載Macでは稼働しません。M1搭載Mac向けにはVirtual Boxが安定してから、あるいはDockerでの動作環境提供を開発中です。<!-- 570MBほどあります。--></p>
+                <p>INTER-Mediator-Server VMは以下のリンクよりダウンロードしてください。いずれも、Intelプラットフォーム向けのLinuxをベースにしているため、Intel版Mac、通常のWindowsでは稼働しますが、Apple M1チップ搭載Macでは稼働しません。Apple Silicon搭載Mac向けにはVirtualBoxが安定してから、あるいはDockerでの動作環境提供を開発中です。<!-- 570MBほどあります。--></p>
                 <ul>
                     <li>
-                        <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-7.ova">INTER-Mediator-Server VM 7</a>（約1.3G、最終更新日：2021/3/21）
-                            <!-- SHA-256 checksum: eb3bff9c3619d65c19cca37ec29f3d323e75b99537c35be305ff65af78afe2ef -->
+                        <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-7.ova">INTER-Mediator-Server VM 7</a>（約1.37GB、最終更新日：2021/03/21）
+                            <!-- SHA-256 checksum: f6c5ab23d9aa628e6470663c18478a0e0af45ef9900e53ae04c95ad5d68405e3 -->
                     </li>
                     <li>
                         <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.11.ova">INTER-Mediator-Server VM 5.11</a>（約830MB、最終更新日：2019/11/17）
                             <!-- SHA-256 checksum: eb3bff9c3619d65c19cca37ec29f3d323e75b99537c35be305ff65af78afe2ef -->
-                    </li>
-                    <li>
-                        <a href="https://inter-mediator.com/archives/INTER-Mediator-Server-VM-5.10.ova">INTER-Mediator-Server VM 5.10</a>（約570MB、最終更新日：2019/04/17）
-                            <!-- SHA-256 checksum: b081d086bab21bd5651b3a2b20221b34f5180ef02e439a84814f15d1e5c4122c -->
                     </li>
                 </ul>
             </section>
@@ -118,14 +114,14 @@
                 <div class="picture">
                     <img class="picture-small picture-dummy" src="/images/shot9516.png">
                 </div>
-                <p><h4>【追記１】同一ネットワーク内の別デバイスからアクセスする「ブリッジネットワークの設定」</h4></p>
+                <h4>【追記１】同一ネットワーク内の別デバイスからアクセスする「ブリッジネットワークの設定」</h4>
                 <p>「ホストオンリーネットワーク」ではVMホストが稼働しているマシンからしか接続できません。しかし、それではiOSやAndroidデバイスでの実機操作テストができず不便です。そこで、中・上級者向けの方法としてブリッジネットワークを設定する方法を解説します。<br>
                 「VirtualBox」メニューの「環境設定」を選択してダイアログボックスを表示したあと、ツールバーにある「ネットワーク」を選択します。「Adapter 1（アダプター1）」の「Attached to:（割り当て）」を「Bridged Adapter」にセットします。
                 </p>
                 <div class="picture">
                     <img class="picture-small picture-dummy" src="/images/shot9920_BridgeAdapter.png">
                 </div>
-                <p><h4>重要：既定ユーザーのパスワード変更</h4></p>
+                <h4>重要：既定ユーザーのパスワード変更</h4>
                 <p>このようにセットしたあと､VirtualBox マネージャーでINTER-Mediator-Server VMの項目を選択して「起動」ボタンをクリックすると、黒いコンソール画面が現れます。<br>
                 最初の起動時には既定値のログインID:developer、Password:im4135devでログインしますが､即座にしなければならないことがあります。パスワードの変更です。 ブリッジネットワークに設定したあと､VMが稼働しているマシンを不用意にカフェなどでWi-Fi接続して動作させると､同一ネットワーク内にいる他のユーザーからアクセスされる危険に晒されます。即座に独自のパスワードに変更した上で､IMをVM上で稼働させてください。<br>
                 パスワードの変更はVMサーバー画面上で行います。まず､既定のログインID､パスワードでログインしたあと､passwdとタイプします。すると次の画面のようにこれまでのパスワードを要求されます。ただしくタイプできたら続いて新しいパスワードを入れるよう促されます。その際あまり短い文字列やローマ字のみのパスワードを入れると「パスワードが弱い」とはねられます。数字や記号混じりのパスワードをセットしてください。</p>
@@ -148,7 +144,7 @@
             </section>
             <section>
                 <h1>INTER-Mediator-Server VMの利用</h1>
-                <p>以上の準備ができれば、VirtualBox マネージャーでINTER-Mediator-Server VMの項目を選択して「起動」ボタンをクリックします。黒いコンソール画面に文字が流れて起動します。ログインプロンプトが表示されます。Webブラウザから「<a href="http://192.168.56.101" target="_blank">http://192.168.56.101</a>」に接続してください。すると、このINTER-Mediator-Server VMで利用出来る機能などなどが見えるページがあります。</p>
+                <p>以上の準備ができれば、VirtualBox マネージャーでINTER-Mediator-Server VMの項目を選択して「起動」ボタンをクリックします。黒いコンソール画面に文字が流れて起動します。ログインプロンプトが表示されます。Webブラウザから「<a href="http://192.168.56.101" target="_blank" rel="noreferrer noopener">http://192.168.56.101</a>」に接続してください。すると、このINTER-Mediator-Server VMで利用出来る機能などなどが見えるページがあります。</p>
                 <p>「サンプルプログラム」のリンクからは、INTER-MediatorのSamplesフォルダの内容を即座に稼働させることができます。ホスト側でFileMaker Serverが稼働している場合、INTER-Mediatorのディストリビューションの中にあるdist-docs/TestDB.fmp12をサーバーに登録してXML共有ができる状態になっていれば、ゲストからホストに接続して動作するので、FileMaker Serverのサンプルも試せます。FileMaker Serverが稼働していない場合には、FileMaker Serverのサンプルはエラーが出ます。</p>
                 <div class="picture">
                     <img class="picture-small picture-dummy" src="/images/shot9633.png">
@@ -186,8 +182,8 @@ git pull origin stable</code></pre>
                 <h1>（参考）VMを自分で作成して起動する</h1>
                 <p>INTER-Mediatorの配布ファイルの中には、VMを生成するためのスクリプト等が含まれています。最新のINTER-Mediatorが組み込まれたVMを作成するには、この方法が最適です。なお、標準環境のWindowsでは、Vagrantをインストールしてもスクリプトが稼働しないので、ご注意ください（別途Git for Windowsなどのソフトウェアをインストールしてsshを実行できる環境が必要です）。</p>
                 <ol>
-                    <li>Vagrantをインストールします。<a href="https://www.vagrantup.com/" target="_blank">こちら</a>のページに移動して、使用するOSに対応したアプリケーションをダウンロードしてインストールします。単にインストールするだけで大丈夫です。</li>
-                    <li>INTER-Mediatorの最新版をcloneします。<a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank">こちら</a>のページににある「Clone in Desktop」ボタンを利用するのが手軽な方法です。</li>
+                    <li>Vagrantをインストールします。<a href="https://www.vagrantup.com/" target="_blank" rel="noreferrer noopener">こちら</a>のページに移動して、使用するOSに対応したアプリケーションをダウンロードしてインストールします。単にインストールするだけで大丈夫です。</li>
+                    <li>INTER-Mediatorの最新版をcloneします。<a href="https://github.com/INTER-Mediator/INTER-Mediator" target="_blank" rel="noreferrer noopener">こちら</a>のページににある「Clone in Desktop」ボタンを利用するのが手軽な方法です。</li>
                     <li>macOSであればターミナルアプリケーションを起動し、cloneしたINTER-Mediatorフォルダ内のdist-docs/vm-for-trialフォルダに移動します。</li>
                     <li>「vagrant up」というコマンドを実行します。ダウンロードや作成処理に時間がかかります。概ね20分程度です。「INTER-Mediator-Server VM is ready.」と表示されたら準備完了です。</li>
                     <li>なお、ダウンロード済みのboxファイルを削除する場合には「vagrant box remove INTER-Mediator-Server」というコマンドを実行します。</li>
