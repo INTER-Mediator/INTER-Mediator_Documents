@@ -115,6 +115,11 @@
 <p>'data-im-group'属性は、Ver.6以降利用できません。type=radioのINPUTタグについては、同一のdata-im属性のものを自動的にグループ化します。</p>
             </section>
             <section>
+                <h1>Ver.5.12での変更</h1>
+                <h2>動作条件の変更</h2>
+                <p>INTER-Mediator Ver.5系統ではVer.5.12でPHP 8.0に対応しましたが、PHP 5.2とPHP 5.3はサポート対象外となりました。PHP 5.4以降が必要です（推奨はPHP 7.3以降）。これに伴い、FileMaker Serverについてはバージョン13以前はサポート対象外となりました。</p>
+            </section>
+            <section>
                 <h1>Ver.5.8での変更</h1>
                 <h2>要求されるプライベートキーの鍵長</h2>
                 <p>セキュリティ上の理由から、プライベートキーの鍵長が2048bit未満のものを非推奨にしました。ネイティブ認証やLDAP認証を利用している場合には、プライベートキー（params.phpファイル内の変数 $generatedPrivateKey の値）を更新する必要があります。</p>
