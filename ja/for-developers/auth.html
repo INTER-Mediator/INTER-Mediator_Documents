@@ -43,6 +43,20 @@
     <script>
     hljs.initHighlightingOnLoad()
     </script>
+    <style>
+        td {
+            text-align: left;
+        }
+
+        .keyword {
+            white-space: nowrap;
+        }
+
+        .subtitle {
+            font-size: 70%;
+            color: gray;
+        }
+    </style>
 </head>
 
 <body class="docs" data-page-title="for-developers">
@@ -60,7 +74,7 @@
         </div>
         <article>
             <section>
-                <p class="lead">ユーザ認証とアクセス権の設定をサポートします。INTER-Mediator自身がデータベースを利用して、ユーザーやグループを管理する手法を「ビルトイン認証」、データベースエンジン側に登録したユーザーを利用する認証を「ネイティブ認証」、LDAPサーバのユーザーを利用した認証を「LDAP認証」と呼びます。</p>
+                <p class="lead">ユーザ認証とアクセス権の設定をサポートします。INTER-Mediator自身がデータベースを利用して、ユーザーやグループを管理する手法を「ビルトイン認証」、データベースエンジン側に登録したユーザーを利用する認証を「ネイティブ認証」、LDAPサーバのユーザーを利用した認証を「LDAP認証」と呼びます。また、OAuth2（ただし、Googleのみ確認）やSAMLにも対応しています。INTER-Mediator Ver.8では、パスワード記録時のハッシュを従来のSHA-1から、5000ストレッチしたSHA-256にアップデートしています。従来のSHA-1でのハッシュと相互運用もできます。</p>
                 <h1>認証動作に必要なテーブル</h1>
                 <h2>チャレンジ等を記録するテーブル</h2>
                 <p>ユーザ認証ではセキュリティを高めるために、サーバーからクライアントに「チャレンジ」を送り、その値を利用して認証情報を作ります。そのため、サーバー側にチャレンジを残しておく必要があり、テーブルの定義が必要です。そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで読み書きの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（issuedhash）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
@@ -84,13 +98,13 @@
                         </tr>
                         <tr>
                             <td>clienthost</td>
-                            <td>VARCHAR(48),</td>
-                            <td>クライアントを識別するもの。Ver.1.0.5の実装では、クライアントのIPアドレスのみを記録している</td>
+                            <td>VARCHAR(64),</td>
+                            <td>クライアントを識別する情報。サーバーからランダムに与えられる40バイトのHEXコード。ただし、パスワードのセルフサービスのリセット時にSHA-256のハッシュ値のHEX文字列が入る。</td>
                         </tr>
                         <tr>
                             <td>hash</td>
-                            <td>VARCHAR(48),</td>
-                            <td>チャレンジに使うハッシュ値。実際には24バイトの16進数文字列。</td>
+                            <td>VARCHAR(64),</td>
+                            <td>チャレンジに使うハッシュ値。実際には24バイトの16進数文字列。ただし、パスワードのセルフサービスのリセット時にSHA-256のハッシュ値のHEX文字列が入る。</td>
                         </tr>
                         <tr>
                             <td>expired</td>
@@ -99,7 +113,7 @@
                         </tr>
                     </table>
                 </div>
-                <p>なお、このテーブルへの検索では、user_idとclienthostあるいはusernameとclienthostの2つのフィールドに対してAND演算での検索条件が与えられます。従って、高速化するためには、この2つのフィールドを合成したインデックスを作っておくなどの措置をとる事ができます。</p>
+                <p>なお、このテーブルへの検索では、user_idとclienthostあるいはusernameとclienthostの2つのフィールドに対してAND演算での検索条件が与えられます。従って、高速化するためには、この2つのフィールドを合成したインデックスを作っておきます。</p>
                 <h2>ユーザーのテーブル</h2>
                 <p>認証のためのユーザは、データベース内にテーブルを作成する方法と、データベースエンジンが管理するユーザによる方法を利用できます。データベース内にテーブルを作る場合、そのテーブルは、IM_Entryの第3引数あるいはparams.phpで指定したユーザで少なくとも読み出しの権限が必要です。チャレンジのテーブル名は、IM_Entryの第2引数で指定するか、あるいは既定値の名前（authuser）のテーブルを作成します。テーブルには以下のフィールドが必要です。</p>
                 <div class="table">
@@ -122,8 +136,8 @@
                         </tr>
                         <tr>
                             <td>hashedpasswd</td>
-                            <td>VARCHAR(48)</td>
-                            <td>パスワードのハッシュ値</td>
+                            <td>VARCHAR(72)</td>
+                            <td>パスワードのハッシュ値。SHA-256のハッシュ値と、4バイトのソルトを合成したコードのHEXが入るので、72バイト必要。</td>
                         </tr>
                         <tr>
                             <td>email</td>
@@ -140,18 +154,30 @@
                 <p>ユーザの場合は、ユーザ名をキーフィールドに使えるとも考えられますが、大量のユーザになったときなどに処理速度を有利にするために、内部的にはidフィールドによる連番で与えた数値で処理をすることにします。なお、usernameを条件として検索をかけるので、高速化のためにはこのフィールドにインデックスを作成しておきます。パスワードはハッシュを保存しますが、ハッシュ値は、次の手順で計算をします。</p>
                 <ol>
                     <li>パスワード（pw）と、4バイトのソルト（s）を用意します。</li>
-                    <li>パスワードとソルトをつなげた文字列のSHA-1を求めます（ sha1(pw+s) → H1）</li>
+                    <li>パスワードとソルトをつなげた文字列のSHA-256を5000回のストレッチで求めます（ sha256(pw+s, 5000) → H1）</li>
                     <li>H1の16進数表現した文字列と、ソルトを16進数表現した文字列をつなげます（hex(H1)+hex(s)→H2）</li>
                     <li>H2をフィールドに保存します。</li>
                 </ol>
-                <p>たとえば、OS Xにおいて、pw=user1、s=TESTとすると、以下のコマンドで「d83eefa0a9bd7190c94e7911688503737a99db0154455354」というハッシュ値の16進数表現を求めることができます。</p>
-                <div class="code"><pre><code>pw=user1
-salt=TEST
-h1=`/bin/echo -n "${pw}${salt}" | openssl sha1 -sha1`
-h2=`/bin/echo -n "${salt}" | xxd -ps`
-echo ${h1}${h2}</code>
+                <p>コマンドで求める例としては、あまり効率良くはないですが、INTER-Mediatorのレポジトリにあるdist-docs/passwdgen.shスクリプトを利用できます。-uはユーザ名、-pはパスワード、-sはSQL文として出力するパラメータです。opensslのコマンドを内部で使っていますが、5000回のストレッチをコマンドから行う方法がわからず、シェルスクリプトで繰り返してopensslコマンドを動かしているため、ハッシュの計算に30秒から1分くらいかかると思われます。</p>
+                <div class="code"><pre><code>% dist-docs/passwdgen.sh -u test -p TEST -s
+INSERT authuser(username,initialpass,hashedpasswd) VALUES('test','TEST','5d4b09daced104e42bc5cfc1d4db6c677afd3ffeadc950a2873b009aeba39bab45654d4b');</code>
 </pre>
                 </div>
+                <p>なお、過去に開発したアプリケーションとの互換性を考慮して、SHA-1での利用も可能です。SHA-1ハッシュ値は、次の手順で計算をします。</p>
+                <ol>
+                    <li>パスワード（pw）と、4バイトのソルト（s）を用意します。</li>
+                    <li>パスワードとソルトをつなげた文字列のSHA-1求めます（ sha1(pw+s) → H1）</li>
+                    <li>H1の16進数表現した文字列と、ソルトを16進数表現した文字列をつなげます（hex(H1)+hex(s)→H2）</li>
+                    <li>H2をフィールドに保存します。</li>
+                </ol>
+                <p>SHA-256互換ハッシュという、SHA-1からパスワードを変更せずにハッシュそのものはSHA-256に移行できるモードも用意しています。設定を行えば、SHA-1での認証が成功した時に、データベースのhashedpasswdフィールドの内容をこの互換ハッシュで書き換えます。次回以降の認証は、互換ハッシュを使っての認証となるので、パスワードを変更せずにSHA-256を使ったハッシュでの運用に移行できます。互換ハッシュは次の手順で計算をします。</p>
+                <ol>
+                    <li>SHA-1で求めたHEX表現のハッシュをHとします。</li>
+                    <li>Hのソルトを求めてsとします（salt(H) → s）</li>
+                    <li>Hとsをつなげた文字列のSHA-256を5000回のストレッチで求めます（ sha256(H+s, 5000) → H1）</li>
+                    <li>Hの16進数表現した文字列と、ソルトを16進数表現した文字列をつなげます。このH2がSHA-256互換ハッシュです（hex(H1)+hex(s)→H2）</li>
+                </ol>
+
                 <h2>グループを管理するテーブル</h2>
                 <p>グループそのものを管理するテーブルと、ユーザーやグループの特定のグループへの所属を記録するテーブルの2つがあります。</p>
                 <div class="table">
@@ -217,6 +243,174 @@ echo ${h1}${h2}</code>
 ...);</code>
 </pre>
                 </div>
+                
+                <h2>オプションの認証設定に設定可能な情報</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="2">配列指定</th>
+                        <th rowspan="2">値</th>
+                        <th rowspan="2">params.phpで変数名</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="12" class="keyword">'authentication'</td>
+                        <td class="keyword">'user'</td>
+                        <td>利用可能なユーザを配列で指定。この記述がなければすべてのユーザにアクセス権。データベースのネイティブユーザで認証する場合には、値を「array('database_native')」と指定する。</td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'group'</td>
+                        <td>利用可能なグループを配列で指定。この記述がなければすべてのグループにアクセス権</td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'user-table'</td>
+                        <td>ユーザ情報が保存されているテーブル名。省略すると'authuser'</td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'group-table'</td>
+                        <td>ユーザ情報が保存されているテーブル名。省略すると'authgroup'</td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'corresponding-table'</td>
+                        <td>ユーザとグループが対応づけられている情報が保存されているテーブル名。省略すると'authcor'</td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'challenge-table'</td>
+                        <td>チャレンジが保存されているテーブル名。省略すると'issuedhash'</td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'authexpired'</td>
+                        <td>認証が自動的に継続される時間を秒数で指定する。省略すると'3600'（1時間）。バージョン4.4以降では、0を指定すると有効期限はWebブラウザー終了時まで</td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'storing'</td>
+                        <td>
+                            認証情報のクライアントへの保存を指定。'cookie'ならPathを指定しないでクッキーに保存（既定値）、'cookie-domainwide'ならドメイン全体で共有できるようにクッキーに保存、'session-storage'ならブラウザのセッションストレージに保存、'none'ならクッキーに保存しない
+                        </td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'realm'</td>
+                        <td>
+                            認証領域名。ログインパネルの上部に表示される。また、認証情報を記憶するクッキーの名称の末尾に付与される。
+                        </td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'email-as-username'</td>
+                        <td>
+                            trueを指定すると、authuserテーブルのusernameと同時にemailフィールドも検索する。つまり、電子メールアドレスでの認証が可能になる。既定値はfalse
+                        </td>
+<td>$emailAsAliasOfUserName</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'issuedhash-dsn'</td>
+                        <td>
+                            issuedhashテーブルに対するDSNを指定する。たとえば、FileMakerデータベースで、issuedhashテーブルをSQLiteで運用する場合に使える
+                        </td>
+<td>$issuedHashDSN</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'password-policy'</td>
+                        <td>パスワード変更時に適用されるパスワードポリシー。useAlphabet useNumber useUpper useLower usePunctuation length(10)
+                            notUserNameの各単語をスペースで区切って指定する。useAlphabetはアルファベットを使用していないといけなくする。その他、同様に単語から意味が分かるはずである。length(10)はパスワードは10文字以上にする必要があるという意味で、(
+                            ) 内には任意の数値を記述できる。
+                        </td>
+<td>$passwordPolicy</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'media-context'</td>
+                        <td></td>
+                        <td>
+                            メディアアクセスに認証を設定するとき、ここで指定したコンテキストにアクセスしたときにメディアの認証用のトークンをクライアントに届ける。このトークンをクライアントが持つ事で、メディアプロキシが認証される（Ver.6ではこの指定は不要になtta）
+                        </td><td></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>コンテキストの認証設定に設定可能な情報</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="3">配列指定</th>
+                        <th rowspan="2">値</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">キー</th>
+                        <th class="keyword">インデックス</th>
+                        <th class="keyword">下位のキー</th>
+                    </tr>
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="9" class="keyword">'authentication'</td>
+                        <td class="keyword">'media-handling'</td>
+                        <td></td>
+                        <td>メディアアクセス時の認証を通すためのクッキー情報を、このコンテキストの読み出し時にクライアントに送り込む。必要なときに値にtrueを指定する</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4" class="keyword">'all'</td>
+                        <td class="keyword">'user'</td>
+                        <td>
+                            すべての操作について、このコンテキストを利用可能なユーザを配列で指定。この記述がなければすべての認証ユーザにアクセス権
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'group'</td>
+                        <td>
+                            すべての操作について、このコンテキストを利用可能なグループを配列で指定。この記述がなければすべてのグループにアクセス権
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'target'</td>
+                        <td>
+                            省略あるいは'table'なら、テーブル全体に対する権限の設定、'field-user'あるいは'field-group'ならレコードごとに権限を指定できる
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'field'</td>
+                        <td>
+                            'target'に'field-user'あるいは'field-group'に指定した場合、ユーザ名やグループ名を指定するフィールドのフィールド名
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'read'</td>
+                        <td class="keyword">(allと同様）</td>
+                        <td>クエリーの操作について、このコンテキストに関する設定を行う</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'update'</td>
+                        <td class="keyword">（allと同様）</td>
+                        <td>更新の操作について、このコンテキストに関する設定を行う</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'create'</td>
+                        <td class="keyword">（allと同様）</td>
+                        <td>新規レコード作成の操作について、このコンテキストに関する設定を行う</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'delete'</td>
+                        <td class="keyword">（allと同様）</td>
+                        <td>レコード削除の操作について、このコンテキストに関する設定を行う</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'protect-writing'</td>
+                        <td></td>
+                        <td></td>
+                        <td>この配列に指定したフィールド名に対する更新処理を禁止する</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'protect-reading'</td>
+                        <td></td>
+                        <td></td>
+                        <td>この配列に指定したフィールド名から読み出したデータをクライアントに送る事を禁止する</td>
+                    </tr>
+                    </tbody>
+                </table>
+
                 <h2>コンテキストの認証設定なし、オプションの認証設定あり</h2>
                 <p>タイトル用な条件だと、コンテキストの認証設定のuserとgroupがアクセス権の設定に関係します。もし、userもgroupも設定されていない場合は、認証が通ったユーザは何でもできると考えてください。</p>
                 <p>userあるいはgroupが設定されている場合、認証が通ると同時に、そのユーザあるいはそのユーザを含むグループが、userあるいはgroupの設定に含まれている必要があります。</p>
@@ -225,11 +419,123 @@ echo ${h1}${h2}</code>
                 <h2>コンテキストの認証設定あり、オプションの認証設定あり</h2>
                 <p>両方の認証設定があれば、先にオプションの認証設定が評価されて、その後にコンテキストの認証設定が評価されます。</p>
                 <h2>コンテキストの認証設定の適用対象</h2>
-                <p>適用対象として、4つのデータベース処理、load/update/new/deleteに対する処理と、それらすべてに対してまとめて設定を行うallがあります。</p>
+                <p>適用対象として、4つのデータベース処理、read/create/update/deleteに対する処理と、それらすべてに対してまとめて設定を行うallがあります。</p>
                 <h2>コンテキストの認証設定のtableとfleld</h2>
                 <p>"table"キーに対する値がfield-userあるいはfield-groupの場合は、そのテーブルにあるfieldに指定したフィールドに、ログインが成功したユーザあるいはそのユーザが含むグループの名前が設定されちているレコードだけに絞り込まれます。検索条件にANDでユーザないしはグループの値をfieldに指定したフィールドに対する条件を付け加えます。したがって、fieldで指定したフィールドのうち、空欄ものは認証すればいっさいアクセスできないということになります。</p>
                 <p>"table"キーに対する値がfield-useやfield-groupではない場合、アクセス権はすべてのテーブルに渡って適用されます。レコードごとのアクセス権を記録するフィールドは不要です。このとき、userあるいはgroup属性に含まれていないユーザで認証した場合、いっさいのアクセスはできないようになっています。オプションの認証設定と異なる動作ですので、注意してください。</p>
-                <p>load/update/deleteに関しては、アクセス権は「検索条件」として集約されます。一方、newの操作に対しては、アクセス権がある場合だけ、レコードの作成が可能です。レコードの作成により、fieldで指定したフィールドに、ユーザないしはグループが設定されます。ユーザの場合は1つに決まりますが、グループの場合は、グループ名を並べ替えたときのいちばん先頭のグループ名を記録するようにします。</p>
+                <p>read/update/deleteに関しては、アクセス権は「検索条件」として集約されます。一方、createの操作に対しては、アクセス権がある場合だけ、レコードの作成が可能です。レコードの作成により、fieldで指定したフィールドに、ユーザないしはグループが設定されます。ユーザの場合は1つに決まりますが、グループの場合は、グループ名を並べ替えたときのいちばん先頭のグループ名を記録するようにします。</p>
+                
+                <h1>params.phpファイルへの指定</h1>
+                <p></p>
+                                <table>
+                    <thead>
+                    <tr>
+                        <th>変数名</th>
+                        <th>既定値</th>
+                        <th>指定内容</th>
+                    </tr>
+                    <thead>
+                    <tbody>
+                      <tr>
+                        <td>$passwordHash</td>
+                        <td style="white-space:nowrap">"1"</td>
+                        <td>"1"なら、SHA-1、SHA-256互換、SHA-256のいずれも対応。"2m"なら、SHA-256互換、SHA-256のいずれも対応。"2"なら、SHA-256のみ対応。</td>
+                      </tr>
+                      <tr>
+                        <td>$alwaysGenSHA2</td>
+                        <td style="white-space:nowrap">false</td>
+                        <td>$passwordHashが"1"で、この変数がfalseの場合、パスワード変更するとSHA-1でハッシュする。この変数がtrueなら、パスワード変更時にSHA-256でハッシュする。$passwordHashが"1"以外の場合は、この変数に関係なく、パスワードを変更すると、SHA-256でハッシュをかける。</td>
+                      </tr>
+                      <tr>
+                        <td>$migrateSHA1to2</td>
+                        <td style="white-space:nowrap">false</td>
+                        <td>trueにすれば、SHA-1でハッシュされたパスワードでログインをした後、そのハッシュ値をSHA-256互換のハッシュにコンバートする。実質的に、SHA-1のパスワードを変更しないでSHA-256に移行できる。</td>
+                      </tr>
+                      <tr>
+                        <td>$resetPage</td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>URLを文字列で指定すると、ログインパネルに「パスワードをリセット」のボタンが表示され、クリックするとそのURLへジャンプする。ボタン名のメッセージの番号は2023</td>
+                      </tr>
+                      <tr>
+                        <td>$enrollPage</td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>URLを文字列で指定すると、ログインパネルに「ユーザー登録をする(要メールアドレス)」のボタンが表示され、クリックするとそのURLへジャンプする。ボタン名のメッセージの番号は2022</td>
+                      </tr>
+                      <tr>
+                        <td>$ldapServer</td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>LDAPサーバーのURLで、ldap://あるいはldaps://から始まる。この設定を行うと、LDAP認証が有効になる。</td>
+                      </tr>
+                      <tr>
+                        <td>$ldapPort</td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>LDAPサーバーのポート番号。通常は389</td>
+                      </tr>
+                      <tr>
+                        <td>$ldapBase</td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>ディレクトリ内のルートへのDNなど。$ldapContainerを繋げてユーザレコードが存在する場所を示す。</td>
+                      </tr>
+                      <tr>
+                        <td>$ldapContainer </td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>$ldapBaseに繋げてユーザレコードが存在する場所を示す。</td>
+                      </tr>
+                      <tr>
+                        <td>$ldapAccountKey</td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>ユーザー名として識別するデータがある属性名</td>
+                      </tr>
+                      <tr>
+                        <td>$ldapExpiringSeconds</td>
+                        <td style="white-space:nowrap">1800</td>
+                        <td>ユーザー情報をビルトインユーザとしてキャッシュするが、キャッシュの有効期間。この期間を過ぎると、再度LDAPサーバへ認証を確認する。</td>
+                      </tr>
+                      <tr>
+                        <td>$oAuthProvider </td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>OAuth認証時のプロバイダを指定する文字列で、"Google"のみ実装。</td>
+                      </tr>
+                      <tr>
+                        <td>$oAuthClientID</td>
+                        <td style="white-space:nowrap"></td>
+                        <td>プロバイダから供給されるクライアントID</td>
+                      </tr>
+                      <tr>
+                        <td>$oAuthClientSecret </td>
+                        <td style="white-space:nowrap"></td>
+                        <td>プロバイダから供給されるシークレット</td>
+                      </tr>
+                      <tr>
+                        <td>$oAuthRedirect</td>
+                        <td style="white-space:nowrap"></td>
+                        <td>認証後にリダイレクトされるURL</td>
+                      </tr>
+                      <tr>
+                        <td>$isSAML</td>
+                        <td style="white-space:nowrap">false</td>
+                        <td>SAML認証を有効にする。なお、SAMLのSPになるための設定については、INTER-Mediatorのレポジトリにあるsample/saml-configディレクトリの内容と説明を参照してください。</td>
+                      </tr>
+                      <tr>
+                        <td>$samlAuthSource</td>
+                        <td style="white-space:nowrap">なし</td>
+                        <td>SPの識別名</td>
+                      </tr>
+                      <tr>
+                        <td>$samlWithBuiltInAuth</td>
+                        <td style="white-space:nowrap">false</td>
+                        <td>trueにすると、SAML認証だけでなく、ビルトイン認証も並行して利用できる。そのため、INTER-Mediatorのログインパネルが表示され、そこに「SAML認証」ボタン（ボタン名のメッセージの番号は2026）が表示される</td>
+                      </tr>
+                   </tbody>
+                </table>
+<h1>ログインパネルのカスタマイズ</h1>
+<p>ログインパネルのカスタマイズについて、マイナーなものであれば、CSSの設定で行けると思います。ブラウザのデバッガで見ていただければ、ログインパネルの各要素はそれぞれclass属性が割り当てられているので、たとえば、ページのヘッダや独立したファイルでCSSを適用します。これらは、原則としてINTER-Mediatorのテーマ設定よりも優先度は高くなるので、上書きや変更は可能です。なお、ログインパネルのスタイル情報はテーマに含まれているので、テーマを作り直すという方法もあります。</p>
+<p>ログインパネルを完全にカスタマイズしたいとう場合は、例えば、以下のようなプログラムを、INTERMediatorOnPage.doBeforeConstructに代入する関数の中などで実行します。最初の3行はプロパティ名から動作は明白と思われますが、ポイントは、ページに上乗せするログインパネル部分を、HTMLの文字列として、loginPanelHTMLプロパティに書き込みます。</p>
+<div class="code"><pre><code>INTERMediatorOnPage.isShowChangePassword = false;
+INTERMediatorOnPage.defaultBackgroundImage = null;
+INTERMediatorOnPage.defaultBackgroundColor = "white";
+INTERMediatorOnPage.loginPanelHTML = '&lt;div&gt;....';</code></pre></div>
+<p>このloginPanelHTMLに書き込むHTMLはボディの一部となるような書き方をします。原則自由に記述できますが、この中にユーザー名を入れるテキストフィールドや、認証ボタンなどを配置する必要があります。それらは、決められたid属性を持つ必要があります。INTER-Mediatorが認識するid属性は、_im_password、_im_username、_im_authbutton、_im_changebutton、_im_oauthbuttonです。最初の2つがテキストフィールド、残りがボタンを想定しています。このid属性値を設定しておけば、例えば、認証ボタンとしての機能はINTER-Mediatorが自動的に組み込みます。</p>
                 <h1>ネイティブ認証、LDAP認証で使う鍵データ</h1>
                 <p>ネイティブ認証やLDAP認証では、クライアントで入力したパスワードを、サーバー側でも利用します。そのため、クライアントからサーバーにパスワードそのものを伝達しなければなりませんが、平文で流すことがないように、暗号化してクライアントからサーバーに送ります。そのために、RSAの鍵ペアを生成してサーバーに記録します。クライアントへは公開鍵だけが送られて、暗号にしたデータをサーバーに送ります。鍵ペアは例えば、「openssl rsagen -out gen.key 2048」のようなコマンドを入れてファイルをまず作ります。そして、その内容のテキストを、$params.phpファイルの変数$generatedPrivateKeyに代入します。INTER-Mediatorに含まれているparams.phpファイルで、該当する変数を探して、生成した鍵に置き換えてください。もし、鍵にパスワードが必要な場合には変数$passPhraseに記述できますが、このファイル自体はPHPが稼働していればクライアントから参照できないとはいえ、扱いには注意しましょう。</p>
                 <h1>LDAP認証</h1>
