@@ -181,6 +181,8 @@
                 <p>このバージョンより、一切のスタイル設定をしなくてもそれなりに見栄えの良いページが作成できるように、デフォルトのテーマを構築しました。また、テーマを入れ替えることで、手軽に見栄えを変更できるような機能にもなっています。しかしながら、独自にCSSを全面的に定義しているようなサイトにおいては、デフォルトのテーマの設定と当たってしまう場合もあります。その場合、「least」テーマに切り替えてください。IM_Entry関数の第2引数（オプション設定）に、"theme"がキーで、値が"least"という定義を加えまます。params.phpでは$themeName = "least"; と指定します。このテーマは、ログインパネルとページネーションの要素に適用される設定しかしていませんので、多くの場合テーマと自分のCSSが当たるということはないと思います。また、テーマのCSSは、独自のCSSファイルへのlinkタグより前に配置されるため、通常は、独自のCSSファイルでテーマの内容を上書きできるはずです。</p>
                 <h2>イベント取得</h2>
                 <p>キーボード関連のイベントに対する応答を登録できるグローバル変数IMLibKeyEventDispatchは、IMLibKeyDownEventDispatchとIMLibKeyUpEventDispatchに変更になりました。</p>
+                <h2>ログインパネルのカスタマイズプロパティの廃止</h2>
+                <p> INTERMediatorOnPage.defaultBackgroundImage、INTERMediatorOnPage.defaultBackgroundColorの2つのプロパティを廃止しました。設定しても何も起こりません。</p>
             </section>
             <section>
                 <h1>Ver.5.5での変更</h1>

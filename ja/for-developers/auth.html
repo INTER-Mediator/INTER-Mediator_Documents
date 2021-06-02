@@ -104,7 +104,7 @@
                         <tr>
                             <td>hash</td>
                             <td>VARCHAR(64),</td>
-                            <td>チャレンジに使うハッシュ値。実際には24バイトの16進数文字列。ただし、パスワードのセルフサービスのリセット時にSHA-256のハッシュ値のHEX文字列が入る。</td>
+                            <td>チャレンジに使うハッシュ値。実際には48バイトの16進数文字列。ただし、パスワードのセルフサービスのリセット時にSHA-256のハッシュ値のHEX文字列が入る。</td>
                         </tr>
                         <tr>
                             <td>expired</td>
@@ -290,7 +290,7 @@ INSERT authuser(username,initialpass,hashedpasswd) VALUES('test','TEST','5d4b09d
                     <tr>
                         <td class="keyword">'storing'</td>
                         <td>
-                            認証情報のクライアントへの保存を指定。'cookie'ならPathを指定しないでクッキーに保存（既定値）、'cookie-domainwide'ならドメイン全体で共有できるようにクッキーに保存、'session-storage'ならブラウザのセッションストレージに保存、'none'ならクッキーに保存しない
+                            認証情報のクライアントへの保存を指定。'cookie'ならPathを指定しないでクッキーに保存（既定値）、'cookie-domainwide'ならドメイン全体で共有できるようにクッキーに保存、'session-storage'ならブラウザのセッションストレージに保存、'none'ならクッキーに保存しない。'credential'であれば認証情報をhttp-onlyのクッキーに保存する
                         </td><td></td>
                     </tr>
                     <tr>
