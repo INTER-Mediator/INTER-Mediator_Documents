@@ -322,6 +322,23 @@ INSERT authuser(username,initialpass,hashedpasswd) VALUES('test','TEST','5d4b09d
 <td>$passwordPolicy</td>
                     </tr>
                     <tr>
+                        <td class="keyword">'reset-page'</td>
+                        <td>ログインパネルに、パスワードリセットページへのボタンを設置する。ここに、パスワードリセットページのURLを記載する。</td>
+                        <td>$resetPage</td>
+                    </tr>
+                        <td class="keyword">'enroll-page'</td>
+                        <td>ログインパネルに、ユーザー登録ページへのボタンを設置する。ここに、ユーザー登録ページのURLを記載する。</td>
+                        <td>$enrollPage</td>
+                    </tr>
+                        <td class="keyword">'is-saml'</td>
+                        <td>SAML認証を有効にする。なお、params.phpで、$samlAuthSourceの設定は必要。</td>
+                        <td>$isSAML</td>
+                    </tr>
+                        <td class="keyword">'saml-builtin-auth'</td>
+                        <td>SAML認証有効時、ビルトイン認証も有効にするかどうかを指定する。</td>
+                        <td>$samlWithBuiltInAuth</td>
+                    </tr>
+                    <tr>
                         <td class="keyword">'media-context'</td>
                         <td></td>
                         <td>
