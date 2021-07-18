@@ -61,8 +61,7 @@
         <article>
             <section>
                 <h1>はじめに</h1>
-                <p class="lead">この文書では、リリース版のダウンロード情報と、Ver
-                    6以降のINTER-Mediatorを使って開発をする場合のINTER-Mediatorの準備方法と、さらに作成したWebアプリケーションで使用するINTER-Mediatorを作成する方法をまとめたものです（INTER-Mediator Ver.5以前は<a href="deploy.html">こちらの文書</a>をご覧ください）。INTER-MediatorはGitHubでソースを公開しています。通常の開発時は、リポジトリにあるものをインストールしておくのがおすすめです。そして、アプリケーション完成後は、JavaScriptに圧縮をかけた実稼働用のINTER-Mediatorを利用するのが少しの事ですが、効率よくなります。これらの方法を説明します。
+                <p class="lead">この文書では、リリース版のダウンロード情報と、Ver. 6以降のINTER-Mediatorを使って開発をする場合のINTER-Mediatorの準備方法と、さらに作成したWebアプリケーションで使用するINTER-Mediatorを作成する方法をまとめたものです（INTER-Mediator Ver.5以前は<a href="deploy.html">こちらの文書</a>をご覧ください）。INTER-MediatorはGitHubでソースを公開しています。通常の開発時は、リポジトリにあるものをインストールしておくのがおすすめです。そして、アプリケーション完成後は、JavaScriptに圧縮をかけた実稼働用のINTER-Mediatorを利用するのが少しの事ですが、効率よくなります。これらの方法を説明します。
                 </p>
             </section>
             <section>
@@ -71,7 +70,7 @@
                 </p>
                 <p>開発用のコンピューターに必要なものは、以下の通りです。</p>
                 <ul>
-                    <li>PHP Ver.7：サーバーコードを実行する必要があります</li>
+                    <li>PHP Ver.7.1以上：サーバーコードを実行する仕組みを用意する必要があります</li>
                     <li>git：ソースコードの取得に必要です</li>
                     <li>composer：ライブラリの取得や稼働環境を整えるのに必要です</li>
                     <li>開発環境：IDEあるいはテキストエディタで、コード作成のために必要です</li>
@@ -81,12 +80,13 @@
                 <ul>
                     <li>データベース：稼働はもちろん、アプリケーションのスキーマを適用している</li>
                     <li>Webサーバー（Apache、IIS、nginx等）：PHPが稼働するように設定する</li>
+                    <li>Node.js：INTER-Mediatorのセットアップでもインストールされるが、OSにあっても良い</li>
                 </ul>
                 <h3>WebサーバーとPHP 7.xのセットアップ</h3>
                 <p>PHPは、開発用と運用用のいずれのコンピューターにも必須ですが、Webサーバーに関しては、運用用のみ必須となります。開発用コンピューターでは、PHPのWebサーバー機能を利用して稼働できるので、必ずしもサーバーは必要ありません。
                 </p>
                 <h4>Ubuntu18.02でのApache2とPHP 7.xのセットアップ</h4>
-                <p>Ubuntu18.02は、PHP 7.2がパッケージとして用意されています。これらのインストールを行い、さらに、MySQL、PostgreSQL、SQLiteをセットアップするまでは以下のようにコマンドを入れれば可能です。INTER-MEdiatorに必要なPHPのモジュールについても、以下の通りで必要なものはインストールされます。
+                <p>Ubuntu18.02は、PHP 7.2がパッケージとして用意されています。これらのインストールを行い、さらに、MySQL、PostgreSQL、SQLiteをセットアップするまでは以下のようにコマンドを入れれば可能です。INTER-MEdiatorに必要なPHPのモジュールについても、以下の通りで、必要なものはインストールされます。
                 </p>
                 <div class="code">
                     <pre><code>sudo apt-get install -y apache2 php7.2 libapache2-mod-php7.2
@@ -257,20 +257,16 @@ composer update # 必要なライブラリをセットアップする</code></pr
                     updateをする」というシンプルな作業で進めることができるようになっているので、composerをインストールしてライブラリのインストールを行ってください。</p>
                 <div class="picture"><img src="../../images/gd04.PNG"></div>
                 <h3>サービスサーバー稼働の確認</h3>
-                <p>実際にアプリケーションが稼働するようになったとき、ページの最後に出てくるINTER-Mediatorのフッター表示にある「Service Server
-                    Status」を確認してください。図のように、緑色になっていれば稼働していますが、赤の場合は稼働していません。</p>
+                <p>実際にアプリケーションが稼働するようになったとき、ページの最後に出てくるINTER-Mediatorのフッター表示にある「Service Server Status」を確認してください。図のように、緑色になっていれば稼働していますが、赤の場合は稼働していません。</p>
                 <div class="picture"><img src="../../images/shot0042.png"></div>
-                <p>このサービスサーバーは、Ver.6現在、サーバーサイドでのバリデーションのために利用していますが、今後のバージョンで利用は拡大する予定です。PHPではなく、Node.jsを使ったサーバーであり、サーバー上で常駐します。サーバーへのリクエストは、PHP側からのみに行い、クライアントから直接は行いません。なんらかの理由でサービスサーバーを止めたい場合は、例えば、次のようにコマンドを入力します。INTER-Mediatorフォルダがカレントディレクトになっているとします。
+                <p>このサービスサーバーは、Ver.8現在、サーバーサイドでのバリデーションと、クライアント間でのリアルタイム同期のために利用していますが、今後のバージョンで利用は拡大する可能性があります。PHPではなく、Node.jsを使ったサーバーであり、サーバー上で常駐します。サーバーへのリクエストは、PHP側からのみに行い、クライアントから直接は行いません。なんらかの理由でサービスサーバーを止めたい場合は、例えば、次のようにコマンドを入力します。INTER-Mediatorフォルダがカレントディレクトになっているとします。
                 </p>
                 <div class="code">
                     <pre><code>node_modules/forever/bin/forever stopall</code></pre>
                 </div>
                 <h3>サービスサーバーに関するトラブルシューティング</h3>
-                <p>Alpine
-                    Linuxの場合、composerでインストールしたnodeやnpmが起動しないという問題があります。この場合、apkコマンドで、nodejsとnodejs-npmをインストールします。そして、composer
-                    updateがnpmを呼び出したところでエラーで止まるので、すぐに「npm
-                    install」コマンド入れれば良いでしょう。また、foreverコマンドに実行権限が付与されていないので、例えば、INTER-Mediatorのルールで「sudo chmod a+x
-                    node_modules/forever/bin/forever」などと入力をして実行権限を与えてください。</p>
+                <p>composerにより、INTER-Mediator側にNode.jsをインストールしており、条件が揃えば、Webアクセスがあった時に自動的にサービスサーバーが起動するようになっています。しかしながら、自動的に起動できる条件が揃っていない状況も多々あります。その場合は、サーバーOS側にNode.jsを通常通りaptやyum等でインストールして稼働してください。Node.jsのコマンドにパスが通っていれば、それで確実にサービスサーバーは稼働します。</p>
+                <p>Alpine Linuxの場合、composerでインストールしたnodeやnpmが起動しないことがあります。この場合、apkコマンドで、nodejsとnodejs-npmをインストールします。そして、composer updateがnpmを呼び出したところでエラーで止まるので、すぐに「npm install」コマンド入れれば良いでしょう。また、foreverコマンドに実行権限が付与されていないので、例えば、INTER-Mediatorのルールで「sudo chmod a+x node_modules/forever/bin/forever」などと入力をして実行権限を与えてください。</p>
             </section>
             <section>
                 <h1>開発用コンピューターでテスト稼動する</h1>
