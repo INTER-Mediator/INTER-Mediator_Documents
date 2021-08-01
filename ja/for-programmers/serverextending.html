@@ -369,10 +369,14 @@ return array( $summary );</code>
                 <p class="exp">引数$strに指定した文字列を、引数$levelに指定したレベルでのデバッグメッセージとして記録する。レベルは1ないしは2のみをサポートし、引数$levelを省略すると1になる。</p>
                 <h4><span class="object">DB_Logger</span>->setErrorMessage($str)</h4>
                 <p class="exp">引数$strに指定した文字列を、エラーメッセージとして記録する。</p>
+                <h4><span class="object">DB_Logger</span>->setWarningMessage($str)</h4>
+                <p class="exp">引数$strに指定した文字列を、警告メッセージとして記録する。</p>
                 <h4><span class="object">DB_Logger</span>->getDebugMessages()</h4>
                 <p class="exp">記録されたデバッグメッセージを要素として含む配列を返す。</p>
                 <h4><span class="object">DB_Logger</span>->getErrorMessages()</h4>
                 <p class="exp">記録されたエラーメッセージを要素として含む配列を返す。</p>
+                <h4><span class="object">DB_Logger</span>->getWarningMessages()</h4>
+                <p class="exp">記録された警告メッセージを要素として含む配列を返す。</p>
                 <h4><span class="object">\INTERMediator\DB\Settings</span>->setDataSourceName($dataSourceName)</h4>
                 <p class="exp">引数に指定した文字列をnameキーの値として持つコンテキストを選択する。</p>
                 <h4><span class="object">\INTERMediator\DB\Settings</span>->getDataSourceName()</h4>
