@@ -3,7 +3,7 @@
 /*
  * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
  *
- *   Copyright (c) 2010-2017 INTER-Mediator Directive Committee, All rights reserved.
+ *   Copyright (c) 2010-2021 INTER-Mediator Directive Committee, All rights reserved.
  *
  *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
  *   INTER-Mediator is supplied under MIT License.
@@ -162,7 +162,7 @@ sudo chmod -R g+w /usr/local/var/www</code></pre>
                 <p>続いて、インターネットインフォメーションサービス（IIS）マネージャーを利用します。サーバーの項目を選択して、「ハンドラマッピング」のところに新たに項目を作成します。要求パスは「*.php」、モジュールは「FastCgiModule」、実行可能ファイルはPHPのフォルダにある「php-cgi.exe」を選択し、名前は「PHP」としておきます。IISの設定は以上のとおりです。</p>
                 <p>さらに、php.iniファイルを用意します。PHPのフォルダにあるphp.ini-productionファイルをコピーして、ファイル名をphp.iniに変更します。そして、次のextensionを有効にします。</p>
                 <div class="code">
-                    <pre><code>curl, mbstring, pdp_mysql, pdf_pgsql, pdo_sqlite</code></pre>
+                    <pre><code>curl, mbstring, pdo_mysql, pdo_pgsql, pdo_sqlite</code></pre>
                 </div>
                 <p>こうして稼働するIISでのPHPは、ここでは、DefaultAppPoolというユーザでプロセスを稼働します。INTER-Mediator Ver.6では、PHPを稼働しているユーザが自身のプロファイルのに書き込み権限を持っている必要があります。そのために、C:\Windows\System32\config\systemprofileというフォルダに対して、IIS_IUSRSグループに対する「書き込み」と「変更」の権限を、フォルダのプロパティの「セキュリティ」のタブで付与しておきます。このグループはIISに関係するユーザーが自動的に登録されるので、アクセス権の設定に便利です。</p>
                 <div class="picture">
