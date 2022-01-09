@@ -363,13 +363,13 @@ INSERT authuser(username,initialpass,hashedpasswd) VALUES('test','TEST','5d4b09d
                     <thead>
                     <tbody>
                     <tr>
-                        <td rowspan="9" class="keyword">'authentication'</td>
+                        <td rowspan="10" class="keyword">'authentication'</td>
                         <td class="keyword">'media-handling'</td>
                         <td></td>
                         <td>メディアアクセス時の認証を通すためのクッキー情報を、このコンテキストの読み出し時にクライアントに送り込む。必要なときに値にtrueを指定する</td>
                     </tr>
                     <tr>
-                        <td rowspan="4" class="keyword">'all'</td>
+                        <td rowspan="5" class="keyword">'all'</td>
                         <td class="keyword">'user'</td>
                         <td>
                             すべての操作について、このコンテキストを利用可能なユーザを配列で指定。この記述がなければすべての認証ユーザにアクセス権
@@ -391,6 +391,12 @@ INSERT authuser(username,initialpass,hashedpasswd) VALUES('test','TEST','5d4b09d
                         <td class="keyword">'field'</td>
                         <td>
                             'target'に'field-user'あるいは'field-group'に指定した場合、ユーザ名やグループ名を指定するフィールドのフィールド名
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'noset'</td>
+                        <td>
+                            'noset' =&gt; trueで指定すると、レコード作成時に、fieldで指定したフィールドにユーザ名あるいはグループ名を設定する操作を行わない。例えば、認証に使うフィールドを意図的にリレーションシップにより自動的に設定するようなことを意図した場合、リレーションシップのためのフィールド設定と、fieldに指定したフィールドへの入力が重複してSQLエラーが出る。それを回避するための設定。
                         </td>
                     </tr>
                     <tr>
