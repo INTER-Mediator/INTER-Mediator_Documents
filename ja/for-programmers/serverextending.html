@@ -49,6 +49,9 @@
         background-color: #444444;
         padding: 2px;
     }
+    h2 {
+        font-size: 1.3em;
+    }
     </style>
 </head>
 
@@ -148,8 +151,8 @@
                 </div>
             </section>
             <section>
-                <h1>データベースアクセス処理の拡張クラスを定義する</h1>
-                <p>データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「拡張処理クラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「拡張処理クラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。必要な処理だけを記述する「拡張処理クラスを定義する方法」を使う方がプログラムの作成は容易でしょう。</p>
+                <h1>データベースアクセス処理のアドバイザクラスを定義する</h1>
+                <p>データベース側の処理に割り込むには「データベースクラスを自作する」で説明する手法（「データアクセスクラスのサブクラスを利用する方法」と定義します）とここで説明する手法（「アドバイザクラスを定義する方法」とします）の2通りがあります。「データアクセスクラスのサブクラスを利用する方法」だと、すべてのコンテキストに対する処理を記述しなければなりません。言い換えれば、複数あるコンテキストの１つだけに対して処理を加えたい場合、そのコンテキストのときだけプログラムが実行されるようにする必要があります。コンテキストが増減したときのメンテナンスタスクが増えます。「アドバイザクラスを定義する方法」だと、特定のコンテキストにだけ利用されるクラスを指定するので、「コンテキストごとに分岐させる」処理は不要です。必要な処理だけを記述する「アドバイザクラスを定義する方法」を使う方がプログラムの作成は容易でしょう。</p>
                 <p>IM_Entry関数の第一引数、つまりコンテキストの中に「extending-class」でクラス名を指定します。ここで指定したクラス名は任意のものでかまいませんが、そのクラスをPHPが認識できる場所に記述しておく必要があります。クラスは以下のようなインタフェースをインプリメントする必要があります。つまり、CRUDに対応する4種類のデータアクセス処理の前後にメソッドを含めることができるのです。</p>
                 <div class="code"><pre><code>interface \INTERMediator\DB\Extending\BeforeRead {
     public function doBeforeReadFromDB();
@@ -188,7 +191,38 @@ interface \INTERMediator\DB\Extending\AfterCopy{
 }</code>
 </pre>
                 </div>
-                <p>Deleteを除くdoAfter____メソッドの$result引数は、対象レコードが連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。doAfterGetFromDBでは複数のレコードが得られますが、doAfterSetToDBやdoAfterNewToDBでは1レコードだけが返されます。基本的に、これらのメソッドでは、2つ目の引数をそのまま返すようにプログラムを作成しますが、ここで、データベースからの取得結果を加工して返しても構いません。たとえば、doAfterGetFromDBメソッドで集計処理などを行い、同様に連想配列の配列にして結果を返します。また、新たなフィールドを追加するなども行えます。新たなフィールドを追加するには、$this->dbClass->setUpdatedRecord(フィールド名, データ, レコード番号) で可能ですが、レコード番号を省略すると最初のレコードにセットされます。なお、setUpdatedRecordで変更した場合、返り値は、$this->dbClass->updatedRecord()としてください。</p>
+                <h2>メソッドの引数</h2>
+                <p>Deleteを除くdoAfter____メソッドの$result引数は、対象レコードが連想配列の配列の形式で入っています。1レコードがフィールド名をキーとした連想配列になっており、レコードの数だけその配列があります。doAfterGetFromDBでは複数のレコードが得られますが、doAfterSetToDBやdoAfterNewToDBでは1レコードだけが返されます。doAfterDeleteメソッドでは、削除できたかどうかの論理値が設定されます。</p>
+                <h2>doAfter____メソッドの返り値</h2>
+                <p>doAfter____メソッドがあれば、その返り値を、データベースのクエリー結果やあるいは更新処理などをした結果のレコードとしてクライアントに返します。シンプルな方法としては、引数をそのまま返すようにプログラムを作成しますが、ここで、データベースからの取得結果を加工して返しても構いません。たとえば、doAfterGetFromDBメソッドで集計処理などを行い、同様に連想配列の配列にして結果を返します。また、新たなフィールドを追加するなども行えます。もちろん、連想配列のキーがフィールドになります。</p>
+                <h2>doBefore____メソッドの返り値</h2>
+                Ver.8の途中より、doBefore____メソッドの返り値を利用できるようにしました。それ以前は、値を返しても何も使われていませんでした。通常は、doBefore___を実行し、クライアントから要求されたデータベース処理を行い、doAfter____を実行しますが、引数によってはdoBeforeで処理を終了させることができます。</p>
+                <div class="table">
+                    <div class="caption">doBefore____メソッドの返り値</div>
+                    <table>
+                        <tr>
+                            <th>値</th>
+                            <th>動作</th>
+                        </tr>
+                        <tr>
+                            <td>false</td>
+                            <td>データベース処理を中断して、英語のエラーメッセージを表示する</td>
+                        </tr>
+                        <tr>
+                            <td>文字列</td>
+                            <td>データベース処理を中断して、文字列をエラーメッセージとして表示する</td>
+                        </tr>
+                        <tr>
+                            <td>""</td>
+                            <td>データベース処理を続ける</td>
+                        </tr>
+                        <tr>
+                            <td>その他（返り値なしの場合も含む）</td>
+                            <td>データベース処理を続ける</td>
+                        </tr>
+                    </table>
+                </div>
+                <h2>メソッドの作成例</h2>
                 <p>以下は、データベースからレコードを取得した後に呼び出されるクラスの定義例です。MyProgramというクラス名は任意ですが、2つのメソッドはインタフェースに決められたものを定義します。doAfterGetFromDBはデータベースからデータを取得した後に呼び出されます。このとき、ナビゲーションを使ってページ送りの処理をしているのなら、「レコードの個数」をcountQueryResultメソッドで、「全レコード数」をgetTotalCountメソッドで返す必要があります。ナビゲーションがない場合にはこのメソッドの実装は不要です。また、ナビゲーションを使う場合でも、レコード総数がdoAfterGetFromDBの処理の後でも変わらないのであれば、countQueryResultメソッドは不要です。</p>
                 <div class="code"><pre><code>class MyProgram extends \INTERMediator\DB\UseSharedObjects implements \INTERMediator\DB\Extending\AfterRead {
     function doAfterReadFromDB($result) {
@@ -218,7 +252,8 @@ interface \INTERMediator\DB\Extending\AfterCopy{
 }</code>
 </pre>
                 </div>
-                <p>開発者が作成するクラスで「\INTERMediator\DB\UseSharedObjects」クラスの子クラスにした場合は、他のオブジェクトへの参照が得られます。メソッドが呼び出された段階で、メンバ変数はオブジェクトを参照した状態になります。</p>
+                <h2>アドバイザクラス内でさまざまな情報にアクセスする</h2>
+                <p>アドバイザクラスで「\INTERMediator\DB\UseSharedObjects」クラスの子クラスにした場合は、他のオブジェクトへの参照が得られます。メソッドが呼び出された段階で、メンバ変数はオブジェクトを参照した状態になります。</p>
                 <div class="table">
                     <div class="caption">\INTERMediator\DB\UseSharedObjectsを継承したときに利用できるメンバ変数</div>
                     <table>
@@ -252,12 +287,93 @@ interface \INTERMediator\DB\Extending\AfterCopy{
                         </tr>
                     </table>
                 </div>
-                <p>doAfter*メソッドの中では、原則として引数から処理対象のレコードが得られます。以下、処理結果のレコードを参照したり更新するメソッドを用意していますが、updateRecordメソッドは通常は不要と思われます。メール処理のためにフィールドを追加するようなときには、setUpdatedRecordメソッドを使います。</p>
-                <h4><span class="object">DB_Class</span>->updatedRecord()</h4>
-                <p class="exp">データベース処理後、処理した結果のレコードの配列が得られる。読み出しなら、読み出したレコード群、更新なら更新したレコード、新規レコードなら作成したレコードが得られる。</p>
-                <h4><span class="object">DB_Class</span>->setUpdatedRecord($f, $v, $n)</h4>
-                <p class="exp">処理した結果のレコードの特定のフィールドを修正する。$fがフィールド、$vがその値、$nは0から始まる番号でレコードを指定するが、$nを省略すると最初のレコードを参照する。返り値はなし。</p>
-            </section>
+                <h3>アドバイザクラスのメソッドでのデータベース処理</h3>
+                <p>メソッド内で新たなデータベース処理を記述したい場合は、DB\Proxyクラスを新たに生成してメソッドを利用すれば可能です。どんなメソッドがあるかは以下の「サーバーサイドのプログラムで利用できるAPI」で説明しています。しかしながら、若干冗長だったので、Ver.8の途中でより簡単にデータベース処理が記述できるようなトレイトProxy_ExtSupportを定義しました。例えば、アドバイザクラスを次のように定義します。ポイントは、class内で「use Proxy_ExtSupport;」と記述するところです。これによりいくつかのメソッドが使えるようになります。</p>
+
+                <div class="code"><pre><code>use \INTERMediator\DB\UseSharedObjects;
+use \INTERMediator\DB\Extending\AfterRead;
+use \INTERMediator\DB\Proxy_ExtSupport;
+
+class Advisor extends UseSharedObjects implements AfterRead
+{
+  use Proxy_ExtSupport;
+
+  public function doAfterReadFromDB($result)
+  {
+    $this->setFixedKey("id");
+    $result = $this->dbRead("authuser",["username" => "admin"]);
+    return $result;
+  }
+} </code></pre></div>
+<p>Proxy_ExtSupportトレイトを利用したクラスでは、以下のメソッドが利用できます。いずれも、そのクラスにメソッドが追加されるので、this-&gt;で呼び出すことができます。</p>
+
+                <h4>this-&gt;dbInit($datasource = null, $options = null, $dbspec = null, $debug = null)</h4>
+                <p class="exp">Proxyクラスのインスタンスの初期化を行う方法。4つの引数は、定義ファイルのIM_Entry関数の引数と同様。引数は省略もでき、さらにこのメソッドの呼出自体も省略可能。</p>
+
+               <h4>this-&gt;setFixedKey($key = null)</h4>
+                <p class="exp">キーフィールドは、既定の状態では、「テーブル名_id」というネーミングルールに従うが、直後のデータベース処理で、キーフィールドを決め打ちしたい場合に引数に指定してこのメソッドを呼び出す。</p>
+
+                <h4>this-&gt;getExtProxy()</h4>
+                <p class="exp">内部で使っているProxyクラスへの参照。トランザクションをスタートしたりロールバックしたりするときに、この返り値にbeginTransaction()やcommitTransaction(), rollbackTransaction()を適用することができる。</p>
+
+              <h4>this-&gt;dbRead($target, $query = null, $sort = null, $spec = null)</h4>
+               <h4>this-&gt;dbUpdate($target, $query = null, $data = null, $spec = null)</h4>
+               <h4>this-&gt;dbCreate($target, $data = null, $spec = null)</h4>
+                 <h4>this-&gt;dbDelete($target, $query = null, $spec = null)</h4>
+               <p class="exp">それぞれ名称通りのデータベース処理を行う。$specにはdbInitメソッドの$datasource引数に指定するコンテンツ定義の配列を指定できる。コンテンツ定義のどのコンテンツを利用するかは、$targetで指定する。$query引数は検索条件、$sort引数は並べ替えの条件、$dataは変更や追加するフィールドと値を示す。</p>
+                <div class="table">
+                    <div class="caption">コンテキストの指定のパターン</div>
+                    <table>
+                        <tr>
+                            <th>パターン</th>
+                            <th>説明</th>
+                        </tr>
+                        <tr>
+                            <td style="white-space: nowrap">dbInit: なし<br>$spec: なし</td>
+                            <td>$targetが文字列「product」なら、productテーブルに対して、キーフィールドproduct_idであることを前提にデータベース処理を行う。</td>
+                        </tr>
+                        <tr>
+                            <td style="white-space: nowrap">dbInit: $datasourceを指定<br>$specなし</td>
+                            <td>$targetには、$datasourceに存在するコンテキスト定義の名前（nameキーの値）を指定して、そのコンテキスト定義に応じたデータベース処理を行う。コンテキスト定義は複数あっても構わないので、1つのdbInitで複数のデータベース処理を行うことも可能。</td>
+                        </tr>
+                        <tr>
+                            <td style="white-space: nowrap">dbInit: なし<br>$spec: 指定</td>
+                            <td>$specには$datasourceと同じ形式の配列を指定する。そのメソッドを使うときにだけ、$specのコンテキスト定義が有効になる。もちろん、$targetは、$specに存在するコンテキスト定義の名前（nameキーの値）を指定する。$specがあれば、$dbInitの$datasourceの指定は無視する。</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table">
+                    <div class="caption">データベース処理の引数</div>
+                    <table>
+                        <tr>
+                            <th>引数</th>
+                            <th>説明</th>
+                            <th>指定例</th>
+                        </tr>
+                        <tr>
+                            <td>query</td>
+                            <td>検索条件の指定</td>
+                            <td><div class="code"><pre><code>[["field" => "id", "operator" => "=", "value" => $id],...]
+// 基本的にはコンテキスト定義のqueryキーの定義と同じルール
+["id" => $id,...] // フィールド名をキーにするとoperatorは=固定'</code></pre></div></td>
+                        </tr>
+                        <tr>
+                            <td>sort</td>
+                            <td>並べ替え条件の指定</td>
+                            <td><div class="code"><pre><code>[["field" => "lastDT", "direction" => "desc"],...]
+// 基本的にはコンテキスト定義のsoftキーの定義と同じルール
+["lastDT" => "desc",...] // フィールド名をキーにもできる</code></pre></div></td>
+                        </tr>
+                        <tr>
+                            <td>data</td>
+                            <td>初期値、更新値</td>
+                            <td><div class="code"><pre><code>[["field" => "lastDT", "value" => $nowDT],...]
+// 基本的にはコンテキスト定義のdefault-valuesキーの定義と同じルール
+["lastDT" => $nowDT,...] // フィールド名をキーにもできる</code></pre></div></td>
+                        </tr>
+                    </table>
+                </div>
+           </section>
             <section>
                 <h1>データベースクラスを自作する</h1>
                 <p>データベースクラスを独自に作成する場合には、以下のようなPHPのクラスが基本となります。もちろん、データベースクラスを1から作れるのですが、たぶん、そういうニーズはまずないと思います。データベースをPDOで使うならINTER-Mediatorの\INTERMediator\DB\PDO.php、FileMaer Serverを使うならDB_FileMaker_FX.phpを拡張したクラスを定義します。基底クラスの方のファイルも読み込みが必要です。以下の例は、INTER-Mediatorフォルダと同じフォルダに、このデータベースクラスのファイルがあるというわけです。自分が作るクラスでも、最初にDBをつけないといけません。IM_Entry関数の引数などでの設定は、この場合DB_をのぞいた「MyOriginalDB」を指定します。</p>
