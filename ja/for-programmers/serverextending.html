@@ -311,7 +311,7 @@ class Advisor extends UseSharedObjects implements AfterRead
                 <p class="exp">Proxyクラスのインスタンスの初期化を行う方法。4つの引数は、定義ファイルのIM_Entry関数の引数と同様。引数は省略もでき、さらにこのメソッドの呼出自体も省略可能。</p>
 
                <h4>this-&gt;setFixedKey($key = null)</h4>
-                <p class="exp">キーフィールドは、既定の状態では、「テーブル名_id」というネーミングルールに従うが、直後のデータベース処理で、キーフィールドを決め打ちしたい場合に引数に指定してこのメソッドを呼び出す。</p>
+                <p class="exp">キーフィールドは、既定の状態では、「テーブル名_id」というネーミングルールに従うが、直後のデータベース処理で、キーフィールドを決め打ちしたい場合に引数に指定してこのメソッドを呼び出す。なお、コンテキスト定義を行なって引数に指定する場合は、keyキーを使って主キーを指定するので、このAPIを必ずしも使う必要はない。</p>
 
                 <h4>this-&gt;getExtProxy()</h4>
                 <p class="exp">内部で使っているProxyクラスへの参照。トランザクションをスタートしたりロールバックしたりするときに、この返り値にbeginTransaction()やcommitTransaction(), rollbackTransaction()を適用することができる。</p>
