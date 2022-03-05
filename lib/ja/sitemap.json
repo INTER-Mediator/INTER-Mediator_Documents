@@ -250,4 +250,11 @@
     "path": "/ja/for-programmers/commitcode.html",
     "title": "ソースコードの投稿",
     "breadcrumb": "ソースコードの投稿"
+},
+{
+    "id": 32,
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/lookup.html",
+    "title": "値をコピーするルックアップ",
+    "breadcrumb": "値をコピーするルックアップ"
 }]

@@ -4,5 +4,6 @@ archives
 lab/room1/rsrcs/params.php
 for-novices/images/
 node_modules/
+package.json
 package-lock.json
 

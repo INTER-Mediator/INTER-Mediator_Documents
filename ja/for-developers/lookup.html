@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   Copyright (c) 2010-2021 INTER-Mediator Directive Committee, All rights reserved.
+ *
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-novices">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>ルックアップについて</h1>
+                <p class="lead">ルックアップとは、特定のフィールドにリレーションシップで得られた値を自動的に埋め込む仕組みです。FileMakerでも機能の1つとして利用できるものです。データベースの世界では、リレーショナルデータベースの考え方が優位であり、マスターテーブルとリンクして値を参照することが中心的です。しかしながら、アプリケーションを作る上では、マスター参照のように常にマスターに定義した値が得られるということがニーズであるだけでなく、その時点のマスターの値を複製しておくというニーズもあります。帳票作成では現実な方法として値を複製しておくことはよく行われます。リレーショナルデータベース的にはそれによって正規化が崩れるという主張もあるかもしれませんが、理論的な綺麗さよりも、ニーズをよりシンプルに満たす方法として、複製はよく利用されています。</p>
+            </section>
+            <section>
+                <h1>ルックアップの設定</h1>
+                <p>ルックアップの動作と設定をまとめた図を以下に示します。ここでは会計アプリケーションにおいて、仕分けパターンを選択すると、それに応じて借方科目と貸方科目がルックアップとして記録されるという状況を考えます。パターンと2つの科目の合計3つの項目に関して、同一のテーブルにフィールドが用意されています。いずれもマスターを持つもので、主キー値をINTEGERで保存しています。このアプリケーションは<a href="" target="_blank">こちらのレポジトリ</a>で公開されているので、実際に手元でご利用いただけます。</p>
+                <div class="picture">
+                    <img src="../../images/fig-lookup.png" style="max-width: 982px">
+                </div>
+                <p>「貸方科目」の設定を見てください。まず、data-imは「account_detail」コンテキストの「credit_id」フィールドが設定されています。このポップアップメニューの値はcredit_idフィールドとバインドされていて、フィールドの値とポップアップの選択結果が連動します。もちろん、optionには科目マスターの項目が並んでいます。ここまでは、普通のINTER-Mediatorの開発手法と変わりません。</p>
+                <p>これに加えて、data-im-control属性をポップアップメニューに設定しています。この属性値として、「lookup:A:B」の形式で設定を行います。これにより「Aの値が変更されれれば、Bの設定に応じて値を取り出し、data-im属性に従って値を記録する」ということを行います。</p>
+                <p>ここでAは「account_detail@assort_pattern_id」となっています。このターゲット指定は、「仕分けパターン」のポップアップメニューのdata-im属性と同一です。つまり、まず、「仕分けパターンのポップアップが変更されれば、」という定義が加わっていることになります。</p>
+                <p>Bについては、取り出し先を指定しますが、一般にはマスター参照などを行うコンテキスト定義（ここでは「assort_pattern_lookup」）をあらかじめ定義しておきます。ポップアップメニューにより、assort_pattern_idに値が設定されて、その値を利用して、assort_pattern_lookupに検索をかけます。検索条件は、assort_pattern_idの値と、assort_pattern_lookupコンテキストのrelationキーに指定したフィールド名を利用して自動的に作成されます。なお、特に理由がないのであれば、ルックアップで利用するコンテキストはqueryキーなどの検索条件はかからないようにしておくのが良いでしょう。また、recordsは自動的に1に設定されるので、コンテキストで指定する必要はありません。そして、コンテキストから検索されると、Bの@以降に記載したフィールドの値が取り出されて、ポップアップメニューのdata-im属性に指定したフィールドに保存します。要素の値が設定されるだけでなく、データベースへの更新も行われます。</p>
+                <p>なお、ルックアップの機能はポップアップにだけ機能するのではなく、テキストフィールドなどのUI要素で稼働します。</p>
+            </section>
+        </article>
+</body>
+
+</html>
