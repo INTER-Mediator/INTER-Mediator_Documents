@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="practices">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>Bootstrapのクラス名を自動生成されるボタンに適用する</h1>
+                <p>INTER-MediatorのサイトをBootstrapを使ってデザインすることは可能です。実際に使って作っている<a href="https://github.com/msyk/IMApp_Account" target="_blank">サンプル</a>もあります。ヘッダや各種要素に通常通りBootstrapのclassなどを適用すればOKです。しかしながら、削除や新規作成ボタンなどは自動的に作られるので、class属性が書けないと思ってしまいます。そのままだと、なんだか古いデザインのボタンになってしまい、ちょっとガッカリな感じです。そこで、JavaScriptを利用することでプロパティに追加するclassタグを記述できるようになっています。以下はその指定例です。buttonClassDeleteプロパティへの代入により、削除ボタンのclassに「btn btn-warning」が加わりますので、標準状態では黄色いボタンになります。以下のように、複製、削除、挿入、詳細、一覧に戻るのボタンのclassを追加するための変数があります。</p>
+                <div class="code">
+                    <pre><code>INTERMediatorOnPage.doBeforeConstruct = function () {
+  INTERMediatorOnPage.buttonClassCopy = "btn btn-info"
+  INTERMediatorOnPage.buttonClassDelete = "btn btn-warning"
+  INTERMediatorOnPage.buttonClassInsert = "btn btn-success"
+  INTERMediatorOnPage.buttonClassMaster = "btn btn-primary"
+  INTERMediatorOnPage.buttonClassBackNavi = "btn btn-primary"
+};</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>デバッグ情報をページ上に出さない</h1>
+                <p>開発中はデバッグ情報を詳細にチェックしながら記述を調整することはよく行います。ページ上にデバッグ情報を出していますが、同時にブラウザの開発者向けツールでも表示できます。ページ上のデバッグ情報を消去するボタンはあるのですが、毎回押すのが面倒になってきます。その場合、以下のプロパティをtrueにすることで、デバッグ情報は開発者向けツールでは表示するものの、ページ上には表示しなくなります。</p>
+                 <div class="code">
+                    <pre><code>INTERMediatorOnPage.doBeforeConstruct = function () {
+    INTERMediatorLog.suppressDebugMessageOnPage = true;
+};</code></pre>
+                </div>
+           </section>
+            <section>
+                <h1>検索機能をANDにする</h1>
+                <p>テキストフィールドなどにdata-im="_@condition:contextname:fieldslist:*match*"のようにローカルコンテキストの指定を入れることで、指定したコンテキストに自動的に検索条件を挿入してデータベース処理をするので、検索機能を簡単に実装できます。ただし、その場合、いくつかのテキストフィールドを用意するとOR検索になります。これをAND検索にするには、以下のようなプロパティへの設定で可能にできます。</p>
+                <div class="code">
+                    <pre><code>INTERMediatorOnPage.doBeforeConstruct = function () {
+    INTERMediator.alwaysAddOperationExchange = true;
+};</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>マスター/ディテールページで新規レコード作成時に詳細ページに移動する</h1>
+                <p>コンテキスト定義でnavi-controlキーで、masterやdetailなどを使って一覧と詳細ページを組んでいる場合、通常は一覧側に新規レコードを作成するボタンを表示させます。その場合、詳細ページに移動して入力等を行うため、一覧の中で新しいレコードを探さないといけないかもしれません。以下のようなプログラムをJavaScript記述可能な場所に書いておけば、新規レコード作成後に、新規作成したレコードの詳細ページに移動します。ここで、ifの条件にある「account_list」は、実際にレコードが作成されるコンテキストのnameキーの値を指定しておきます。また、moveDetailメソッドの引数は、「詳細ページのコンテキストのkey=newId変数の値」という検索条件のような文字列を指定します。これにより該当するレコードを詳細ページで表示します。</p>
+                <div class="code">
+                    <pre><code>INTERMediatorOnPage.doAfterCreateRecord = (newId, contextName) => {
+  if (contextName == 'account_list') {
+    IMLibPageNavigation.moveDetail('account_id=' + newId)
+  }
+}</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>一覧と詳細が別々のページである場合に新規レコード作成時に詳細ページに移動する</h1>
+                <p>一覧と詳細ページを別々のページで組んでいる場合、通常は一覧側に新規レコードを作成するボタンを表示させます。詳細ページは、URLのパラメータにid=123のような記述を行なって特定のレコードを検索するようにします。新しいレコードを一覧ページで作った直後、詳細ページに移動して入力等を行うため、一覧の中で新しいレコードを探さないといけないかもしれません。以下のようなプログラムをJavaScript記述可能な場所に書いておけば、新規レコード作成後に、新規作成したレコードの詳細ページに移動します。ここで、ifの条件にある「account_list」は、実際にレコードが作成されるコンテキストのnameキーの値を指定しておきます。また、location.hrefに代入する文字列は、詳細ページの仕様に合わせたURLを指定します。</p>
+                <div class="code">
+                    <pre><code>INTERMediatorOnPage.doAfterCreateRecord = (newId, contextName) => {
+  if (contextName == 'account_list') {
+    location.href = `index_detail.html?id=${newId}`
+  }
+}</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1></h1>
+                <p></p>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>

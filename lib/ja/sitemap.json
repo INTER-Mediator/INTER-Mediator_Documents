@@ -257,4 +257,11 @@
     "path": "/ja/for-developers/lookup.html",
     "title": "値をコピーするルックアップ",
     "breadcrumb": "値をコピーするルックアップ"
+},
+{
+    "id": 37,
+    "parent": "/ja/practices/",
+    "path": "/ja/practices/practice-tips.html",
+    "title": "ティップス集",
+    "breadcrumb": "ティップス集"
 }]
