@@ -313,17 +313,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetFirstRecord\u0028\u0029",
             "name": "getFirstRecord",
-            "summary": "Export\u0020to\u0020array",
+            "summary": "Returns\u0020the\u0020fiest\u0020record\u0020of\u0020the\u0020query\u0020result.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFirstRecord"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetLastRecord\u0028\u0029",
             "name": "getLastRecord",
-            "summary": "Export\u0020to\u0020array",
+            "summary": "Returns\u0020the\u0020last\u0020record\u0020of\u0020the\u0020query\u0020result.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getLastRecord"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetRecords\u0028\u0029",
             "name": "getRecords",
-            "summary": "Export\u0020to\u0020array",
+            "summary": "Returns\u0020the\u0020array\u0020of\u0020the\u0020query\u0020result.\u0020Usually\u0020iterating\u0020by\u0020using\u0020foreach\u0020is\u0020a\u0020better\u0020way.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getRecords"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AtoArray\u0028\u0029",
