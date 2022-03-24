@@ -306,6 +306,26 @@ Search.appendIndex(
             "summary": "Return\u0020the\u0020array\u0020of\u0020field\u0020names.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFieldNames"
         },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetNumberedRecord\u0028\u0029",
+            "name": "getNumberedRecord",
+            "summary": "",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getNumberedRecord"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetFirstRecord\u0028\u0029",
+            "name": "getFirstRecord",
+            "summary": "Export\u0020to\u0020array",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFirstRecord"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetLastRecord\u0028\u0029",
+            "name": "getLastRecord",
+            "summary": "Export\u0020to\u0020array",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getLastRecord"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetRecords\u0028\u0029",
+            "name": "getRecords",
+            "summary": "Export\u0020to\u0020array",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getRecords"
+        },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AtoArray\u0028\u0029",
             "name": "toArray",
             "summary": "Export\u0020to\u0020array",

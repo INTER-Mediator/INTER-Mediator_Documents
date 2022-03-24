@@ -157,7 +157,7 @@ and you shouldn't call the constructor of this class.</p>
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">24</span>
+                                            <span class="phpdocumentor-tag-link">25</span>
                                                                                 
                                              
                                     </dd>
@@ -255,12 +255,26 @@ streaming url depends on the setCertValidating(_) call, and it can work on self-
 <dd>Return the array of field names.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFirstRecord">getFirstRecord()</a>
+    <span>
+                                &nbsp;: <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a>|null    </span>
+</dt>
+<dd>Export to array</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFoundCount">getFoundCount()</a>
     <span>
                                 &nbsp;: int    </span>
 </dt>
 <dd>Get the founded record count of query to get this relation. If the relation comes from getRecord() method,
 this method returns 1.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getLastRecord">getLastRecord()</a>
+    <span>
+                                &nbsp;: <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a>|null    </span>
+</dt>
+<dd>Export to array</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getModId">getModId()</a>
@@ -282,6 +296,13 @@ this method returns 1.</dd>
                                 &nbsp;: int    </span>
 </dt>
 <dd>Return the value of special field recordId in the current pointing record.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getRecords">getRecords()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;|null    </span>
+</dt>
+<dd>Export to array</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getReturnedCount">getReturnedCount()</a>
@@ -367,6 +388,13 @@ this method returns 1.</dd>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Checks if current position is valid. This method is implemented for Iterator interface.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getNumberedRecord">getNumberedRecord()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
 
         </dl>
 
@@ -508,7 +536,7 @@ The table occurrence name of the portal can be the 'portal_name,' and also the o
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">468</span>
+    <span class="phpdocumentor-element-found-in__line">519</span>
 
     </aside>
 
@@ -543,7 +571,7 @@ The table occurrence name of the portal can be the 'portal_name,' and also the o
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">307</span>
+    <span class="phpdocumentor-element-found-in__line">358</span>
 
     </aside>
 
@@ -616,7 +644,7 @@ The table occurrence name of the portal can be the portal name, and also the obj
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">448</span>
+    <span class="phpdocumentor-element-found-in__line">499</span>
 
     </aside>
 
@@ -704,6 +732,41 @@ The table occurrence name of the portal can be the portal name, and also the obj
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getFirstRecord">
+        getFirstRecord()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFirstRecord" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">267</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Export to array</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getFirstRecord</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a>|null</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a>|null</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The record set of the record.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getFoundCount">
         getFoundCount()
         <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFoundCount" class="headerlink"><i class="fas fa-link"></i></a>
@@ -740,6 +803,41 @@ this method returns 1.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getLastRecord">
+        getLastRecord()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getLastRecord" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">277</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Export to array</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getLastRecord</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a>|null</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a>|null</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The record set of the record.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getModId">
         getModId()
         <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getModId" class="headerlink"><i class="fas fa-link"></i></a>
@@ -747,7 +845,7 @@ this method returns 1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">407</span>
+    <span class="phpdocumentor-element-found-in__line">458</span>
 
     </aside>
 
@@ -782,7 +880,7 @@ this method returns 1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">281</span>
+    <span class="phpdocumentor-element-found-in__line">332</span>
 
     </aside>
 
@@ -817,7 +915,7 @@ this method returns 1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">372</span>
+    <span class="phpdocumentor-element-found-in__line">423</span>
 
     </aside>
 
@@ -835,6 +933,41 @@ this method returns 1.</p>
     <span class="phpdocumentor-signature__response_type">int</span>
             &mdash;
             <section class="phpdocumentor-description"><p>The value of special field recordId.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getRecords">
+        getRecords()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getRecords" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">287</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Export to array</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getRecords</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The FileMakerRelation objects of the records.</p>
 </section>
 
     
@@ -958,7 +1091,7 @@ this method returns 1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">494</span>
+    <span class="phpdocumentor-element-found-in__line">545</span>
 
     </aside>
 
@@ -1137,7 +1270,7 @@ this method returns 1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">518</span>
+    <span class="phpdocumentor-element-found-in__line">569</span>
 
     </aside>
 
@@ -1215,7 +1348,7 @@ this method returns 1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">250</span>
+    <span class="phpdocumentor-element-found-in__line">301</span>
 
     </aside>
 
@@ -1248,7 +1381,7 @@ this method returns 1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">504</span>
+    <span class="phpdocumentor-element-found-in__line">555</span>
 
     </aside>
 
@@ -1268,6 +1401,50 @@ this method returns 1.</p>
             <section class="phpdocumentor-description"><p>Returns true on existing the record or false on not existing.</p>
 </section>
 
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getNumberedRecord">
+        getNumberedRecord()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getNumberedRecord" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerRelation.php"><a href="files/src-supporting-filemakerrelation.html"><abbr title="src/Supporting/FileMakerRelation.php">FileMakerRelation.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">245</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">getNumberedRecord</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$num</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$num</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
     
 </article>
             </section>
