@@ -41,6 +41,16 @@ Search.appendIndex(
             "summary": "Set\u0020to\u0020verify\u0020the\u0020server\u0020certificate.\u0020The\u0020default\u0020is\u0020to\u0020handle\u0020as\u0020self\u002Dsigned\u0020certificate\u0020and\u0020doesn\u0027t\u0020verify.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setCertValidating"
         },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetFieldHTMLEncoding\u0028\u0029",
+            "name": "setFieldHTMLEncoding",
+            "summary": "Set\u0020to\u0020true\u0020if\u0020the\u0020return\u0020value\u0020of\u0020the\u0020field\u0028\u0029\u0020method\u0020uses\u0020htmlspecialchars\u0020function.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setFieldHTMLEncoding"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetFieldHTMLEncoding\u0028\u0029",
+            "name": "getFieldHTMLEncoding",
+            "summary": "Detect\u0020the\u0020return\u0020value\u0020of\u0020the\u0020field\u0028\u0029\u0020method\u0020uses\u0020htmlspecialchars\u0020function\u0020or\u0020not.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getFieldHTMLEncoding"
+        },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetSessionToken\u0028\u0029",
             "name": "setSessionToken",
             "summary": "Set\u0020session\u0020token",

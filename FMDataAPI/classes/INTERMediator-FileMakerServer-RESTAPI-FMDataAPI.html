@@ -150,7 +150,7 @@
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">25</span>
+                                            <span class="phpdocumentor-tag-link">26</span>
                                                                                 
                                              
                                     </dd>
@@ -243,6 +243,13 @@ oAuthRequestId and oAuthIdentifier. Moreover call useOAuth method before accessi
                                 &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>Get the information about hosting database. It includes the target database and others in FileMaker Server.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getFieldHTMLEncoding">getFieldHTMLEncoding()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Detect the return value of the field() method uses htmlspecialchars function or not.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getFoundCount">getFoundCount()</a>
@@ -338,6 +345,13 @@ the FileMakerRelation class.</dd>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Set the debug mode or not. The debug mode isn&#039;t in default.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setFieldHTMLEncoding">setFieldHTMLEncoding()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Set to true if the return value of the field() method uses htmlspecialchars function.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setGlobalField">setGlobalField()</a>
@@ -564,7 +578,7 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">169</span>
+    <span class="phpdocumentor-element-found-in__line">193</span>
 
     </aside>
 
@@ -599,7 +613,7 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">230</span>
+    <span class="phpdocumentor-element-found-in__line">254</span>
 
     </aside>
 
@@ -632,7 +646,7 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">189</span>
+    <span class="phpdocumentor-element-found-in__line">213</span>
 
     </aside>
 
@@ -670,7 +684,7 @@ This error code is associated with FileMaker's error code.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">199</span>
+    <span class="phpdocumentor-element-found-in__line">223</span>
 
     </aside>
 
@@ -707,7 +721,7 @@ This error code is associated with FileMaker's error code.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">281</span>
+    <span class="phpdocumentor-element-found-in__line">305</span>
 
     </aside>
 
@@ -754,6 +768,52 @@ property.Ex.: [{&quot;name&quot;: &quot;TestDB&quot;},{&quot;name&quot;: &quot;s
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getFieldHTMLEncoding">
+        getFieldHTMLEncoding()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getFieldHTMLEncoding" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">166</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Detect the return value of the field() method uses htmlspecialchars function or not.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getFieldHTMLEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The result.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getFoundCount">
         getFoundCount()
         <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getFoundCount" class="headerlink"><i class="fas fa-link"></i></a>
@@ -761,7 +821,7 @@ property.Ex.: [{&quot;name&quot;: &quot;TestDB&quot;},{&quot;name&quot;: &quot;s
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">340</span>
+    <span class="phpdocumentor-element-found-in__line">364</span>
 
     </aside>
 
@@ -811,7 +871,7 @@ the FileMakerRelation class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">293</span>
+    <span class="phpdocumentor-element-found-in__line">317</span>
 
     </aside>
 
@@ -864,7 +924,7 @@ Ex.: [{&quot;name&quot;: &quot;person_layout&quot;},{&quot;name&quot;: &quot;con
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">269</span>
+    <span class="phpdocumentor-element-found-in__line">293</span>
 
     </aside>
 
@@ -917,7 +977,7 @@ Ex.: [{&quot;name&quot;: &quot;person_layout&quot;},{&quot;name&quot;: &quot;con
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">351</span>
+    <span class="phpdocumentor-element-found-in__line">375</span>
 
     </aside>
 
@@ -967,7 +1027,7 @@ the FileMakerRelation class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">307</span>
+    <span class="phpdocumentor-element-found-in__line">331</span>
 
     </aside>
 
@@ -1022,7 +1082,7 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">160</span>
+    <span class="phpdocumentor-element-found-in__line">184</span>
 
     </aside>
 
@@ -1057,7 +1117,7 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">318</span>
+    <span class="phpdocumentor-element-found-in__line">342</span>
 
     </aside>
 
@@ -1107,7 +1167,7 @@ the FileMakerRelation class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">329</span>
+    <span class="phpdocumentor-element-found-in__line">353</span>
 
     </aside>
 
@@ -1157,7 +1217,7 @@ the FileMakerRelation class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">178</span>
+    <span class="phpdocumentor-element-found-in__line">202</span>
 
     </aside>
 
@@ -1241,7 +1301,7 @@ the FileMakerRelation class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">133</span>
+    <span class="phpdocumentor-element-found-in__line">134</span>
 
     </aside>
 
@@ -1288,7 +1348,7 @@ the FileMakerRelation class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">142</span>
+    <span class="phpdocumentor-element-found-in__line">143</span>
 
     </aside>
 
@@ -1371,6 +1431,57 @@ the FileMakerRelation class.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_setFieldHTMLEncoding">
+        setFieldHTMLEncoding()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setFieldHTMLEncoding" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">157</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Set to true if the return value of the field() method uses htmlspecialchars function.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">setFieldHTMLEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"><p>The default value is FALSE. The nostalgic FileMaker API for PHP was returning htmlspecialchars value of the field.
+If we want to get the row field data, we had to call getFieldUnencoded method. If this property set to true,
+FileMakerRelation class's field method (including describing field name directly) returns the value processed
+with htmlspecialchars. This means kind of compatible mode of FileMaker API for PHP.
+This feature works whole the FMDataAPI library.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Turn on to verify the certificate if the value is true.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_setGlobalField">
         setGlobalField()
         <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setGlobalField" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1378,7 +1489,7 @@ the FileMakerRelation class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">242</span>
+    <span class="phpdocumentor-element-found-in__line">266</span>
 
     </aside>
 
@@ -1440,7 +1551,7 @@ Keys are global field names and values is these values.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">151</span>
+    <span class="phpdocumentor-element-found-in__line">175</span>
 
     </aside>
 
@@ -1485,7 +1596,7 @@ Keys are global field names and values is these values.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">209</span>
+    <span class="phpdocumentor-element-found-in__line">233</span>
 
     </aside>
 
@@ -1575,7 +1686,7 @@ Keys are global field names and values is these values.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">220</span>
+    <span class="phpdocumentor-element-found-in__line">244</span>
 
     </aside>
 
@@ -1612,7 +1723,7 @@ it can expect faster operations.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">124</span>
 
     </aside>
 
