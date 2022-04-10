@@ -60,6 +60,73 @@
         </div>
         <article>
             <section>
+                <h1>スタイルの値にフィールドの値を設定する</h1>
+                <p>HTML要素にフィールドの値を表示させるには、data-im属性を使うのはよくご存知だと思います。通常は属性の値に「コンテキスト名@フィールド名」と書きますが、これによりinput属性などではvalue属性に、value属性のない要素には、小要素の1つとしてフィールドの値のテキスト値をセットします。加えて、フィールドの値をスタイルに設定できます。例えば、次のように記載すると、要素のstyle属性のdisplayの値として、フィールドmyStyleの値が設定されます。「style.」に続いて、JavaScriptでのstyle属性で利用できるキーを指定します。つまり、背景色なら、@style.backgroundColorと指定します。</p>
+                <div class="code"><pre><code>&lt;span data-im="myContext@myStyle@style.display"&gt;&lt;/span&gt;</code></pre>
+                <p>この場合、フィールドmyStyleに「none」や「inline-block」などの値が入っていないといけませんが、もともとコンテキストから得られるリレーションで、display属性スタイルに合致しない値が入っているのなら、コンテキスト定義の中でcalculationキーを使って計算式を設定しましょう。ここで、is_showフィールドが1の場合は表示、そうでない場合は非表示にしたい場合、上記のように要素のdata-im属性を指定するとともに、定義ファイルに以下のような記述を追加します。こうすればデータベース側でmyStyleフィールドが存在していなくても、ダウンロードした結果に計算結果のmyStyleフィールド（計算プロパティ）が追加されて、is_showフィールドの値に応じてdisplayスタイルが設定されることになります。</p>
+                <div class="code"><pre><code>IM_Entry(
+    [
+        [
+            'name' => 'myContext',
+            'view' => 'person_list',
+            'table' => 'person',
+            'key' => 'person_id',
+           'calculation' => [
+                ['field' => 'myStyle', 'expression' => "if(is_show, 'in-lineblock', 'none')"],
+            ], ....
+        ], ...</code></pre></div>
+            </section>
+            <section>
+                <h1>一覧ページから詳細ページに移動するボタンを設置する</h1>
+                <p>一覧ページと選択したレコードの詳細ページを移動するナビゲーションはよく作られます。INTER-Mediatorでは、簡単にそうしたUIを作成する方法として、navi-controlキーにmasterやdetailなどの値を設定したコンテキストを定義ファイルで定義することで簡単に実現します。詳細は、プラクティスの<a href="practice-masterdetail.html" target="_blank">一覧と詳細</a>に記載しています。</p>
+                <p>しかしながら、さまざまな理由で、一覧と詳細を別々のHTMLファイルで用意する場合があります。例えば、ファイル送信コンポーネントを使うような場合だと、ファイルの送信後にページ更新が必要になり、詳細ページから一覧ページに勝手に移行してしまうので、別々のHTMLにするのが1つの解決策です。また、単純な一覧と詳細ではないような場合、別々に作る方が作りやすいかもしれません。その場合、一覧のページに、詳細のページに移動するボタンをつけたいでしょう。典型的には次のようなコードになるでしょう。</p>
+                <div class="code"><pre><code>&lt;button onclick="detailpage.html?id="
+    data-im="myList@person_id@#onclick"&gt;
+&lt;/button&gt;</code></pre></div>
+                <p>ここではmyListコンテキストに、主キー値としてperson_idフィールドが存在しているとします。ここで、data-imのターゲット指定に「@#onclick」が存在します。これにより、person_idフィールドの値が、onclick属性の末尾に追加されます。person_idが35なら、onclick属性の値は「detailpage.html?id=35」となります。詳細のページでこのURL引数を取り出す方法は、次に説明します。</p>
+            </section>
+            <section>
+                <h1>URLの検索パラメータの値を検索条件にする</h1>
+                <p>前の項目で説明した一覧ページから詳細ページに移動するボタンを設置した場合など、URLに詳細に表示すべきレコードの主キー値が検索パラメータとしてに含まれています。検索パラメータを取り出して、それを検索条件として与えるには、INTERMediatorOnPage.doBeforeConstructメソッドにプログラムを記載します。</p>
+                <div class="code"><pre><code>INTERMediatorOnPage.doBeforeConstruct = () => {
+  const params = INTERMediatorOnPage.getURLParametersAsArray()
+  const contextName = 'myDetail'
+  INTERMediator.clearCondition(contextName)
+  INTERMediator.addCondition(contextName, {field: 'person_id', value: parseInt(params['id']), operator: '='})
+    :</code></pre></div>
+                <p>INTERMediatorOnPage.getURLParametersAsArray()によりURLに含まれる検索パラメータをオブジェクトとして取得できます。その後は、INTERMediator.clearConditionで一度コンテキストの検索条件を消してから、INTERMediator.addConditionでコンテキストの検索条件を追加します。doBeforeConstructメソッド内なので、この後に、データベースアクセスを行います。その時に、addConditionで追加した条件が付加されて、該当するレコードを取得できます。例えば、URLが「detailpage.html?id=35」なら、「id = 35」という検索条件がSELECT句に追加されます。なお、この場合、idパラメータが存在しない場合などの処理は必要に応じて組み込んでください。</p>
+            </section>
+            <section>
+                <h1>ページ移動時に「保存されない」場合の対処</h1>
+                <p>一覧と詳細ページを別々に作っている場合、詳細から一覧のページに移動する「戻る」ボタンを独自に設置しなければなりません。navi-controlを使えば自動的に用意しました。その場合、シンプルなリンクやlocation.href属性への代入等を行うことが簡単な方法ですが、詳細ページに編集可能テキストフィールドやテキストエリアがある場合には、それらの値が“場合によって”保存されないことがあります。これは、「戻る」ボタンをクリック時に編集中のテキストフィールドからフォーカスが外れて、テキストフィールドの更新のためのデータベースアクセスがスタートするからです。そのアクセスが終了しない間に一覧ページに移動すると、更新処理が失敗して更新がかからず、「保存されていない」と思ってしまいます。この場合、更新処理が終わってからページ移動をするようにします。例えば、戻るボタンのonclickに以下のようなmovePage関数の呼び出しを設置します。URLは引数にしましたが、固定文字列でもいいでしょう。IMLibQueue.setTaskにキューに入れる処理を記述しますが、その中ではキューを進めるために、引数で渡されたクロージャを呼びだすcomplete()を書きます。そして、setTaskの2、3番目の引数を、false、trueと記述します。これがあれば、優先度の低いキューとなり、更新処理が終わるのを確実に待って、この場合はlocation.hrefへの代入が行われます。</p>
+                <div class="code"><pre><code>function movePage($url) {
+  IMLibQueue.setTask((complete) => {
+    complete()
+    location.href = $url
+  }, false, true)
+}</code></pre></div>
+            </section>
+            <section>
+                <h1>「クリックを受け付けない場合がある」と感じた時の対処</h1>
+                <p>サーバの応答にもよるのですが、テキストフィールドを編集中にボタンをクリックした時、ボタンのクリックが受け付けないという思う場合が出てきます。その時は、CSSセレクタ#_im_progress（つまり、idが_im_progress）の要素に対して、pointer-event属性をnoneにしてください。この時、クリック時の処理は、優先度の低いキューに入れる方が良い場合があります。このページに記載の『ページ移動時に「保存されない」場合の対処』を参照してください。</p>
+                <div class="code"><pre><code>#_im_progress {
+    pointer-events: none;
+}</code></pre></div>
+                <p>この_im_progressは、何かの処理を背後で行なっているときに出てくるギアのマークの背景オブジェクトです。既定の状態では、pointer-eventsは既定値（auto）であり、ギアが出ている間にページ内をクリックしても、_im_progressがイベントを拾うので何も起こりません。この属性をnoneにすることで、ギアが出ている間でも背後に見えているボタンなどをクリックできるようになります。テキストフィールドの編集時にボタンを押すと、一瞬ギアが出るので、その間にボタンのクリックが受け付けない時間帯が発生します。これはタイミングと処理のスピードの問題で、一定した動作ではないかもしれません。</p>
+                <p>開発者としてはこの属性はnoneにしたいですし、以前はそうしていました。しかしながら、いくつかの案件で、「連打したらおかしくなる」と言われこの属性を規定値にしました。連打により、ページ構築途中の状態をクリックできてしまうようで、チェックボックスなどは確かに連打には弱いようです。しかしながら、連打を防ぐと、このタイトルのようにクリックを受け付けない瞬間が出てくるためいずれにしても使い勝手は良くありません。この調整は実際の案件に合わせるしかないという結論で、クリックを受け付けないということをINTER-Mediatorの既定値としています。</p>
+            </section>
+            <section>
+                <h1>条件に応じてページ生成を行わないようにする</h1>
+                <p>URLの検索パラメータに想定した項目がない場合にページを表示したくないかもしれません。その場合、INTERMediatorOnPage.doBeforeConstructメソッドに次のように記載します。この例では、idとpパラメータの両方がない場合、その後のページ構築をキャンセルするようにしました。ページ構築を行うかどうかは、INTERMediatorOnPage.isAutoConstructプロパティの値に応じます。つまり、通常はこのプロパティがtrueなのでページ構築をしますが、以下の場合はidとpパラメータのいずれかが存在しない場合ページ生成を行わなず、この後のデータベース接続などは行いません。</p>
+               <div class="code"><pre><code>INTERMediatorOnPage.doBeforeConstruct = () => {
+  const params = INTERMediatorOnPage.getURLParametersAsArray()
+  if (!params['id'] || !params['p']) {
+    INTERMediatorOnPage.isAutoConstruct = false
+    return
+  }
+        :</code></pre></div>
+            </section>
+             <section>
                 <h1>Bootstrapのクラス名を自動生成されるボタンに適用する</h1>
                 <p>INTER-MediatorのサイトをBootstrapを使ってデザインすることは可能です。実際に使って作っている<a href="https://github.com/msyk/IMApp_Account" target="_blank">サンプル</a>もあります。ヘッダや各種要素に通常通りBootstrapのclassなどを適用すればOKです。しかしながら、削除や新規作成ボタンなどは自動的に作られるので、class属性が書けないと思ってしまいます。そのままだと、なんだか古いデザインのボタンになってしまい、ちょっとガッカリな感じです。そこで、JavaScriptを利用することでプロパティに追加するclassタグを記述できるようになっています。以下はその指定例です。buttonClassDeleteプロパティへの代入により、削除ボタンのclassに「btn btn-warning」が加わりますので、標準状態では黄色いボタンになります。以下のように、複製、削除、挿入、詳細、一覧に戻るのボタンのclassを追加するための変数があります。</p>
                 <div class="code">
@@ -111,6 +178,40 @@
   }
 }</code></pre>
                 </div>
+            </section>
+            <section>
+                <h1>disabled属性を条件に応じて設定する</h1>
+                <p>HTMLの属性にフィールドの値を設定する場合、data-im属性に指定するターゲット指定に「コンテキスト名@フィールド名@属性名」と記述することで可能です。しかしながら、disabled属性は、そこに設定する値でのグレーにするコントロールはできず、この属性が存在するかどうかで動作が決まり、他の属性と動作が異なります。こうした違いを本来はフレームワークで吸収したいところではありますが、Ver.9現在それは実現していません。ここで、フィールド、is_activeの値に応じて（""やnull、0の場合はグレーにする）ボタンをグレーにするということを実現するための方法を示します。まず、コンテキストに、post-repeater属性を記述します。</p>
+                <div class="code"><pre><code>IM_Entry(
+    [
+        [
+            'name' => 'myList',
+            'view' => 'person_list',
+            'table' => 'person',
+            'key' => 'person_id',
+            'post-repeater' => 'disablingButton', ....
+        ], ...</code></pre></div>
+                <p>ページファイルでは、まず、調べたい値があるis_activeをページ上に展開するために、spanタグでこのフィールドの値を表示します。もし、その値がページ上に見えているのが好ましくない場合は、displayスタイル属性をnoneにしておきます。また、is_showの値に応じてグレーにしたい要素は、disablingというクラスにしておきます。</p>
+                <div class="code"><pre><code>&lt;button class="disabling" onclick="detailpage.html?id="
+    data-im="myList@person_id@#onclick"&gt;
+&lt;/button&gt;
+&lt;span data-im="myList@is_active" style="display:none"&gt;&lt;/span&gt;</code></pre></div>
+                <p>そして、以下のようなプログラムをJavaScriptで組み込みます。メソッド名は、コンテキスト定義のpost-repeater属性の値を指定します。リピーターの合成が終わったときに、引数repeatersにリピータの配列をセットしてこのメソッドが呼び出されます。INTERMediatorOnPage.getNodeIdsHavingTargetFromNodeは引数のリピータから、is_activeフィールドを展開した要素のid属性値の配列を取り出します。リピータ内部から取るので、言わば「特定の1つのレコード」について、is_activeを展開した要素が特定できます。ここでは要素は1つと仮定します。その値に応じて、値が0なら、そのリピータ内のクラス属性がdisablingの要素を取り出して、disabled属性をtrueにしてグレーにしています。</p>
+                <div class="code"><pre><code>INTERMediatorOnPage.adjustOptions = (repeaters) => {
+  const ids = INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(repeaters, 'myList@is_active')
+  if (ids.length > 0 && parseInt(document.getElementById(ids[0]).innerHTML) == 0) {
+    for (const repeater of repeaters) {
+      const nodes = repeater.getElementsByClassName('disabling')
+      for (const node of nodes) {
+        node.disabled = true
+      }
+    }
+  }
+}</code></pre></div>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
             </section>
             <section>
                 <h1></h1>
