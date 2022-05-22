@@ -264,4 +264,11 @@
     "path": "/ja/practices/practice-tips.html",
     "title": "ティップス集",
     "breadcrumb": "ティップス集"
+},
+{
+    "id": 38,
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/trial.html",
+    "title": "トライアル版の利用方法",
+    "breadcrumb": "トライアル版の利用方法"
 }]
