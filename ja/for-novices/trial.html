@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   Copyright (c) 2010-2021 INTER-Mediator Directive Committee, All rights reserved.
+ *
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-novices">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>はじめに</h1>
+                <p class="lead">INTER-Mediatorの試用や学習用に、簡単な操作でサーバとして実行できるWebアプリケーションについての情報をこの文書に記載します。Dockerを利用するか、phpのサーバモード等で直接実行することを想定したWebアプリケーションです。後者の方法は「ダイレクトホスティング」と呼ぶことにします。いずれかの方法で稼働することができます。</p>
+                <p class="lead">Webアプリケーションでは、INTER-Mediatorのサンプルプログラムを稼働することができると同時に、稼働に必要なファイルをWebブラウザ上で編集して実行できるようになっており、自分でHTMLや設定を作って実行することもできます。INTER-Mediatorのハンズオンや学習用教材での利用を見込んでいます。</p>
+                <p class="lead">従来は試用や学習用にVMを用意していましたが、Ver.9以降はフリーかつプラットフォームに依存しないVM環境が整わないため、VMよりDockerベースに移行しました。Webアプリケーション自体は、INTER-Mediator Ver.10以降で利用できますが、基本的にはインストール作業をしたときの最新版が稼働するようになっています。</p>
+            </section>
+            <section>
+                <h1>Dockerでインストールして稼働する</h1>
+                <p>まず、お使いのプラットフォーム上でDocker Desktopを起動しておく必要があります。Docker Desktopのインストール方法は<a href="https://www.docker.com/get-started/" target="_blank">こちら</a>を参考にしてください。Docker Desktopが稼働可能な状態になったら以下のコマンドを実行します。</p>
+                <div class="code"><pre><code>git clone https://github.com/inter-mediator/IMApp_Trial
+cd IMApp_Trial
+docker-compose up -d</code></pre></div>
+                <p>コンテナのビルドに10分以上かかるかもしれません。しかし、これだけでINTER-Mediatorの開発環境が実行可能になりました。データベースを含むサーバ一式及びINTER-Mediatorのインストール等は全て自動的に行われています。</p>
+                <div class="code"><pre><code>Creating network "imapp_trial_default" with the default driver
+Creating imapp_trial_db_1 ... done
+Creating php-apache_im    ... done</code></pre></div>
+                <p>上のようなメッセージが確認できたら、Webブラウザで <a href="http://localhost:9080/" target="_blank">http://localhost:9080/</a> を開いてください。INTER-Mediatorのデモアプリのトップページが表示されます。トップページに解説がありますので、そちらを参照すれば使用方法等が示されています。</p>
+                <p>編集可能なページや定義ファイルはDockerコンテナの外側のファイルに格納されているので、永続的に表示されます。 MySQLはDockerコンテナとして起動し、スキーマも割り当て済みですが、DBは永続的ではないので、コンテナ起動後に追加したデータはIMコンテナを停止すると消えます。</p>
+            </section>
+            <section>
+                <h1>ダイレクトホスティングによるインストール</h1>
+                <p>OSにセットアップしたWebサーバやデータベースを利用して稼働する方法を「ダイレクトホスティング」と総称します。サーバやデータベースのソフトウエアにはさまざまなものがありますが、ApacheとMySQLを使用する想定でここでは手順を紹介しましょう。<h3</p>
+                <h3>準備</h3>
+                <p>PHP、git、composer、MySQL、Node.jsをインストールして稼働できるようにしてください。</p>
+                <p>データベースにはINTER-Mediatorのサンプルデータベース（データベース名'test_db'）を以下のMySQL用スキーマで用意します。すでにINTER-Mediatorを使用している場合は、このサンプルDBを既にセットアップしていると思われるので、それをそのまま使用しても構いません。</p>
+                <div class="code"><pre><code>https://raw.githubusercontent.com/INTER-Mediator/INTER-Mediator/master/dist-docs/sample_schema_mysql.txt</code></pre></div>
+                <p>MySQLを用意し、rootパスワードを知っている場合、IMApp_Trialリポジトリをクローンした後、以下のようにtest_dbを設定することができます。</p>
+                <div class="code"><pre><code>cd IMApp_Trial # カレントディレクトリがこのリポジトリのルートであると仮定します。
+mysql -u root -p < vendor/inter-mediator/inter-mediator/dist-docs/sample_schema_mysql.txt
+# Homebrew ユーザは root のパスワードを設定しないかもしれないので、 -p パラメータを削除してください。
+# Windows ユーザは、ディレクトリの区切り文字を / から \ または ¥ に変更する必要があります。</code></pre></div>
+                <h3>セットアップ</h3>
+                <p>このWebアプリは、composerをベースにしています。IMApp_Trialリポジトリをクローンして、リポジトリのルートで以下のようにcomposerコマンドを実行します。</p>
+                <div class="code"><pre><code>git clone https://github.com/inter-mediator/IMApp_Trial
+cd IMApp_Trial
+composer update</code></pre></div>
+                <h3>Windowsの場合の追加セットアップ</h3>
+                <p>Windows Subsystem for Linux (WSL) があれば、macOS/Linux と同じように設定できます。 Windows PowerShellなどを使っていない場合、composer updateコマンドの最後でエラーになります。 IMApp_Trialのカレントディレクトリで、以下のコマンドを手動で実行する必要があります。 この2つのコマンドは、shを使ったシェルスクリプトですので、bashアプリケーションが自動的に立ち上がります。</p>
+                <div class="code"><pre><code>cd .¥vendor¥inter-mediator¥inter-mediator
+npm install
+cd .¥dist-docs
+./generateminifyjshere.sh
+cd ..¥..¥..¥..¥lib
+./trialsetup.sh
+cd ..</code></pre></div>
+                <h3>アプリケーションのスタートアップ</h3>
+                <p>Webアプリを手っ取り早くホストするには、phpコマンドのサーバーモードが便利です。IMApp_Trialディレクトリがカレントディレクトにして、以下のコマンドを実行します。</p>
+                <div class="code"><pre><code>php -S localhost:9000</code></pre></div>
+                <p>これで、同じホストで実行されているブラウザから、 <a href="http://localhost:9000/" target="_blank">http://localhost:9000/</a> という url でアプリケーションにアクセスできるようになります。トップページに解説がありますので、そちらを参照すれば使用方法等が示されています。</p>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>
