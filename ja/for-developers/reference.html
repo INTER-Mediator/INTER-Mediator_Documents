@@ -713,7 +713,7 @@
                     <tr>
                         <td class="keyword">'db-class'</td>
                         <td>
-                            このコンテキストで使うデータアクセスクラスの名前（例：PDO、FileMaker_FX、FileMaker_DataAPI）この指定がなければ、IM_Entry関数の第3引数あるいはparams.phpの値が使われます。以下、'datatype'まで同様
+                            このコンテキストで使うデータアクセスクラスの名前（例：PDO、FileMaker_FX、FileMaker_DataAPI）この指定がなければ、IM_Entry関数の第3引数あるいはparams.phpの値が使われます。以下、'cert-verifying'まで同様
                         </td>
                     </tr>
                     <tr>
@@ -751,6 +751,10 @@
                     <tr>
                         <td class="keyword">'datatype'</td>
                         <td>[FileMaker_FX]このコンテキストで使うサーバーがサポートするデータ形式（例：FMPro12）</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'cert-verifying'</td>
+                        <td>[FileMaker_DataAPI]接続時に証明書の検証が必要かどうかを論理値で指定（例：true）。未指定時はtrue</td>
                     </tr>
                     </tbody>
                 </table>
@@ -1204,7 +1208,7 @@
                             'port'
                         </td>
                         <td>
-                            [FileMaker_FX]サーバーポート（例：80）
+                            [FileMaker_FX][FileMaker_DataAPI]サーバーポート（例：80）
                         </td>
                         <td>
                             $dbPort
@@ -1215,7 +1219,7 @@
                             'protocol'
                         </td>
                         <td>
-                            [FileMaker_FX]サーバーへの接続プロトコル（例：HTTP）
+                            [FileMaker_FX][FileMaker_DataAPI]サーバーへの接続プロトコル（例：HTTP）
                         </td>
                         <td>
                             $dbProtocol
@@ -1231,6 +1235,11 @@
                         <td>
                             $dbDataType
                         </td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'cert-verifying'</td>
+                        <td>[FileMaker_DataAPI]接続時に証明書の検証が必要かどうかを論理値で指定（例：true）。未指定時はtrue</td>
+                      <td>$certVerifying</td>
                     </tr>
                 </table>
             </div>
