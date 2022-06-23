@@ -66,7 +66,7 @@
                 <h3>データベース側の設定</h3>
                 <p>FileMaker Serverでは、INTER-MediatorからはFileMaker ServerのXML Web公開機能もしくはFileMaker Data APIを使用しているため、XML Web公開もしくはFileMaker Data APIでのアクセスを許可する必要があります。INTER-Mediatorが使用するアカウントを用意し、XML Web公開もしくはFileMaker Data APIでのアクセスを許可するようにしてください（XML Web公開の拡張アクセス権のキーワードは「fmxml」、FileMaker Data APIの拡張アクセス権のキーワードは「fmrest」）。</p>
                 <h3>FileMaker Data APIを利用する場合</h3>
-                <p>INTER-Mediator 5.8以降でFileMaker Data APIに対応しています。FileMaker Data APIを利用するにはFileMaker Server 17が必要であり、Data API ライセンスが必要になるほか、Admin ConsoleでFileMaker Data APIを有効にする必要があります。db-classキーで指定するデータアクセスクラスの名前は「DB_FileMaker_FX」の代わりに「DB_FileMaker_DataAPI」を使用します。serverキーで「127.0.0.1」や「localhost」を指定していた場合には「localserver」を指定するように変更します。</p>
+                <p>INTER-Mediator 5.8以降でFileMaker Data APIに対応しています。FileMaker Data APIを利用するにはFileMaker Server 17以降が必要であり、Data API ライセンスが必要になるほか、Admin ConsoleでFileMaker Data APIを有効にする必要があります。db-classキーで指定するデータアクセスクラスの名前は「DB_FileMaker_FX」の代わりに「DB_FileMaker_DataAPI」を使用します。serverキーで「127.0.0.1」や「localhost」を指定していた場合には「localserver」を指定するように変更します。</p>
                 <h3>Windows版FileMaker Serverにおける注意点</h3>
                 <p>Windows版FileMaker Serverではmbstring拡張モジュールが標準で有効になっていません。FileMaker Serverフォルダ内のWeb Publishing > publishing engine > phpフォルダ以下にある「php.ini」ファイルにおいて「;extension=php_mbstring.dll」を「extension=php_mbstring.dll」に変更した上でIISの再起動を行い、mbstring拡張モジュールを有効にする必要があります。</p>
                 <h3>定義ファイルに記述するテーブル名</h3>
@@ -96,7 +96,7 @@
                 <p>PostgreSQLのサンプルを動かすためのデータベースのスキーマファイルは、INTER-Mediatorのレポジトリでは、</p>
                 <pre>dist-docs/sample_schema_pgsql.txt</pre>
                 <p>というファイルにあります。冒頭にコマンド例がありますが、PostgreSQLがどのOSのどのディストリビューションで動いているかによって、いろいろ違いがあると思います。例えばOS X Serverの場合：PostgreSQLの稼働ユーザはpostgresではなく、_postgresです。-Uの引数を_postgresにします。</p>
-                <p>INTER-Mediatorとの絡みについては、MySQLとほとんど同じなのですが、1点違いがあります。PostgreSQLでは、主キーフィールドにシリアル値を入力する方法として、SEQUENCEオブジェクトを利用する方法と、SERIAL型を利用する方法があります。どちらの方法も、原則として、定義ファイルのIM_Entry関数の第1引数にあるコンテキストに、'sequence' =&gt; 'xxxx' として、SEQUENCEオブジェクトを指定する必要があります。</p>
+                <p>INTER-Mediatorとの絡みについては、MySQLとほとんど同じなのですが、1点違いがあります。PostgreSQLでは、主キーフィールドにシリアル値を入力する方法として、SEQUENCEオブジェクトを利用する方法と、SERIAL型を利用する方法があります。どちらの方法も、原則として、定義ファイルのIM_Entry関数の第1引数にあるコンテキストに、'sequence' =&gt; 'xxxx' として、SEQUENCEオブジェクトを指定する必要があります。ただし、省略可能な場合もあります。</p>
                 <p>sequenceキーに対する値がない場合の問題は、ページネーションコントロールを表示して1レコードずつ表示しているとき、「レコード追加」ボタンをクリックしてレコードを作成した場合、新たに作られたレコードが現在のレコードになっておらず、レコードの移動をしないといけません。他は問題ないのですが、これだけの問題ではありますが、使い勝手が変わるので注意が必要です。なお、検索して参照するだけなら、sequenceキーの指定はなくてもいいのかもしれません。</p>
                 <h3>SEQUENCEオブジェクトを使用する場合</h3>
                 <p>SEQUENCEオブジェクトを使用する場合、スキーマは以下のようになると思います。SCHEMAはim_sample、アクセスユーザはwebを想定しています。テーブルとシーケンスの両方のオブジェクトにアクセス権を与えるのを忘れないようにしましょう。</p>
@@ -131,7 +131,7 @@ GRANT ALL PRIVILEGES ON im_sample.serial TO web;
 GRANT ALL PRIVILEGES ON im_sample.person_id_seq TO web;</code></pre>
                 </div>
                 <p>SERIAL型を使った場合、INSERTでレコードを新規に作るときに、ここでのidフィールドへの値を代入はしないようにします。もし、自分で値を設定したい場合は、シーケンスの値と当たらないようにしないといけませんが、そこまでの状況でSERIAL型を使う事はほぼないと思われます。</p>
-                <p>そして、定義ファイルでは、このときも、次のように、sequeceキーで、シーケンスオブジェクトの名前を指定します。これをしないと、1レコード表示時に新規レコードを作成しても、新規レコードが編集状態で開いてくれません。</p>
+                <p>そして、定義ファイルでは、このときも、次のように、sequeceキーで、シーケンスオブジェクトの名前を指定できます。しかしながら、sequenceキーの値が存在しない場合は、tableキーとkeyキーの値から自動的に標準のシーケンス名を生成するので、原則、sequenceキーの指定は不要です。SEQUENCEオブジェクトが正しく機能しないと、1レコード表示時に新規レコードを作成しても、新規レコードが編集状態で開いてくれません。</p>
                 <div class="code">
                     <pre><code>array(
     'records' =&gt; 1,
