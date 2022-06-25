@@ -105,6 +105,45 @@
                     <li>第4セクション（例：asc）：昇順ならasc、降順ならdesc</li>
                 </ul>
             </section>
+            <section>
+            <h1>複数の検索条件に対する演算子</h1>
+                <p>この項目の記述は、Ver.10の途中から実装した機能です。あるコンテキストtesttableに対して、以下のような3つの検索用テキストフィールドを用意したとします。ちょっと複雑ですが、これによって、どんなWHERE句が生成されるのかを具体的に紹介します。</p>
+                <div class="picture">
+                    <img class="picture-small picture-dummy" src="/images/shot0080.png">
+                </div>
+                <p>まず、既定の状態では次のように、ローカルコンテキストを利用した検索条件などからWHERE句を生成します。このコンテキストは、num1 &gt; 0 という検索条件をコンテキストに設定しているので、まず、それらの検索条件（つまり、ローカルコンテキストではない条件）があって、続いてANDで繋がれ、その後にローカルコンテキストによる条件が並びます。既定値では、ローカルコンテキストの検索条件は全てORで結ばれます。ローカルコンテキストによる条件の前の演算子は必ずANDになります。</p>
+                <div class="code"><pre><code>SELECT * FROM `testtable` WHERE ((`num1` > 0)) 
+    AND ( ((`vc1` LIKE '%test word%' OR `vc2` LIKE '%test word%' OR `vc3` LIKE '%test word%') 
+         OR (`num1` >= 10) 
+         OR (`num2` <= 99)))</code></pre>
+                <p>ここでカスタマイズ可能な演算子を「OP1」「OP2」で記述すると、次のようになります。OP1は、フィールドをカンマで書き並べた場合のそれぞれの条件を結合する演算子です。一方、OP2は、異なるローカルコンテキストの値ごとに生成される条件を結合する演算子です。</p>
+                <div class="code"><pre><code>SELECT * FROM `testtable` WHERE ((`num1` > 0)) 
+    AND ( ((`vc1` LIKE '%test word%' <span style=color:red">OP1 </span>`vc2` LIKE '%test word%' <span style=color:red">OP1 </span> `vc3` LIKE '%test word%') 
+         <span style=color:red">OP2 </span> (`num1` >= 10) 
+         <span style=color:red">OP2 </span> (`num2` <= 99)))</code></pre></div>
+               <p>OP1、OP2については既定値ではORですが、プロパティへの設定で演算子をANDに切り替えることもできます。INTERMediator.lcConditionsOP1AND、あるいはINTERMediator.lcConditionsOP2ANDというプロパティに対してtrueを代入することで、それぞれ、OP1とOP2の演算子をANDに切り替えることができます。プロパティへの設定は、例えば、ページ生成前に呼びされるdoBeforeConstructメソッド等に記述します。</p>
+               <p>INTERMediator.lcConditionsOP3ANDは、さらに検索条件の値に半角あるいは全角のスペースがあれば、それで区切って複数の検索条件を生成することができます。例えば、次のようにプロパティを設定したとします。</p>
+      <div class="code"><pre><code>INTERMediatorOnPage.doBeforeConstruct = function () {
+        INTERMediatorLog.suppressDebugMessageOnPage = true
+        INTERMediator.lcConditionsOP1AND = false;
+        INTERMediator.lcConditionsOP2AND = true;
+        INTERMediator.lcConditionsOP3AND = true;
+      }</code></pre></div>
+               <p>この時、3つ目の検索条件は「test word」だったので、「test」と「word」でそれぞれで検索する条件を生成して、それらは、OP1、つまりORで検索条件を生成します。ここでのtestによる検索条件と、wordによる検索条件を結ぶ演算子はORになっていますが、INTERMediator.lcConditionsOP3ANDに代入する値を文字列の'and'にすれば、ORではなくANDで演算します。なお、INTERMediator.lcConditionsOP2ANDについてもtrueにしているので、num1 &gt;= 10などの検索条件との結合演算子はANDが設定されています。</p>
+<div class="code"><pre><code>SELECT * FROM `testtable` WHERE ((`num1` > 0))
+    AND ( (((`vc1` LIKE '%test%' OR `vc2` LIKE '%test%' OR `vc3` LIKE '%test%') 
+             OR (`vc1` LIKE '%word%' OR `vc2` LIKE '%word%' OR `vc3` LIKE '%word%')) 
+         AND (`num1` >= 10) 
+         AND (`num2` <= 99)))</code></pre></div>
+                <p>改めて、OP1、OP2、OP3の関係がわかりやすいSQL文を記述しておきます。</p>
+                <div class="code"><pre><code>SELECT * FROM `testtable` WHERE ((`num1` > 0)) 
+    AND ( (((`vc1` LIKE '%test%' <span style=color:red">OP1 </span> `vc2` LIKE '%test%' <span style=color:red">OP1 </span> `vc3` LIKE '%test%') 
+             <span style=color:red">OP3 </span> (`vc1` LIKE '%word%' <span style=color:red">OP1 </span> `vc2` LIKE '%word%' <span style=color:red">OP1 </span> `vc3` LIKE '%word%')) 
+         <span style=color:red">OP2 </span> (`num1` >= 10) 
+         <span style=color:red">OP2 </span> (`num2` <= 99)))</code></pre></div>
+                <p>INTERMediator.lcConditionsOP1ANDとINTERMediator.lcConditionsOP2ANDについては、trueかfalseを入力しますが、規定値がfalseになっているので、trueにしたい場合だけ代入することでも構いません。INTERMediator.lcConditionsOP3ANDは前の2つのプロパティと異なり、false/true/'and'の3つの値のどれかです。trueの場合は単語分割するというフラグになっているので、演算子はORにはなりません。ANDにしたい場合は、文字列の'and'を指定します。</p>
+                <p>なお、Ver.7でINTERMediator.alwaysAddOperationExchangeを導入し、これにより、前述の説明のOP2をANDにするという機能を実装しました。Ver.10での改訂時に、INTERMediator.alwaysAddOperationExchangeが設定されていれば、INTERMediator.lcConditionsOP2ANDをtrueにするようにして、互換性を保っています。</p>
+                        </section>
         </article>
     </div>
 </body>
