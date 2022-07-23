@@ -271,4 +271,11 @@
     "path": "/ja/for-novices/trial.html",
     "title": "トライアル版の利用方法",
     "breadcrumb": "トライアル版の利用方法"
+},
+{
+    "id": 39,
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/sendmail10.html",
+    "title": "メール送信(Ver.10)",
+    "breadcrumb": "メール送信(Ver.10)"
 }]
