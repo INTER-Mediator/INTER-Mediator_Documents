@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+    <style>
+        td {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .keyword {
+            white-space: nowrap;
+        }
+
+        .subtitle {
+            font-size: 70%;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle">メール送信(Ver.10)</h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>はじめに</h1>
+<p>INTER-Mediatorのメールを送る機能は、Ver.5までの仕組みと、Ver.6以降の仕組みが大きく異なっています。ここでは前者を「旧アーキテクチャ」、後者を「新アーキテクチャ」と呼びます。Ver.6を実装では、旧アーキテクチャの実装は残して新アーキテクチャも組み込み、相互に切り替えて運用できるようにしました。また、過去のアプリケーションとの互換性を考慮して、既定値では旧アーキテクチャでの稼働を規定値にしました。Ver.10では、規定値を新アーキテクチャとしましたが、旧アーキテクチャに切り替えることは可能です。しかしながら、今後は新アーキテクチャが使われることがメインになると想定して、新アーキテクチャのみをこの文書では紹介します。旧アーキテクチャでのメール機能の利用については<a href="sendmail.html" target="_blank">メール送信(Ver.5)</a>あるいは<a href="sendmail6.html" target="_blank">メール送信(Ver.6)</a>をご覧ください。</p>
+                <p class="lead">メールはPHPのmail関数を使う方法と、メールサーバを利用する方法を使用できます。mail関数を使う場合UNIX系サーバならsendmailコマンドをたたく方法になります。SMTPサーバーを利用してメールを送信する場合、<a href="https://swiftmailer.symfony.com/">swiftmailer</a>を利用します。</p>
+            </section>
+            <section>
+                <h1>定義ファイルへの指定</h1>
+                <h3>
+                    <div class="subtitle">[第1引数, コンテキスト定義]</div>
+                    メール送信
+                </h3>
+               <table>
+                    <thead>
+                    <tr>
+                        <th colspan="3">配列指定</th>
+                        <th rowspan="2">値</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">キー</th>
+                        <th class="keyword">インデックス</th>
+                        <th class="keyword">下位のキー</th>
+                    </tr>
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="15" class="keyword">'send-mail'<br>あるいは<br>'messaging'</td>
+                        <td class="keyword">'driver'</td>
+                        <td></td>
+                        <td>メールを送信する場合は、値は'mail'、あるいはこのエントリーごと省略する（send-mailキーの場合は記述してはいけない）</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="12" class="keyword">'read'</td>
+                        <td></td>
+                        <td>コンテキストに対してレコードの取り出しを行った後にメールを送信する。</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'from'</td>
+                        <td>送信者名や送信者アドレスが含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'to'</td>
+                        <td>送信先が含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる。複数の送信先はカンマで区切る</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'cc'</td>
+                        <td>Cc先が含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる。複数の送信先はカンマで区切る</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'bcc'</td>
+                        <td>Bcc先が含まれるフィールド名、あるいはアドレスの文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる。複数の送信先はカンマで区切る</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'subject'</td>
+                        <td>件名が含まれるフィールド名、あるいは件名の文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'body'</td>
+                        <td>メール本文が含まれるフィールド名、あるいは本文の文字列。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'template-context'</td>
+                        <td>メールの文面を得られるコンテキスト名と検索条件。テーブルに文面のテンプレートをセットしているものとする</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'store'</td>
+                        <td>送信したメールをここで指定したコンテキストに対して新規レコードを作成して保存する</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'attachment'</td>
+                        <td>添付するファイルへの相対パスの文字列、あるいはそれを含むフィールド名。文字列内に「@@フィールド名@@」の記述があれば、フィールドのレコードに置き換わる</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'f-option'</td>
+                        <td>UNIXでSMTPサーバを経由しない場合にtrueを指定すると、fromの指定が有効</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'body-wrap'</td>
+                        <td>右端の折り返しのバイト数</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'update'</td>
+                        <td></td>
+                        <td>コンテキストに対してレコードの更新処理を行った後にメールを送信する。第3次元については、readと同様</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'create'</td>
+                        <td></td>
+                        <td>コンテキストに対して新たなレコードを作るアクションを起こした後にメールを送信する。第3次元については、readと同様</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h3>
+                    <div class="subtitle">[第2引数, オプション設定]</div>メール送信サーバー
+                </h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="2">配列指定</th>
+                        <th rowspan="2">値</th>
+<th rowspan="2">params.phpで変数名</th>
+                    </tr>
+                    <tr>
+                        <th class="keyword">第1次元</th>
+                        <th class="keyword">第2次元</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="5" class="keyword">'smtp'</td>
+                        <td class="keyword">'server'</td>
+                        <td>メール送信時に使用するサーバのホスト</td>
+                        <td rowspan="5">$sendMailSMTP</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'port'</td>
+                        <td>メール送信時に使用するサーバのポート</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'username'</td>
+                        <td>メール送信時に認証で使用するユーザー名</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'password'</td>
+                        <td>メール送信時に認証で使用するパスワード</td>
+                    </tr>
+                    <tr>
+                        <td class="keyword">'encryption'</td>
+                        <td>通信処理の暗号化をする場合にその方法を指定する。'ssl'、あるいは'tls'を指定する</td>
+                    </tr>
+                    </tbody>
+                </table>
+               <p>定義ファイルでの指定例を以下に示します。</p>
+                <div class="code">
+<pre><code>IM_Entry(
+        array(   // Contexts
+            array(
+                'name' =&gt; 'request',
+                'send-mail' =&gt; array(
+                    'create' =&gt; array(
+                        'from' =&gt; 'info@msyk.net',
+                        'to' =&gt; '@@email@@',
+                        'cc' =&gt; 'msyk@me.com',
+                        'subject' =&gt; 'ビジネスマッチング申し込み',
+                        'body' =&gt; '受け付けました。\n本当です。',
+                        'f-option' =&gt; true,
+                        'body-wrap' =&gt; 76,
+                    )
+                )
+             )
+        ),
+        array(   // Options
+            'formatter' =&gt; array(...),
+            'smtp' =&gt; array(
+                'server' =&gt; 'mysmtp.msyk.net',
+                'port' =&gt; 587,
+                'encryption' =&gt; 'tls',
+                'username' =&gt; 'msyktest@msyk.net',
+                'password' =&gt; 'oshienai',
+            )
+        ),
+        array('db-class' =&gt; 'PDO'),
+        false
+    );</code></pre>
+                </div>
+            </section>
+            <section>
+                <h1>メールを送信するタイミングの指定</h1>
+                <p>'send-mail'キーの配列の次のレベルのキーとして、'read' 'update' 'create'のいずれかを指定できます。それぞれ、データベースからの読み込み時、更新時、新規レコード作成時を意味し、コンテキストに対するそれぞれのタイミングでメールを送信します。いずれも、データベース処理が終了してからメールの送信にかかります。上記の例では、新規レコード作成時に、メールが送信されます。</p>
+            </section>
+            <section>
+                <h1>メールの内容</h1>
+                <p>メールの送信者はfromキー、宛先はto、cc、bccキー、件名はsubjectキー、本文はbodyキーで指定した文字列になります。一定の文字列で良い場合は単に記述するだけです。一方、全ての値でフィールドの値に置き換えるテンプレート処理が可能です。readの場合のメールだと、その時にviewキーのテーブルやビュー等で読み出した1つのレコードのフィールドを「@@フィールド名@@」の部分に置き換えてメールを作成することができます。create、updateの場合は対象レコードをviewキーのフィールドもしくはビューから取り出します。</p>
+<p>基本的にはメールはUTF-8でエンコードして送られます。定義ファイルはUTF-8を利用するので、日本語の文字列は通常通り記述して、UTF-8で保存すればその文字がメールで利用されます。ヘッダについては、base64のインラインエンコードを、ASCIIコード以外の文字について行います。本文はそのままですが、ヘッダのContent-TypeのcharsetにUTF-8という文字を付けます。つまり、本文はbase64等でのエンコードは行いません。</p>
+<p>本文は一定の長さで改行を入れます。既定値では72バイトですが、'body-wrap'キーで異なる値にできます。0に設定すると改行しません。ここで、バイト数ですが、実際のバイト数ではなく、日本語は2バイト、英語は1バイトと数えた結果で示しています。実際のエンコードはUTF-8なので、嘘と言えば嘘のカウントになりますが、おそらくこうして指定をすることに慣れている人が多いので、ここでは実態とは関係ない数値ではありますけども実用的という意味で「2バイトルール」でカウントしたものとします。</p>
+<p>UNIXでSMTPサーバーを使わない場合、通常はメールソースのFrom:は無視されて、UNIXアカウントそのものをFrom:として設定してしまいます。ただし、サーバー側で許可されていれば「'f-option' =&gt; true」の指定を定義ファイル内に記述することで、sendmailコマンドの-fパラメータを指定して、送信者の指定が可能です。</p>
+            </section>
+            <section>
+                <h1>SMTPサーバーの指定</h1>
+                <p>定義ファイルのIM_Entry関数の第3引数のオプション領域に'smtp'キーで配列を指定します。その他のキーは、前記の例の通りで、キーを見れば意味は分かると思います。もし、SMTP認証をしない場合は、serverとportだけを指定します。認証する場合は、server, port, username, passwordを指定します。</p>
+                <p>SMTPサーバーの指定は、params.phpファイルでも指定が可能です。変数名として、$sendMailSMTPの定義し、値は'smtp'の右側の配列と同様に指定をします。params.phpファイルでの指定よりも、定義ファイルの指定が優先されます。どこにもSMTPサーバーの設定がない場合には、mail関数での送信になります。</p>
+                <p>Windowsの場合、mail関数はSMTP利用するので、php.iniにサーバー情報などを書くことで対処できます。従って、'smtp'の指定やparams.phpファイルでの指定は一般には不要ですが、もし設定すれば、mail関数ではなく、swiftmailによるメール送信ができます。</p>
+            </section>
+            <section>
+                <h1>Gmailのアカウントでメール送信する場合</h1>
+                <p>"server"キーの値は、"smtp.gmail.com" としてください。"port"キーの値は、"587"としてください。さらに"encryption"キーは、"tls"とします。"username"キーの値は、ユーザー名を指定しますが、メールアドレスそのものを指定します。"password"キーはパスワードそのものを指定します。params.phpファイルに指定する場合の例を示します。</p>
+<div class="code"><pre><code>$sendMailSMTP = array(
+    "server" => "smtp.gmail.com",
+    "port" => 587,
+    "encryption" => "tls",
+    "username" => "msyk.nii83@gmail.com",
+    "password" => "himitsunopassword",
+);</code></pre></div>
+                <p>定義ファイルやparams.phpに上記の2つのSMTP送信に関するパラメータを設定するとメールが送信できますが、できない場合には、<a href="https://support.google.com/accounts/answer/6010255?hl=ja" target="_blank">こちら</a>の記述に従って、「安全性の低いアプリのアクセス」を有効にします。この設定が「有効」になっていないと、SMTPサーバーが受け付けません。相当以前はこれが既定値で「有効」になっていましたが、ある時期からは「無効」が既定値になっているようですので、以前は送ることができたという方も、この設定は必ず確認をしてみてください。</p>
+           </section>
+            <section>
+                <h1>ファイルを添付する</h1>
+                <p>ファイルを1つだけ追加できます。添付するには、media-root-dirキーの指定が必要です。そして、media-root-dirキーと、attachmentキーから得られるパスを繋いだ絶対パスのファイルを添付します。attachmentキーに「@@フィールド名@@」を用いてフィールド名を指定した場合、そのフィールドは、ファイルのアップロードコンポーネントを利用してアップロードした場合に自動的に設定されるパス名であることを想定しています。</p>
+            </section>
+            <section>
+                <h1>送信結果をデータベースに残す</h1>
+                <p>storeキーには、同じ定義ファイル内に定義した、レコード作成可能なコンテキストを指定します。メール送信を行うと、そのコンテキストに、新たにレコードを作って送信した結果を残せます。エラーがあって送れない場合でも結果を残します。なお、指定したコンテキストには、以下のフィールドがあるものとします。フィールド名は固定でカスタマイズはできません。フィールド名から、何が入力されるかは判別可能だと思います。</p>
+                <p>to_field、bcc_field、cc_field、from_field、subject、body、errors</p>
+                <p>あるテーブルの関連テーブルに送信結果を残す場合、relationキーを指定します。すると、上位のコンテキストの主キー値を自分自身の外部キーフィールドに設定できるので、作られたメール送信レコードに元のテーブルとの関連を残すことができます。ただし、operatorが=のものだけです。また、送信結果を残すコンテキストにqueryキーがあり、operatorが=のものがある場合、その値も初期値として設定されます。</p>
+            </section>
+            <section>
+                <h1>データベースに入れたテンプレートにある文面でメールを作成する</h1>
+                <p>メールの文面や送り先などをデータベースに入れておき、それを元にメールを作成して送付するには、template-contextキーを指定します。例えば、「mail_template@id=3」のように記述します。mail_templateは、同じ定義ファイルにある読み込み可能なコンテキストで、このコンテキストから読み出したデータについては、以下のようなフィールドがあるものとします。フィールド名は固定でカスタマイズはできません。フィールド名から、何が入力されているかは判別可能だと思います。</p>
+                 <p>to_field、bcc_field、cc_field、from_field、subject、body</p>
+                 <p>@以降は、コンテキストの中の検索条件を指定しますが、この記述は条件そのものではなく、=の前後で分離して、WHERE id = 3 のような検索条件で検索をします。実際には最初の1つのレコードだけを利用します。そのレコードからそれぞれのフィールドを取り出しますが、値そのままの場合もありますが、テンプレートのデータにある「@@フィールド@@」を、実際にメールを送るときのデータに置き換えることも可能です。</p>
+           </section>
+            <section>
+                <h1>HTMLメールの送信</h1>
+                <p>メールの文面の最初の文字列が &lt;html&gt; である場合、HTMLメールとして送信します。添付ファイルも1つまでは一緒に送れますが、添付ファイルをHTMLに埋め込みたい場合、本文の文面内で##image## と記述すればOKです。ただし、画像ファイルであるという前提で文面を作成してください。</p>
+            </section>
+            <section>
+                <h1>メッセージングとしてメール送信</h1>
+                <p>send-mailキーはVer.6でも利用できますが、メッセージ送信機能を拡張するにあたり、send-mailキーの代わりにmessagingキーを指定することもできます。その場合は、配列にdriverキーで値がmailのエントリーを入れるか、drivierキーを省略することでも構いません。</p>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>
