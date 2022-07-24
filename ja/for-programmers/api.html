@@ -660,7 +660,7 @@
 }
 
 function moving(complete) {
-  if (IMLibQueue.tasks.length <= 1) {
+  if (IMLibQueue.tasks.length &lt;= 1) {
     location.href = 'https://moving.to.this.url.site/all_right'
   } else {
     IMLibQueue.setTask(moving, false, true)
@@ -668,6 +668,16 @@ function moving(complete) {
   complete()
 }</code></pre> </div>
       </section>
+<sction>
+<h1>クライアント同期処理のカスタマイズ</h1>
+<h4>INTERMediatorOnPage.syncBeforeUpdate = (d) => {}</h4>
+<h4>INTERMediatorOnPage.syncAfterUpdate = (d) => {}</h4>
+<h4>INTERMediatorOnPage.syncBeforeCreate = (d) => {}</h4>
+<h4>INTERMediatorOnPage.syncAfterCreate = (d) => {}</h4>
+<h4>INTERMediatorOnPage.syncBeforeDelete = (d) => {}</h4>
+<h4>INTERMediatorOnPage.syncAfterDelete = (d) => {}</h4>
+<p>クライアント同期が設定されているページにおいて、変更処理が同期された側で、それぞれの変更処理が行われる前後に呼び出されるメソッドを定義できます。Beforeが名前に含まれているメソッドでは、返り値を設定でき、引き続き処理する場合はtrue、処理をキャンセルする場合はfalseを返します。引数dは、同期情報に関するオブジェクト（例：{entity: "item", field: ["product_unitprice"], 'justnotify: false, pkvalue: ["3"], value: ["30"]}）が設定されて呼び出されます。</p>
+</section>
     </article>
   </div>
 </body>
