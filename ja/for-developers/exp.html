@@ -531,6 +531,26 @@
                             <td>dirname('dir/subdir/afile.txt') の結果は 'dir/subdir'</td>
                             <td style="text-align: left">引数の文字列をパスとして認識して、ディレクトリ名を求める</td>
                         </tr>
+                        <tr>
+                            <td>decodeURI(str)</td>
+                            <td>decodeURI('%28Z%29') の結果は '(Z)'</td>
+                            <td style="text-align: left">JavaScriptのdecodeURI関数と同一の動作</td>
+                        </tr>
+                        <tr>
+                            <td>encodeURI(str)</td>
+                            <td>encodeURI('(Z)') の結果は'%28Z%29' </td>
+                            <td style="text-align: left">JavaScriptのencodeURI関数と同一の動作</td>
+                        </tr>
+                        <tr>
+                            <td>decodeURIComponent(str)</td>
+                            <td>decodeURIComponent('%28Z%29') の結果は '(Z)'</td>
+                            <td style="text-align: left">JavaScriptのdecodeURIComponent関数と同一の動作</td>
+                        </tr>
+                        <tr>
+                            <td>encodeURIComponent(str)</td>
+                            <td>encodeURIComponent('(Z)') の結果は'%28Z%29' </td>
+                            <td style="text-align: left">JavaScriptのencodeURIComponent関数と同一の動作</td>
+                        </tr>
                     </table>
                 </div>
                 <h4>正規表現</h4>

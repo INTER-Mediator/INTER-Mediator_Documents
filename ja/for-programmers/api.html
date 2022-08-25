@@ -179,7 +179,7 @@
         <h4>INTERMediatorLocale</h4>
         <p>このオブジェクトに、サーバーで設定あるいは識別したロケールに基づく小数点の記号などの情報が設定されている。</p>
         <h4>INTERMediatorOnPage.metadata</h4>
-        <h4>composer.jsonから得られたINTER-Mediatorに関する情報で、キーはversionとreleasedate</h4>
+        <p>composer.jsonから得られたINTER-Mediatorに関する情報で、キーはversionとreleasedate</p>
         <h4>INTERMediatorOnPage.showProgress()</h4>
         <p>処理中を示すギアが回るアニメーションを表示する。</p>
         <h4>INTERMediatorOnPage.hideProgress()</h4>
@@ -430,6 +430,8 @@
         <p>コンテキストが保持するデータベースの値。このオブジェクトのプロパティは、keyフィールードが「id」とすれば、id=3、id=420のように、「主キーフィールド名=値」の文字列。その文字列のプロパティはさらにオブジェクトとなっていて、そのオブジェクトのプロパティはフィールド名。そのフィールド名のプロパティに対する値がデータベースに記録された値。FileMaker Serverで、relationキーのportalがtrueの場合、その値がさらにオブジェクトとなっており、プロパティはリレーションシップの関連キーの値である。なお、この値は更新しても、データベースへの更新は自動的には行われない。</p>
         <h4>《IMLibContext》.setValue(recKey, key, value, nodeId, target)</h4>
         <p>コンテキストに値valueを設定する。キーとしてはrecKey（id=34、つまり主キーとイコール、その値を合成した文字列）およびkey（フィールド名）を指定する。最初は要素のid属性値nodeIdを伴ってい指定され、id属性値とターゲット指定targetで決定されるページ内のノードと、データベースの値の対応関係を記録する。nodeIdを省略すると、値を保存すると同時に、他のコンテキストの同じテーブルの同じレコードの同じフィールドとバインドしている値も更新し、要素に表示する値も更新する。</p>
+        <h4>INTERMediatorOnPage.updateProcessedNode</h4>
+        <p>このプロパティは既定値がfalseで、その場合、すでにバインドされたノードに再度値を設定する事はしない。trueに設定すれば、Widgetでなければ値の設定をバインドが終わったノードに対しても行う。</p>
         <h4>《IMLibContext》.getValue(recKey, key)</h4>
         <p>2種類のキーを指定して値を取り出す。最初のキーは、「主キーフィールド名=値」の文字列、次のキーはフィールド名。つまり、storeプロパティへのアクセッサーメソッド。なお、keyに "_im_buttom_master_id" を指定すると、「詳細」ボタンの要素に設定されているid属性値を得られるので、プログラムでクリック操作をしたい時には利用できる。</p>
         <h4>《IMLibContext》.getContextInfo(nodeId, target)</h4>
