@@ -141,7 +141,7 @@
              <span style=color:red">OP3 </span> (`vc1` LIKE '%word%' <span style=color:red">OP1 </span> `vc2` LIKE '%word%' <span style=color:red">OP1 </span> `vc3` LIKE '%word%')) 
          <span style=color:red">OP2 </span> (`num1` >= 10) 
          <span style=color:red">OP2 </span> (`num2` <= 99)))</code></pre></div>
-                <p>INTERMediator.lcConditionsOP1ANDとINTERMediator.lcConditionsOP2ANDについては、trueかfalseを入力しますが、規定値がfalseになっているので、trueにしたい場合だけ代入することでも構いません。INTERMediator.lcConditionsOP3ANDは前の2つのプロパティと異なり、false/true/'and'の3つの値のどれかです。trueの場合は単語分割するというフラグになっているので、演算子はORにはなりません。ANDにしたい場合は、文字列の'and'を指定します。</p>
+                <p>INTERMediator.lcConditionsOP1ANDとINTERMediator.lcConditionsOP2ANDについては、trueかfalseを入力しますが、規定値がfalseになっているので、trueにしたい場合だけ代入することでも構いません。INTERMediator.lcConditionsOP3ANDは前の2つのプロパティと異なり、false/true/'and'の3つの値のどれかです。trueの場合は単語分割するというフラグになっているので、この時のOP3演算子はORにはなります。OP3演算子をANDにしたい場合は、文字列の'AND'を指定します。</p>
                 <p>なお、Ver.7でINTERMediator.alwaysAddOperationExchangeを導入し、これにより、前述の説明のOP2をANDにするという機能を実装しました。Ver.10での改訂時に、INTERMediator.alwaysAddOperationExchangeが設定されていれば、INTERMediator.lcConditionsOP2ANDをtrueにするようにして、互換性を保っています。</p>
                         </section>
         </article>

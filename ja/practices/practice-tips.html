@@ -160,7 +160,7 @@
             </section>
             <section>
                 <h1>検索機能で値を区切って条件指定する</h1>
-                <p>テキストフィールドなどにdata-im="_@condition:contextname:fieldslist:*match*"のようにローカルコンテキストの指定を入れることで、指定したコンテキストに自動的に検索条件を挿入してデータベース処理をするので、検索機能を簡単に実装できます。この時、検索条件の値はテキストフィールド等に入力された通りになりますが、INTERMediator.lcConditionsOP3ANDにtrueを代入すると、テキストフィールドの値を半角あるいは全角のスペースで区切って複数の検索条件として与えることができます。このままだと区切った値のそれぞれの検索をORしますが、INTERMediator.lcConditionsOP3ANDに'and'を代入するとそれぞれの検索をANDします。</p>
+                <p>テキストフィールドなどにdata-im="_@condition:contextname:fieldslist:*match*"のようにローカルコンテキストの指定を入れることで、指定したコンテキストに自動的に検索条件を挿入してデータベース処理をするので、検索機能を簡単に実装できます。この時、検索条件の値はテキストフィールド等に入力された通りになりますが、INTERMediator.lcConditionsOP3ANDにtrueを代入すると、テキストフィールドの値を半角あるいは全角のスペースで区切って複数の検索条件として与えることができます。このままだと区切った値のそれぞれの検索をORしますが、INTERMediator.lcConditionsOP3ANDに'AND'を代入するとそれぞれの検索をANDします。</p>
                 <div class="code">
                     <pre><code>INTERMediatorOnPage.doBeforeConstruct = function () {
         INTERMediator.lcConditionsOP1AND = false;

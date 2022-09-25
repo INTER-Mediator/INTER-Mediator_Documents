@@ -111,32 +111,26 @@
       </section>
       <section>
         <h1>ページ合成処理に割り込む処理の記述</h1>
-        <h4>INTERMediatorOnPage.additionalExpandingEnclosureFinish = {コンテキスト名: function (node) { }},</h4>
-        <h4>INTERMediatorOnPage.expandingEnclosureFinish = function (name,target) { } </h4>
+        <h4>INTERMediatorOnPage.additionalExpandingEnclosureFinish = {コンテキスト名: function (target) { }},</h4>
+        <h4>INTERMediatorOnPage.expandingEnclosureFinish = function (name, target) { } </h4>
+        <h4>INTERMediatorOnPage.postEnclosure_《コンテキスト名》 (target) </h4>
         <h4>INTERMediatorOnPage.《コンテキストで指定した名前》 (target) </h4>
         <ul>
           <li>引数：name：展開が終わった箇所で利用した定義ファイルのコンテキストのname属性の値</li>
           <li>引数：target：展開が終わったエンクロージャのノード</li>
           <li>返り値：なし</li>
         </ul>
-        <p> エンクロージャの展開が終わる度に呼び出されます。3つメソッドがあり、前述の順序で呼び出されます。コンテキストごとに呼び出すものは最初と最後のものですが、最初のものは呼び出すプログラム自体をプログラムで指定できます。そこまで複雑ではない場合には3番目の手法が良いでしょう。2番目の手法は、全てのエンクロージャの展開後に実行したい処理を記述します。3番目の《コンテキストで指定した名前》は、定義ファイルのコンテキストの指定で、'post-enclosure'というキーに対応する文字列で、メソッド名を指定します。そのメソッドは下記のように2つの引数を伴って定義して、プログラムを記述します。</p>
-        <div class="code">
-          <pre><code>INTERMediatorOnPage.expandingEnclosureFinish = function(name,target) {
-    :
-}</code></pre> </div>
-        <h4>INTERMediatorOnPage.additionalExpandingRecordFinish: {コンテキスト名: function (node) { }},</h4>
-        <h4>INTERMediatorOnPage.expandingRecordFinish(name,repeaters)</h4>
+        <p> エンクロージャの展開が終わる度に呼び出されます。4つメソッドがあり、前述の順序で呼び出されますが、3番目が存在すれば4番目は呼び出されません。2つ目は全てのコンテキストで呼び出され、その他のものはコンテキストごとに呼び出すかどうかを制御できます。最初のものは呼び出すプログラム自体をプログラムで指定できます。そこまで複雑ではない場合には3ないしは4番目の手法が良いでしょう。2番目の手法は、全てのエンクロージャの展開後に実行したい処理を記述します。4番目の《コンテキストで指定した名前》は、定義ファイルのコンテキストの指定で、'post-enclosure'というキーに対応する文字列で、メソッド名を指定します。1〜3番目はメソッドの定義をすればそれで呼び出されますが、3番目の手法がいちばん手軽だと思われます。</p>
+        <h4>INTERMediatorOnPage.additionalExpandingRecordFinish: {コンテキスト名: function (repeaters) { }},</h4>
+        <h4>INTERMediatorOnPage.expandingRecordFinish(name, repeaters)</h4>
+        <h4>INTERMediatorOnPage.postRepeater_《コンテキスト名》(repeaters)</h4>
         <h4>INTERMediatorOnPage.《コンテキストで指定した名前》(repeaters)</h4>
         <ul>
           <li>引数：name：展開が終わった箇所で利用した定義ファイルのコンテキストのname属性の値</li>
           <li>引数：repeaters：1レコード分の展開をしたリピーターの配列</li>
           <li>返り値：なし</li>
         </ul>
-        <p> リピータの展開時に、1レコード分の処理が終わった度に呼び出されます。3つメソッドがあり、前述の順序で呼び出されます。コンテキストごとに呼び出すものは最初と最後のものですが、最初のものは呼び出すプログラム自体をプログラムで指定できます。そこまで複雑ではない場合には3番目の手法が良いでしょう。2番目の手法は、全てのリピーターの展開後に実行したい処理を記述します。3番目の《コンテキストで指定した名前》は、定義ファイルのコンテキストの指定で、'post-repeater'というキーに対応する文字列で、メソッド名を指定します。そのメソッドを以下のように定義して、プログラムを記述します。</p>
-        <div class="code">
-          <pre><code>INTERMediatorOnPage.expandingRecordFinish = function(name,repeaters) {
-    :
-}</code></pre> </div>
+        <p> リピータの展開時に、1レコード分の処理が終わった度に呼び出されます。4つメソッドがあり、前述の順序で呼び出されますが、3番目が存在すれば4番目は呼び出されません。2つ目は全てのコンテキストで呼び出され、その他のものはコンテキストごとに呼び出すかどうかを制御できます。最初のものは呼び出すプログラム自体をプログラムで指定できます。そこまで複雑ではない場合には3ないしは4番目の手法が良いでしょう。2番目の手法は、全てのリピーターの展開後に実行したい処理を記述します。4番目の《コンテキストで指定した名前》は、定義ファイルのコンテキストの指定で、'post-repeater'というキーに対応する文字列で、メソッド名を指定します。そのメソッドを以下のように定義して、プログラムを記述します。1〜3番目はメソッドの定義をすればそれで呼び出されますが、3番目の手法がいちばん手軽だと思われます。</p>
         <h4>INTERMediatorOnPage.notShowHeaderFooterOnNoResult</h4>
         <p>trueの場合、data-im-control属性の値がfooter、headerのリピーターについて、検索結果にレコードが存在しない場合に表示しなくする。既定値はfalse。</p>
         <h4>INTERMediator.noRecordClassName: '_im_for_noresult_',</h4>
