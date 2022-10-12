@@ -65,7 +65,8 @@
             </section>
             <section>
                 <h1>Ver.10での変更</h1>
-                <p>params.phpで定義される変数$sendMailCompatibilityModeの初期値をfalseにしました。元はtrueだったので、何も変数定義をしないと、<a href="sendmail.html" target="_blank">古いアーキテクチャーでのメール送信</a>になっていました。デフォルトを変えたので、この変数をtrueにしない限りは<a href="sendmail6.html" target="_blank">新しいアーキテクチャーのメール送信機能</a>が利用されます。以前のアプリケーションを移行する場合には気をつけてください。</p>
+                <p>params.phpで定義される変数$sendMailCompatibilityModeの初期値をfalseにしました。元はtrueだったので、何も変数定義をしないと、<a href="sendmail.html" target="_blank">古いアーキテクチャーでのメール送信</a>になっていました。デフォルトを変えたので、この変数をtrueにしない限りは<a href="sendmail10.html" target="_blank">新しいアーキテクチャーのメール送信機能</a>が利用されます。以前のアプリケーションを移行する場合には気をつけてください。</p>
+                <p>package.jsonから、flatpickrの定義をなくしたので、node_modules内にはflatpickrは存在しません。CDNからダウンロードするのが良いかと思われます（samples/Sample_webpage/flatpickr_MySQL.htmlを参照）。</p>
              </section>
             <section>
                 <h1>Ver.9での変更</h1>
