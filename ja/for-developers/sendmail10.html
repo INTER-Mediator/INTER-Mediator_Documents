@@ -76,8 +76,8 @@
         <article>
             <section>
                 <h1>はじめに</h1>
-<p>INTER-Mediatorのメールを送る機能は、Ver.5までの仕組みと、Ver.6以降の仕組みが大きく異なっています。ここでは前者を「旧アーキテクチャ」、後者を「新アーキテクチャ」と呼びます。Ver.6を実装では、旧アーキテクチャの実装は残して新アーキテクチャも組み込み、相互に切り替えて運用できるようにしました。また、過去のアプリケーションとの互換性を考慮して、既定値では旧アーキテクチャでの稼働を規定値にしました。Ver.10では、規定値を新アーキテクチャとしましたが、旧アーキテクチャに切り替えることは可能です。しかしながら、今後は新アーキテクチャが使われることがメインになると想定して、新アーキテクチャのみをこの文書では紹介します。旧アーキテクチャでのメール機能の利用については<a href="sendmail.html" target="_blank">メール送信(Ver.5)</a>あるいは<a href="sendmail6.html" target="_blank">メール送信(Ver.6)</a>をご覧ください。</p>
-                <p class="lead">メールはPHPのmail関数を使う方法と、メールサーバを利用する方法を使用できます。mail関数を使う場合UNIX系サーバならsendmailコマンドをたたく方法になります。SMTPサーバーを利用してメールを送信する場合、<a href="https://swiftmailer.symfony.com/">swiftmailer</a>を利用します。</p>
+<p>INTER-Mediatorのメールを送る機能は、Ver.5までの仕組みと、Ver.6以降の仕組みが大きく異なっています。ここでは前者を「旧アーキテクチャ」、後者を「新アーキテクチャ」と呼びます。Ver.6を実装では、旧アーキテクチャの実装は残して新アーキテクチャも組み込み、相互に切り替えて運用できるようにしました。また、過去のアプリケーションとの互換性を考慮して、既定値では旧アーキテクチャでの稼働を規定値にしました。Ver.10では、既定値を新アーキテクチャとしましたが、旧アーキテクチャに切り替えることは可能です。しかしながら、今後は新アーキテクチャが使われることがメインになると想定して、新アーキテクチャのみをこの文書では紹介します。旧アーキテクチャでのメール機能の利用については<a href="sendmail.html" target="_blank">メール送信(Ver.5)</a>あるいは<a href="sendmail6.html" target="_blank">メール送信(Ver.6)</a>をご覧ください。</p>
+                <p class="lead">メールはPHPのmail関数を使う方法と、メールサーバを利用する方法を使用できます。mail関数を使う場合UNIX系サーバならsendmailコマンドをたたく方法になります。SMTPサーバーを利用してメールを送信する場合、Ver.10までは<a href="https://swiftmailer.symfony.com/">swiftmailer</a>を利用します。Ver.11で、<a href="https://symfony.com/doc/current/mailer.html">symfony/mailer</a>に切り替えています。</p>
             </section>
             <section>
                 <h1>定義ファイルへの指定</h1>
@@ -192,6 +192,10 @@
                         <td>メール送信時に使用するサーバのポート</td>
                     </tr>
                     <tr>
+                        <td class="keyword">'protocol'</td>
+                        <td>メール送信時に使用するプロトコルで、省略すると'smtp'を選択する。<a href="https://symfony.com/doc/current/mailer.html#using-built-in-transports" target="_blank">こちら</a>のDSNのProtocolの指定となる（Ver.11で追加）</td>
+                    </tr>
+                    <tr>
                         <td class="keyword">'username'</td>
                         <td>メール送信時に認証で使用するユーザー名</td>
                     </tr>
@@ -201,7 +205,7 @@
                     </tr>
                     <tr>
                         <td class="keyword">'encryption'</td>
-                        <td>通信処理の暗号化をする場合にその方法を指定する。'ssl'、あるいは'tls'を指定する</td>
+                        <td>通信処理の暗号化をする場合にその方法を指定する。'ssl'、あるいは'tls'を指定する（Ver.11以降は無視される）</td>
                     </tr>
                     </tbody>
                 </table>
@@ -227,9 +231,9 @@
         array(   // Options
             'formatter' =&gt; array(...),
             'smtp' =&gt; array(
+                'protocol' =&gt; 'smtp',
                 'server' =&gt; 'mysmtp.msyk.net',
                 'port' =&gt; 587,
-                'encryption' =&gt; 'tls',
                 'username' =&gt; 'msyktest@msyk.net',
                 'password' =&gt; 'oshienai',
             )
@@ -257,17 +261,29 @@
                 <p>Windowsの場合、mail関数はSMTP利用するので、php.iniにサーバー情報などを書くことで対処できます。従って、'smtp'の指定やparams.phpファイルでの指定は一般には不要ですが、もし設定すれば、mail関数ではなく、swiftmailによるメール送信ができます。</p>
             </section>
             <section>
-                <h1>Gmailのアカウントでメール送信する場合</h1>
-                <p>"server"キーの値は、"smtp.gmail.com" としてください。"port"キーの値は、"587"としてください。さらに"encryption"キーは、"tls"とします。"username"キーの値は、ユーザー名を指定しますが、メールアドレスそのものを指定します。"password"キーはパスワードそのものを指定します。params.phpファイルに指定する場合の例を示します。</p>
+                <h1>Gmailのアカウントでメール送信する場合（Ver.11以降）</h1>
+                <p>Gmailへの送信は、symfony/mailerの機能を使って送信します。ライブラリの「symfony/google-mailer」は、INTER-Mediatorのcomposer.jsonファイルに記述済みなので、通常はすでにインストールされているはずです。設定としては、prtocol、username、passwordのみを指定してください。serverに相当する値は背後で自動的にdefaultになります。params.phpファイルに指定する場合の例を示します。なお、パスワードはログインのためのパスワードではなく、<a href="https://support.google.com/accounts/answer/185833?hl=ja" target="_blank">AppPassword</a>によって発行されたコードを指定します。</p>
 <div class="code"><pre><code>$sendMailSMTP = array(
-    "server" => "smtp.gmail.com",
-    "port" => 587,
-    "encryption" => "tls",
+    "protocol" => "gmail+smtp",
     "username" => "msyk.nii83@gmail.com",
     "password" => "himitsunopassword",
 );</code></pre></div>
-                <p>定義ファイルやparams.phpに上記の2つのSMTP送信に関するパラメータを設定するとメールが送信できますが、できない場合には、<a href="https://support.google.com/accounts/answer/6010255?hl=ja" target="_blank">こちら</a>の記述に従って、「安全性の低いアプリのアクセス」を有効にします。この設定が「有効」になっていないと、SMTPサーバーが受け付けません。相当以前はこれが既定値で「有効」になっていましたが、ある時期からは「無効」が既定値になっているようですので、以前は送ることができたという方も、この設定は必ず確認をしてみてください。</p>
            </section>
+            <section>
+                <h1>AWSのSESでメール送信する場合（Ver.11以降）</h1>
+                <p>AWSのSES（Simple Email Service）での送信にはSMTPも利用できますが、APIを使った送信も可能です。送信処理は、symfony/mailerの機能を使って送信します。ライブラリの「symfony/amazon-mailer」は、INTER-Mediatorのcomposer.jsonファイルに記述済みなので、通常はすでにインストールされているはずです。設定としては、prtocol、username、passwordのみを指定してください。serverに相当する値は背後で自動的にdefaultになります。params.phpファイルに指定する場合の例を示します。なお、アクセスキーとシークレットキーは、AWSのIAMで作成したユーザに対して発行されたものを指定します。このユーザには、アクセス許可としてAmazonSesSendingAccessを指定します。</p>
+<div class="code"><pre><code>$sendMailSMTP = array(
+    "protocol" => "ses+https",
+    "username" => "yourACCESSKEY",
+    "password" => "yourSECRETKEY",
+);</code></pre></div>
+<p>AWS SESの利用にはいくつかポイントがあります。まず、Verified AddressというところにFromに指定するメールアドレスを登録します。ここに登録しないとエラーとなります。登録時、そのメールアドレスに対して確認メールが送信され、そこに記載されたリンクをクリックしないといけないので、メールの受信がができるアドレスである必要があります。そして、サービスを利用した段階では、SES自体がサンドボックスモードになっていて、Fromだけでなく送信先もVerified Addressである必要があります。原則として、サンドボックスモードでメール送信のテストをするので、必要なアドレスを全部登録しておきます。そして、実際に運用する段階で、プロダクションモードに変更しますが、設定だけではできず、Amazon側に申請する必要があります。メール送信の頻度や内容などを比較的詳しくレポートしないと追加情報を求められるので、そのつもりで申請に臨みます。また、申請は人間による処理をしているようで、即座に反映はされませんので注意が必要です。</p>
+<p>symfony/mailerは既定値では、Irelandのリージョンつまり、eu-west-1を利用します。Verified Addressはリージョンごとに設定されるので、この設定とメーラが利用するリージョンを合わせないといけません。もし、東京リージョンをメール送信で利用したいのであれば、'server'キーの値に「default?region=ap-northeast-1」を指定します。そうすれば、東京リージョンに設定したVerified Addressでメール送信が可能です。</p>
+           </section>
+            <section>
+                <h1>symfony/mailerがサポートするプロトコル（Ver.11以降）</h1>
+                <p>symfony/mailerのドキュメントにある<a href="https://symfony.com/doc/current/mailer.html#using-a-3rd-party-transport" target="_blank">Using a 3rd Party Transport</a>はもちろんサポートしていますが、追加のプロトコルを利用するためにはライブラをインストールしなければなりません。INTER-Mediatorは既定値ではGmailとAWS SESだけをインストールしてあります。</p>
+            </section>
             <section>
                 <h1>ファイルを添付する</h1>
                 <p>ファイルを1つだけ追加できます。添付するには、media-root-dirキーの指定が必要です。そして、media-root-dirキーと、attachmentキーから得られるパスを繋いだ絶対パスのファイルを添付します。attachmentキーに「@@フィールド名@@」を用いてフィールド名を指定した場合、そのフィールドは、ファイルのアップロードコンポーネントを利用してアップロードした場合に自動的に設定されるパス名であることを想定しています。</p>
