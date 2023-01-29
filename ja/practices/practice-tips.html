@@ -99,12 +99,14 @@
             <section>
                 <h1>ページ移動時に「保存されない」場合の対処</h1>
                 <p>一覧と詳細ページを別々に作っている場合、詳細から一覧のページに移動する「戻る」ボタンを独自に設置しなければなりません。navi-controlを使えば自動的に用意しました。その場合、シンプルなリンクやlocation.href属性への代入等を行うことが簡単な方法ですが、詳細ページに編集可能テキストフィールドやテキストエリアがある場合には、それらの値が“場合によって”保存されないことがあります。これは、「戻る」ボタンをクリック時に編集中のテキストフィールドからフォーカスが外れて、テキストフィールドの更新のためのデータベースアクセスがスタートするからです。そのアクセスが終了しない間に一覧ページに移動すると、更新処理が失敗して更新がかからず、「保存されていない」と思ってしまいます。この場合、更新処理が終わってからページ移動をするようにします。例えば、戻るボタンのonclickに以下のようなmovePage関数の呼び出しを設置します。URLは引数にしましたが、固定文字列でもいいでしょう。IMLibQueue.setTaskにキューに入れる処理を記述しますが、その中ではキューを進めるために、引数で渡されたクロージャを呼びだすcomplete()を書きます。そして、setTaskの2、3番目の引数を、false、trueと記述します。これがあれば、優先度の低いキューとなり、更新処理が終わるのを確実に待って、この場合はlocation.hrefへの代入が行われます。</p>
-                <div class="code"><pre><code>function movePage($url) {
+                <div class="code"><pre><code>function movePage(url) {
   IMLibQueue.setTask((complete) => {
     complete()
-    location.href = $url
+    location.href = url
   }, false, true)
 }</code></pre></div>
+            <p>Ver.11より、APIを増やしました。上記と同じことが、以下の１行で実行可能です。</p>
+            <div class="code"><pre><code>INTERMediator.moveAnotherURL(url)</code></pre></div>
             </section>
             <section>
                 <h1>「クリックを受け付けない場合がある」と感じた時の対処</h1>

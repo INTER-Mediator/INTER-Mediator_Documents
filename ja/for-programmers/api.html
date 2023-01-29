@@ -232,6 +232,11 @@
         <p>URLの中のパラメータを取り出し、パラメータ名をキーとしたオブジェクトを返す。たとえば、「http://domain.name/page.html?a=1&b=2」というページなら、返り値は {a:1, b:2}となる。</p>
       </section>
       <section>
+      <h1>安全に別のページに移動する</h1>
+      <h4>INTERMediator.moveAnotherURL(url[, task])</h4>
+     <p>location.hrefに文字列を代入することで別のページに移動できますが、フィールドの更新の途中かもしれません。このメソッドを利用すれば、更新処理を全て終えるのを待って引数urlで指定する別のページに移動できます。また、クライアント間同期処理を行っている場合、別ページに移動する前にページに表示している内容に関する情報を削除したいのですが、このメソッドで移動する前に削除を行います。taskはページ移動前に行う処理をクロージャで記述できますが、省略可能です。</p>
+      </section>
+      <section>
         <h1>Post Onlyモードでのメソッド</h1>
         <h4>INTERMediatorOnPage.processingBeforePostOnlyContext = function(targetNode) {}</h4>
         <p>バリデーションが完了し、データベースへの書き込み前に呼び出される。falseを返すとデータベースの書き込み処理はキャンセルされる。引数targetにはPost Onlyモードのエンクロージャーへの参照が設定される。</p>
