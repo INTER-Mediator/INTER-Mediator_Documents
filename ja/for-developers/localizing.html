@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1></h1>
+                <p></p>
+                <h3></h3>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+let config = {
+  theme: 'msyk3',
+  transition: 'fade',
+  openParen: '#',
+  closeParen: '#'
+}
+
+let contents = [
+  {
+    presubtitle: 'INTER-Mediator Study Meeting 2023-#01',
+    maintitle: 'サイトのローカライズ',
+    subtitle: '##IMG|images/im-logo.png|120px|120px##',
+    coveritems: [
+      'January 18, 2022 (Wed)',
+      'Masayuki Nii, Ph.D. in Engineering',
+      '##IMG|images/email.png|30px|30px## nii@msyk.net '
+      + '##IMG|images/facebook.png|30px|30px## msyknii '
+      + '##IMG|images/twitter.png|30px|30px## msyk_nii'
+    ]
+  },
+  {
+    title: 'ローカライズとは？',
+    items: [
+      'ブラウザやOSの言語に合わせてメッセージを切り替える',
+      '##IMG|images/fig1.png|100%##',
+    ]
+  },
+  {
+    title: 'ローカライズ可能な箇所',
+    items: [
+      '①システムが生成する文字列(従来機能)',
+      '-PHPソースをいじる、params.phpで定義',
+      '-オブジェクトによってはコンテキスト定義で「カスタマイズ」できるが、これは「ローカライズ」ではなく、決め打ちの文字列',
+      '②特定のHTML要素内の文字列(新機能)',
+      '-params.phpで定義、オプション指定で定義',
+      '③データベースから取り出した文字列(新機能)',
+      '-params.phpで定義、オプション指定で定義',
+      'そのほかの手法',
+      '-言語ごとにHTMLページを分離する（サイトで利用している手法）'
+    ]
+  },
+  {
+    title: '①システムが生成する文字列(従来機能)',
+    items: [
+      'ボタン名やエラーメッセージなどは、PHPのコードに配列として埋められている',
+      '-src/php/Message/MessageStrings.phpクラスに英語の文字列を定義',
+      '-src/php/Message/MessageStrings_ja.phpクラスに日本語の文字列を定義',
+      '-新たな言語対応するには、日本語のクラスのコピーを作って値を変更する',
+      '文字テーブルをparams.phpでカスタマイズ',
+      '-##highlight|PHP|$messages[\'default\'][1022] = "We don\'t support Internet Explorer. We\'d like you to access by Edge or any other major browsers.";\n' +
+      '$messages[\'ja\'][1022] = "Internet Explorerは使用できません。Edgeあるいは他の一般的なブラウザをご利用ください。";##',
+      '[参考]カスタマイズ',
+      '-コンテキスト定義にあるbutton-namesキーの値',
+    ]
+  },
+  {
+    title: '②特定のHTML要素内の文字列(新機能)',
+    items: [
+      '要素にdata-im-locale属性を指定する',
+      '-##highlight|php|<h1 data-im-locale="page|title">Contact Management</h1>\n<th data-im-locale="category">category</th>##',
+      'オプション指定の「terms/言語名」以下に、上記属性名をキーとして値を記述',
+      '-##highlight|yaml|options:\n' +
+      '  terms:\n' +
+      '    en:\n' +
+      '      header: INTER-Mediator - Sample - Form Style/MySQL\n' +
+      '      category: Category\n' +
+      '      check: Check\n' +
+      '      page:\n' +
+      '        title: Contact Management (Sample for Several Fundamental Features\n' +
+      '    ja:\n' +
+      '      header: INTER-Mediator - サンプル - フォーム形式/MySQL\n' +
+      '      category: カテゴリ\n' +
+      '      check: チェック\n' +
+      '      page:\n' +
+      '        title: コンタクト先管理 (さまざまな機能を確認するためのサンプル)##'
+    ]
+  },
+  {
+    title: '③データベースから取り出した文字列(新機能)',
+    items: [
+      '要素にdata-im-locale属性を指定する',
+      '-##highlight|html|<select data-im="contact@kind" class="_im_test-contact-kind">\n' +
+      '  <option data-im="cor_way_kindname@kind_id@value cor_way_kindname@name_kind"\n' +
+      '     data-im-locale="way"\n' +
+      '     class="_im_test-cor_way_kindname-kind_id"></option>\n' +
+      '</select>##',
+      'オプション指定の「terms/言語名」以下に上記属性名をキーとして、データベースで得られる値と表示する値を配列で記述',
+      '-##highlight|yaml|options:\n' +
+      '  terms:\n' +
+      '    en:\n' +
+      '      way:\n' +
+      '        Calling: Telephone\n' +
+      '        Mail: Paper Mail\n' +
+      '        Email: Electronic Mail\n' +
+      '    ja:\n' +
+      '      way:\n' +
+      '        Calling: 電話\n' +
+      '        Mail: 手紙\n' +
+      '        Email: 電子メール##',
+    ]
+  },
+  {
+    title: 'ページファイルでの定義のポイント',
+    items: [
+      'ページファイルの要素に必要な設定',
+      '-data-im-localeがあり、data-imがない場合は、テーブルから取り出した文字列を単に要素のテキストとして設定する',
+      '-data-im-localeとdata-imの両方がある場合は、データベースから得られた値に対して、テーブルから取り出した文字列に置き換えて設定する',
+      'data-im-localeに関して',
+      '-単一のキーでも良いが、|で区切って階層化が可能',
+      '設定の記述',
+      '-ページにまたがる共通の用語は、params.phpに指定（$terms変数）',
+      '--##highlight|php|$terms = [\n' +
+      '    \'en\' => [\n' +
+      '        \'header\' => \'INTER-Mediator - Sample - Form Style/MySQL\',\n' +
+      '        \'page-title\' => \'Contact Management (Sample for Several Fundamental Features)\',\n' +
+      '    ],\n' +
+      '    \'ja\' => [\n' +
+      '        \'header\' => \'INTER-Mediator - サンプル - フォーム形式/MySQL\',\n' +
+      '        \'page-title\' => \'コンタクト先管理 (さまざまな機能を確認するためのサンプル)\',\n' +
+      '        \'category\' => \'カテゴリ\',\n' +
+      '        \'check\' => \'チェック\',\n' +
+      '   ],\n' +
+      '];##',
+      '-ページごとに用語テーブルを提供するならオプション設定が便利',
+    ]
+  },
+  {
+    title: 'ほかのフレームワークとざっくり比較',
+    items: [
+      'Laravelの場合',
+      '-オブジェクトのプロパティ、あるいはテンプレート内で使える変数を用意してくれる、クライアントの言語に応じて値の文字列が変わる',
+      'Laravelと比較してINTER-Mediatorは...',
+      '-ローカライズされていないページをちょっとずつローカライズできる',
+      '-データベースの値のローカライズがやりやすい',
+      '-プログラミング言語によるプログラミングが不要、配列を構成するだけで良い',
+      '-単数形/複数形の処理はない',
+    ]
+  },
+  {
+    title: 'まとめ',
+    fig3: "images/qrcode_presen.msyk.net.png",
+    items: [
+      '-ブラウザの言語ごとに異なる文字列を表示できるようになった',
+      '-ページ上のスタティックな文字列はもちろん、データベースから得られる値を言語ごとに異なるものにもできる',
+      '-言語のテーブルを用意すれば、あとは、HTML要素への属性の設定だけで可能',
+      '-以前からあるメッセージの言語対応機能の使いこなしも必要',
+      '-本日のプレゼン→',
+   ]
+  },
+]                <div class="code"><pre><code></code></pre></div>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>

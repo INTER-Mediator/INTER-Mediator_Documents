@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1>定義ファイルについて</h1>
+                <p>INTER-Mediatorは、HTMLのテンプレートである「ページファイル」と、データベースとのやり取りなどの動作を規定する「定義ファイル」を用意することで、データベースと連動したWebページを作成することができるフレームワークです。レポジトリのsamplesディレクトリにあるサンプルファイル内にある.phpファイルが定義ファイルの例であり、具体的な記述方法はサンプルファイルを参照していただくのが早いかと思われます。Ver.10までは、.phpファイルの定義ファイルだけをサポートしていましたが、Ver.11からは.yamlや.jsonもサポートするようになったので、改めて、定義ファイルに関することを１つのページにまとめました。</p>
+                <h3>定義ファイルについてのルール</h3>
+                <p>定義ファイルは、ページに必要なデータベース利用の設定をまとめたものというのが1つの視点であり、設定そのものに加えて、INTER-Mediatorのクライアント側のコードを提供するということも行なっています。フレームワークのダウンロードに関してはほぼ自動的に行われるので、原則としては定義ファイルには「ページ構築に必要な設定を記述する」ということで済みます。以下は典型的なページファイルの記述例です。この内容の.phpファイルをサーバ側に作成するので、処理自体はサーバサイドで行われます。ポイントは、最初にフレームワークの読み込みを行、その後に、IM_Entryという決められた関数の呼び出しを行うことです。</p>
+                <div class="code"><pre><code>&lt;?php
+require_once ('INTER-Mediator/INTER-Mediator.php');
+IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
+?&gt;</code></pre>
+                <p>この定義ファイルを、ページファイルで呼び出します。ページファイルと定義ファイルが同じディレクトリにあることが一般的ですので、scriptタグのsrcプロパティには、定義ファイルのファイル名だけを記述すれば良いでしょう。あとは、ページをロードするときに自動的に定義ファイルの設定に加えてフレームワーク自体もダウンロードされ、さらに自動的にページ構築に入ります。ページファイル構築については、『<a href="manual.html" target="_blank">INTER-MediatorによるWebアプリケーションの概要</a>』などをご覧ください。</p>
+                <div class="code"><pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;script src="sample_form_MySQL_include.php"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+                :                
+&lt;td&gt;&lt;input type="text" data-im="contact@datetime"/&gt;&lt;/td&gt;</code></pre></div>
+                <h3>定義ファイル内の記述例</h3>
+                <p>定義ファイルでは、IM_Entry関数を呼び出しますが、そこでは4つの引数があり、それぞれに配列や値などを設定することで、必要な動作のセットアップができるようになっています。そこに記述する内容は、『<a href="reference.html" target="_blank">定義ファイルの記述方法</a>』を参照してください。</p>
+                <p>以下は定義ファイルの例です。前述のように、IM_Entry関数の引数に変数を割り当てて、変数に代入しても良いのですが、設定は１箇所だけに記述すれば良いので、引数に配列をそのまま記述する方が手軽だと思われます。最初の引数をコンテキスト定義と呼んでいます。最初の引数は、コンテキスト定義の配列を指定します。コンテキスト定義自体は決められたキーワードを使った連想配列で指定します。以下の例では3つのコンテキストを定義しています。コンテキストは、nameキーの値で参照されるので例えば、person、contact、contact_wayという3つのコンテキストがあると認識します。IM_Entryの2つ目の引数は、オプション設定と呼ばれ、利用しているページ全体に対する設定を記述できます。ここでも決められたキーワードを利用した連想配列を記述しますが、以下の例では認証に関する設定だけが行われています。3つはデータベースへの接続設定ですが、設定はアプリケーション全体で使うことが多いため、params.phpファイルに指定するということが一般的です。ここでも連想配列で指定しますが、利用しているのがPDO、つまり、MySQLやPostgreSQLといったSQLサーバを使っていることを明記するために、エンジンの種類だけをここでは記述しています。4つ目の引数は整数を指定し、デバッグモードで動かすかどうかを指定しています。</p>
+                <div class="code"><pre><code>require_once('../../INTER-Mediator.php');
+IM_Entry(
+    [
+        [
+            'records' =&gt; 1,
+            'paging' =&gt; true,
+            'name' =&gt; 'person',
+            'key' =&gt; 'id',
+            'query' =&gt; [['field'=&gt;'location', 'operator'=&gt;'&gt;', 'value'=&gt;'200'],],
+            'sort' =&gt; [['field' =&gt; 'id', 'direction' =&gt; 'asc'],],
+            'repeat-control' =&gt; 'insert delete',
+        ],
+        [
+            'name' =&gt; 'contact',
+            'key' =&gt; 'id',
+            'relation' =&gt; [
+                array('foreign-key' =&gt; 'person_id', 'join-field' =&gt; 'id', 'operator' =&gt; '=')
+            ],
+            'repeat-control' =&gt; 'insert delete',
+        ],
+        [
+            'name' =&gt; 'contact_way',
+            'key' =&gt; 'id',
+        ],
+    ],
+    [
+        'authentication' =&gt; array( // table only, for all operations
+            'user' =&gt; array('user1'), // Itemize permitted users
+            'group' =&gt; array('group2'), // Itemize permitted groups
+            'authexpired' =&gt; '100000', // Set as seconds.
+            'storing' =&gt; 'credential',
+        ],
+    ],
+    ['db-class' =&gt; 'PDO'],
+    false
+);</code></pre></div>
+
+                <h1>YAMLによる定義ファイル</h1>
+                <p>前述のPHPで記述した定義ファイルは、PHPで記述するとは言うものの、事実上、連想配列の情報であり、ほぼスタティックなデータを供給することで事は足りるため、プログラムを行なって指定する必要はありません。そのため、PHPでは記述できるものの宣言的な記述による定義ファイルであると言えます。</p>
+                <h3>YAMLで記述する定義ファイル</h3>
+                <p>一方、INTER-Mediator Ver.11よりYAMLにより定義ファイルを記述できるようになりました。つまり、形態上も宣言的な記述であるということが言えるようになったのです。その場合、ページファイルの指定も若干変わります。前に示したPHPの定義ファイルと同等なYAMLファイルの定義ファイルは以下の通りです。ここでは、INTER-Mediator自体の読み込みや、IM_Entry関数の呼び出しは記述しません（記述できないです）。PHP版のIM_Entryの引数に与えている内容のみを、YAMLで記述します。ただし、4つの引数それぞれに対する情報は、contexts、options、connection、debugというキーを記述します。これらのキーワード以外は、PHP版と同等のキーワードが利用できます。なお、ファイル名は任意ではありますが、拡張子は.yamlないしは.ymlにします。</p>
+                <div class="code"><pre><code>contexts: 
+    -   name: person
+        records: 1
+        paging: true
+        key: id
+        query: [{field: location, operator: &gt;, value:200}]
+        sort: [{field: id, direction: asc}]
+        repeat-control: 'insert delete'
+    -   name: contact
+        key: id
+        relation:
+            -   foreign-key: person_id
+                operator: '='
+                join-field: id
+        repeat-control: 'insert delete'
+    -   name: contact_way
+        key: id
+options:
+    authentication:
+        user: [user1]
+        group: [group2]
+        authexpired: '100000'
+        storing: credential
+connection:
+    db-class: PDO
+debug: false</code></pre></div>
+                <h3>YAMLの定義ファイルをページファイルで指定する</h3>
+                <p>PHP版の定義ファイルだと、ページファイル側でscriptタグで読み込む必要がありました。同様に、定義ファイルの内容をページファイルに反映させるために、YAML版でもscriptファイルで読み込みが必要になります。そのとき、hrefは定義ファイルそのものではなく、INTER-Mediatorのルートにあるindex.phpを指定します。以下、INTER-Mediatorフォルダがどこにあるのかに応じた例を記述します。実際には、Webサーバのドキュメントルートからの絶対パスを記述することがわかりやすいと思われますが、もちろん、相対パスでも構いません。INTER-Mediatorディレクトリのルートにあるindex.phpをともかく参照します。</p>
+                <div class="code"><pre><code># ドキュメントルートにINTER-Mediatorフォルダがある場合
+&lt;script src="/INTER-Mediator/index.php"&gt;&lt;/script&gt;
+# /libにINTER-Mediatorフォルダがある場合
+&lt;script src="/lib/INTER-Mediator/index.php"&gt;&lt;/script&gt;
+# /lib/srcにINTER-Mediatorフォルダがある場合
+&lt;script src="/lib/src/INTER-Mediator/index.php"&gt;&lt;/script&gt;
+# アプリケーション形式の場合（composerでINTER-Mediatorをインストール）
+&lt;script src="/vendor/inter-mediator/inter-mediator/index.php"&gt;&lt;/script&gt;</code></pre></div>
+                <p>この場合、YAMLファイル自体をどうやって認識するかが問題になります。scriptタグで、INTER-Mediator/index.phpを読み出す場合、定義ファイル名にはページファイル名と同じ名前をつけるのが一番手軽な方法になります。つまり、「ページファイル名.(yml|yaml|json)」という定義ファイル名にするということです。そして、その名前のファイルを、以下の順番で検索をします。以下を、「定義ファイルの検索パス」と参照します。</p>
+<ul>
+<li>ドキュメントルート</li>
+<li>ページファイルのあるディレクトリ</li>
+<li>params.phpの$yamlDefFilePool変数で指定した絶対パスのディレクトリ</li>
+</ul>
+                <p>定義ファイルのファイル名が、ページファイルと同一ではない場合、INTER-Mediator/index.phpのURLにdeffile=というキーでパラメータを設定して、ファイルへの相対パスを記述します。以下はその記述例です。そして、定義ファイルの検索パスに関して順番にチェックして、存在すればそれを定義ファイルとして使います。検索パスのそれぞれの場所からの相対パスを、deffileキーの値として指定するの基本となります。</p>
+                <div class="code"><pre><code>&lt;script src="/lib/src/INTER-Mediator/index.php?deffile=path_to/def_file.yaml"&gt;</script&gt;</code></pre></div>
+                <p>ページファイルと定義ファイルをYAMLベースで構築する方法としては、まずは、それら2つのファイルを同一フォルダに置き、同一mのファイル名で定義するのが基本です。そうすれば、ページファイル側でのscriptタグでは、単にINTER-Mediator/index.phpへの参照をするだけで構いません。YAMLファイルの置き場所やあるいはファイル名をページファイルと異なるものにしたい場合には、deffile=を指定したり、検索パス上のどこに配置するかを検討することになります。</p>
+                <h1>PHPファイルだが設定をYAMLで定義する方法</h1>
+                <p>定義そのものはYAMLで記述するものの、それをPHPファイルに配置することも可能です。そうすれば、PHPファイルでの定義ファイルと同様、ページファイルのscriptタグからは単にPHPの定義ファイルを呼び出せば良いでしょう。定義ファイルに機能を組み込むような方法もあり、例えば、Interne Explorerを排除する方法としては有効な方法になります。その場合は、プログラムがかけるPHPファイルが前提になるので、こうした手法も必要になってくるかもしれません。定義をYAMLで記述するPHPファイルの例は以下のようなものです。最初にフレームワークを読み込むことが必要で、続いて、変数$yamlにYAMLでコンテキスト定義などを構築します。そして、IM_Entry_YAML関数にYAMLのテキストを渡せばOKです。</p>
+                <div class="code"><pre><code>&lt;?php
+
+require_once('/../../INTER-Mediator.php'); // INTER-Mediatorを読み込む
+$yaml = &lt;&lt;&lt;EOYAML // YAMLの定義をHereDoc形式で変数に代入
+contexts: 
+    -   name: person
+        records: 1
+        paging: true
+        key: id
+        query: [{field: location, operator: &gt;, value:200}]
+        sort: [{field: id, direction: asc}]
+        repeat-control: 'insert delete'
+    -   name: contact
+        key: id
+        relation:
+            -   foreign-key: person_id
+                operator: '='
+                join-field: id
+        repeat-control: 'insert delete'
+    -   name: contact_way
+        key: id
+options:
+    authentication:
+        user: [user1]
+        group: [group2]
+        authexpired: '100000'
+        storing: credential
+connection:
+    db-class: PDO
+debug: false
+EOYAML;
+IM_Entry_YAML($yaml); // IM_Entry_YAML関数を呼び出す </code></pre></div>
+                <h1>JSONによる定義ファイル</h1>
+                <p>YAMLによる定義ファイルについてここまでで説明したことは、全てJSONにも適用可能です。JSONはYAMLをより厳密にしたものであり、YAMLのパーサはJSONもパースすることできるので、あとはどちらで記述するかは好みの問題となるでしょう。JSONで記述した定義ファイルの例を挙げておきます。他の説明は、YAMLに関する説明を参照してください。</p>
+                <div class="code"><pre><code>[
+    [
+        {
+            "name": "person",
+            "records": 1,
+            "paging": true,
+            "key": "id",
+            "query": [
+                {
+                    "field": "location",
+                    "operator": ">",
+                    "value": "200"
+                }
+            ],
+            "sort": [
+                {
+                    "field": "id",
+                    "direction": "asc"
+                }
+            ],
+            "repeat-control": "insert delete",
+            }
+        },
+        {
+            "name": "contact",
+            "key": "id",
+            "relation": [
+                {
+                    "foreign-key": "person_id",
+                    "join-field": "id",
+                    "operator": "="
+                }
+            ],
+            "repeat-control": "insert delete"
+        },
+        {
+            "name": "contact_way",
+            "key": "id"
+        },
+    ],
+    {
+        "authentication": {
+            "user": [
+                "user1"
+            ],
+            "group": [
+                "group2"
+            ],
+            "authexpired": "100000",
+            "storing": "credential"
+        }
+    },
+    {
+        "db-class": "PDO"
+    },
+    false
+]</code></pre></div>
+                <h1>定義ファイルにプログラムを追加する</h1>
+                <p>PHPファイルで定義ファイルを構築すれば、単にIM_Entry関数を呼び出す以外にさまざまなプログラムを追加でき、場合によっては非常に便利に利用できます。ここでは、プログラム例をいくつか紹介しましょう。</p>
+                <h3>Internet Explorerを排除する</h3>
+                <p>INTER-Mediatorでは、ブラウザのバージョンを含めた判定が可能であり、一定以上のバージョンでないと処理に入らないような仕組みがあります。しかしながら、INTER-Mediator Ver.6以降はモダンなJavaScriptを利用しているため、Internet Explorerでは読み込むと即座にエラーになり、ブラウザ判定にすら入れません。2022年6月16 日にサポートが終了し、もっと以前よりも「使わない方が良い」ことをMicrosoft自身が頻繁にアナウンスしていることもあって、INTER-Mediator Ver.6以降はサポートしていない点については一定の理解が得られると思いますが、それでも、エラーで止まるのではなく、何かしら小綺麗なメッセージを出したいと思うところです。その場合、定義ファイルの冒頭で、以下のようにブラウザの判定を行い、Internet Explorerであれば別のページ（ここでは/ie.html）に強制的に移動してしまうようにする方法が有効です。定義ファイル自体の読み込みをscriptタグで実施していることを利用して、クライアントの挙動をサーバ側で制御してしまおうという手法です。</p>
+                <div class="code"><pre><code>&lt;?php
+$userAgent = $_SERVER['HTTP_USER_AGENT'];
+if (stripos($userAgent, \'MSIE\') !== false || stripos($userAgent, \'Trident\') !== false) {
+    echo "location.href=\'/ie.html\';";
+    exit;\n' +
+}\n' +
+// 以下は通常の定義ファイルと同様
+require_once('lib/INTER-Mediator/INTER-Mediator.php');
+
+'IM_Entry(....</code></pre></div>
+                <h3>一定の記述でページの表示を行わなくする</h3>
+                <p>決められた日時になると、ページが見えなくなるとか、あるいは逆の用途に、PHPの定義ファイルにプログラムを記述する方法があります。以下のプログラム例はコード内に記述された日時を超えると/endofservice.htmlにリダイレクトされます。また、定義ファイルの処理を行なっていないので、ページをそれ以前に表示できていたとしても、この時刻以降は更新処理ができないので、フィールドを描き戻してもエラーになりデータベースの更新はなされません。</p>
+                <div class="code"><pre><code>$today = new DateTime();
+$loginLimit = new DateTime('2022-10-28 17:00:00');
+if ($loginLimit &lt; $today) {
+    echo "location.href='/endofservice.html';";
+    exit;
+}</code></pre></div>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>

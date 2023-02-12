@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1></h1>
+                <p></p>
+                <h3></h3>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+let config = {
+  theme: 'msyk3',
+  transition: 'fade',
+  openParen: '#',
+  closeParen: '#'
+}
+
+let contents = [
+  {
+    presubtitle: 'INTER-Mediator Study Meeting 2022-#11',
+    maintitle: 'データベースの内容を##BR##エクスポート',
+    subtitle: '##IMG|images/im-logo.png|120px|120px##',
+    coveritems: [
+      'November 17, 2022 (Thu)',
+      'Masayuki Nii, Ph.D. in Engineering',
+      '##IMG|images/email.png|30px|30px## nii@msyk.net '
+      + '##IMG|images/facebook.png|30px|30px## msyknii '
+      + '##IMG|images/twitter.png|30px|30px## msyk_nii'
+    ]
+  },
+  {
+    title: '現状のエクスポートとVer.11の新機能',
+    items: [
+      'すでに「エクスポート」は実装可能',
+      '-「コンテキストファイル?media=class://クラス名/コンテキスト名/条件」により、エクスポートの機能は実装できている',
+      '-エクスポートに限らず利用できる機能ではあるが、必ず、カスタムクラスを定義しなければならなかった',
+      'より簡単にエクスポートの実現ができるようになった',
+      '-汎用エクスポートクラスをINTER-Mediatorに内蔵',
+      '-エクスポートクラスのカスマイズも可能',
+    ]
+  },
+  {
+    title: 'いちばん簡単なエクスポートの実装',
+    items: [
+      'コンテキストファイル?media=class://クラス名/コンテキスト名(/条件...)',
+      '-上記のURLへのリンクを作成する。例えば、aタグやbuttonタグ',
+      '-クラス名は「INTERMediator\\DB\\Export」。これはINTER-Mediator内部にすでに存在している',
+      '-定義ファイルに存在するコンテキスト名を指定すれば良い',
+      '結果として得られるもの',
+      "-コンテキストのデータをShift-JIS化したCSVファイル",
+      "-ヘッダは、フィールド名がそのまま入る",
+      "-コンテキストに存在する全レコード、全フィールドが出力される。フィールドの順番はデータベースからの出力通り",
+      "-コンテキストに定義した条件や並べ替えの定義が適用されるが、さらに、URLに条件を追加することもできる"
+    ]
+  },
+  {
+    title: '実装例',
+    items: [
+      "サンプル(PDF Generating, Exporting ...)",
+      "-/samples/Sample_pdf/list_detail_MySQL.html",
+      '-コンテキストファイルにコンテキスト「productlist」が定義されている',
+      '--##highlight|PHP|[\n' +
+      '  \'records\' => 10,\n' +
+      '  \'name\' => \'productlist\',\n' +
+      '  \'view\' => \'product\',\n' +
+      '  \'key\' => \'id\',\n' +
+      '  \'query\' => [[\'field\' => \'name\', \'value\' => \'%\', \'operator\' => \'LIKE\']],\n' +
+      '  \'sort\' => [[\'field\' => \'name\', \'direction\' => \'ASC\'],],\n' +
+      '],##',
+      "-以下のようなリンクをページファイルに作成",
+      "--##highlight|HTML|<a href=\"contexts_MySQL.php?media=\nclass://INTERMediator\\DB\\Export/productlist\">\n<button>Export (Default)</button></a>##"
+    ]
+  },
+  {
+    title: 'エクスポートのカスタマイズ',
+    items: [
+      'Exportクラスを継承した独自のクラスを作る',
+      "-/samples/Sample_pdf/ExportSample.php",
+      "-ファイルは定義ファイルと同じディレクトリが手軽",
+      "-カスタマイズ可能なプロパティとメソッド",
+      '-##highlight|PHP|class ExportSample extends INTERMediator\\DB\\Export\n' +
+      '{\n' +
+      '    protected $keysAndLabels = []; // array of field name => column name\n' +
+      '\n' +
+      '    protected $encoding = "UTF-8";\n' +
+      '    protected $fileNamePrefix = "Exported-";\n' +
+      '    protected $fileExtension = "csv";\n' +
+      '    protected $fieldSeparator = \',\';\n' +
+      '    protected $quote = \'"\';\n' +
+      '    protected $endOfLine = "\\n";\n' +
+      '\n' +
+      '    public function processing($contextData, $options) {}\n' +
+      '}##',
+    ]
+  },
+
+  {
+    title: 'カスタマイズの方法',
+    items: [
+      'レコードの絞り込み、レコードの順序',
+      '-コンテキスト定義、URLの末尾に指定する',
+      'フィールドの制限・順序、ラベルのカスタマイズ',
+      '-##highlight|PHP|protected $keysAndLabels = [\n' +
+      '  "unitprice" => "単価","name" => "商品名","taxrate" => "消費税率",\n' +
+      '];##',
+      'エンコード',
+      '-##highlight|PHP|protected $encoding = "SJIS";##',
+      '出力ファイルのスペック',
+      '-プロパティで、ファイル名と拡張子を指定。ファイル名の後に日付時刻をくっつけた数字が付与される',
+      '-プロパティには、フィールド区切り、行区切り、クォートの文字を指定可能'
+    ]
+  },
+
+  {
+    title: '任意の出力を得る方法',
+    items: [
+      'processingメソッドを自分で書く',
+      '-##highlight|PHP|public function processing($contextData, $options) {}##',
+      '-引数に、コンテキストから得られたデータが配列でやってくる',
+      '-echo等で自由に出力すれば良く、それがファイルのないようになる',
+      '-league/csvを組み込んであるので、ライブラリを使うのが良い',
+      '-INTERMediator\\DB\\Exportクラスのコードを参考にすれば良い',
+      '-Exportクラスの出力処理を呼び出したいならparent::processing($data, $options)',
+    ]
+  },
+
+  {
+    title: '取組中：定義ファイルをYAMLファイルで供給',
+    items: [
+      '-##highlight|PHP|contexts:\n' +
+      '  - records: 3\n' +
+      '    name: productlist\n' +
+      '    view: product\n' +
+      '    table: product\n' +
+      '    key: id\n' +
+      '    paging: true\n' +
+      '    sort:\n' +
+      '      - field: unitprice\n' +
+      '        direction: ASC\n' +
+      '    navi-control: master\n' +
+      '    repeat-control: \'insert delete copy\'\n' +
+      '  - records: 1\n' +
+      '    name: productdetail\n' +
+      '    view: product\n' +
+      '    table: product\n' +
+      '    key: id\n' +
+      '    navi-control: detail-top\n' +
+      'options: { }\n' +
+      'connection:\n' +
+      '  db-class: PDO\n' +
+      'debug: false\n##']
+  },
+
+  {
+    title: '実装完了：メール送信ライブラリをsymfony/mailerへ変更',
+    items: [
+      '-原則、現状と互換あり',
+      '-Gmailの設定ができる',
+      '-Amazon Simple Email ServiceはAPI接続が可能',
+      '-ドキュメントへも反映ずみ',
+    ]
+  },
+  {
+    title: '取組中：E2Eテスト(End to End Test)',
+    items: [
+      'ブラウザを介してテストをすることをE2Eテストと呼ぶ',
+      '-現状は、Seleniumを利用してごくわずかな範囲のみをテスト',
+      'WebdriverIOを使うことにした',
+      '-Selenium Webdriverだけでなく、各種ドライバなどを自動的にインストールするなど、統合テスト環境として優れている',
+      '-JavaSriptベース、すなわちNode.jsベースのテスト開発環境',
+      'すでにスタートしているが、まだ全然...',
+      '-GitHubのINTER-Mediator/INTER-Mediator_Test',
+      '-本体とは別に、テスト環境を作る方がいいのではないかという判断'
+    ]
+  },
+  {
+    title: 'ディスカッション',
+    items: [
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+    ]
+  },
+]
+
+                <div class="code"><pre><code></code></pre></div>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>

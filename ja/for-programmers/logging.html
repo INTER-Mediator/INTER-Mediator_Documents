@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   by Masayuki Nii  msyk@msyk.net Copyright (c) 2014 Masayuki Nii, All rights reserved.
+ *
+ *   This project started at the end of 2009.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-developers">
+    <div class="container clearfix">
+        <div class="page-title">
+            <h1 id="pageTitle"></h1>
+        </div>
+        <ol id="breadcrumb" class="breadcrumb clearfix">
+        </ol>
+        <div class="docs-sidebar sticky clearfix">
+            <nav>
+                <ul id="pageIndex">
+                </ul>
+            </nav>
+        </div>
+        <article>
+            <section>
+                <h1></h1>
+                <p></p>
+                <h3></h3>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+let config = {
+  theme: 'msyk3',
+  transition: 'fade',
+  openParen: '#',
+  closeParen: '#'
+}
+
+let contents = [
+  {
+    presubtitle: 'INTER-Mediator Study Meeting 2022-#04',
+    maintitle: 'サーバ利用ログ作成機能の向上',
+    subtitle: '##IMG|images/im-logo.png|120px|120px##',
+    coveritems: [
+      'April 13, 2022 (Wed)',
+      'Masayuki Nii, Ph.D. in Engineering',
+      '##IMG|images/email.png|30px|30px## nii@msyk.net '
+      + '##IMG|images/facebook.png|30px|30px## msyknii '
+      + '##IMG|images/twitter.png|30px|30px## msyk_nii'
+    ]
+  },
+  {
+    title: 'Agenda',
+    items: [
+      '-サーバ利用のログ作成機能（2020-08）として発表した内容の更新',
+      '-ログ作成のカスタマイズ',
+      '-ログ作成対象の限定'
+    ]
+  },
+   {
+    title: 'サーバ利用ログの作成',
+    items: [
+      '監査目的のログ機能',
+      '-クライアントからサーバーへのリクエスト1つがログの1項目',
+      '-通信処理そのものを1件ずつ記録できる',
+      '-Apacheのアクセスログでは、INTER-MEdiator特有の情報が保存されない',
+      '得られる情報',
+      '-認証ユーザーと利用データ（コンテキストやパラメータ、取得データ）',
+      '-アクセス頻度',
+    ]
+   },
+  {
+    title: 'ログの作成のための設定',
+    items: [
+      'デフォルトはオフ、params.phpでPDO情報を指定して記録開始',
+      '-##highlight|PHP|$accessLogLevel = 2; // false: No logging, 1: without data, 2: with data\n' +
+      '$dbClassLog = $dbClass; // データベースへの接続情報\n' +
+      '$dbDSNLog = $dbDSN;\n' +
+      '$dbUserLog = $dbUser;\n' +
+      '$dbPasswordLog = $dbPassword;\n' +
+      '$recordingContexts = false; // ログを取りたいコンテキスト名の配列\n' +
+      '$recordingOperations = false; // ログを取りたいオペレーションの配列\n' +
+      '$dontRecordTheme = false; // テーマのアクセスをログに取るかどうか\n' +
+      '$dontRecordChallenge = false; // 認証のチャレンジをログに取るかどうか\n' +
+      '$dontRecordDownload = false; // ファイルのダウンロードをログに取るかどうか\n' +
+      '$dontRecordDownloadNoGet = false; // ダウンロード時に$_GETをログに取るかどうか\n' +
+      '$accessLogExtensionClass = \'LoggingExt\'; // 拡張クラスの名前##',
+    ]
+  },
+  {
+    title: 'ログを保存するスキーマ',
+    items: [
+      '##highlight|SQL|CREATE TABLE operationlog (\n' +
+      '\tid              INT AUTO_INCREMENT,\n' +
+      '\tdt              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n' +
+      '\tuser            VARCHAR(48),\n' +
+      '\tclient_id_in    VARCHAR(48),\n' +
+      '\tclient_id_out   VARCHAR(48),\n' +
+      '\trequire_auth    BIT(1),\n' +
+      '\tset_auth        BIT(1),\n' +
+      '\tclient_ip       VARCHAR(60),\n' +
+      '\tpath            VARCHAR(256),\n' +
+      '\taccess          VARCHAR(20),\n' +
+      '\tcontext         VARCHAR(50),\n' +
+      '\tget_data        TEXT,\n' +
+      '\tpost_data       TEXT,\n' +
+      '\tresult          TEXT,\n' +
+      '\terror           TEXT,\n' +
+      '\tcondition(N)    VARCHAR(50), // カスタマイズ用、フィールド名は任意\n' +
+      '\tfield(N)        TEXT, // カスタマイズ用、フィールド名は任意\n' +
+      '\tPRIMARY KEY(id)\n' +
+      ')\tCHARACTER SET utf8mb4, COLLATE utf8mb4_unicode_ci ENGINE=InnoDB;##'
+    ]
+  },
+  {
+    title: 'ログデータの例（read）',
+    items: [
+      "##highlight|javascript|{'id':'72', 'dt':'2020-08-12 11:35:50', 'user':'user1', \n" +
+      " 'client_id_in':'43342bbf6e295752847fee311262dc9393ae0ce0', \n" +
+      " 'client_id_out':'5ceba592ac317f662c1dcd42d8fb73fc7ed63664', \n" +
+      " 'require_auth':'0',\n" +
+      " 'set_auth':'1', \n" +
+      " 'client_ip':'::1',\n" +
+      " 'path':'/samples/Sample_webpage/include_authAll_MySQL.php',\n" +
+      " 'access':'read', \n" +
+      " 'context':'testtable',\n" +
+      " 'get_data':'', \n" +
+      " 'post_data':'['access' => 'read','name' => 'testtable',\n" +
+      "   'field_0' => 'dt1','field_1' => 'vc1','field_2' => 'vc1','field_3' => 'vc1','start' => '0',\n" +
+      "   'records' => '10000',\n" +
+      "   'clientid' => '43342bbf6e295752847fee311262dc9393ae0ce0',\n" +
+      "   'authuser' => 'user1',\n" +
+      "   'response' => 'ae5cfb247c89f8fc6208a854a006fd883fab475d46ca6918dc85d6ebe8ca1975',\n" +
+      "   'notifyid' => 'f58e365f01b1ce05303512e127d3bafddf446ca75b3ed534d38495b928419be0',]', \n" +
+      " 'result':'[\n" +
+      "   'dbresult' => 'Query result includes 1 records.', // データをなしに設定した場合\n" +
+      "   'resultCount' => '1',\n" +
+      "   'totalCount' => '1',\n" +
+      "   'getRequireAuthorization' => true,\n" +
+      "   'challenge' => '09cd7c80adebaab86b7e99ba54455354',\n" +
+      "   'clientid' => '5ceba592ac317f662c1dcd42d8fb73fc7ed63664',\n" +
+      "   'requireAuth' => false,\n" +
+      " ]', \n" +
+      " 'error':'', }##"
+    ]
+  }, {
+    title: 'ログデータの例（update）',
+    items: [
+      "##highlight|javascript|{\n" +
+      "  access: \"update\"\n" +
+      "  client_id_in: null\n" +
+      "  client_id_out: null\n" +
+      "  client_ip: \"::1\"\n" +
+      "  context: \"contact\"\n" +
+      "  dt: \"2022-04-08 10:46:03\"\n" +
+      "  error: null\n" +
+      "  get_data: null\n" +
+      "  id: 28\n" +
+      "  path: \"/samples/Sample_form/include_MySQL.php\"\n" +
+      "  post_data: \"[\n" +
+      "    access => update,\n" +
+      "    name => contact,\n" +
+      "    condition0field => id, condition0operator => =, condition0value => 1,\n" +
+      "    field_0 => summary, value_0 => Telephone2,\n" +
+      "    notifyid => ce3d9dc918bb5220091cda9a93a9f7a8765ef95e518cc4aabed0ece9e6327f72\n" +
+      "  ]\"\n" +
+      "  require_auth: null\n" +
+      "  result: \"[\n" +
+      "    dbresult => Query result includes 1 records.,\n" +
+      "    getRequireAuthorization => , requireAuth => \n  ]\"\n" +
+      "  set_auth: null\n" +
+      "  user: null\n" +
+      "}##"
+    ]
+  },
+  {
+    title: 'サーバ利用ログの活用',
+    items: [
+      'ログビューア /samples/Log_Support/MySQL_logviewer.html',
+      '-##IMG|images/logviewer.png|1050px|690px##'
+    ]
+  },
+  {
+    title: 'カスタマイズ',
+    items: [
+      '必要な情報を独立したフィールドに入れる',
+      '-フィールドはoperationlogテーブルに定義しておく',
+      '-クラス名は、params.phpの$accessLogExtensionClassに代入する',
+      "##highlight|javascript|class LoggingExt extends INTERMediator\\DB\\Support\\OperationLogExtension\n" +
+      "{\n" +
+      "    public function extendingFields()\n" +
+      "    {\n" +
+      "        return ['condition0','field0','field1']; // 追加するフィールドの配列\n" +
+      "    }\n" +
+      "\n" +
+      "    public function valueForField($field) // フィールドに対応する値を返す\n" +
+      "    {\n" +
+      "        if(strpos($field, 'condition') === 0) {\n" +
+      "            return isset($_POST['condition0value']) ? $_POST['condition0value'] : NULL;\n" +
+      "        } else if(strpos($field, 'field_') === 0) {\n" +
+      "            $n = substr($field, 6);\n" +
+      "            return isset($_POST['value_'.$n]) ? $_POST['value_'.$n] : NULL;\n" +
+      "        }\n" +
+      "    }\n" +
+      "}##"
+    ]
+  },
+  {
+    title: 'まとめ',
+    items: [
+      '-監査に利用できるログ機能を実装',
+      '-デフォルトはオフ、スキーマを用意しparams.phpの設定でオン',
+      '-クラスを定義することで必要なフィールドを追加することもできる',
+      '--会計ソフトに実装あり##LINK|https://github.com/msyk/IMApp_Account|https://github.com/msyk/IMApp_Account##',
+      '-簡単なビューアは用意したが、横長になるのでそのままでは使いにくい',
+      '-案件に合わせた「ビューア」を作る必要がある',
+    ]
+  }
+]
+
+                <div class="code"><pre><code></code></pre></div>
+            </section>
+        </article>
+    </div>
+</body>
+
+</html>

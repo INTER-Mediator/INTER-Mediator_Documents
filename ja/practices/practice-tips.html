@@ -222,11 +222,20 @@
     }
   }
 }</code></pre></div>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
             </section>
+            <section>
+                <h1>サーバーに応じて設定を変える</h1>
+                <p>params.phpファイルの設定について、データベース接続先が例えば手元ではlocalhostだけど、本番環境ではあるホスト名にしたいなど、稼働環境によって値を変えたい場合もあると思います。その場合は、PHPのhostname()関数を使って、params.php内でプログラムを記述します。例えば、params.phpにある$isSAML変数をホスト名によって切り替える方法はこのようなプログラムになります。hostname()の返り値は、そのホストにログインをしてhostnameコマンドを実施すれば得られます。</p>
+                <div class="code"><pre><code>$isSAML = ((gethostname() == \'inter-mediator.com\') ? true : false);</code></pre></div>
+            </section>
+            <section>
+                <h1>Webサーバーから起動されたくないPHPファイル</h1>
+                <p>cron等で稼働したり、メンテナンスで使うようなスクリプトは、Webサーバから起動されたくありません。念の為、Webサーバで起動されていない場合には何もしないで終わるような仕組みを組み込みたい場合は、php_sapi_name()関数を利用して判定可能です。Webサーバとして稼働させていれば、その返り値は 'server' になります。</p>
+                 <div class="code"><pre><code>if (strpos(php_sapi_name(), 'server') !== false) {
+    echo "Local execution only.";
+    exit;
+}</code></pre></div>
+           </section>
             <section>
                 <h1></h1>
                 <p></p>

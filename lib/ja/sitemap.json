@@ -277,5 +277,33 @@
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/sendmail10.html",
     "title": "メール送信(Ver.10)",
-    "breadcrumb": "メール送信(Ver.10)"
+    "breadcrumb": "メール送信"
+},
+{
+    "id": 40,
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/deffile.html",
+    "title": "定義ファイルの詳細",
+    "breadcrumb": "定義ファイルの詳細"
+},
+{
+    "id": 41,
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-developers/localizing.html",
+    "title": "ローカライズ",
+    "breadcrumb": "ローカライズ"
+},
+{
+    "id": 42,
+    "parent": "/ja/for-developers/",
+    "path": "/ja/for-programmers/exporting.html",
+    "title": "テーブル内容のエクスポート",
+    "breadcrumb": "エクスポート"
+},
+{
+    "id": 43,
+    "parent": "/ja/for-programmers/",
+    "path": "/ja/for-programmers/logging.html",
+    "title": "ローカライズ",
+    "breadcrumb": "データベース処理のログ記録"
 }]

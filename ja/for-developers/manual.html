@@ -66,7 +66,7 @@
                     <li>データベース接続など設定を記述したPHPファイル（「定義ファイル」と名付けます</li>
                 </ul>
                 <h3>定義ファイルの記述</h3>
-                <p>定義ファイルは、PHPのファイルにします。したがって、PHPの処理が可能なサーバーに配置しないといけません。定義ファイルでは、以下のように、INTER-Mediator.phpを読み込み、IM_Entry関数をコールします。この関数の引数の指定方法は、後で記述します。サンプルで言えば、sample_form_FMS_include.phpやsample_form_MySQL_include.phpなどのファイルが、定義ファイルに相当します。定義ファイルに記述できる内容は<a href="reference.html">こちら</a> のページにまとめてあります。</p>
+                <p>定義ファイルは、PHPのファイルにします。したがって、PHPの処理が可能なサーバーに配置しないといけません。定義ファイルでは、以下のように、INTER-Mediator.phpを読み込み、IM_Entry関数をコールします。この関数の引数の指定方法は、後で記述します。サンプルで言えば、sample_form_FMS_include.phpやsample_form_MySQL_include.phpなどのファイルが、定義ファイルに相当します。定義ファイルに記述できる内容は<a href="reference.html">こちら</a> のページにまとめてあります。定義ファイルについては、『<a href="deffile.html" target="_blank">定義ファイルの詳細</a>』もご覧ください。</p>
                 <div class="code"><pre><code>&lt;?php
 require_once ('INTER-Mediator/INTER-Mediator.php');
 IM_Entry( $tableDefs, $optionDefs, $dbDefs, true );
