@@ -60,198 +60,41 @@
         </div>
         <article>
             <section>
-                <h1></h1>
-                <p></p>
-                <h3></h3>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-let config = {
-  theme: 'msyk3',
-  transition: 'fade',
-  openParen: '#',
-  closeParen: '#'
-}
+                <h1>エクスポート機能の実装</h1>
+                <p><a href="media.html" target="_blank">メディアクラスとその拡張点</a>において、「データ生成を指定したクラスにさせ生成結果を返す」という方法を利用することで、テーブルの内容やあるいはビューの内容などをCSVファイル等にエクスポートすることが可能です。そのような拡張クラスを作成すれば良いのですが、汎用的なエクスポートクラスを利用することで、より簡単にエクスポートを実装することができます。</p>
+                <h1>汎用クラスを用いたエクスポート</h1>
+                <p>aタグや、あるいはbuttonタグをクリックした後に、以下のリンクにアクセスします。そのページで使っている定義ファイルへのパスは、scriptタグのsrcに指定しているものと同じです。そのリンクにmediaパラメータを指定しますが、そのキーの値は、プロトコルとして「class」を指定し、続いて汎用エクスポートクラスのパスとして「INTERMediator\DB\Export」を指定し、さらにパスに利用するコンテキスト名をつなげます。コンテキスト名は、定義ファイルに定義されたコンテキストである必要があります。</p>
+<div class="code"><pre><code>定義ファイル?media=class://INTERMediator\DB\Export/コンテキスト名(/条件...)</code></pre></div>
+                <p>これにより、指定したコンテキストのデータを含むShift-JIS化したCSVファイルがダウンロードされます。aタグ等をクリックしても、ページ遷移はしないはずです。そのほか、CSVファイルの1行目にはフィールド名がそのまま入り、2行目からデータとなります。1つのコンテキストの結果が全部得られます。つまり、コンテキストに存在するフィールド全て、レコード全てが出力されます。ファイル名は「Exported-日付時刻」となります。また、改行コードは、0x0Aのみとなります。ページ上に表示しているコンテキストだと、例えば、20レコードずつ表示する設定になっていると思います。しかしながら、エクスポートでは全部のレコードが欲しいことになるかと思います。その意味では、ページ上のコンテキストとは別に、エクスポート用のコンテキストを用意する方が、ニーズに合致した結果が得られるでしょう。</p>
+                <h3>エクスポート機能のカスタマイズ</h3>
+                <p>エクスポートの処理をカスタマイズすることができます。例えば、以下のようなExportSampleクラスを、定義ファイルと同じディレクトリに、ExportSample.phpというファイル名で保存したとします。そうすれば、前述のエクスポートのリンク先は「定義ファイル?media=class://ExportSample/コンテキスト名」のようになります。既存のエクスポートのためのクラスを拡張しており、その動作を変更できるということになります。</p>
+<div class="code"><pre><code>&lt;?php
 
-let contents = [
-  {
-    presubtitle: 'INTER-Mediator Study Meeting 2022-#11',
-    maintitle: 'データベースの内容を##BR##エクスポート',
-    subtitle: '##IMG|images/im-logo.png|120px|120px##',
-    coveritems: [
-      'November 17, 2022 (Thu)',
-      'Masayuki Nii, Ph.D. in Engineering',
-      '##IMG|images/email.png|30px|30px## nii@msyk.net '
-      + '##IMG|images/facebook.png|30px|30px## msyknii '
-      + '##IMG|images/twitter.png|30px|30px## msyk_nii'
-    ]
-  },
-  {
-    title: '現状のエクスポートとVer.11の新機能',
-    items: [
-      'すでに「エクスポート」は実装可能',
-      '-「コンテキストファイル?media=class://クラス名/コンテキスト名/条件」により、エクスポートの機能は実装できている',
-      '-エクスポートに限らず利用できる機能ではあるが、必ず、カスタムクラスを定義しなければならなかった',
-      'より簡単にエクスポートの実現ができるようになった',
-      '-汎用エクスポートクラスをINTER-Mediatorに内蔵',
-      '-エクスポートクラスのカスマイズも可能',
-    ]
-  },
-  {
-    title: 'いちばん簡単なエクスポートの実装',
-    items: [
-      'コンテキストファイル?media=class://クラス名/コンテキスト名(/条件...)',
-      '-上記のURLへのリンクを作成する。例えば、aタグやbuttonタグ',
-      '-クラス名は「INTERMediator\\DB\\Export」。これはINTER-Mediator内部にすでに存在している',
-      '-定義ファイルに存在するコンテキスト名を指定すれば良い',
-      '結果として得られるもの',
-      "-コンテキストのデータをShift-JIS化したCSVファイル",
-      "-ヘッダは、フィールド名がそのまま入る",
-      "-コンテキストに存在する全レコード、全フィールドが出力される。フィールドの順番はデータベースからの出力通り",
-      "-コンテキストに定義した条件や並べ替えの定義が適用されるが、さらに、URLに条件を追加することもできる"
-    ]
-  },
-  {
-    title: '実装例',
-    items: [
-      "サンプル(PDF Generating, Exporting ...)",
-      "-/samples/Sample_pdf/list_detail_MySQL.html",
-      '-コンテキストファイルにコンテキスト「productlist」が定義されている',
-      '--##highlight|PHP|[\n' +
-      '  \'records\' => 10,\n' +
-      '  \'name\' => \'productlist\',\n' +
-      '  \'view\' => \'product\',\n' +
-      '  \'key\' => \'id\',\n' +
-      '  \'query\' => [[\'field\' => \'name\', \'value\' => \'%\', \'operator\' => \'LIKE\']],\n' +
-      '  \'sort\' => [[\'field\' => \'name\', \'direction\' => \'ASC\'],],\n' +
-      '],##',
-      "-以下のようなリンクをページファイルに作成",
-      "--##highlight|HTML|<a href=\"contexts_MySQL.php?media=\nclass://INTERMediator\\DB\\Export/productlist\">\n<button>Export (Default)</button></a>##"
-    ]
-  },
-  {
-    title: 'エクスポートのカスタマイズ',
-    items: [
-      'Exportクラスを継承した独自のクラスを作る',
-      "-/samples/Sample_pdf/ExportSample.php",
-      "-ファイルは定義ファイルと同じディレクトリが手軽",
-      "-カスタマイズ可能なプロパティとメソッド",
-      '-##highlight|PHP|class ExportSample extends INTERMediator\\DB\\Export\n' +
-      '{\n' +
-      '    protected $keysAndLabels = []; // array of field name => column name\n' +
-      '\n' +
-      '    protected $encoding = "UTF-8";\n' +
-      '    protected $fileNamePrefix = "Exported-";\n' +
-      '    protected $fileExtension = "csv";\n' +
-      '    protected $fieldSeparator = \',\';\n' +
-      '    protected $quote = \'"\';\n' +
-      '    protected $endOfLine = "\\n";\n' +
-      '\n' +
-      '    public function processing($contextData, $options) {}\n' +
-      '}##',
-    ]
-  },
+class ExportSample extends \INTERMediator\DB\Export
+{
+    protected $keysAndLabels = [
+        "unitprice" => "単価",
+        "name" => "商品名",
+        "taxrate" => "消費税率",
+        "photofile" => "画像ファイル名",
+        "acknowledgement" => "画像謝辞",
+        "ack_link" => "謝辞リンク",
+        "id" => "ID",
+        "category_id" => "カテゴリID",
+    ];
 
-  {
-    title: 'カスタマイズの方法',
-    items: [
-      'レコードの絞り込み、レコードの順序',
-      '-コンテキスト定義、URLの末尾に指定する',
-      'フィールドの制限・順序、ラベルのカスタマイズ',
-      '-##highlight|PHP|protected $keysAndLabels = [\n' +
-      '  "unitprice" => "単価","name" => "商品名","taxrate" => "消費税率",\n' +
-      '];##',
-      'エンコード',
-      '-##highlight|PHP|protected $encoding = "SJIS";##',
-      '出力ファイルのスペック',
-      '-プロパティで、ファイル名と拡張子を指定。ファイル名の後に日付時刻をくっつけた数字が付与される',
-      '-プロパティには、フィールド区切り、行区切り、クォートの文字を指定可能'
-    ]
-  },
+    protected $fileNamePrefix = "Exported-";
+    protected $fileExtension = "csv";
+    protected $encoding = "SJIS";
+    protected $fieldSeparator = ',';
+    protected $quote = '"';
+    protected $endOfLine = "\n";
 
-  {
-    title: '任意の出力を得る方法',
-    items: [
-      'processingメソッドを自分で書く',
-      '-##highlight|PHP|public function processing($contextData, $options) {}##',
-      '-引数に、コンテキストから得られたデータが配列でやってくる',
-      '-echo等で自由に出力すれば良く、それがファイルのないようになる',
-      '-league/csvを組み込んであるので、ライブラリを使うのが良い',
-      '-INTERMediator\\DB\\Exportクラスのコードを参考にすれば良い',
-      '-Exportクラスの出力処理を呼び出したいならparent::processing($data, $options)',
-    ]
-  },
-
-  {
-    title: '取組中：定義ファイルをYAMLファイルで供給',
-    items: [
-      '-##highlight|PHP|contexts:\n' +
-      '  - records: 3\n' +
-      '    name: productlist\n' +
-      '    view: product\n' +
-      '    table: product\n' +
-      '    key: id\n' +
-      '    paging: true\n' +
-      '    sort:\n' +
-      '      - field: unitprice\n' +
-      '        direction: ASC\n' +
-      '    navi-control: master\n' +
-      '    repeat-control: \'insert delete copy\'\n' +
-      '  - records: 1\n' +
-      '    name: productdetail\n' +
-      '    view: product\n' +
-      '    table: product\n' +
-      '    key: id\n' +
-      '    navi-control: detail-top\n' +
-      'options: { }\n' +
-      'connection:\n' +
-      '  db-class: PDO\n' +
-      'debug: false\n##']
-  },
-
-  {
-    title: '実装完了：メール送信ライブラリをsymfony/mailerへ変更',
-    items: [
-      '-原則、現状と互換あり',
-      '-Gmailの設定ができる',
-      '-Amazon Simple Email ServiceはAPI接続が可能',
-      '-ドキュメントへも反映ずみ',
-    ]
-  },
-  {
-    title: '取組中：E2Eテスト(End to End Test)',
-    items: [
-      'ブラウザを介してテストをすることをE2Eテストと呼ぶ',
-      '-現状は、Seleniumを利用してごくわずかな範囲のみをテスト',
-      'WebdriverIOを使うことにした',
-      '-Selenium Webdriverだけでなく、各種ドライバなどを自動的にインストールするなど、統合テスト環境として優れている',
-      '-JavaSriptベース、すなわちNode.jsベースのテスト開発環境',
-      'すでにスタートしているが、まだ全然...',
-      '-GitHubのINTER-Mediator/INTER-Mediator_Test',
-      '-本体とは別に、テスト環境を作る方がいいのではないかという判断'
-    ]
-  },
-  {
-    title: 'ディスカッション',
-    items: [
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-    ]
-  },
-]
-
-                <div class="code"><pre><code></code></pre></div>
+    public function processing($contextData, $options){}
+}</code></pre></div>
+                <p>まず、1行目のフィールド名のカスタマイズに加えて、取り出すフィールドのカスタマイズは$keysAndLabelsプロパティに連想配列で指定します。コンテキストのフィールド名として、出力に加えたいフィールドのフィールド名をキーとします。その値は出力結果の1行目に登場する名目のカラム名を指定します。</p>
+                <p>$fileNamePrefixは、ファイル名に指定する名前の前半部分を指定します。ファイル名の拡張子は$fileExtensionで指定します。出力データのエンコーディングは$encodingで指定します。フィールド区切りは$fieldSeparator、行区切りは$endOfLineで指定できます。文字列データのクオート記号は$quoteで指定します。これらは既定値のままで良いのであれば、定義する必要はありません。変更したい場合にのみ定義をします。</p>
+                <p>場合によっては、processingメソッドを指定して、処理プログラムを自分で書くこともできます。最初の引数には、コンテキストで得られた結果が連想配列の配列で得られるので、あとは自由に加工をして、echo等で出力すれば良いでしょう。また、元になっているExportクラスは、league/csvというライブラリを利用しています。INTER-Mediatorの中にもインストールしてあるので、その仕組みを使うことも検討すれば良いでしょう。なお、Exportクラスのprocessingメソッドを呼び出せば、通常のCSV出力が可能なので、上記ExportSampleクラスのprocessingメソッドでは、引数で得られたフィールドの内容を加工して、Exportクラスのprocessingメソッドを呼び出すということも可能です。</p>
             </section>
         </article>
     </div>
