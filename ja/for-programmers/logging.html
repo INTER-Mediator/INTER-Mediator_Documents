@@ -60,208 +60,152 @@
         </div>
         <article>
             <section>
-                <h1></h1>
-                <p></p>
-                <h3></h3>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-let config = {
-  theme: 'msyk3',
-  transition: 'fade',
-  openParen: '#',
-  closeParen: '#'
-}
+                <h1>ログ作成機能の利用方法</h1>
+                <p>INTER-Mediatorでは、デーベース処理は、クライアントからサーバーに対して送られて実施しています。その単位でのログ作成機能が組み込まれています。既定値ではログは作成しない状態になっているので、ログを作成するにはログ作成可能な状態にする必要があります。また、ログ参照のためのシンプルなビューアも用意してありますが、アプリケーションで利用するとなると、ログデータから独自の手法でアプリケーションに必要なデータの取り出しが必要になるでしょう。</p>
+                <h1>ログ作成機能の実装</h1>
+                <p>ログを保存するためのテーブルoperationlogを用意する必要があります。テーブルの名前はカスタマイズできません。例えば、MySQL向けには以下のように定義されています。INTER-Mediatorのディストリビューションにあるdist-docsディレクトリにあるデータベースごとのサンプルスキーマから取り出すと良いでしょう。なお、INTER-Mediatorが使用するのはerrorフィールドまでで、conditionNおよびfieldNフィールドは、カスタマイズした結果を保存するためのフィールドとなります。ログビューアは、samples/Log_Supportディレクトリに用意してありますので、適時改造して利用してください。</p>
+                <div class="code"><pre><code>CREATE TABLE operationlog
+(
+    id            INT AUTO_INCREMENT,
+    dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user          VARCHAR(48),
+    client_id_in  VARCHAR(48),
+    client_id_out VARCHAR(48),
+    require_auth  BIT(1),
+    set_auth      BIT(1),
+    client_ip     VARCHAR(60),
+    path          VARCHAR(256),
+    access        VARCHAR(20),
+    context       VARCHAR(50),
+    get_data      TEXT,
+    post_data     TEXT,
+    result        TEXT,
+    error         TEXT,
+    condition0    VARCHAR(50),
+    condition1    VARCHAR(50),
+    condition2    VARCHAR(50),
+    condition3    VARCHAR(50),
+    condition4    VARCHAR(50),
+    field0        TEXT,
+    field1        TEXT,
+    field2        TEXT,
+    field3        TEXT,
+    field4        TEXT,
+    field5        TEXT,
+    field6        TEXT,
+    field7        TEXT,
+    field8        TEXT,
+    field9        TEXT,
+    PRIMARY KEY (id)
+) CHARACTER SET utf8mb4,
+  COLLATE utf8mb4_unicode_ci
+  ENGINE = InnoDB;</code></pre></div>
+                <h1>ログ作成機能の利用とカスタマイズ</h1>
+                <p>ログの機能は、params.phpに定義した変数で指定します。以下は、関連する変数定義部分を集めたものです。まず、最初の$accessLogLevel変数に1あるいは2を代入すると、ログのテーブルにレコードを作り始めます。もちろん、operationlogテーブルへの書き込みができる状態になっている必要があります。</p>
+                <div class="code"><pre><code>$accessLogLevel = 2; // false: No logging, 1: without data, 2: with data
+$dbClassLog = $dbClass; // データベースへの接続情報
+$dbDSNLog = $dbDSN;
+$dbUserLog = $dbUser;
+$dbPasswordLog = $dbPassword;
+$recordingContexts = false; // ログを取りたいコンテキスト名の配列
+$recordingOperations = false; // ログを取りたいオペレーションの配列
+$dontRecordTheme = false; // テーマのアクセスをログに取るかどうか
+$dontRecordChallenge = false; // 認証のチャレンジをログに取るかどうか
+$dontRecordDownload = false; // ファイルのダウンロードをログに取るかどうか
+$dontRecordDownloadNoGet = false; // ダウンロード時に$_GETをログに取るかどうか
+$accessLogExtensionClass = 'LoggingExt'; // 拡張クラスの名前</code></pre></div>
+                <p>2行目の$dbClassLogから$dbPasswordLogまでは、ログのデータを書き込むときに利用するデータベースの接続情報です。通常は、使用するデータベースの中にoperationlogテーブルを設けるので、既存のデータを変数より単にコピーしているだけになります。異なるデータベースに書き込みたい場合には、ここがカスタマイズポイントになります。</p>
+                <p>最後の拡張クラスの指定を除き、他の変数は、何らかの制限を行うものです。例えば、cssやギアの画像の取り出しのアクセスを残す必要はないということであれば、$dontRecordThemeにtrueを設定します。特定のコンテキストのみ、ログを取りたい場合には、$recordingContexts = ['context_name']; のように、コンテキスト名の配列を指定します。$recordingOperationsで利用できるキーワードは、read、create、update、deleteなど、クライアントからの通信のaccess=パラメータに指定される文字列で、記録したい操作の文字列を配列で指定します。そのほかはコメントに記載の説明を参考にしてください。dontRecordで始まる変数はいずれも論理値を指定します。</p>
+                <h1>ログの取得結果を検討する</h1>
+                <p>実際に取得したログデータをまずは理解しましょう。以下に示したものが、operationlogテーブルの1つのレコードです。idなどのキーがフィールド名を示していて、その値がキーに対応して記述されています。以下の例は、読み出しのリクエストが発生した場合を示しています。</p>
+                <div class="code"><pre><code>{'id':'72',
+ 'dt':'2020-08-12 11:35:50',
+ 'user':'user1', 
+ 'client_id_in':'43342bbf6e295752847fee311262dc9393ae0ce0', 
+ 'client_id_out':'5ceba592ac317f662c1dcd42d8fb73fc7ed63664', 
+ 'require_auth':'0',
+ 'set_auth':'1', 
+ 'client_ip':'::1',
+ 'path':'/samples/Sample_webpage/include_authAll_MySQL.php',
+ 'access':'read', 
+ 'context':'testtable',
+ 'get_data':'', 
+ 'post_data':'['access' => 'read','name' => 'testtable',
+   'field_0' => 'dt1','field_1' => 'vc1','field_2' => 'vc1','field_3' => 'vc1','start' => '0',
+   'records' => '10000',
+   'clientid' => '43342bbf6e295752847fee311262dc9393ae0ce0',
+   'authuser' => 'user1',
+   'response' => 'ae5cfb247c89f8fc6208a854a006fd883fab475d46ca6918dc85d6ebe8ca1975',
+   'notifyid' => 'f58e365f01b1ce05303512e127d3bafddf446ca75b3ed534d38495b928419be0',]', 
+ 'result':'[
+   'dbresult' => 'Query result includes 1 records.', // データをなしに設定した場合
+   'resultCount' => '1',
+   'totalCount' => '1',
+   'getRequireAuthorization' => true,
+   'challenge' => '09cd7c80adebaab86b7e99ba54455354',
+   'clientid' => '5ceba592ac317f662c1dcd42d8fb73fc7ed63664',
+   'requireAuth' => false,
+ ]', 
+ 'error':'', }</code></pre></div>
+                <p>まず、最初のidフィールドは、operationlogテーブルでの自動連番による主キーなので、データそのものではありません。dtフィールドは、サーバ側での発生時刻です。client_ipフィールドは、クライアントつまりブラウザが稼働しているホストのIPアドレスです。</p>
+                <p>ログが発生した理由は、path、context、accessからわかります。つまり、pathはどの定義ファイルで発生したものなのか、そしてcontextはコンテキストの名前、accessは処理の種類を示しています。そして、実際にやりとりしたデータは、get_data、post_data、resultの各フィールドに記述されます。いずれも配列をvar_export関数で文字列化して、それぞれフィールドには文字列として入力されています。get_data、post_dataが、クライアントからのリクエストで、resultがサーバのレスポンスになります。もちろん、$_GET、$_POSTの値が、それぞれget_data、post_dataフィールドに入ります。エラーが発生すれば、errorフィールドに文字列で情報が入力されます。</p>
+                <p>このログは、params.phpファイルの$accessLogLevel変数が1、つまり読み出したデータを含めないという設定になっているので、resultフィールドのdbresultキーの値は単に文字列のメッセージとなっています。変数値を2にすると、ここに読み出したレコードの配列が加わるので、かなり長い文字列になる可能性もあります。</p>
+                <p>認証の処理が行われたかどうかは、set_authフィールドの値でわかります。そして、ログインしているユーザ名はuserフィールドでわかります。client_id_inとclient_id_outは、それぞれ、認証のためにクライアントを識別するためのランダムなコードで、リクエストとレスポンスで使われている値になります。また、同じ値が、post_dataとresultにも見られます。</p>
+                <p>以下のログレコードの例は、フィールドの値を更新した時のものです。この例では、認証は行われておらず、set_authはnullになっています。path、context、accessを見ると、定義ファイル、コンテキスト名としてcontact、そして更新処理を示すupdateの文字列が見えています。どのレコードのどのフィールドを、どんな値に変更したのかは、post_dataから判断できます。condition0*の3つの項目が検索条件で、つまりはコンテキストcontactに対して、id=1という条件で検索をしたレコードが更新対象になります。そして、field*とvalue*を参照することで、summaryフィールドの値がTelephone2という文字列に変更されたことがわかります。</p>
+                 <div class="code"><pre><code>{id: 28,
+  access: "update",
+  client_id_in: null,
+  client_id_out: null,
+  client_ip: "::1",
+  context: "contact",
+  dt: "2022-04-08 10:46:03",
+  error: null,
+  get_data: null,
+  path: "/samples/Sample_form/include_MySQL.php",
+  post_data: "[
+    access => update,
+    name => contact,
+    condition0field => id, condition0operator => =, condition0value => 1,
+    field_0 => summary, value_0 => Telephone2,
+    notifyid => ce3d9dc918bb5220091cda9a93a9f7a8765ef95e518cc4aabed0ece9e6327f72
+  ]",
+  require_auth: null,
+  result: "[
+    dbresult => 'Query result includes 1 records.',
+    getRequireAuthorization => , requireAuth =>
+  ]",
+  set_auth: null,
+  user: null,
+}</code></pre></div>
+                <p>このように、POSTデータをまとめて記録してしまっていますが、あまり細かい処理を入れてパフォーマンスに影響することを避けるためでもあります。しかしながら、データをログに入れるとかなり長いものになってしまうので、原則としては必要な情報のみをログに残すように調整をするのが良いと考えられます。</p>
+                <h1>ログ保存結果のカスタマイズ</h1>
+                <p>例えばデータの修正履歴を記録した場合、contextはフィールドがあるとして、どのレコードかを示す主キー値は、既定の状態ではフィールドに分離されていません。前述のように、post_dataフィールドの内容から求めることは不可能ではないものの、リレーションシップの対象とするデータは単独のフィールドに入っていないとパフォーマンスが相当悪くなりそうです。こうした用途を実現するために、operationlogテーブルのフィールドを増やすことができます。サンプルのスキーマにあるテーブルは、すでに適当にフィールドを増やした状態になっていますが、フィールド名などは任意にできるので、好みのフィールド構成にしてください。</p>
+                <p>そして、以下のようなクラスを作り、この場合だとLoggingExt.phpファイルに保存します。場所は定義ファイルと同じディレクトリがまずは確実です。params.phpファイルの$accessLogExtensionClass変数には、この作成したクラス名を指定します。このクラスは、INTERMediator\DB\Support\OperationLogExtensionを拡張して定義します。</p>
+                <p>ログ処理のカスタマイズクラスは、extendingFields()とvalueForField($field)の2つのメソッドを実装しなければなりません。extendingFields()は追加するフィールドのフィールド名を配列で返します。valueForField($field)は引数に追加したフィールドのフィールド名が指定されて呼び出されるので、そのフィールドに保存したい値を返します。</p>
+                <p>以下の例では、condition0フィールドには、post_dataに入っているcondition0valueキーの値を取り出して返します。フィールドがいくつかあれば、ifあるいはswith等を用いて分岐させて、それぞれ要求されたフィールド名に応じた値を返すようにプログラムを作る必要があります。</p>
+                <div class="code"><pre><code>class LoggingExt extends INTERMediator\DB\Support\OperationLogExtension
+{
+    public function extendingFields()
+    {
+        return ['condition0','field0','field1']; // 追加するフィールドの配列
+    }
 
-let contents = [
-  {
-    presubtitle: 'INTER-Mediator Study Meeting 2022-#04',
-    maintitle: 'サーバ利用ログ作成機能の向上',
-    subtitle: '##IMG|images/im-logo.png|120px|120px##',
-    coveritems: [
-      'April 13, 2022 (Wed)',
-      'Masayuki Nii, Ph.D. in Engineering',
-      '##IMG|images/email.png|30px|30px## nii@msyk.net '
-      + '##IMG|images/facebook.png|30px|30px## msyknii '
-      + '##IMG|images/twitter.png|30px|30px## msyk_nii'
-    ]
-  },
-  {
-    title: 'Agenda',
-    items: [
-      '-サーバ利用のログ作成機能（2020-08）として発表した内容の更新',
-      '-ログ作成のカスタマイズ',
-      '-ログ作成対象の限定'
-    ]
-  },
-   {
-    title: 'サーバ利用ログの作成',
-    items: [
-      '監査目的のログ機能',
-      '-クライアントからサーバーへのリクエスト1つがログの1項目',
-      '-通信処理そのものを1件ずつ記録できる',
-      '-Apacheのアクセスログでは、INTER-MEdiator特有の情報が保存されない',
-      '得られる情報',
-      '-認証ユーザーと利用データ（コンテキストやパラメータ、取得データ）',
-      '-アクセス頻度',
-    ]
-   },
-  {
-    title: 'ログの作成のための設定',
-    items: [
-      'デフォルトはオフ、params.phpでPDO情報を指定して記録開始',
-      '-##highlight|PHP|$accessLogLevel = 2; // false: No logging, 1: without data, 2: with data\n' +
-      '$dbClassLog = $dbClass; // データベースへの接続情報\n' +
-      '$dbDSNLog = $dbDSN;\n' +
-      '$dbUserLog = $dbUser;\n' +
-      '$dbPasswordLog = $dbPassword;\n' +
-      '$recordingContexts = false; // ログを取りたいコンテキスト名の配列\n' +
-      '$recordingOperations = false; // ログを取りたいオペレーションの配列\n' +
-      '$dontRecordTheme = false; // テーマのアクセスをログに取るかどうか\n' +
-      '$dontRecordChallenge = false; // 認証のチャレンジをログに取るかどうか\n' +
-      '$dontRecordDownload = false; // ファイルのダウンロードをログに取るかどうか\n' +
-      '$dontRecordDownloadNoGet = false; // ダウンロード時に$_GETをログに取るかどうか\n' +
-      '$accessLogExtensionClass = \'LoggingExt\'; // 拡張クラスの名前##',
-    ]
-  },
-  {
-    title: 'ログを保存するスキーマ',
-    items: [
-      '##highlight|SQL|CREATE TABLE operationlog (\n' +
-      '\tid              INT AUTO_INCREMENT,\n' +
-      '\tdt              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n' +
-      '\tuser            VARCHAR(48),\n' +
-      '\tclient_id_in    VARCHAR(48),\n' +
-      '\tclient_id_out   VARCHAR(48),\n' +
-      '\trequire_auth    BIT(1),\n' +
-      '\tset_auth        BIT(1),\n' +
-      '\tclient_ip       VARCHAR(60),\n' +
-      '\tpath            VARCHAR(256),\n' +
-      '\taccess          VARCHAR(20),\n' +
-      '\tcontext         VARCHAR(50),\n' +
-      '\tget_data        TEXT,\n' +
-      '\tpost_data       TEXT,\n' +
-      '\tresult          TEXT,\n' +
-      '\terror           TEXT,\n' +
-      '\tcondition(N)    VARCHAR(50), // カスタマイズ用、フィールド名は任意\n' +
-      '\tfield(N)        TEXT, // カスタマイズ用、フィールド名は任意\n' +
-      '\tPRIMARY KEY(id)\n' +
-      ')\tCHARACTER SET utf8mb4, COLLATE utf8mb4_unicode_ci ENGINE=InnoDB;##'
-    ]
-  },
-  {
-    title: 'ログデータの例（read）',
-    items: [
-      "##highlight|javascript|{'id':'72', 'dt':'2020-08-12 11:35:50', 'user':'user1', \n" +
-      " 'client_id_in':'43342bbf6e295752847fee311262dc9393ae0ce0', \n" +
-      " 'client_id_out':'5ceba592ac317f662c1dcd42d8fb73fc7ed63664', \n" +
-      " 'require_auth':'0',\n" +
-      " 'set_auth':'1', \n" +
-      " 'client_ip':'::1',\n" +
-      " 'path':'/samples/Sample_webpage/include_authAll_MySQL.php',\n" +
-      " 'access':'read', \n" +
-      " 'context':'testtable',\n" +
-      " 'get_data':'', \n" +
-      " 'post_data':'['access' => 'read','name' => 'testtable',\n" +
-      "   'field_0' => 'dt1','field_1' => 'vc1','field_2' => 'vc1','field_3' => 'vc1','start' => '0',\n" +
-      "   'records' => '10000',\n" +
-      "   'clientid' => '43342bbf6e295752847fee311262dc9393ae0ce0',\n" +
-      "   'authuser' => 'user1',\n" +
-      "   'response' => 'ae5cfb247c89f8fc6208a854a006fd883fab475d46ca6918dc85d6ebe8ca1975',\n" +
-      "   'notifyid' => 'f58e365f01b1ce05303512e127d3bafddf446ca75b3ed534d38495b928419be0',]', \n" +
-      " 'result':'[\n" +
-      "   'dbresult' => 'Query result includes 1 records.', // データをなしに設定した場合\n" +
-      "   'resultCount' => '1',\n" +
-      "   'totalCount' => '1',\n" +
-      "   'getRequireAuthorization' => true,\n" +
-      "   'challenge' => '09cd7c80adebaab86b7e99ba54455354',\n" +
-      "   'clientid' => '5ceba592ac317f662c1dcd42d8fb73fc7ed63664',\n" +
-      "   'requireAuth' => false,\n" +
-      " ]', \n" +
-      " 'error':'', }##"
-    ]
-  }, {
-    title: 'ログデータの例（update）',
-    items: [
-      "##highlight|javascript|{\n" +
-      "  access: \"update\"\n" +
-      "  client_id_in: null\n" +
-      "  client_id_out: null\n" +
-      "  client_ip: \"::1\"\n" +
-      "  context: \"contact\"\n" +
-      "  dt: \"2022-04-08 10:46:03\"\n" +
-      "  error: null\n" +
-      "  get_data: null\n" +
-      "  id: 28\n" +
-      "  path: \"/samples/Sample_form/include_MySQL.php\"\n" +
-      "  post_data: \"[\n" +
-      "    access => update,\n" +
-      "    name => contact,\n" +
-      "    condition0field => id, condition0operator => =, condition0value => 1,\n" +
-      "    field_0 => summary, value_0 => Telephone2,\n" +
-      "    notifyid => ce3d9dc918bb5220091cda9a93a9f7a8765ef95e518cc4aabed0ece9e6327f72\n" +
-      "  ]\"\n" +
-      "  require_auth: null\n" +
-      "  result: \"[\n" +
-      "    dbresult => Query result includes 1 records.,\n" +
-      "    getRequireAuthorization => , requireAuth => \n  ]\"\n" +
-      "  set_auth: null\n" +
-      "  user: null\n" +
-      "}##"
-    ]
-  },
-  {
-    title: 'サーバ利用ログの活用',
-    items: [
-      'ログビューア /samples/Log_Support/MySQL_logviewer.html',
-      '-##IMG|images/logviewer.png|1050px|690px##'
-    ]
-  },
-  {
-    title: 'カスタマイズ',
-    items: [
-      '必要な情報を独立したフィールドに入れる',
-      '-フィールドはoperationlogテーブルに定義しておく',
-      '-クラス名は、params.phpの$accessLogExtensionClassに代入する',
-      "##highlight|javascript|class LoggingExt extends INTERMediator\\DB\\Support\\OperationLogExtension\n" +
-      "{\n" +
-      "    public function extendingFields()\n" +
-      "    {\n" +
-      "        return ['condition0','field0','field1']; // 追加するフィールドの配列\n" +
-      "    }\n" +
-      "\n" +
-      "    public function valueForField($field) // フィールドに対応する値を返す\n" +
-      "    {\n" +
-      "        if(strpos($field, 'condition') === 0) {\n" +
-      "            return isset($_POST['condition0value']) ? $_POST['condition0value'] : NULL;\n" +
-      "        } else if(strpos($field, 'field_') === 0) {\n" +
-      "            $n = substr($field, 6);\n" +
-      "            return isset($_POST['value_'.$n]) ? $_POST['value_'.$n] : NULL;\n" +
-      "        }\n" +
-      "    }\n" +
-      "}##"
-    ]
-  },
-  {
-    title: 'まとめ',
-    items: [
-      '-監査に利用できるログ機能を実装',
-      '-デフォルトはオフ、スキーマを用意しparams.phpの設定でオン',
-      '-クラスを定義することで必要なフィールドを追加することもできる',
-      '--会計ソフトに実装あり##LINK|https://github.com/msyk/IMApp_Account|https://github.com/msyk/IMApp_Account##',
-      '-簡単なビューアは用意したが、横長になるのでそのままでは使いにくい',
-      '-案件に合わせた「ビューア」を作る必要がある',
-    ]
-  }
-]
-
-                <div class="code"><pre><code></code></pre></div>
+    public function valueForField($field) // フィールドに対応する値を返す
+    {
+        if(strpos($field, 'condition') === 0) {
+            return isset($_POST['condition0value']) ? $_POST['condition0value'] : NULL;
+        } else if(strpos($field, 'field_') === 0) {
+            $n = substr($field, 6);
+            return isset($_POST['value_'.$n]) ? $_POST['value_'.$n] : NULL;
+        }
+    }
+}</code></pre></div>
+                <p>現実にはpost_dataにどんなデータがやってくるのかを理解した上でないと、カスタマイズのためのクラスの記述は難しいでしょう。実際に記録されたログを見ながら検討をして、必要なデータを取り出すようにしましょう。</p>
+                <p>また、operationlogのテンプレートは追加フィールドは文字列で定義していますが、例えば、元々INT型だったフィールドの値を取り出して保存する場合は、追加フィールドもINT型にする方が、リレーションシップを構成することを考えれば望ましいと考えられます。</p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
             </section>
         </article>
     </div>
