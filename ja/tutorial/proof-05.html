@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" class="hltr"><head><title>さまざまなユーザーインターフェース構築</title><link href="00_default.css" rel="stylesheet" media="all"/></head><body xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:msyk="http://msyk.net/Editorial" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/"><div id="main"><h1><span id="H1-ANC-1"><span style="display:none">→</span></span><span class="chapternumber">Chapter 5</span><br/>さまざまなユーザーインターフェース構築</h1><p class="version-notation">この章は、INTER-Mediator Ver.10をもとに記載しました。</p><p class="chapter-lead">このセクションでは、定義ファイルやページファイルの設定だけで可能な機能のうち、これまでに説明していない機能について説明をします。最初は一覧と詳細を行き来するユーザーインターフェース、続いて電子メールの送信、異なるクライアント間で編集結果を連動させる方法、JavaScriptで作られたユーザーインターフェース部品を利用する方法を説明します。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-1"><span style="display:none">→</span></span><span class="sectionnumber">5-1</span>マスター/ディテール形式のナビゲーション</h2><p class="section-lead">一覧と詳細を切り替えて表示するようなユーザーインターフェースはよくみられます。業務系システムでは多くの場合、こうした動作が基本です。INTER-Mediatorではこうした動作を2つのコンテキストで実現して自動的に切り替えるユーザーインターフェースを用意します。そこまでの作業は、特別なプログラムコードを書かなくても、定義ファイルとページファイルの設定だけで可能です。また、一覧と詳細の切り替え時にプログラムを記述すれば、より高度なユーザーインターフェース構築も可能です。</p><h3><span id="H3-ANC-1"><span style="display:none">→</span></span><span xmlns="" id="ix-1"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>マスター/ディテールあるいは<span xmlns="" id="ix-2"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>一覧/詳細</h3><p>　データを一覧表示し、さらに特定のレコードについてより多くの情報を表示するといった形式のユーザーインターフェースは一般的なテクニックです。その場合、異なる画面であるだけに、2つのページを作成しておき、それぞれの機能動作を組み込むということが一般的かもしれません。しかしながら、INTER-Mediatorでは、ひとつのページに一覧表示のためのコンテキストと、詳細表示のためのコンテキストを両方を用意して、切り替えることなどが可能です。</p><p>　iOSには、UISplitViewControllerというクラスがあり、iPadの「メール」などにみられるように、一覧と詳細を同時に、あるいは個別に表示できる仕組みがあります（図5-1-1）。INTER-Mediatorの機能は、このスプリットビューをヒントにしています。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-172.png"/><div class="caption">図5-1-1　UISplitViewControllerを利用したアプリケーションの例</div></div><p>　FileMakerを利用するときに、レイアウトを2種類作成し、同じTOを2つのレイアウトに割り当てることで、一覧（図5-1-2）と詳細表示（図5-1-3）の切り替えがスムーズに行われます。切り替えるために、なんらかのスクリプトは必要ですが、一覧で選択した結果は、TOで記録されるので、レイアウトを切り替えるだけで、一覧で選択されているレコードを詳細レイアウトでも表示することができます。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-173.png"/><div class="caption">図5-1-2　FileMakerでの一覧表示</div></div><div class="picture"><img class="picture-small" src="figs/ng-shot-174.png"/><div class="caption">図5-1-3　FileMakerでの詳細表示</div></div><p>　これらのユーザーインターフェースを本コースでは、「マスター/ディテール形式」あるいは「一覧詳細形式」と総称することにして、「一覧表示側」「詳細表示側」という用語で、2種類の画面をそれぞれ特定することにします。</p><h3><span id="H3-ANC-2"><span style="display:none">→</span></span>コンテキストに記述する<span xmlns="" id="ix-3"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>navi-controlキー</h3><p>　INTER-Mediatorでの一覧詳細形式のユーザーインターフェースを構築するには、原則として同一テーブルを元にした2つの異なるコンテキストを定義します。同じテーブルであっても、2つのコンテキストを定義してください。もちろんnameキーで指定する名前は別々のものにします。このとき、同一のテーブルというのは、より厳密に言えば、keyキーで指定する主キーフィールドとその値が、適切なレコードを検索する状態であるということです。極端に言えば、全く異なるテーブルでも構いませんが、主キー値を共有するものであれば、動作はします。しかしながら、それはかなり難しい運用となります。ありうる運用としては、viewキーで参照されるものが、同一のテーブルを元にしたビューであってもかまいません。それぞれが同一名の主キーフィールドを持ちkeyキーで指定されていることがポイントになります。</p><p>　そして、それぞれのコンテキストでは、navi-controlキーによる値を定義します。設定可能な値は表5-1-1に記載します。このnavi-controlキーの値が設定されたコンテキストは、ひとつの定義ファイルで必ず2つにしてください。3つ以上ある場合の動作は保証できません。navi-controlには、そのコンテキストが一覧表示側なのか、詳細表示側なのかを指定します。詳細表示側は、recordsキーの値を「1」にしておきます。また、pagingキーは記述するとしたら、一覧表示側のコンテキストに指定をしてください。</p><div class="table"><table><tr><th>一覧表示側</th><th>詳細表示側</th></tr><tr><td><span xmlns="" id="ix-4"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>master</td><td><span xmlns="" id="ix-5"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>detail</td></tr><tr><td><span xmlns="" id="ix-6"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>master-hide</td><td><span xmlns="" id="ix-7"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>detail-top</td></tr><tr><td/><td><span xmlns="" id="ix-8"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>detail-bottom</td></tr><tr><td/><td><span xmlns="" id="ix-9"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>detail-update</td></tr></table><div class="caption">表5-1-1　navi-controlキーに設定可能な値</div></div><p>　2つのコンテキストの動作は、一覧表示側のnavi-controlキーの設定に依存します。「master-hide」を指定すると、前に説明したFileMakerの一覧と詳細タイプの動作をします。つまり、最初は一覧表示側だけが見えていて、詳細表示側は見えていません。一覧表示側には<span xmlns="" id="ix-10"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>「詳細」ボタンが各レコードの冒頭に付加されます。それをクリックすると、一覧側は消えて、詳細表示側のみが見えます。詳細表示は1レコードだけが表示され、一覧側でクリックしたレコードが表示されます。なお「見えなくなる範囲」は原則としてエンクロージャーですが、TBODYについては、それを含むテーブル全体が見えなくなります。したがって、一番シンプルな構成は、2つのコンテキストをそれぞれ別々のTABLEタグのテーブルに表示するという手法になります。詳細表示側には、「一覧に戻る」ボタンが自動的に追加され、クリックすると、詳細表示が消えて一覧表示のみとなります。</p><p>　一方、一覧表示側のnavi-controlキーの値に「master」を指定すると、前に説明した、iOSのスプリットビュー形式のユーザーインターフェースになり、一覧側、詳細側、どちらも常に表示しています。一覧表示側には「詳細」ボタンが各レコードの冒頭に付加され、クリックすると詳細側に対応するレコードが表示されます。初期状態では、詳細側は、マスター側の最初のレコードが表示されるようになっています。なお、iPadのような左右に分離された形式での表示にするには、スタイルシートの仕組みを利用して、レイアウトが意図したようになるようにします。</p><p>　詳細表示側の設定値の種類が多いですが、「top」「bottom」は、<span xmlns="" id="ix-11"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>「一覧に戻る」ボタンをエンクロージャーの前か後かを指定することができます。また「detail」と「detail-top」は同じ意味です。「detail-update」は、詳細から一覧に戻るときに、一覧のコンテキストを再表示します。データベースアクセスからやり直して、表示内容を更新します。このように、一覧側に「master-hide」を指定したときにだけ、詳細側のnavi-controlの値にバリエーションがあり、一覧側が「master」の場合は、詳細側にどの値を指定しても「detail」を指定するのと変わりません。</p><p>　一覧表示側に表示される「詳細」ボタン、詳細表示側に表示される「一覧に戻る」ボタンのボタン名は、いずれも、<span xmlns="" id="ix-12"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>button-namesキーの配列で変更できます。それぞれのコンテキスト内で、button-namesキーの配列を定義し、要素のキーを一覧表示側は「navi-detail」、詳細表示側は「navi-back」で指定します。これらのキーの値が、ボタン名になります。</p><p>　2つのコンテキストの外観をカスタマイズするには、スタイルシートを使ってさまざまに設定します。各オブジェクトに関して、表5-1-2のように、class属性を設定しています。これらのclass属性をボタン等のスタイルの変更に利用してください。なお、IM_NaviBack_TRとIM_NaviBack_TDは、詳細表示側のコンテキストのエンクロージャーがTBODYの場合だけ設定されます。このとき、THEADあるいはTFOOTに新たにTRタグ要素を作り、TDタグ要素を含み、さらにその中にBUTTON要素を配置します。これらすべてにclassを割り当てているので、うまく設定すると表の外にボタンがあるように見えるかもしれません。エンクロージャーがTBODY以外の場合、class属性がIM_NaviBack_TRとIM_NaviBack_TDの要素は作られません。</p><div class="table"><table><tr><th>class属性の値</th><th>適用先</th></tr><tr><td><span xmlns="" id="ix-13"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_Button_Master</td><td>一覧表示側に追加される「詳細」ボタンのBUTTONタグ要素</td></tr><tr><td><span xmlns="" id="ix-14"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_Button_BackNavi</td><td>詳細表示側に追加される「一覧に戻る」ボタンのBUTTONタグ要素</td></tr><tr><td><span xmlns="" id="ix-15"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_NaviBack_TR</td><td>詳細表示のエンクロージャーがTBODYの場合、「一覧に戻る」ボタンを含むTRタグ要素</td></tr><tr><td><span xmlns="" id="ix-16"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_NaviBack_TD</td><td>詳細表示のエンクロージャーがTBODYの場合、「一覧に戻る」ボタンを含むTDタグ要素</td></tr></table><div class="caption">表5-1-2　一覧詳細形式の表示により自動的に付加されるclass属性値</div></div><h3><span id="H3-ANC-3"><span style="display:none">→</span></span>一覧と詳細の切り替え時に呼び出されるメソッド</h3><p>　一覧表示と詳細表示で、コンテキスト内のリンクノードについては、データベースの内容がそれぞれ表示されますが、それ以外のなんらかの処理を追加したい場合には、いくつかのメソッドを利用することができます。少ない作業で確認ができるので、このセクションの演習で実際にプログラムを追加して動作を紹介しておきます。</p><h3><span id="H3-ANC-4"><span style="display:none">→</span></span><span class="exsign">演習</span>一覧と詳細を利用したユーザーインターフェース</h3><p>　iPadのようなユーザーインターフェースや、一覧と詳細が切り替わるユーザーインターフェースを実際に作成してみましょう。また、JavaScriptを利用した高度なカスタマイズも紹介します。</p><h4>2つのコンテキストを定義ファイルに定義</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、演習環境を起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://localhost:9080」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def11.phpを編集する」をクリックし、定義ファイルエディターでdef11.phpファイルを編集します。（もし、他の用途で11番目を利用しているのなら、例えば、def21.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">5</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">6</span>nameに「person_list」、keyを「id」、pagingを「true」、repeat-controlを「confirm-insert」、recordsを「10」、maxrecordsを「100」とします。</div><div class="step-wo-number">[MySQL]の場合<br/>viewとtableは「person」とします。</div><div class="step-wo-number">[FileMaker]の場合<br/>viewとtableは「person_layout」とします。</div><div class="step-wo-number">Contextsのその他のテキストフィールドは空白にします。</div><div class="step"><span class="stepnumber">7</span>Contextsという見出しのすぐ下の「追加」ボタンをクリックします。コンテキストの定義領域がひとつ分増えます。</div><div class="step"><span class="stepnumber">8</span>nameに「person_detail」、keyを「id」、recordsを「1」、maxrecordsを「1」とします。</div><div class="step-wo-number">[MySQL]の場合<br/>viewとtableは「person」とします。</div><div class="step-wo-number">[FileMaker]の場合<br/>viewとtableは「person_layout」とします。</div><div class="step-wo-number">Contextsのその他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-175.png"/></div><div class="step"><span class="stepnumber">9</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=db;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_DataAPI」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「gateway.docker.internal」、portに「443」、protocolに「https」、cert-vefifyingに「false」と入力します。</div><div class="step"><span class="stepnumber">10</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><h4>ページファイルの作成と表示</h4><div class="step"><span class="stepnumber">1</span>「http://localhost:9080」で開いたページに戻り「page11.htmlを編集する」をクリックし、ページファイルのpage11.htmlを編集するページファイルエディターが開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="def11.php"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+  &lt;table&gt;
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;div data-im="person_list@name"&gt;&lt;/div&gt;
+        &lt;div data-im="person_list@mail"&gt;&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;id&lt;/th&gt;
+      &lt;td data-im="person_detail@id"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;name&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="person_detail@name"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;address&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="person_detail@address"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;mail&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="person_detail@mail"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;category&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="person_detail@category"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;checking&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="person_detail@checking"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;location&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="person_detail@location"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;memo&lt;/th&gt;
+      &lt;td&gt;&lt;textarea data-im="person_detail@memo"&gt;&lt;/textarea&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページに戻り、「page11.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。2つのテーブルが見えています。ひとつは、personテーブルの内容が一覧になっています。もうひとつはpersonテーブルのひとつのレコードが見えています。ページネーションが見えていますが、こちらは定義ファイルで指定した通り、テーブルの一覧表示のコンテキストに関連付けられたものです。ここまでは、本コースでこれまでにやってきたことと同一です。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-176.png"/></div><div class="step"><span class="stepnumber">3</span>「page11.htmlを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを編集する」をクリックして開きます。そして、2つのTABLEタグを囲むようにDIVタグを定義して、スタイル属性を設定します。displayスタイル属性をflexにすることで、テーブルが2つ横に並ぶようになります。gapによって、テーブル間に適当な空白を入れます。</div><div class="code"><pre><code>&lt;body&gt;
+  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+  <strong>&lt;div style="display: flex; gap: 1em"&gt;</strong>
+  &lt;table&gt;
+    :
+  &lt;/table&gt;
+  &lt;table&gt;
+    :
+  &lt;/table&gt;
+<strong>&lt;/div&gt;</strong>
+&lt;/body&gt;</code></pre></div><div class="step"><span class="stepnumber">4</span>「page11.htmlを表示する」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新機能を使ってページ内容を更新します。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを表示する」をクリックして開きます。style属性で指定した通り、テーブルが左右に配置され、テーブル間には空間が作られています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-177.png"/></div><h4>同一ページでのマスター/ディテール形式のユーザーインターフェース</h4><div class="step"><span class="stepnumber">1</span>「def11.phpを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def11.phpを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">2</span>最初の「person_list」コンテキストのnavi-controlを「master」にします。</div><div class="step"><span class="stepnumber">3</span>2つ目の「person_detail」コンテキストのnav-controlを「detail」にします。設定後、Tabキーを押すなどして、入力結果を確定させてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-178.png"/></div><div class="step"><span class="stepnumber">4</span>「page11.htmlを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを編集する」をクリックして開きます。一覧を表示するテーブルの行の最初に、空のセルを付け加えておきます。</div><div class="code"><pre><code>&lt;body&gt;
+  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+  &lt;div style="display: flex; gap: 1em"&gt;
+  &lt;table&gt;
+    &lt;tr&gt;
+      <strong>&lt;td&gt;&lt;/td&gt;</strong>
+      &lt;td&gt;
+        &lt;div data-im="person_list@name"&gt;&lt;/div&gt;
+        &lt;div data-im="person_list@mail"&gt;&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;</code></pre></div><div class="step"><span class="stepnumber">5</span>「page11.htmlを表示する」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新機能を使ってページ内容を更新します。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを表示する」をクリックして開きます。一覧のテーブルの各行に追加した空白のセルの中に、「詳細」ボタンが自動的に設定されています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-179.png"/></div><div class="step"><span class="stepnumber">6</span>4番目の「詳細」ボタンをクリックすると、右側には、一覧表示側と対応したレコードの内容が表示されています。つまり、「詳細」ボタンをクリックしたレコードの内容が右側のテーブル（詳細表示）に表示しています。iPadでよく見られるような一覧と詳細が左右に並ぶ形式のユーザーインターフェースがこれで実現しています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-180.png"/></div><div class="step"><span class="stepnumber">7</span>詳細表示側はテキストフィールドになっています。nameフィールドの中身を変更してみて、ReturnキーあるいはTabキーを押して設定を確定します。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-182.png"/></div><div class="step"><span class="stepnumber">8</span>自動的に左側の一覧表示側のnameフィールド値も、書き換えたものに即座に変更されました。同一のレコードの同一のフィールドは、ページ内では連動しています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-183.png"/></div><h4>一覧表示側に対して作用するページネーション</h4><div class="step"><span class="stepnumber">1</span>一覧表示側で、10より多くのレコードがあるようにします。ない場合には、「レコード追加：person_list」ボタンをクリックしてレコードを追加します。このボタンが見えない場合には、「更新」ボタンをクリックして、ページを更新してください。「レコードを本当に作成していいですか？」とたずねられるので、OKボタンをクリックします。「レコード追加」ボタンがない場合には、ブラウザーの更新機能を利用するか、ページネーションの「更新」ボタンをクリックして、ページを更新します。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-184.png"/></div><div class="step"><span class="stepnumber">2</span>例えばレコードを全部で13個作成した場合、最初の10レコードが左側の一覧表示側に見えています。また、ページネーションコントロールでは、次のページに移動するボタンがクリックできるようになっています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-185.png"/></div><div class="step"><span class="stepnumber">3</span>ページネーションコントローラーの「&gt;」ボタンをクリックして、ページネーションを次のページに移動します。左側の一覧表示側は11レコード目より10レコード以内のレコードが一覧されていますが、詳細表示側は見えているリストの最初のレコード（idフィールドが「12」）が見えています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-186.png"/></div><div class="step"><span class="stepnumber">4</span>最後のレコードの「詳細」ボタンをクリックして、詳細表示側で適当に入力しました。もちろん、その結果はデータベースに保存されるとともに、一覧表示側にも即座に反映しています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-187.png"/></div><h4>レコード削除に対する詳細側の動作</h4><div class="step"><span class="stepnumber">1</span>「def11.phpを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def11.phpを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">2</span>最初の「person_list」コンテキストのrepeat-controlを「confirm-insert confirm-delete」にします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-188.png"/></div><div class="step"><span class="stepnumber">3</span>「page11.htmlを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを編集する」をクリックして開きます。一覧を表示するテーブルの行の最後に、空のセルを付け加えておきます。</div><div class="code"><pre><code>  &lt;table&gt;
+    &lt;tr&gt;
+      &lt;td&gt;
+        &lt;div data-im="person_list@name"&gt;&lt;/div&gt;
+        &lt;div data-im="person_list@mail"&gt;&lt;/div&gt;
+      &lt;/td&gt;
+      <strong>&lt;td&gt;&lt;/td&gt;</strong>
+    &lt;/tr&gt;
+  &lt;/table&gt;</code></pre></div><div class="step"><span class="stepnumber">4</span>「page11.htmlを表示する」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新機能を使ってページ内容を更新します。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを表示する」をクリックして開きます。一覧のテーブルの各行に、「削除」ボタンが自動的に設定されています。</div><div class="step"><span class="stepnumber">5</span>適当なレコードの「詳細」ボタンをクリックして、詳細表示側に何か表示されている状態にします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-189.png"/></div><div class="step"><span class="stepnumber">6</span>詳細表示側に表示されている対応するレコードを一覧表示側で特定して、そのレコードの「削除」ボタンをクリックします。削除するかどうかをたずねるので、OKボタンをクリックして、本当に削除します。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-190.png"/></div><div class="step"><span class="stepnumber">7</span>一覧表示側からレコードは消えました。</div><h4>一覧と詳細が切り替わるユーザーインターフェース</h4><div class="step"><span class="stepnumber">1</span>「def11.phpを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def11.phpを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">2</span>最初の「person_list」コンテキストのnavi-controlを「master-hide」にします。Tabキーを押して、確実に内容を定義ファイルに反映させるようにしてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-191.png"/></div><div class="step"><span class="stepnumber">3</span>この状態で、Webアプリケーションの表示がどのようになっているか確認してみましょう。「page11.htmlを表示する」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新機能を使ってページ内容を更新します。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを表示する」をクリックして開きます。すると、一覧表示部分だけが見えています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-192.png"/></div><div class="step"><span class="stepnumber">4</span>適当に「詳細」ボタンをクリックすると、そのクリックしたページの詳細表示側だけが見えています。つまり、一覧と詳細が切り替わるユーザーインターフェースが自動的に構築されています。詳細側では、ページネーションも見えていないことを確認してください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-193.png"/></div><div class="step"><span class="stepnumber">5</span>詳細側の「一覧表示」ボタンをクリックすると、一覧表示側つまり、最初の状態に戻ります。ページネーションも見えるようになっています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-194.png"/></div><div class="step"><span class="stepnumber">6</span>「def11.phpを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def11.phpを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">7</span>2つ目の「person_detail」コンテキストのnav-controlを「detail-bottom」にします。設定後、Tabキーを押すなどして、入力結果を確定させてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-196.png"/></div><div class="step"><span class="stepnumber">8</span>「page11.htmlを表示する」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新機能を使ってページ内容を更新します。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを表示する」をクリックして開きます。一覧表示側だけが表示されています。適当なレコードの「詳細」ボタンをクリックして詳細表示側を見てみます。「一覧表示」ボタンが、下部に表示されました。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-197.png"/></div><h4>エンクロージャー外の要素のコントロール</h4><div class="step"><span class="stepnumber">1</span>「page11.htmlを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを編集する」をクリックして開きます。ヘッダー部にスクリプトを追加するとともに、ボディ部の最初に一覧表示と詳細表示の両方の見出しを表示しておきます。そして、詳細側はdisplay属性をnoneにして、非表示にしておきます。スクリプトは、一覧から詳細あるいはその逆に変化する段階で呼び出されるメソッドで、H1タグの見出しをそれぞれ表示/非表示を切り替えているだけです。</div><div class="code"><pre><code>&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="def11.php"&gt;&lt;/script&gt;
+<strong>  &lt;script type="text/javascript"&gt;
+    INTERMediatorOnPage.<span xmlns="" id="ix-17"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>naviAfterMoveToDetail
+      = function(master, detail){
+      document.getElementById("master_title").style.display = "none";
+      document.getElementById("detail_title").style.display = "block";
+    }
+
+    INTERMediatorOnPage.<span xmlns="" id="ix-18"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>naviAfterMoveToMaster
+      = function(master, detail){
+      document.getElementById("master_title").style.display = "block";
+      document.getElementById("detail_title").style.display = "none";
+    }
+  &lt;/script&gt;</strong>
+&lt;/head&gt;
+&lt;body&gt;
+<strong>  &lt;h1 id="master_title"&gt;住所録一覧表示&lt;/h1&gt;
+  &lt;h1 id="detail_title" style="display:none"&gt;住所録詳細表示&lt;/h1&gt;</strong>
+  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+  &lt;div style="display: flex; gap: 1em"&gt;
+  &lt;table&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;
+        &lt;div data-im="person_list@name"&gt;&lt;/div&gt;</code></pre></div><div class="step-wo-number">使用しているメソッドについての説明は、この演習のすぐ後にある『一覧と詳細の切り替え時に呼び出されるメソッド』を参照してください。</div><div class="step"><span class="stepnumber">2</span>「page11.htmlを表示する」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新機能を使ってページ内容を更新します。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page11.htmlを表示する」をクリックして開きます。一覧表示側だけが表示されていて、ページの見出しは「住所録一覧表示」だけが表示されています。「住所録詳細表示」は初期状態ではdisplayスタイル属性が「none」なので、非表示です。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-198.png"/></div><div class="step"><span class="stepnumber">3</span>適当な「詳細」ボタンをクリックして、詳細表示にすると、見出しは「住所録詳細表示」に切り替わります。これは、一覧から詳細に移行する途中でINTERMediatorOnPage.naviAfterMoveToDetailメソッドが呼び出され、ヘッダーに記述したプログラムが実行され、一方の見出しは非表示に、もう一方は表示されるようになったということです。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-199.png"/></div><div class="step"><span class="stepnumber">4</span>「一覧」ボタンをクリックして、一覧表示にすると、見出しは「住所録一覧表示」に戻ります。これは、詳細から一覧に移行する途中でINTERMediatorOnPage.naviAfterMoveToMasterメソッドが呼び出され、ヘッダーに記述したプログラムが実行され、一方の見出しは非表示に、もう一方は表示されるようになったということです。</div><h4>演習のまとめ</h4><ul><li>コンテキスト定義のnavi-controlに「master」「detail」をそれぞれ同一のテーブルから定義した2つのコンテキストに記述することで、一覧と詳細を表示するユーザーインターフェースが作成できます。</li><li>一覧および詳細のコンテキストでは、その他の設定にも注意を払う必要がありますが、通常、一覧は複数レコードを表示、必要に応じてページネーションと連動させます。詳細は1レコードを表示するようにします。</li><li>「master-hide」を指定すると、一覧と詳細が切り替わるユーザーンタフェースを作成できます。</li><li>一覧から詳細、あるいは詳細から一覧に移動するときに、作成しているページ側で定義したプログラムを実行することができます。これを利用して、例えば「master-hide」を利用しているときに、一覧と詳細で異なる見出しを表示することなどが可能です。</li></ul><h3><span id="H3-ANC-5"><span style="display:none">→</span></span><span xmlns="" id="ix-19"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-20"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>一覧と詳細の切り替え時に呼び出されるメソッド</h3><p>　以下、マスター/ディテール形式のページにおいて使用可能なJavaScriptのAPIについて説明をします。JavaScriptについては、本ページよりも後になりますが、『2-3　JavaScriptプログラムの記述』の記述を踏まえたものとします。</p><p>　一覧表示と詳細表示で、コンテキスト内のリンクノードについては、データベースの内容がそれぞれ表示されますが、それ以外のなんらかの処理を追加したい場合には、いくつかのメソッドを利用することができます。一覧表示から詳細表示、あるいは詳細表示から一覧表示に切り替わるとき、切り替え前に呼び出されるメソッドと、切り替わり後に呼び出されるメソッドの、合計4種類のメソッドを、グローバル変数INTERMediatorOnPageのメソッドとして定義可能です。引数を2つ取り、mContextが一覧表示側、dContextが詳細表示側のコンテキストオブジェクトです。コンテキスト定義ではなく、モデルとして動作するコンテキストオブジェクトへの参照が得られます。返り値は不要です。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-21"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>naviBeforeMoveToDetail = function (mContext, dContext) {...}</h4><p>　一覧表示から詳細表示に切り替わる前に呼び出されます。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-22"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>naviAfterMoveToDetail = function (mContext, dContext) {...}</h4><p>　一覧表示から詳細表示に切り替わった直後に呼び出されます。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-23"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>naviBeforeMoveToMaster = function (mContext, dContext) {...}</h4><p>　詳細表示から一覧表示に切り替わる前に呼び出されます。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-24"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>naviAfterMoveToMaster = function (mContext, dContext) {...}</h4><p>　詳細表示から一覧表示に切り替わった直後に呼び出されます。</p><p>　これらの4つのメソッドは、一覧/詳細の切り替わるときにしかこれらのメソッドは呼び出されません。ページ表示直後に何らかのプログラムの追加が必要なら、INTERMediator.doBeforeConstructメソッドの呼び出し前や、INTERMediatorOnPage.doAfterConstructメソッド（『8-6　ブラウザーを判断するページ』を参照）を利用します。</p><h3><span id="H3-ANC-6"><span style="display:none">→</span></span>マスター/ディテール形式のページでのそれぞれのコンテキストの取得</h3><p>　マスター表示とディテール表示の切り替え前後に呼び出されるメソッドは、それぞれのコンテキストオブジェクトを引数として渡されるので、コンテキストは即座に参照できます。これら以外のメソッドで、マスターあるいはディテールのコンテキストを得るには、次のAPIを利用することができます。</p><h4>IMLibContextPool.<span xmlns="" id="ix-25"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getMasterContext()</h4><p>　<span xmlns="" id="ix-26"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-27"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>マスター側のコンテキストへの参照を返します。</p><h4>IMLibContextPool.<span xmlns="" id="ix-28"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDetailContext()</h4><p>　<span xmlns="" id="ix-29"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-30"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ディテール側のコンテキストへの参照を返します。</p><h3><span id="H3-ANC-7"><span style="display:none">→</span></span>詳細へのナビゲーション</h3><h4>IMLibPageNavigation.<span xmlns="" id="ix-31"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>moveToDetail(keyField, keyValue, isHide, isHidePageNavi)</h4><p>　引数に指定した仕様の<span xmlns="" id="ix-32"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-33"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>詳細画面を表示します。一覧側にある「詳細」ボタンを押したときに利用されるメソッドです。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>keyField</td><td>詳細側に表示するレコードのキーフィールド名</td></tr><tr><td>keyValue</td><td>詳細側に表示するレコードのキーフィールド値</td></tr><tr><td>isHide</td><td>一覧側を非表示にするのならtrue、そのままならfalse</td></tr><tr><td>isHidePageNavi</td><td>ページネーションを非表示にするのならtrue</td></tr></table><div class="caption">表5-1-3　moveToDetailメソッドに指定する引数</div></div><p>　このメソッドの返り値は、関数です。その関数を引数なしで呼び出すことで、詳細への画面切り替えが発生します。例えば、マスター領域の最初のレコードに対応した詳細を表示するには、リスト5-1-1のようなプログラムで可能です。</p><div class="code"><div class="caption">リスト5-1-1　マスターの最初のレコードを表示する詳細への移動プログラム</div><pre><code>var context = IMLibContextPool.getMasterContext();
+var keys = Object.keys(context.store);
+var comp = keys[0].split('=');
+var func = IMLibPageNavigation.moveToDetail(comp[0], comp[1], true, true);
+func();</code></pre></div><p>　リスト5-1-1のプログラムを利用すると、最初に一覧表示のマスター領域ではなく、最新データの詳細を表示することができます。リスト5-1-2にあるように、INTERMediatorOnPage.<span xmlns="" id="ix-34"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterConstructメソッドに処理を記述します。INTERMediator.<span xmlns="" id="ix-35"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>partialConstructingプロパティは、ページ全部が生成し終わっているかどうかを判定できるものです。最初のページ生成ではfalseになっていて、その後のマスターと詳細を行き来するときにはtrueになります。つまり、ページの最初の生成時にのみ、moveToDetailメソッドが実行されるということです。moveToDetailメソッドの返り値は関数なので、「func();」のように即座に実行しています。ここで、詳細側にどのレコードを表示するのかを、moveToDetailメソッドの引数に指定します。詳細側のコンテキストからレコードを取り出すとき、「第1引数="第2引数"」といった条件式が適用されると考えてください。一方、マスター領域はすでにコンテキストが作られています。マスター側のコンテキストを取得するには、IMLibContextPool.getMasterContextメソッドが手軽で便利です。そのオブジェクトのstoreプロパティがデータベースから取得したデータですが、「主キー=値」がプロパティとなったオブジェクトの形式になっています。Object.keysメソッドで、プロパティ名の配列を得て、その最初の要素から、主キーフィールド名とその値を分離して得ています。</p><div class="code"><div class="caption">リスト5-1-2　ページを表示したときに詳細を表示する</div><pre><code>INTERMediatorOnPage.doAfterConstruct = function () {
+  if (!INTERMediator.partialConstructing) {
+    var context = IMLibContextPool.getMasterContext();
+    var keys = Object.keys(context.store);
+    var comp = keys[0].split('=');
+    var func = IMLibPageNavigation.moveToDetail(comp[0], comp[1], true, true);
+    func();
+  }
+}</code></pre></div><h4>IMLibPageNavigation.<span xmlns="" id="ix-36"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>moveDetailOnceAgain()</h4><p>　最後に行った<span xmlns="" id="ix-37"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-38"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>詳細画面への移行を再度行います。マスター/ディテール形式のページから別のページに移動し、またマスター/ディテール形式のページに戻ったときに、以前表示していた詳細レコードを再度表示したいような場合に利用できます。</p><h3><span id="H3-ANC-8"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　一覧と詳細を行き来するユーザーインターフェースや、一覧と詳細を同時に表示するユーザーインターフェースを、定義ファイルへの指定だけで作成可能な機能がINTER-Mediatorには搭載されています。2つのコンテキストを用意して、navi-controlキーにmasterやdetailなどの値を指定することが基本です。レコードの削除の動作には若干、気を付ける必要がありますが、2つのコンテキストは連動しているので、一方で編集した結果はもう一方に原則として即座に反映されます。ナビゲーションのためのボタンが自動的に付けられますが、ボタン名のカスタマイズや、スタイルシートによる書式設定もできます。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-2"><span style="display:none">→</span></span><span class="sectionnumber">5-2</span>メールの送信</h2><p class="section-lead">Webアプリケーションでは、<span xmlns="" id="ix-39"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-40"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>メールの送信を行うことがよくあるため、INTER-Mediatorでもメール送信の機能を実装しました。単に送信するだけなら、定義ファイルへの設定のみで可能ですが、一般にはJavaScriptとの連携を行うことが多いと思われます。</p><h3><span id="H3-ANC-9"><span style="display:none">→</span></span>メールを送るタイミング</h3><p>　まず、メールを送るタイミングについて説明をします。メールの送信をクライアントから実行するという手もありますが、ブラウザーからクライアントOSや別のアプリケーションを操作するのはかなり難しく、セキュリティ面から、原則として大きく制約されているのが一般的です。そのため、メールを組み込む機能はサーバー上にある必要があります。</p><p>　そのこともあって、メールの送信機能は、「データベースに対する操作を行った後」に行うという実装としました。ただし、レコード削除後に送信するのは用途的に考えにくいのと、レコードの内容をメールに含める仕組みを実現しようとすると、この処理だけ例外的になってしまうので、削除は対象外としました。つまり、データの基本操作であるCRUD（Create Read Update Delete）のうちのCRUの3つの操作の後に、メールを送ります。コンテキストに対して<span xmlns="" id="ix-41"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>send-mailキーで連想配列を定義し、その要素のキーとして、表5-2-1のようなキーを指定します。言い換えれば、ひとつのコンテキストについて、CRUそれぞれひとつのメール送信だけを指定できるようになっています。</p><div class="table"><table><tr><th>キー</th><th>動作</th></tr><tr><td><span xmlns="" id="ix-42"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>read</td><td>レコードの取り出しを行った後にメールを送信する</td></tr><tr><td><span xmlns="" id="ix-43"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>upate</td><td>レコードの更新処理を行った後にメールを送信する</td></tr><tr><td><span xmlns="" id="ix-44"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>create</td><td>新たなレコードを作るアクションを起こした後にメールを送信する</td></tr></table><div class="caption">表5-2-1　send-mailキーの連想配列に設定可能なキー</div></div><p>　設定の上で若干柔軟性が低いと思われるかもしれません。例えば、フィールドAを更新したときだけメールを出したいといった場合です。そのようなときには、フィールドAの更新を行うときのコンテキストを新たに定義し、そこにメール送信の設定を行います。そして、フィールドAの更新を、例えばボタンを押して行うなどして、ボタンを押したときに新たなコンテキストの更新処理をJavaScriptで記述するという手法を使います。このように、メールの送信のための別のコンテキストを用意するといった手法で、柔軟にメール送信の仕組みが組み立てられると同時に、条件設定的な複雑な設定やプログラムを導入することなくメール送信が利用できます。</p><h3><span id="H3-ANC-10"><span style="display:none">→</span></span>メールの内容に関する設定</h3><p>　あるコンテキストで、新規にレコードを作ったときにメールを送るのであれば、send-mailキーのnewキーの値にさらに連想配列を定義して、その連想配列を、表5-2-2に示すキーの要素を追加します。表にあるすべてのキーを設定する必要はありませんが、送信者と送信先、そして本文の3つはなんらかのキーで指定は必要です。</p><div class="table"><table><tr><th>キー</th><th>値に設定する内容</th></tr><tr><td><span xmlns="" id="ix-45"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>from</td><td>送信者名や送信者アドレスが含まれるフィールド名</td></tr><tr><td><span xmlns="" id="ix-46"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>to</td><td>送信先が含まれるフィールド名</td></tr><tr><td><span xmlns="" id="ix-47"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>cc</td><td>Cc先が含まれるフィールド名</td></tr><tr><td><span xmlns="" id="ix-48"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>bcc</td><td>Bcc先が含まれるフィールド名</td></tr><tr><td><span xmlns="" id="ix-49"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>subject</td><td>件名が含まれるフィールド名</td></tr><tr><td><span xmlns="" id="ix-50"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>body</td><td>メール本文が含まれるフィールド名</td></tr><tr><td><span xmlns="" id="ix-51"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>template-context</td><td>本文のテンプレートとなるコンテキストとレコードを指定</td></tr><tr><td><span xmlns="" id="ix-52"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>store</td><td>メール送信の記録を行うコンテキストを指定</td></tr><tr><td><span xmlns="" id="ix-53"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>attachment</td><td>メールにファイル添付を行う場合</td></tr><tr><td><span xmlns="" id="ix-54"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>f-option</td><td>UNIXでSMTPサーバーを経由しない場合にtrueを指定すると、fromの指定が有効</td></tr><tr><td><span xmlns="" id="ix-55"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>body-wrap</td><td>右端の折り返しのバイト数（指定がないと72バイト）。0だと折り返ししない</td></tr></table><div class="caption">表5-2-2　send-mailキーの連想配列の値に設定する連想配列に設定可能なキー</div></div><p>　メールの作成方法は、この後に演習を通じていくつかの事例を示しながら解説をします。表の中のf-optionは、UNIXマシンのsendmailコマンドを使ってメールを送るときに、送信者を指定したのにもかかわらず、送信者が、www（あるいはApacheの稼働ユーザー）になってしまうようなときに指定をしてください。OSに組み込まれているメール送信コマンド等の動作に依存しますが、より確実に送信者の指定ができるはずです。</p><p>　body-wrapは、長い行の折り返しを、Shift-JISのバイト数で指定します。なお、折り返しを入れますが、比較的追い込みを積極的に行うアルゴリズムを組み込んであります。</p><h3><span id="H3-ANC-11"><span style="display:none">→</span></span><span class="exsign">演習</span>Post Onlyモードのページでメールを送信する</h3><p>　Post Onlyモードでは、アンケートなどで使われることが多いと思われます。そのとき、投稿した上で、確認のメールを出すということはよく行われます。そうした場面を想定して、3種類のメールの送信方法を紹介します。</p><h4>演習環境にメールサーバのコンテナを追加する</h4><div class="step"><span class="stepnumber">1</span>演習環境を作成したレポジトリ「IMApp_Trial」を特定して、ルートにあるdocker-compose.yamlファイル開きます。</div><div class="step"><span class="stepnumber">2</span>ファイルの最後の5行の部分を特定します。mailhog: 以降の行が#によってコメントになっていますが、全てのコメントを外します。そして、ファイルを保存します。</div><div class="code"><pre><code>:
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    ports:
+      - 127.0.0.1:13306:3306
+#  mailhog:
+#    image: mailhog/mailhog
+#    ports:
+#      - "8025:8025"
+#      - "1025:1025"</code></pre></div><div class="step"><span class="stepnumber">3</span>ターミナルを開き、レポジトリのルートをカレントディレクトリとして、以下のコマンド、つまりコンテナの構築コマンドを実行します。</div><div class="code"><pre><code>docker-compose up -d</code></pre></div><div class="step-wo-number">しばらく待つと、mailhogという名前のコンテナが新たに稼働します。このコンテナは、メールサーバの役割を持つコンテナですが、SMTPのリクエストを受け付けて、それをWebページで表示する機能を持ちます。実際にメールをインターネットに対して飛ばすことはないので、デバッグ等で安心して利用できます。</div><h4>コンテキストを定義ファイルに定義</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。ブラウザーで、「http://localhost:9080」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def12.phpを編集する」をクリックし、定義ファイルエディターでdef12.phpファイルを編集します。（もし、他の用途で12番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">5</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">6</span>name、table、viewに「survey」、keyを「id」とします。このコンテキストには他にテキストフィールドがありますが、すべて空白にします。</div><div class="step-wo-number">Contextsのその他のテキストフィールドは空白にします。</div><div class="step"><span class="stepnumber">7</span>Contextsのすぐ下にある「追加」ボタンをクリックして、コンテキスト定義をひとつ増やします。</div><div class="step"><span class="stepnumber">8</span>nameに「survey_list」、table、viewに「survey」、keyを「id」、pagingを「true」、repeat-controlを「confirm-delete confirm-insert」、recordsを「10」、maxrecordsを「100」とします。その他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-202.png"/></div><div class="step"><span class="stepnumber">9</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=db;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_DataAPI」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「gateway.docker.internal」、portに「443」、protocolに「https」、cert-vefifyingに「false」と入力します。</div><div class="step"><span class="stepnumber">10</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><h4>Post Onlyモードのページファイルの作成</h4><div class="step"><span class="stepnumber">1</span>「http://localhost:9080」で開いたページに戻り「page12.htmlを編集する」をクリックし、ページファイルのpage12.htmlを編集するページファイルエディターが開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="def12.php"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>&lt;table&gt;
+  &lt;tbody data-im-control="post"&gt;
+    &lt;tr&gt;
+      &lt;th&gt;お名前&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="survey@Q1"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;メールアドレス&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="survey@Q2"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;ご意見&lt;/th&gt;
+      &lt;td&gt;&lt;textarea data-im="survey@Q3"&gt;&lt;/textarea&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;td&gt;&lt;button data-im-control="post"&gt;送信&lt;/button&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;お名前&lt;/th&gt;&lt;th&gt;メールアドレス&lt;/th&gt;&lt;th&gt;ご意見&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-im="survey_list@Q1"&gt;&lt;/td&gt;
+      &lt;td data-im="survey_list@Q2"&gt;&lt;/td&gt;
+      &lt;td data-im="survey_list@Q3"&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">「http://localhost:9080」で開いたページに戻り「page12.htmlを表示するする」をクリックして、どのような画面になっているか確認してみてください。最初のテーブルは、Post Onlyモードで動作し、ボタンをクリックすると、surveyコンテキストに対して新たなレコードを作成します。2つ目のコンテキストは、単にsurveyコンテキストの全レコードを表示しているもので、入力したレコードの確認用です。</div><h4>送信者、送信先、本文がすべて一定のメールの設定</h4><p>　以下の演習では、メールアドレスを使用しますが、mailhogのコンテナを使っている限りは、メールアドレスに何を指定しても、実際にはメールは送られませんし、メールを送ったということをブラウザで確認できます。筆者の新居雅行のメールアドレスを記述しますが、そのまま指定しても構いませんし、ご自分のメールアドレスを指定されても構いません。</p><div class="step"><span class="stepnumber">1</span>「def12.phpを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def12.phpを編集する」をクリックして開きます。Definition File Editorのページが開きます。右上に表示されている「Show All」のボタンを押します。Context内に表示されている項目が全て表示されます。</div><div class="step"><span class="stepnumber">2</span>surveyコンテキストの設定にあるSetting for Post-only Modeのpost-reconstructを「true」、post-dismiss-messageに「ありがとう」と入力します。post-dismiss-messageの文言はなんでもかまいません。データ送信を受けたことを示す簡潔な文言を入れてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-203.png"/></div><div class="step"><span class="stepnumber">3</span>surveyコンテキストのSend Email or Messagingの設定にある、createの見出しの下に入力します。fromとtoに「msyk@msyk.net」、subjectに「ご意見承りました」、bodyに「ありがとうございます。今後ともよろしくお願いします。」を入力します。f-optionを「true」に、body-wrapは「72」とします。Tabキーを押すなどして、確実に入力をしてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-204.png"/></div><div class="step"><span class="stepnumber">4</span>定義ファイルエディタでさらにスクロールして、OptionsのSMTP Settingsを表示します。ここでは送信用のメールサーバへの接続情報を指定します。serverに「mailhog」、portに「1025」と指定します。Tabキーを押すなどして、確実に入力をしてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-209.png"/></div><h4>フォームの入力をきっかけとしてメール送信される</h4><div class="step"><span class="stepnumber">1</span>「http://localhost:9080」で開いたページに戻り、「page12.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。2つのテーブルが見えています。上のPost Onlyモードのテーブルに、適当に入力します。ここで、メールアドレスの右のテキストフィールドには定義ファイルエディタで入力したものと異なるものを指定してください。ここで、「msyk@mac.com」と入力しました。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-206.png"/></div><div class="step"><span class="stepnumber">2</span>「送信」ボタンをクリックします。すると、まず、「送信」ボタンが消えて、コンテキストのpost-dismiss-messageキーに指定したメッセージがページ上に見えています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-207.png"/></div><div class="step"><span class="stepnumber">3</span>さらに4秒後にページが更新され、下側のテーブルに、今入力したデータが見えています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-208.png"/></div><div class="step"><span class="stepnumber">4</span>ブラウザでタブを新たに開いて、「http://localhost:8025」へ接続してください。mailhogコンテナが受け付けたメールがリストになって表示されています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-211.png"/></div><div class="step"><span class="stepnumber">5</span>メールの項目をクリックして、内容を表示します。このメールは、コンテキスト定義のtoに指定したメールアドレス「msyk@msyk.net」に送られており、Post Onlyモードのテーブル内で入力したメールアドレス「msyk@mac.com」には送られていません。現在の設定では、メールの送り先は常にtoに指定したメールアドレスになります。また、本文や件名、送信者は常に固定された文字列です。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-212.png"/></div><h4>データベースから得られた宛先を送信者にする</h4><div class="step"><span class="stepnumber">1</span>「def12.phpを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def12.phpを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">2</span>すべての項目が表示されている状態でない場合には、定義ファイルエディターのページの最初にある「Show All」ボタンをクリックして、すべての項目を表示します。</div><div class="step"><span class="stepnumber">3</span>surveyコンテキストのSend Email or Messagingの設定にある、createの見出しの下に入力します。toを「@@Q2@@」と入力します。この@@でフィールドを囲む表記はテンプレート処理です。@@Q2@@の部分が、Q2フィールドに入力されている値に置き換わることを意味します。Tabキーを押すなどして、確実に入力をしてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-213.png"/></div><div class="step"><span class="stepnumber">4</span>「http://localhost:9080」で開いたページに戻り、「page12.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。2つのテーブルが見えています。上のPost Onlyモードのテーブルに、適当に入力します。ここで、メールアドレスの右のテキストフィールドには「msyk@mac.com」を入力しました。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-214.png"/></div><div class="step"><span class="stepnumber">5</span>「送信」ボタンをクリックします。5秒後にページが更新され、下側のテーブルに、今入力したデータが追加されています。</div><div class="step"><span class="stepnumber">6</span>メールが到着しています。このメールは、Post Onlyモードのテーブル内で入力した「msyk@mac.com」宛に送られています。ここで、コンテキストに設定したtoが「@@Q2@@」、つまりQ2フィールドに入力した文字列であることを思い出してください。本文や件名、送信者はここでも常に固定された文字列ですが、いずれの設定にも@@を用いてフィールドに置き換える処理が記述可能です。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-215.png"/></div><h4>メール本文に<span xmlns="" id="ix-56"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>テンプレートを使用する</h4><div class="step"><span class="stepnumber">1</span>IMApp_Trialによるコンテナのデータベースには、メールのテンプレートとなるテーブルと、サンプルのテンプレートメールがすでに入力されています。ターミナルから以下のコマンドを入力して、まず、MySQLへコマンドラインで接続します。</div><div class="code"><pre><code>mysql -u web -h 127.0.0.1 -P 13306 --password=password test_db</code></pre></div><div class="step"><span class="stepnumber">2</span>mysql &gt; のプロンプトが出てくることを確認して、以下のSQLコマンドを入力し、テンプレートのテーブルとレコードのデータを確認します。</div><div class="code"><pre><code>select * from mailtemplate;</code></pre></div><div class="step-wo-number">結果は以下の図のようになっています。bodyには改行が入っていて見づらいですが、idフィールドに「1」、to_fieldフィールドに「@@Q2@@」、from_fieldフィールドに「msyk@msyk.net」、subjectフィールドに「ご意見承りました」と入力されています。bodyフィールドを追ってみると、文字列の途中に@@Q1@@など、フィールド内容に置き換わるテンプレートの記述がなされています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-218.png"/></div><div class="step"><span class="stepnumber">3</span>「def12.phpを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def12.phpを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">4</span>Contextsのすぐ下にある「追加」ボタンをクリックして、コンテキスト定義をひとつ増やします。</div><div class="step"><span class="stepnumber">5</span>追加されたコンテキストでは、nameに「mailtemplate」、table、viewに「mailtemplate」、keyを「id」、とします。その他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-220.png"/></div><div class="step"><span class="stepnumber">6</span>定義ファイルエディタがすべての項目が表示されている状態でない場合には、定義ファイルエディターのページの最初にある「Show All」ボタンをクリックして、すべての項目を表示します。</div><div class="step"><span class="stepnumber">7</span>surveyコンテキストのSend Email or Messagingの設定にある、createの見出しの下に入力します。from、to、subject、bodyを空欄にします。そして、template-contextに「mailtemplate@id=1」と指定します。これは、メールテンプレートとして「mailtemplateコンテキストにある、idフィールドが1のレコードを利用する」ということを意味しています。Tabキーを押すなどして、確実に入力をしてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-219.png"/></div><div class="step"><span class="stepnumber">8</span>「http://localhost:9080」で開いたページに戻り、「page12.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。2つのテーブルが見えています。上のPost Onlyモードのテーブルに、適当に入力します。ここで、メールアドレスの右のテキストフィールドには「msyk@mac.com」を指定しました。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-221.png"/></div><div class="step"><span class="stepnumber">9</span>「送信」ボタンをクリックします。5秒後にページが更新され、下側のテーブルに、今入力したデータが追加されています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-222.png"/></div><div class="step"><span class="stepnumber">10</span>ブラウザで「http://localhost:8025」に接続して、メールが到着していることを確認します。このメールは、Post Onlyモードのテーブル内で入力した「msyk@mac.com」に送られています。ここで、コンテキストに設定したtoが「@@Q2@@」であり、つまりQ2フィールドに入力した文字列であることを思い出してください。現在の設定では、メールの送り先は、Post Onlyモードのテーブルで入力したQ2の文字列になります。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-223.png"/></div><div class="step-wo-number">このメールの本文は、mailtemplateテーブルのid=1のbodyフィールドの内容になっていますが、「@@フィールド名@@」の部分がフィールドの値に置き換わっています。つまり、新規作成したレコードのQ1フィールドが@@Q1@@、Q2フィールドが@@Q2@@、Q3フィールドが@@Q3@@の部分と置き換わって、メールの本文が作られています。このように、メールの本文は別に作ってある文面に、対象となるレコードの内容を差し込んで作成することができます。</div><h4>演習のまとめ</h4><ul><li>Post Onlyモードを利用してレコードを新規作成するときに、メールを送信する方法を演習を通じて学びました。</li><li>送信者と件名は固定でしたが、宛先や本文を固定あるいはフィールドの値を利用する方法を説明しました。</li><li>本文をテンプレートから抜き出してきて差し込む方法を学びました。本文をテンプレートとなるテキストファイルに記述する方法が実用的な意味で汎用性が高く、さまざまな文面を手早くシステムに組み込めて便利に使えるでしょう。</li></ul><h3><span id="H3-ANC-12"><span style="display:none">→</span></span><span xmlns="" id="ix-57"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SMTPサーバーを利用してメールを送信する</h3><p>　INTER-Mediatorでのメール送信は、PHPのmail関数を使用し、独自にエンコード等を行ってUTF-8のメールを送信する基本機能を備えています。UNIX系OSの場合は、sendmailあるいはPostfixをインストールしておけば、そのホストからメールの送信ができます。Windowsの場合はSMTPサーバーをサービスとして追加するなどしておけば、mail関数はSMTP通信を行ってメールを送信します。</p><p>　しかしながら、INTER-Mediatorが稼働するサーバーからのメール送信が許可されない場合もあるかもしれません。例えば、ファイアウォールの中にあって、ポートが開かれていない、あるいはプロバイダーが制限しているなど、一般には通信遮断が第三者によってなされていて解除できない場合が相当します。そのときには、SMTPサーバーに宛ててメールの中継を依頼することもできます。そのための設定は、定義ファイルのオプション部分に設定します。オプション部分に<span xmlns="" id="ix-58"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>smtpキーの要素を定義し、その値の連想配列の要素に表5-2-3のキーと対応する値を指定することで、SMTP通信を行ってメールのリレーを別のサーバーに依頼することができます。</p><div class="table"><table><tr><th>キー</th><th>対応する値</th></tr><tr><td><span xmlns="" id="ix-59"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>server</td><td>メール送信時に使用するサーバーのホスト</td></tr><tr><td><span xmlns="" id="ix-60"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>port</td><td>メール送信時に使用するサーバーのポート</td></tr><tr><td><span xmlns="" id="ix-61"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>encryption</td><td>暗号化のプロトコルで、'ssl'ないしは'pls'</td></tr><tr><td><span xmlns="" id="ix-62"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>username</td><td>メール送信時に認証で使用するユーザー名</td></tr><tr><td><span xmlns="" id="ix-63"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>password</td><td>メール送信時に認証で使用するパスワード</td></tr></table><div class="caption">表5-2-3　smtpキーの連想配列に設定可能なキー</div></div><p>　定義ファイルエディターで実際に設定する場合は、ページの冒頭にある「Show All」ボタンをクリックして、全項目を表示します。すると、図5-2-1のように、Optionsの最後に設定項目が表示されるようになります。定義ファイルへの設定を直接行う場合は、リスト5-2-1にあるように、オプション領域に記述を行います。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-209.png"/><div class="caption">図5-2-1　stmpキーの値を設定した定義ファイル（定義ファイルエディター）</div></div><div class="code"><div class="caption">リスト5-2-1　stmpキーの値を設定した定義ファイル（PHPでの記述）</div><pre><code>IM_Entry(
+array (	// コンテキストの定義
+  array (
+    'name' =&gt; 'survey',
+	:
+  ),
+),
+array (  // オプション設定
+  'smtp' =&gt;  array (
+    'server' =&gt; 'mail.msyk.net',
+    'port' =&gt; 589,
+    'Encriptio'n =&gt; 'tls',
+    'username' =&gt; 'msyk_test',
+    'password' =&gt; 'testpassword',
+  ),
+),
+array (  // データベース接続設定
+  'db-class' =&gt; 'PDO',
+	:
+),
+false);</code></pre></div><p>　SMTPによるメール送信では、SwiftmailというPHPのライブラリを使用しています。usernameとpasswordに何も指定をしなければ、認証なしにSMTP通信を実行します。一方、usernameとpasswordを使用すると、SMTP認証を行います。SMTPサーバーまでの経路によっては、SSL/<span xmlns="" id="ix-64"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>TLSを使った通信の利用を検討してください。その場合は、serverキーの値にはホスト名を記述しますが、encryptionキーにはsslあるいはtlsといったプロトコルを指定します。</p><h3><span id="H3-ANC-13"><span style="display:none">→</span></span>メール送信を伴う機能組み込みのパターン</h3><p>　このセクションの演習は、新規レコード作成とメール送信を連動させるという非常に分かりやすい事例を使いましたが、実際のアプリケーションではさまざまな状況でのメール送信のニーズが発生するでしょう。例えば、マネージャーが承認したら、関係者にメールが飛ぶといったような用途を考えてみましょう。このような場合、どのように機能を組み込めば良いのでしょう。もちろん、個別の事情によって異なると言えばその通りなのですが、いくつかの組み込みパターンがあり、それをヒントにすれば、機能の組み込み方法は見えているかもしれません。ここでは2つのパターンを紹介します。</p><p>　まず、最初のパターンは「メール送信用のコンテキストを定義する」ということです。つまり、一覧を表示したり、レコードの修正を行うためのコンテキストとは独立したメール送信専用のコンテキストを作ります。何種類かメールがあれば、それぞれコンテキストを作ります。こうすれば、例えば、「承認」というのは、「メール送信用コンテキストを通じて特定のフィールド（例えば「承認日」）に現在の日付を入力する」というデータベースの操作に置き換えることができます。この操作は、JavaScriptの記述が便利なので、『6-3　データベースへの書き込みを直接行う』で具体的なサンプルを示します。こうして、特定の処理だけ、メールの送信を伴うコンテキスト上で処理を進めるということで、他の処理とメール処理が混同することはなくなります。</p><p>　もうひとつのパターンは「メール送信コンテキストのviewキーの値を効果的に使う」ということです。メールの文面は、ファイルで用意したテンプレートを利用すると、長いものでも管理はしやすいでしょう。しかしながら、ここで問題になるのは、必要なフィールドの値をきちんとメールに含めることができるかどうかです。そのためには、メール作成時にどんなレコードが得られるかを知る必要があります。</p><p>　新しいレコードを作成すると、その作成したレコードの主キー値を使って、viewキーで指定したテーブルやビューに対して検索をかけて、新規に作成したレコードを取り出し、そのフィールドの値をメール内の「@@フィールド名@@」の記述に置き換えることができます。このとき、新規レコードを作成したテーブルから検索をしてもいいのですが、SQL系のデータベースだとビューを定義することで、レコードを作成したテーブルにないフィールドも、関連付けを辿ってビューの結果に含めておくことで、メールに含めることができます。例えば、この演習ではメールアドレスを入力しましたが、顧客マスターのようなテーブルがあるなら、メールアドレスから名前や会社名を取り出して、それもメールに含めることも可能になります。そのためには、surveyテーブルと顧客マスターをJOINし、回答に加えてその顧客の名前や会社名、部署等をフィールドとして含むビューを作成します。こうした、メール専用のコンテキストで、メール専用のビューを作って使うということを行えば、別のテーブルの内容もメールに含めることができます。FileMakerの場合はレイアウトに、同一のTOG（テーブルオカレンスのグループ）に含まれるフィールドを配置することで、SQLのビューに近いことが可能です。</p><p>　レコードの更新を行う場合、あるレコードのあるフィールドが更新されると、そのレコードの主キー値を使ってviewキーの値のテーブルあるいはビューに対して検索をかけて、得られたレコードをメールの文面に含めることができます。レコードの検索の場合は、検索結果の最初のレコードから、指定のフィールドが抜き出されます。そのため、レコードの検索を行った後、その結果情報をメール送信に含めたい場合には、検索結果が基本的にひとつに絞られるようなものでないと、正しく動作しないかもしれません。</p><h3><span id="H3-ANC-14"><span style="display:none">→</span></span>メール送信のトラブルシューティング</h3><p>　メール送信のトラブルは、現実には単にキータイプミスという場合がほとんどではないかと思われますが、加えて、ネットワーク制限を認識しているかどうかという点も重要ではあります。しかしながら、トラブルに遭った方は「正しく設定しているはずなのに」という前提から抜け出せないことで、なかなか対処できないということにもなりがちです。ともかく、冷静かつ客観的に設定や状況を確認してください。「間違い」を除くと、以下のような原因が考えられます。</p><ul><li>そもそもサーバーにメール送信機能がない。その場合はサーバーの動作を変えるか、SMTPサーバーへ中継する。</li><li>サーバーにメール送信機能はあるが送られない。その場合はサーバーの動作で何か設定が必要かもしれない。あるいはどこかでファイアウォールによってSMTP通信が遮断されていることが多い。</li><li>文字化けする。その場合は定義ファイルやテンプレートのファイルがUTF-8でエンコードされているかどうかを確認する。</li><li>送信者が指定通りにならない。その場合は、UNIX系OSなら、f-optionキーの値を「true」にする。</li><li>SMTPサーバーを指定したが送られない。原因は別掲します。</li></ul><p>　SMTPやあるいは認証のトラブルはさらに複雑な設定が絡みます。うまく行かない場合には、以下のような原因が考えられます。</p><ul><li>サーバー名がまちがっている。</li><li><span xmlns="" id="ix-65"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SSLないしは<span xmlns="" id="ix-66"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>TLSを使う場合に、encryptionの指定がない。<span xmlns="" id="ix-67"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Gmailはencryptionに'tls'を指定します。</li><li>INTER-Mediatorのサーバーと、SMTPサーバーの間で、利用するポートの通信ができるのかどうかをよく確認する。</li><li>ポート番号が違っている。Gmailの送信機能は587です。そのほか、25なのか、587なのか、ないとは思われるが465なのか、よく確認する。</li><li>ユーザー名、パスワードが違っている。正しいと思っている方こそ、絶対に違っています！と言い切れるほど、この手の間違いは多い。Gmailのユーザー名は、@を含むメールアドレス全てがユーザー名です。</li><li>SMTPサーバーが送信者の制限を行っている。例えば、一般にプロバイダーは、契約しているドメインの送信者のメールしか送れません。任意のアドレスを送信者にできないのが一般的です。</li><li>あなたの利用しているSMTPサーバーがブラックリストに入っている。未だにけっこう無意味な「怪しいホスト名リスト」にあるメールを拒否する設定をしている会社が、いくらかはあります。これは、送信できているけれども、受け入れてもらえないだけです。INTER-Mediatorやあるいは関連ライブラリの問題ではありません。</li><li>Gmailでは、自分のアカウントのアカウント情報にある「安全性の低いアプリケーションのアクセス」の設定を「有効」にします。多くの場合、この設定が「無効」になっており、外部からのSMTPサーバー利用はできない状態です。<a href="https://support.google.com/accounts/answer/6010255?hl=ja">Googleのサイト</a>でも記載されています。</li></ul><h3><span id="H3-ANC-15"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　コンテキストを通じて、データベースから検索した後、データベースの内容を更新した後、新しいレコードを作成した後に、メールを送信することができます。メールの宛先や本文などを定義ファイルで指定できます。メールの本文や宛先は、データベースから得られたレコードのフィールドの値を利用できます。メールの本文をテンプレートとしてテキストファイルで用意して、そこにフィールドを埋め込むといったメールの作成方法も可能です。メールの送信には、同一サーバーにあるSMPTサーバーを利用したり、別のホストに対して認証SMTPで送信することもできます。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-3"><span style="display:none">→</span></span><span class="sectionnumber">5-3</span>マルチクライアントでの同期</h2><p class="section-lead"><span xmlns="" id="ix-68"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>2つのクライアントで同一のレコードを表示しているとき、一方のクライアントで変更した結果を別のクライアントでも自動的に反映されるような動作が必要なときもあります。FileMakerでは当たり前に実現しているこうした機能は、Webアプリケーションで実装するには、通信処理などを含めてイチから構築しなければなりません。INTER-Mediatorには、変更結果を伝達する仕組みを搭載しているため、定義ファイルへの記述だけで実現できます。</p><h3><span id="H3-ANC-16"><span style="display:none">→</span></span><span xmlns="" id="ix-69"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-70"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>クライアント間連動の仕組み</h3><p>　通常のWebサーバーとのやりとり、すなわちHTTPは、通信が終了したら切れてしまうという動作を行います。つなぎっぱなしにはできないので、サーバー上のデータが更新されたかどうかは、接続してみないと分かりません。一定時間ごとに接続するとしても、すぐに変更が分かるわけではありません。では、0.5秒ずつ接続するということでは、サーバーの負荷が大きくなり、パフォーマンスを損なう可能性もありますし、バッテリー動作ならば消費電力が大きくなり、不利です。</p><p>　一方、インターネットの核となるTPC/IPは、通常はつなぎっぱなしができます。逆に言えば、HTTPはつないでは切るという動作をしているわけです。そこで、Webアプリケーションでもサーバーとつないだままにして、変化があったことだけを通知として受け取り、その後に必要なデータ処理を通常のHTTPで行うという仕組みが登場しました。それを、WebSocketと呼びます。INTER-Mediatorでは、Socket-IOというライブラリを利用して、WebSocketの機能を組み込んでいます。</p><h3><span id="H3-ANC-17"><span style="display:none">→</span></span>管理用テーブルの作成</h3><p>　INTER-Mediatorはどのクライアントにどのテーブルのデータが配布されているのかを、データベースに記録します。そのために表5-3-1のようなテーブルが必要になりますので、アプリケーションでクライアント間同期の機能を利用する場合には、これらと同一名および同一フィルードを持つテーブルを作成してください。PDO対応のデータベースエンジンの場合は、INTER-Mediator/dist-docsファイルにあるサンプルデータベースのスキーマ（sample_schema_*.txtファイル）に、CREATE TABLE等で記述されたSQLがあるので、それを利用できます。なお、<span xmlns="" id="ix-71"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>registeredcontextテーブルのidフィールドと、registeredpksテーブルのcontext_idフィールドでリレーションシップが設定されています。</p><div class="table"><table><tr><th>テーブル名</th><th>フィールド名</th><th>型</th></tr><tr><td>registeredcontext</td><td>id</td><td>INT AUTO_INCREMENT,</td></tr><tr><td/><td>clientid</td><td>TEXT</td></tr><tr><td/><td>entity</td><td>TEXT</td></tr><tr><td/><td>conditions</td><td>TEXT</td></tr><tr><td/><td>registereddt</td><td>DATETIME</td></tr><tr><td>registeredpks</td><td>context_id</td><td>INT</td></tr><tr><td/><td>pk</td><td>INT</td></tr></table><div class="caption">表5-3-1　クライアント同期の動作に必要なテーブル</div></div><h3><span id="H3-ANC-18"><span style="display:none">→</span></span><span class="exsign">演習</span>クライアント間連携の動作を確認する</h3><h4>クライアント間連携の機能を有効にする</h4><p>　演習環境では、クライアント連携の機能は有効になっていません。まず、サーバー側での設定の変更を行います。</p><div class="step"><span class="stepnumber">1</span>Docker DesktopのContainersの画面で、php-apache_imというコンテナイメージを特定します。その行の右の方にあるOPEN IN TERMINALボタンをクリックして、ターミナルでコンテナの操作をできるようにします。ターミナルの新たなウインドウが表示されることを確認します。</div><div class="step"><span class="stepnumber">2</span>このコンテナはエディタが入っていないので、エディタをインストールします。ここでは、nanoを以下のコマンドを入力してインストールすることにします。</div><div class="code"><pre><code>apt install nano -y</code></pre></div><div class="step"><span class="stepnumber">3</span>インストール後、設定ファイルを修正するために、nanoで開きます。以下のようにコマンドを入力します。</div><div class="code"><pre><code>cd /var/www/html/lib
+nano params.php</code></pre></div><div class="step-wo-number">ここで、params.phpファイルは最初から存在しているファイルで、ファイルの内容がnanoエディタで開かれていることを確認してください。</div><div class="step"><span class="stepnumber">4</span>control+Vで、先に進みます。PHPの変数$notUseServiceServerに代入している箇所を特定してください。（前方向にスクロールするのはcontrol+Tです。）</div><div class="step"><span class="stepnumber">5</span>変数$notUseServiceServerの値をfalseに、$activateClientServiceの値をtrueに変更します。</div><div class="code"><pre><code>:
+/* Service Server Behavior
+ * ===================
+ * Port number and host name for service server */
+$notUseServiceServer = <span class="enhanced">false</span>;  // Default is TRUE!. It has to set false to work every feature with Service Server.
+$activateClientService = <span class="enhanced">true</span>;  // Default is FLASE!.
+$serviceServerProtocol = "ws";  // The Service Server url components to connect from client.
+$serviceServerHost = "";    // "" for public ip address.
+:</code></pre></div><div class="picture"><img class="picture-small" src="figs/ng-shot-224.png"/></div><div class="step"><span class="stepnumber">6</span>保存して終了するために、control+Xを押します。保存するかどうかをたずねられるので「Y」で答えます。その後、保存するファイル名をたずねられ、読み出したファイルのparams.phpが見えているので、それを確認してEnterキーを押します。これで、変更結果が元のファイルに書き込まれました。</div><div class="step"><span class="stepnumber">7</span>ブラウザーで、「http://localhost:9080」に接続します。すでに接続していれば、そのページを表示して、command+Rやcontrol+Rなどの操作で更新を行います。</div><div class="step"><span class="stepnumber">8</span>少し時間がかかりますが、ページが出てきます。ページを最後までスクロールすると、INTER-Mediatorのバージョン表示のところに、Service Server:という項目が登場します。ここで、◆の色が赤い場合はService Serverが稼働していません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-225.png"/></div><div class="step"><span class="stepnumber">9</span>もう一度command+Rやcontrol+Rなどの操作でページ更新を行います。すると、◆の色が緑色になりService Serverが稼働していることが確認できます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-226.png"/></div><div class="step-wo-number">最初から◆の色が緑色であれば、最初からService Serverが起動しているので、それはそれで問題はありません。最初にService Serverが起動していないという表示が出ても、ほとんどの場合はService Serverは起動しています。サーバの起動が自動的になっていて、起動していない場合に自動起動する処理が状況によってはうまく稼働しないため、起動しているのに起動していないという判断をする場合もあります。なお、Service Serverはページを表示する毎に起動するのではなく、1度起動すればそれをずっと使い続けるので、最初にService Serverが起動しない点は通常の運用では問題にならないはずです。</div><h4>Webアプリケーションでクライアント間同期を有効にする</h4><p>　以下、Chapter 4で作成した「page01.html/def09.php」のWebアプリケーションに対して、クライアント間同期をできるように設定して動作を確認します。もし、このアプリケーションを作っていない場合には、「http://localhost:9080」で接続したページにある「サンプルプログラム」のリンクをクリックして、「Any Kinds of Samples」にある「Master-Detail Style Page」の「MySQL/MariaDB」の列にある「show」ボタンを押したページで確認をしてください。このサンプルは、ページ全体のコンテキストと、最初の繰り返し部分のコンテキストで同様な設定を行なっています。</p><div class="step"><span class="stepnumber">1</span>「http://localhost:9080」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。そこにある「def09.phpを編集する」をクリックします。すでに2つのコンテキストproductとitemが存在します。いずれのコンテキストでもsync-controlの部分に「create update delete」とキータイプをしてください。設定後、Tabキーを押すなどして、入力結果を確定させてください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-227.png"/></div><div class="step-wo-number">sync-controlでは、ここで指定した3つのキーワードを指定でき、複数指定する場合は空白で分離します。指定した名称の操作について同期が行われます。このキーがない場合は同期処理は行われません。</div><div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページに戻り、「page09.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。以前に作成した通りに表示されますが、ページ末尾のINTER-Mediatorのバージョン表示のところを見てください。緑色の◆はService Serverが稼働していることを示します。白色の➤は、ページに表示されているアプリケーションで、sync-controlの設定がなされていてクライアント間同期ができていることを示しています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-228.png"/></div><h4>編集結果が別のクライアントに伝達されることを確認する</h4><p>　クライアントの動作を確認するために、2つの異なるブラウザーを同時に起動します。SafariとFirefox、あるいはChromeとEdgeなど、INTER-Mediatorの稼働可能なブラウザーを演習環境が稼働しているOSで同時に起動します。これにより、異なるユーザーによる接続と同じ状況になります。なお、ひとつのブラウザーでウインドウが違うという状況では、厳密には「別のクライアント」と同等ではないので、2つのブラウザーを稼働させてください。</p><div class="step"><span class="stepnumber">1</span>すでにSafariで「http://localhost:9080」に接続しています。続いて、ここではChromeを起動したとします。</div><div class="step"><span class="stepnumber">2</span>Safariで見えているページのURLをアドレスバーでコピーし、Chromeのアドレスバーにペーストして、それぞれのブラウザで同一のページを参照します。以下の図では、手前のウインドウがSafari、背後のウインドウがChromeです。この段階では、当然ながら同一のデータがそれぞれのウインドウで見えています。</div><div class="step"><span class="stepnumber">3</span>変更可能なフィールドのひとつを修正してみます。ここでは、unitpriceのフィールドの値を変更してみます。手前のSafariで、unitpriceの値を変更しました。ここでは、まだ数値を変更しただけなので、背後のブラウザーでは表示内容に変更はありません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-229.png"/></div><div class="step"><span class="stepnumber">4</span>Tabキーを押して、修正結果を確定します。すると、背後のブラウザーの同一のフィールドが、修正後の値に自動的に変更されました。つまり、あるクライアントでの変更結果は、他のクライアントにも伝達されたということになります。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-230.png"/></div><h4>レコード追加が別のクライアントに伝達されることを確認する</h4><div class="step"><span class="stepnumber">1</span>手前のSafariで、明細行の下にある「追加」ボタンをクリックします。「レコードを本当に作成していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-231.png"/></div><div class="step"><span class="stepnumber">2</span>手前のウインドウでは新たに明細行が追加されましたが、背後のウインドウでも自動的に明細行が追加されています。つまり、あるクライアントでレコードを作成すれば、その作成されたレコードは他のクライアント側でも認識されたということです。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-232.png"/></div><div class="step"><span class="stepnumber">3</span>追加された明細行にあるフィールドに適当な数値を入力してEnterを押すなどして確定してみました。これによりデータベースに入力した数値が記録されますが、配置のChromeの同一のフィールドでも、入力した値が自動的に入力されており、Safariでの編集結果がChrome側にも自動的に伝達されたことがわかります。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-233.png"/></div><h4>レコード削除が別のクライアントに伝達されることを確認する</h4><div class="step"><span class="stepnumber">1</span>ページ上部のページネーションを操作して、どちらのウインドウにも同一のページが見えるようにします。ここでは、idが2のレコードを見えるようにしました。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-234.png"/></div><div class="step"><span class="stepnumber">2</span>手前のSafariでページネーションにある「レコード削除：product」ボタンで削除します。削除の可否が確認されるので、OKボタンで応答して実際に削除します。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-235.png"/></div><div class="step"><span class="stepnumber">3</span>手前のウインドウではid=2のレコードが削除されたので、ひとつ後ろのid=3のレコードが見えています。背後のウインドウでは、単にid=2のレコードが消えて存在しないので、何も表示されていない状態になりました。削除の伝達ではこういう状況にもなり得ます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-236.png"/></div><h4>演習のまとめ</h4><ul><li>複数のクライアントで編集結果のリアルタイム同期を実装してあります。利用するデータベースにはいくつかのテーブルが仕様に従って定義されている必要があります。</li><li>サーバ側では、Service Serverが稼働している必要があります。既定の状態では稼働していないので、params.phpファイルを変更して起動するようにします。</li><li>アプリケーションで編集結果の同期ができるようにするためには、コンテキストごとにsync-controlキーの値を指定して、どの更新処理に対して同期をするのかを指定する必要があります。これがない場合は、同期処理は行われません。</li></ul><h3><span id="H3-ANC-19"><span style="display:none">→</span></span>同期処理への割り込み</h3><p>　クライアント同期により、伝達してきたクライアント側では、以下の6つの関数をJavaScriptで定義できます。メソッド名を見てわかるように、Create/Update/Deleteのそれぞれのオペレーションの前後つまりBefore/Afterに呼び出されます。クライアントでは、Beforeが呼び出され、更新処理を行い、Afterが呼び出されるようになります。Beforeが付くメソッドでは、引き続く処理を実行するためにはtrueを返します。逆にfalseを返すと、そこでクライアント同期の処理は停止します。引数dは、同期情報に関するオブジェクト（例：{entity: "item", field: ["product_unitprice"], 'justnotify: false, pkvalue: ["3"], value: ["30"]}）が設定されて呼び出されます。</p><div class="code"><div class="caption">リスト5-3-1　同期処理のカスタマイズが可能なメソッド</div><pre><code>INTERMediatorOnPage.syncBeforeUpdate = (d) =&gt; {}
+INTERMediatorOnPage.syncAfterUpdate = (d) =&gt; {}
+INTERMediatorOnPage.syncBeforeCreate = (d) =&gt; {}
+INTERMediatorOnPage.syncAfterCreate = (d) =&gt; {}
+INTERMediatorOnPage.syncBeforeDelete = (d) =&gt; {}
+INTERMediatorOnPage.syncAfterDelete = (d) =&gt; {}</code></pre></div><h3><span id="H3-ANC-20"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　複数のクライアント間で、編集やレコード作成、削除の結果をリアルタイムに反映させる仕組みをINTER-Mediatorは持っています。作成したWebアプリケーションは、更新のどの処理を同期させるかを指定することで、そのコンテキストに対する更新処理を別のクライアントに同期ができるようになります。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-4"><span style="display:none">→</span></span><span class="sectionnumber">5-4</span>JavaScriptコンポーネントの利用</h2><p class="section-lead">現在、Webアプリケーションの機能を拡張するために、JavaScriptで作られた部品（コンポーネント）が盛んに使われています。INTER-Mediatorでも、<span xmlns="" id="ix-72"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-73"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>JavaScriptのコンポーネントを利用して、データベースの内容を表示したり、あるいは修正結果をフィールドに描き戻すことができます。これらの機能の基本的な利用方法を説明します。また、ファイルのアップロードとアップロードした結果を表示する方法についてもこのセクションで説明します。</p><h3><span id="H3-ANC-21"><span style="display:none">→</span></span>JavaScriptのコンポーネントを利用する</h3><p>　多種多様なJavaScriptのコンポーネントがオープンソースで配布されています。ライセンス形態はMIT Licenseのものも多く、気軽にサイトで利用している人も多いでしょう。代表的なものといえばjQueryやあるいはそれをベースにしたユーザーインターフェース素材のjQueryUIなどがあります。まず、INTER-Mediatorでは、これら別途開発されたコンポーネントを活用し、テキストフィールドなどと同様に、データベースの値を表示したり、あるいは編集した結果をデータベースに更新する仕組みを組み込むことができます。既存のコンポーネントを利用する場合は、そのコンポーネントに対する「アダプター」を作成しなければなりません。INTER-Mediator Ver.10現在では、jQueryUIの<span xmlns="" id="ix-74"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DatePickerや<span xmlns="" id="ix-75"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>File Upload、<span xmlns="" id="ix-76"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>HTMLエディターの<span xmlns="" id="ix-77"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>TinyMCE、<span xmlns="" id="ix-78"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ソースコードエディターの<span xmlns="" id="ix-79"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>CodeMirrorのアダプターなどが付属しています。これら以外の素材を利用する場合には、独自にアダプターを開発しなければなりません。アダプターの開発方法は、『6-6　JavaScriptコンポーネント用のアダプターの開発方法』で説明をします。INTER-Mediatorには独自のユーザーインターフェース用部品も搭載されています。</p><p>　これらのJavaScriptコンポーネントを利用するには、タグ要素に<span xmlns="" id="ix-80"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>data-im-widget属性を記述します。この属性の値は、それぞれのアダプターで定義された文字列を指定します。なお、設定可能なタグ要素はなんでもいいわけではなく、原則として、そのコンポーネントごとに決められています。例えば、jQueryUIのDatePickerは、テキストフィールドの要素に対して指定します。</p><p>　実際の試用方法は、演習で具体的に説明しましょう。</p><h3><span id="H3-ANC-22"><span style="display:none">→</span></span><span class="exsign">演習</span><span xmlns="" id="ix-81"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ファイルアップロードのコンポーネントを利用する</h3><p>　INTER-Mediatorに組み込まれているファイルのアップロードのコンポーネントの利用方法を説明します。なお、アップロードにおいては、いろいろな準備が必要ですし、アップロードしたファイルを参照する方法も知っておく必要があります。これらをまとめて、この演習で説明をします。</p><p>　また、PHPの環境上の制限で現在の標準設定では1.5MB程度が上限となり、演習環境はその設定を変更していません。それ以上のファイルをアップロードしようとしても、制限を超えているというメッセージが表示されてアップロード作業は完了しません。アプリケーションを実際に作るとき、精細な写真を貼付したい、あるいは動画を保存しておきたいときなど、業務上、どうしても大きなファイルを添付しなければならないという場合は、PHPの環境設定ファイルを書き直すなどの対応が可能です。方法は、『9-3　INTER-Mediatorを利用する開発プロセス』で説明します。</p><h4>2つのコンテキストを定義ファイルに定義</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、演習環境を起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://localhost:9080」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def13.phpを編集する」をクリックし、定義ファイルエディターでdef13.phpファイルを編集します。（もし、他の用途で13番目を利用しているのなら、例えば、def21.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">5</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">6</span>name、view、tableに「testtable」、keyを「id」、pagingを「true」、repeat-controlを「confirm-insert confirm-delete」、recordsを「10」、maxrecordsを「100」とします。</div><div class="step-wo-number">Contextsのその他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-238.png"/></div><div class="step"><span class="stepnumber">7</span>Optionsのセクションにある、media-root-dirに「/var/www」と入力します。入力結果を確定させるために、Tabキーを押すなどしてください。</div><div class="step-wo-number">サーバー上では、media-root-dirキーで指定したパス以下にアップロードしたファイルが保存されます。この演習では、/var/wwwを利用します。実際のアプリケーション運用時は、適切なディレクトリを指定しますが、一般にはWebサーバーで公開していない範囲にディレクトリを作ります。また、Webサーバーのユーザーが読み書き権限があるように、ディレクトリのアクセス権を設定する必要があります。</div><div class="step"><span class="stepnumber">8</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=db;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_DataAPI」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「gateway.docker.internal」、portに「443」、protocolに「https」、cert-vefifyingに「false」と入力します。</div><div class="step"><span class="stepnumber">9</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-239.png"/></div><h4>ページファイルの作成と表示</h4><div class="step"><span class="stepnumber">1</span>「http://localhost:9080」で開いたページに戻り「page13.htmlを編集する」をクリックし、ページファイルのpage13.htmlを編集するページファイルエディターが開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"/&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
+<strong>  &lt;!-- Loading JQuery --&gt;
+  &lt;script src="https://code.jquery.com/jquery-3.5.1.js"&gt;&lt;/script&gt;
+  &lt;!-- Loading Bootstrap --&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+  &lt;!-- Loading JQuery UI FileUpload --&gt;
+  &lt;link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.css" rel="stylesheet"&gt;
+  &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/css/jquery.fileupload.min.css"/&gt;
+  &lt;script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload-jquery-ui.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload-process.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload-image.min.js"&gt;&lt;/script&gt;
+  &lt;!-- Loading INTER-Mediator --&gt;</strong>
+  &lt;script src="def13.php"&gt;&lt;/script&gt;
+  &lt;script src="/vendor/inter-mediator/inter-mediator/node_modules/inter-mediator-plugin-jqueryfileupload/index.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+    &lt;thead&gt;
+    &lt;tr&gt;
+        &lt;th&gt;File Upload&lt;/th&gt;
+        &lt;th&gt;Path&lt;/th&gt;
+        &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td data-im="testtable@text1" data-im-widget="jquery_fileupload"&gt;&lt;/td&gt;
+        &lt;td data-im="testtable@text1"&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">ヘッダー部のLINKおよびSCRIPTタグのパスが長く見づらいですが、正しく入力してください。これらは、jQueryやBootstrap、jQueryUI、およびそれらのテーマを読み込む部分です。</div><div class="step-wo-number">INTER-Mediatorで用意しているJQueryUIのDatePicker向けアダプターは、node_modulesフォルダにあるinter-mediator-plugin-jqueryfileuploadフォルダにあります。すなわち、composerによるインストールやアップデートの後に実行されるnpmコマンドによってインストールされるものです。</div><div class="step-wo-number">タグ要素にdata-im-widget属性があり、「jquery_fileupload」という値が設定されている箇所がポイントです。ここに、JavaScriptのコンポーネントが展開されて、ファイルのアップロード機能が利用できるようになります。text1はTEXT型のフィールドです。ファイルアップロードのコンポーネントは、このように、テキスト型のフィールドとバインドした要素に記述します。この例では、TDタグに記述しています。TDタグはセルの表示はできますが、編集はできません。しかしながら、コンポーネントがその内部に必要な要素を用意するので「ファイルのドラッグ&amp;ドロップの受付」ができるのです。しかし、単にアップロードするだけではアプリケーションとしては成り立たず、そのファイルを後から活用する必要があります。そのために、アップロードしたファイルのパスを保存するテキスト型のフィールドとのバインドを必要とします。</div><h4>実際にファイルをアップロードしてみる</h4><div class="step"><span class="stepnumber">1</span>「page13.htmlを開く」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新ボタン等でページを再読み込みします。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page13.htmlを開く」をクリックして開きます。ページが表示されます。レコードが存在すれば「ファイル選択」ボタンが見えるはずです。レコードがない場合は、ページネーションの「レコード追加：testtable」をクリックして、レコードを新たに作成しておきます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-240.png"/></div><div class="step"><span class="stepnumber">2</span>「ファイル」選択ボタンをクリックします。すると、ファイルを指定するダイアログボックスが表示されます。適当な画像ファイルを指定して、Uploadボタンをクリックします。ファイルサイズに制限がありますので、1MB程度のファイルを使って下さい。なお、この上限サイズは変更可能です（『9-3　INTER-Mediatorを利用する開発プロセス』）。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-241.png"/></div><div class="step"><span class="stepnumber">3</span>ファイルを指定すると、「ファイル選択」ボタンの直下に選択したファイルのファイル名が見え、「アップロード」ボタンが表示されます。まだ、ファイルはアップロードされていません。ここで、「アップロード」ボタンをクリックすることで、実際にファイルをサーバーに送信します。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-242.png"/></div><div class="step"><span class="stepnumber">4</span>ファイルのアップロードはすぐに終わります。「アップロード」ボタンは消えて、「ファイル選択」ボタンだけが表示されています。つまり、初期状態に戻りしました。表の2列目にはtext1フィールドを表示しました。そこには、アップロードしたファイルの相対パスが入力されていますが、このパスの入力もコンポーネントが自動的に行います。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-243.png"/></div><h4>アップロードした結果の確認</h4><p>　ファイルがアップロードされた結果を、演習環境上で確認をします。</p><div class="step"><span class="stepnumber">1</span>Docker DesktopのContainersの画面で、php-apache_imというコンテナイメージを特定します。その行の右の方にあるOPEN IN TERMINALボタンをクリックして、ターミナルでコンテナの操作をできるようにします。ターミナルの新たなウインドウが表示されることを確認します。（以下の図は、このステップをいくつか進んでコマンドを入力した結果が見えています。）</div><div class="picture"><img class="picture-small" src="figs/ng-shot-244.png"/></div><div class="step"><span class="stepnumber">2</span>まず、次のようなコマンドを打ち込んで、media-root-dirに指定したパスをカレントディレクトリにします。</div><div class="code"><pre><code>cd /var/www</code></pre></div><div class="step"><span class="stepnumber">3</span>次のようなコマンドを打ち込んで、ディレクトリにあるファイルの一覧を表示します。ここでは、testtable、つまりコンテキスト名のディレクトリが存在することを確認します。</div><div class="code"><pre><code>ls -l</code></pre></div><div class="step"><span class="stepnumber">4</span>次のようなコマンドを打ち込んで、testtableディレクトリにあるすべてのファイルの相対パスを一覧表示します。id=2は、このコンテキストで、id=2によって特定できるレコードに関するファイルがあるディレクトリであることを示しています。続くtext1は対応するフィールドを示しています。data-im-widgetを書き込んだ要素のdata-im属性がtesttable@text1となっていることを思い出してください。</div><div class="code"><pre><code>find testtable</code></pre></div><div class="step-wo-number">testtableディレクトリ以下は、コンテキスト名（testtable）、keyキーで指定した主キーフィールドを含むレコードを特定する条件式（id=1）、フィールド名（text1）とディレクトリが階層的に構成され、最後に画像ファイルが見えていて、アップロードしたファイルをここに保持したことが分かります。ドラッグ&amp;ドロップしたときに、text1フィールドに入力されたパスのテキストが、この画像ファイルのパスになっていることを確認してください。</div><div class="step-wo-number">もともと、ここにドラッグ&amp;ドロップした画像のファイル名は「313.jpg」でしたが、アップロード時にファイル名に4桁のランダムな数字（ここでは「6317」）を付与し、既存のファイルの上書きがなされないようにしています。</div><h4>アップロードしたファイルの履歴を残す</h4><p>　ここまでの方法では、あるレコードのあるフィールドに対して、アップロードしたファイルのうち、最後のファイルへのパスだけがデータベースに残っていました。さらに発展させて、ファイルをアップロードした履歴も残すようにします。</p><div class="step"><span class="stepnumber">1</span>「def13.phpを開く」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新ボタン等でページを再読み込みします。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「def13.phpを開く」をクリックして開きます。</div><div class="step"><span class="stepnumber">2</span>Contextsのすぐ下にある「追加」ボタンをクリックして、コンテキスト定義をひとつ増やします。</div><div class="step"><span class="stepnumber">3</span>name、table、viewに「fileupload」、keyを「id」します。その他のテキストフィールドは空白にします。</div><div class="step"><span class="stepnumber">4</span>Relationshipのすぐ下の「追加」ボタンをクリックして、設定項目を増やし、foreign-keyを「f_id」、join-fieldを「id」、operatorを「=」、portalを空白とします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-245.png"/></div><div class="step"><span class="stepnumber">5</span>定義ファイルエディターの一番最初にあるShow Allボタンをクリックして、すべての設定項目を表示します。</div><div class="step"><span class="stepnumber">6</span>既存のコンテキスト（testtable）で、File Uploadingと記述された部分の下にある「追加」ボタンをクリックします。</div><div class="step"><span class="stepnumber">7</span>新たに追加された項目で、fieldを「text1」、contextを「fileupload」、containerを空欄とします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-246.png"/></div><div class="step"><span class="stepnumber">8</span>「page13.htmlを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page13.htmlを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">9</span>次のように、ページファイルのコードを修正します。テーブルに、新たにfileuploadコンテキストを展開するテーブルを定義します。</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+		:
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+    &lt;thead&gt;
+    &lt;tr&gt;
+        &lt;th&gt;File Upload&lt;/th&gt;
+        &lt;th&gt;Path&lt;/th&gt;
+        <strong>&lt;th&gt;fileupload&lt;/th&gt;</strong>
+        &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td data-im="testtable@text1" data-im-widget="jquery_fileupload"&gt;&lt;/td&gt;
+        &lt;td data-im="testtable@text1"&gt;&lt;/td&gt;
+<strong>        &lt;td&gt;
+            &lt;table&gt;
+                &lt;tbody&gt;
+                &lt;tr&gt;
+                    &lt;td data-im="fileupload@path"&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/td&gt;</strong>
+        &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step"><span class="stepnumber">10</span>「page13.htmlを開く」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新ボタン等でページを再読み込みします。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page13.htmlを開く」をクリックして開きます。</div><div class="step"><span class="stepnumber">11</span>ページネーションのコントローラーにある「レコード追加」のボタンをクリックして、新たにレコードを追加します。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-247.png"/></div><div class="step"><span class="stepnumber">12</span>新しく作られたレコードの「ファイル選択」ボタンをクリックして、ファイルを指定します。ファイルを指定すると、「アップロード」ボタンが見えるようになります。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-248.png"/></div><div class="step"><span class="stepnumber">13</span>「アップロード」ボタンを押してアップロードが終了すると、パスが2つ追加されました。左側がTD要素に展開したtext1フィールドで、右側はfileuploadコンテキストのpathフィールドです。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-249.png"/></div><div class="step"><span class="stepnumber">14</span>同じレコードの「ファイル選択」ボタンをクリックしてファイルを指定して「アップロード」ボタンを押し、さらにファイルを追加します。text1フィールドは最新のファイルのパスのみが残っていますが、fileuploadコンテキスト側では、アップロードしたファイルのパスを随時記憶しています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-250.png"/></div><div class="step"><span class="stepnumber">15</span>ファイルが保存されている様子を確認します。Docker DesktopのContainersの画面で、php-apache_imというコンテナイメージを特定します。その行の右の方にあるOPEN IN TERMINALボタンをクリックして、ターミナルでコンテナの操作をできるようにします。ターミナルの新たなウインドウが表示されることを確認します。</div><div class="step"><span class="stepnumber">16</span>以下のようにコマンドを打ち込んで、アップロードされたファイルなどを一覧します。</div><div class="code"><pre><code>cd /var/www
+find testtable</code></pre></div><div class="step-wo-number">例えば、次のようにファイル一覧が表示されます。id=3の新しいレコードに対して、text1にバインドした要素にあるアップロードボタンから、3つのファイルがアップロードされて、それぞれがファイルに残っていることが分かります。text1フィールドには最後のP1100099_3235.JPGしか残っていませんが、fileuploadコンテキストのテーブルには、この3つのパスがいずれも残っています。</div><div class="code"><pre><code># find testtable
+testtable
+testtable/id=3
+testtable/id=3/text1
+testtable/id=3/text1/P1100099_3235.JPG
+testtable/id=3/text1/child-msyk_4518.png
+testtable/id=3/text1/NII-2_8482.jpg
+testtable/id=2
+testtable/id=2/text1
+testtable/id=2/text1/313_6317.jpg</code></pre></div><!--<div class="picture"><img class="picture-small" src="figs/ng-shot-251.png" /></div>--><h4>アップロードしたファイルをページに表示する</h4><p>　ファイルがアップロードできるようになりましたが、それだけではファイルが取り扱えません。今度は、コンポーネントでアップロードしたファイルを、Webページの中で表示する方法を説明します。なお、この方法は、アップロードのコンポーネントを使わないでアップロードしたファイルについても適用できる手法です。</p><div class="step"><span class="stepnumber">1</span>「page13.htmlを編集する」をクリックして表示したタブあるいはウインドウに戻ります。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page13.htmlを編集する」をクリックして開きます。</div><div class="step"><span class="stepnumber">2</span>次のように、ページファイルのコードを修正します。fileuploadコンテキストを展開するテーブルに、さらに画像を表示するIMGタグを追加します。</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+		:
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+    &lt;thead&gt;
+    &lt;tr&gt;
+        &lt;th&gt;File Upload&lt;/th&gt;
+        &lt;th&gt;Path&lt;/th&gt;
+        <strong>&lt;th&gt;fileupload&lt;/th&gt;</strong>
+        &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td data-im="testtable@text1" data-im-widget="jquery_fileupload"&gt;&lt;/td&gt;
+        &lt;td data-im="testtable@text1"&gt;&lt;/td&gt;
+        &lt;td&gt;
+            &lt;table&gt;
+                &lt;tbody&gt;
+                &lt;tr&gt;
+                    &lt;td data-im="fileupload@path"&gt;&lt;/td&gt;
+<strong>                    &lt;td&gt;&lt;img style="height: 50px" src="def13.php?media="
+                        data-im="fileupload@path@#src"&gt;
+                    &lt;/td&gt;</strong>
+                &lt;/tr&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/td&gt;
+        &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">IMGタグのsrc属性は「定義ファイル?media=」で記述し、=以降は、ファイルの存在するパスを、media-root-dirキーの値のディレクトリからの相対パスで指定します。このパスはpathフィールドに入っています。ターゲット指定に#をつけることで、pathフィールドの値を現在のsrc属性の後につなげます。</div><div class="step"><span class="stepnumber">3</span>「page13.htmlを開く」をクリックして表示したタブあるいはウインドウに戻り、ブラウザーの更新ボタン等でページを再読み込みします。もし、閉じていたら、「http://localhost:9080」で開いたページに戻り「page13.htmlを開く」をクリックして開きます。読み込んだ画像がページ上に見えています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-252.png"/></div><h4>演習のまとめ</h4><ul><li>ファイルのアップロードのためのコンポーネントが用意されており、data-im-widget属性に「jquery_fileupload」を指定すると、利用できます。ただし、アップロードできるファイルサイズの上限は演習環境では約2MBまでです。この制限を大きくすることもできます（『9-3　INTER-Mediatorを利用する開発プロセス』を参照）。</li><li>data-im-widget属性は、テキストを保存するフィールドにバインドしたタグ要素に指定します。そのフィールドにはアップロードしたファイルへのパスが設定されます。</li><li>アップロードされたファイルは、media-root-dirキーで指定したパス以下、コンテキスト名、レコードを特定する条件、フィールド名と続くディレクトリが作られ、そこに保存されます。</li><li>アップロードされたファイルのファイル名に4桁のランダムな値が付与され、同一ファイル名を持つファイルがアップロードされても上書きされないようにしています。</li><li>アップロードの履歴を別テーブルに残すこともできます。</li></ul><h3><span id="H3-ANC-23"><span style="display:none">→</span></span>ファイルアップロードのその他の機能</h3><p>　ファイルのアップロード履歴を、演習ではfileuploadコンテキストのテーブルに残していました。このテーブルの構成としては、pathという名前のテキスト型フィールドが必要ですが、その他は自由に設定可能です。relationキーによるリレーションシップが定義されていますが、演習のような設定をした場合には、fileuploadコンテキストのテーブルには、外部キーとなるf_idフィールドが必要です。また、この演習では設定していませんが、レコード作成日時を自動的に設定するタイムスタンプのフィールドを確保し、現在の日時を既定値にすれば、ファイルをアップロードした日時が分かります。</p><h3><span id="H3-ANC-24"><span style="display:none">→</span></span>その他の付属のコンポーネント</h3><p>　ファイルのアップロードは演習で見たように、jQueryなどの別のソフトウェアのインストールが必要です。これらの使用方法については、INTER-Mediatorにあるサンプルを参照してください。ディレクトリはレポジトリのルートからだと、samples/Sample_webpage/で、表5-4-1〜表5-4-7のようなファイルを参照してください。TinyMCEなど、アダプターが利用するコンポーネント本体は、ページファイルのヘッダーで、スタイルシートファイルやJavaScriptのファイルを、適切なパスを指定して読み込む必要があります。パスを指定しますので、必ずしもページファイルと同じ階層に存在する必要はありません。別のディレクトリにあっても参照ができれば問題はありません。また、コンポーネント自体は別レポジトリで管理しています。</p><div class="table"><table><tr><th>コンポーネント</th><td>TinyMCE</td></tr><tr><th>レポジトリ</th><td>https://github.com/inter-mediator/inter-mediator-plugin-tinymce</td></tr><tr><th>data-im-widgetの値</th><td>tinymce</td></tr><tr><th>ページファイル</th><td>samples/Sample_webpage/tinymce_MySQL.html</td></tr><tr><th>定義ファイル</th><td>samples/Sample_webpage/include_MySQL.php</td></tr></table><div class="caption">表5-4-1　サンプルにあるJavaScriptコンポーネント「TinyMCE」</div></div><div class="table"><table><tr><th>コンポーネント</th><td>CodeMirror</td></tr><tr><th>レポジトリ</th><td>https://github.com/inter-mediator/inter-mediator-plugin-codemirror</td></tr><tr><th>data-im-widgetの値</th><td>codemirror</td></tr><tr><th>ページファイル</th><td>samples/Sample_webpage/codemirror_MySQL.php</td></tr><tr><th>定義ファイル</th><td>samples/Sample_webpage/include_MySQL.php</td></tr></table><div class="caption">表5-4-2　サンプルにあるJavaScriptコンポーネント「CodeMirror」</div></div><div class="table"><table><tr><th>コンポーネント</th><td>jQuery DatePicker</td></tr><tr><th>レポジトリ</th><td>https://github.com/inter-mediator/inter-mediator-plugin-jquerydatepicker</td></tr><tr><th>data-im-widgetの値</th><td>jquery_datepicker</td></tr><tr><th>ページファイル</th><td>samples/Sample_webpage/jquery_datepicker_MySQL.php</td></tr><tr><th>定義ファイル</th><td>samples/Sample_webpage/include_MySQL.php</td></tr></table><div class="caption">表5-4-3　サンプルにあるJavaScriptコンポーネント「jQuery DatePicker」</div></div><div class="table"><table><tr><th>コンポーネント</th><td>flatpickr（日付と時刻を同時に設定可能なコンポーネント）</td></tr><tr><th>レポジトリ</th><td>https://github.com/inter-mediator/inter-mediator-plugin-flatpickr</td></tr><tr><th>data-im-widgetの値</th><td>flatpickr</td></tr><tr><th>ページファイル</th><td>samples/Sample_webpage/flatpickr_MySQL.html</td></tr><tr><th>定義ファイル</th><td>samples/Sample_webpage/include_MySQL.php</td></tr></table><div class="caption">表5-4-4　サンプルにあるJavaScriptコンポーネント「flatpickr」</div></div><div class="table"><table><tr><th>コンポーネント</th><td>jQuery DatePicker</td></tr><tr><th>レポジトリ</th><td>https://github.com/inter-mediator/inter-mediator-plugin-jqueryfileupload</td></tr><tr><th>data-im-widgetの値</th><td>jquery_fileupload</td></tr><tr><th>ページファイル</th><td>samples/Sample_webpage/fileupload_jQuery_MySQL.html（他にもあり）</td></tr><tr><th>定義ファイル</th><td>samples/Sample_webpage/include_MySQL.php</td></tr></table><div class="caption">表5-4-5　サンプルにあるJavaScriptコンポーネント「jQuery File Upload」</div></div><div class="table"><table><tr><th>コンポーネント</th><td>Popup Selector（ポップアップメニュー。独自開発）</td></tr><tr><th>レポジトリ</th><td>https://github.com/inter-mediator/inter-mediator-plugin-popupselector</td></tr><tr><th>data-im-widgetの値</th><td>popupselector</td></tr><tr><th>ページファイル</th><td>samples/Sample_webpage/popuselector_MySQL.html</td></tr><tr><th>定義ファイル</th><td>samples/Sample_webpage/include_MySQL.php</td></tr></table><div class="caption">表5-4-6　サンプルにあるJavaScriptコンポーネント「Popup Selector」</div></div><div class="table"><table><tr><th>コンポーネント</th><td>JSON Formatter（JSONを整えて表示する。独自開発）</td></tr><tr><th>レポジトリ</th><td>https://github.com/inter-mediator/inter-mediator-plugin-jsonformatter</td></tr><tr><th>data-im-widgetの値</th><td>jsonformatter</td></tr><tr><th>ページファイル</th><td>なし</td></tr><tr><th>定義ファイル</th><td>なし</td></tr></table><div class="caption">表5-4-7　サンプルにあるJavaScriptコンポーネント「JSON Formatter」</div></div><h3><span id="H3-ANC-25"><span style="display:none">→</span></span><span xmlns="" id="ix-82"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-83"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>メディアファイルの内容の取得</h3><p>　定義ファイルは、通常はフレームワーク自体をページファイルに送り込むことや、データベースアクセスに利用しますが、他にもさまざまな機能があります。そのうちのひとつが、ファイルの内容を取り出す仕組みです。HTMLでは、IMGタグによる画像や、PDFファイルへのリンクといった用途に使うことを想定しており、パスを与えて、そのファイルの中身をMIMEタイプなどとともにクライアントに返すといった動作を行います。基本的にはリスト5-4-1のような記述を行います。mediaというキーでパラメーターを指定するということです。</p><div class="code"><div class="caption">リスト5-4-1　定義ファイルを利用してファイルの内容を取り出す</div><pre><code>一般的な記述：定義ファイルへのパス?<span xmlns="" id="ix-84"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>media=ファイルへのパス
+例：def13.php?media=shot0001_3923.png</code></pre></div><p>　ファイルへのパスが「http://」「https://」で始まるURLの場合には、そのURLから得られた結果をそのまま返します。パスが「<span xmlns="" id="ix-85"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>class://」で始まる場合には、その後に自分で作成したPHPのクラスのプログラムを実行できます。これについては『Chapter 8　サーバーサイドでのプログラミング』で解説をします。</p><p>　上記のプロトコル以外は、ファイルへのパスとみなします。そして、<span xmlns="" id="ix-86"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>media-root-dirキーで指定したパスに続いて、media=以降のパスで構成される絶対パスのファイルを取り出して、その内容を返します。なお、media=が「/fmi/xml/cnt」の場合、つまりFileMaker Serverを使っていて、オブジェクトフィールドを指定した場合のみ、FileMaker ServerへのURLに変換して、オブジェクトフィールドの内容を画像等で取り出すといった動作を行います。</p><p>　このセクションの演習で行ったように、ファイルアップロードのコンポーネントでアップロードしたファイルのパスが相対パスで記録されていれば、そのフィールドの値をmedia=の値に指定すればOKです。fileuploadコンテキストのようなアップロード履歴を残すテーブルは相対パスですが、演習でいえば、testtableコンテキストのtext1フィールドは絶対パスで記録されてしまっています。このままではIMGタグのsrc属性に指定をしたい場合には少し不便なので、この仕様は将来変更する可能性もあります。</p><h3><span id="H3-ANC-26"><span style="display:none">→</span></span>FileMakerのオブジェクトフィールドへのアップロードと画像表示</h3><p>　FileMakerを利用している場合、オブジェクトフィールドへ画像を保存することは一般的です。したがって、オブジェクトフィールドに画像を入れることを前提として、Webアプリケーションも作成したいと考えるでしょう。INTER-Mediatorでは、ファイルアップロードのコンポーネントが直接オブジェクトフィールドにデータを入力できますし、オブジェクトフィールドの画像をIMGタグ要素で画面に表示することもできます。</p><p>　このセクションの演習で作った一連のファイルに対して、オブジェクトフィールドを利用する場合にはどのようにすればよいかを説明します。まず、データベース「TestDB」について確認します。testtableレイアウトには、vc1という名前のオブジェクトフィールドがあります（図5-4-1）。このオブジェクトフィールドに画像等を入力するものとします。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-258.png"/><div class="caption">図5-4-1　データベースで利用するtesttableレイアウト</div></div><p>　このオブジェクトフィールドには計算値自動入力の設定がなされています。フィールド定義を調べるには、「ファイル」メニューの「管理」から「データベース」を選択して、データベースの管理ダイアログボックスを表示します（図5-4-2）。この式については、FX.phpを利用している場合に、アップロードとダウンロードをうまく整合させるために設定した式です。FileMaker Data APIを利用する場合にはこの式の設定は必要ありません。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-259.png"/><div class="caption">図5-4-2　使用するテーブルtesttableのフィールド定義</div></div><p>　ここから、定義ファイルとページファイルを用意します。それぞれ、def14.phpとpage14.htmlのファイルを利用しますが、別の番号のものでも構いません。まず、定義ファイルのContextsではひとつのコンテキストを定義します。初期状態では、queryとsortに設定があるので、それを消しておきます。そして、図5-4-3のように、nameとtableとviewを「testtable」、keyを「id」、recordsを「10」、maxrecordsを「100」、pagingを「true」、repeat-controlを「confirm-insert confirm-delete」としておきます。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-261.png"/><div class="caption">図5-4-3　定義ファイルの変更箇所1</div></div><p>　続いて、定義ファイルエディタの最初のところにあるShow Allボタンをクリックして、項目をすべて出しておきます。そして、図5-4-4のように、testtableコンテキストのFile Uploadingのところで「追加」ボタンをクリックして新たな行を追加し、fieldに「vc1」、containerに「true」を入力しておきます。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-262.png"/><div class="caption">図5-4-4　定義ファイルの変更箇所2</div></div><p>　さらに、Optionsの設定では、図5-4-5のように、media-root-dirに「/var/www」と設定をしておきます。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-263.png"/><div class="caption">図5-4-5　定義ファイルの変更箇所3</div></div><p>　Database Settingsでは、図5-4-6のように、db-classを「FileMaker_DataAPI」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「gateway.docker.internal」、portに「443」、protocolに「https」、cert-vefifyingに「false」と入力します。Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-264.png"/><div class="caption">図5-4-6　定義ファイルの変更箇所4</div></div><p>　ページファイルをリスト5-4-2のようにします。ファイルアップロードのコンポーネントをdata-im-widget属性で指定するタグ要素は、vc1フィールドにバインドします。そして、vc1フィールドに入力されている画像を表示するには、vc1フィールドの値をmedia=の後につなげます。オブジェクトフィールドは、カスタムWeb経由でデータを得ると画像等のバイナリデータではなく、フィールドに入力することが可能なURLの一部分が得られます。それを定義ファイルの引数に与え、定義ファイルから先のINTER-Mediatorの内部で正しいURLを構築して画像データなどを得ています。</p><div class="code"><div class="caption">リスト5-4-2　修正したpage14.html</div><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta http-equiv="content-type" content="text/html;charset=UTF-8"/&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
+  &lt;!-- Loading JQuery --&gt;
+  &lt;script src="https://code.jquery.com/jquery-3.5.1.js"&gt;&lt;/script&gt;
+  &lt;!-- Loading Bootstrap --&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+  &lt;!-- Loading JQuery UI FileUpload --&gt;
+  &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css"&gt;
+  &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/css/jquery.fileupload.min.css"/&gt;
+  &lt;script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload-ui.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload-process.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.32.0/js/jquery.fileupload-image.min.js"&gt;&lt;/script&gt;
+  &lt;!-- Loading INTER-Mediator --&gt;
+  &lt;script src="def14.php"&gt;&lt;/script&gt;
+  &lt;script src="/vendor/inter-mediator/inter-mediator/node_modules/inter-mediator-plugin-jqueryfileupload/index.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+    &lt;thead&gt;
+    &lt;tr&gt;
+        &lt;th&gt;File Upload&lt;/th&gt;
+        &lt;th&gt;Path&lt;/th&gt;
+        &lt;th&gt;fileupload&lt;/th&gt;
+        &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td data-im="testtable@vc1" data-im-widget="jquery_fileupload"&gt;&lt;/td&gt;
+        &lt;td data-im="testtable@vc1"&gt;&lt;/td&gt;
+        &lt;td&gt;
+            &lt;img style="height: 50px" src="def14.php?media=" data-im="testtable@vc1@#src"&gt;
+        &lt;/td&gt;
+        &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><p>　ページファイルを表示して、画像ファイルをアップロードしてみます。アップロードすれば、ページの中にその画像が見えているはずです。表示されている画像のパスは、FileMakerのコンテナフィールドの情報へのURLです。</p><div class="picture"><img class="picture-small" src="figs/ng-shot-265.png"/><div class="caption">図5-4-7　ページファイルを表示した</div></div><h3><span id="H3-ANC-27"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　JavaScriptで作られたさまざまなソフトウェアコンポーネントを利用する仕組みを持っています。しかしながら、利用するには、アダプターの開発が必要になります。INTER-Mediatorには、TinyMCE、CodeMirror、jQuery FileUploadなどのアダプターが付属しています。定義ファイルは、画像ファイルなどの内容を取り出すことにも利用できます。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-5"><span style="display:none">→</span></span><span class="sectionnumber">5-5</span><span xmlns="" id="ix-87"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>クロステーブルの作成</h2><p class="section-lead">クロステーブルは、表があって、一番上の列と、一番左の列がラベルとなっており、そのラベルの交差するセルには、ラベルに関連するデータが表示されるというものです。例えば、一番上の列には自社の「支店」が並び、一番左の列には年月が並ぶとすると、その交差するセルには、特定の支店の特定の年月の売り上げが見えるというものです。INTER-Mediatorではこうしたテーブルをデータベースの値を利用して作成することができます。</p><h3><span id="H3-ANC-28"><span style="display:none">→</span></span>クロステーブルに必要な記述</h3><p>　通常、INTER-Mediatorはひとつのコンテキストをページ上に展開してページ合成を行いますが、クロステーブルは3つのコンテキストを使用します。そのため、定義ファイルには3つの異なるコンテキストを定義しなければなりません。それぞれ、「<span xmlns="" id="ix-88"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>列見出し用コンテキスト」「<span xmlns="" id="ix-89"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>行見出し用コンテキスト」「<span xmlns="" id="ix-90"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>交差セル用コンテキスト」と名付けることにします。クロステーブルの見出しは固定的なものではなく、データベースのマスターテーブル等から取り出す仕組みにしてあります。そのため、汎用性は高いですが、現状では、単に数字の100から150までのような見出しを利用するのが少し面倒です。この方法は、Samples/Sample_ExtensibleにあるYearMonthGen.phpファイルおよびそれを使用している定義ファイルを参照してください。</p><p>　行見出し用および列見出し用のコンテキストは通常と変わりありません。1レコードがひとつの見出しセルに展開されます。これに対して、交差セル用のコンテキストでは、relationキーの値で2つの要素を定義します。ひとつ目は行見出し用のコンテキストとの関係、2つ目は列見出し用コンテキストとの関係、すなわち対応するフィールドが何かを記述します。設定の中にあるoperatorキーは無視され、イコールによる関係しか扱えません。コンテキスト指定のポイントを示したのが、リスト5-5-1です。なお、コンテキストの中にはqueryやsortキーでの検索条件や並べ替え設定があっても構いません。必須なことはコンテキスト定義が3つあることと、交差セル用コンテキストにおいて、2つの要素を持つ<span xmlns="" id="ix-91"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>relationキーの値があることです。なお、ここでは説明を分かりやすくするために、nameキーと同一のテーブルがあるといった状況を想定してください。</p><div class="code"><div class="caption">リスト5-5-1　クロステーブルで使用する3つのコンテキスト</div><pre><code>array(  // 列見出し用コンテキスト
+  "name" =&gt; "item",
+  "key" =&gt; "id",
+),
+array(  // 行見出し用コンテキスト
+  "name" =&gt; "customer",
+  "key" =&gt; "id",
+),
+array(  // 交差セル用コンテキスト
+  "name" =&gt; "salessummary",
+  "key" =&gt; "id",
+  "relation" =&gt; array(
+     array(  // 列見出し用コンテキストとの関連
+       "foreign-key" =&gt; "item_id", 
+       "join-field" =&gt; "id", 
+       "operator" =&gt; "=",),
+     array(  // 行見出し用コンテキストとの関連
+       "foreign-key" =&gt; "customer_id", 
+       "join-field" =&gt; "id", 
+       "operator" =&gt; "=",),
+  ),
+),</code></pre></div><p>　一方、ページファイルでは、TABLEタグ要素を利用したテーブルを利用します。エンクロージャーとなるTBODYタグ要素の<span xmlns="" id="ix-92"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>data-im-control属性には「<span xmlns="" id="ix-93"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>cross-table」という値を設定します。その中には2行2列のセルだけを入れます（図5-5-1、リスト5-5-2）。data-im-control属性に「cross-table-sum」と設定すれば、クロステーブルの右側と下側に<span xmlns="" id="ix-94"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>合計を求めるセルをさらに追加します。セルはそれぞれ、THでもTDでもどちらのセルでも構いません。リスト5-5-2では、各セルの中にdata-im属性によってターゲット指定が記述されています。ここで、Ⓑのセルは行見出し用コンテキスト、Ⓒのセルは列見出し用のコンテキストが展開されます。したがって、これらのセルでは、コンテキスト定義に存在するコンテキスト名およびその中に存在するフィールド名を記述する必要があります。そして、Ⓓのセルには、交差セル用コンテキストに対応したターゲット指定を記述しますが、セルを埋めるルールは、この後の『クロステーブル生成の仕組み』で説明をします。なお、Ⓐのセルは、ページ合成後もテーブルの左上のセルとして配置されます。</p><div class="picture"><img class="picture-in-fig" src="figs/fig20.png" altsrc="figs/fig20.pdf"/><div class="caption">図5-5-1　ページファイルに用意するテーブルの中身</div></div><div class="code"><div class="caption">リスト5-5-2　ページファイルへの記述例</div><pre><code>&lt;table&gt;
+&lt;tbody data-im-control="cross-table"&gt;
+&lt;tr&gt;
+  &lt;th&gt;&lt;/th&gt;
+  &lt;th&gt;
+     &lt;div data-im="item@id"&gt;&lt;/div&gt;
+     &lt;div data-im="item@name"&gt;&lt;/div&gt;
+  &lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;th&gt;
+     &lt;div data-im="customer@id"&gt;&lt;/div&gt;
+     &lt;div data-im="customer@name"&gt;&lt;/div&gt;
+  &lt;/th&gt;
+  &lt;td&gt;
+     &lt;div data-im="salessummary@qty"&gt;&lt;/div&gt;
+     &lt;div data-im="salessummary@total"&gt;&lt;/div&gt;
+   &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div><h3><span id="H3-ANC-29"><span style="display:none">→</span></span><span xmlns="" id="ix-95"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-96"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>クロステーブル生成の仕組み</h3><p>　クロステーブルを合成する仕組みを解説しましょう。コンテキストが3つもあるとややこしく思われるかもしれませんが、それぞれの見出しを合成した上で、交差セルを埋めるという処理が全体的な流れになります。その流れが理解できれば、動作の見通しもつきやすいでしょう。</p><p>　まず、ページファイルでのクロステーブル部分の初期状態は図5-5-1のようなものです。この時、TBODY内部のセルを一度全部取り除きます。そして、ⒶⒷⒸⒹの4つのTHないしはTDタグ要素を別途記録しておきます。最初に1行目のTRタグ要素を生成し、その子要素としてⒶのセルを追加します（図5-5-2）。ここでのTRタグは、ページファイルにあったもではなく、プログラムで単に生成したものです。Ⓐのセルは単に複製して子要素にするだけですので、この中にターゲット指定を記述しても、データベースの内容を展開することはありません。</p><div class="picture"><img class="picture-in-fig" src="figs/fig16.png" altsrc="figs/fig16.pdf"/><div class="caption">図5-5-2　テーブルにⒶのセルを合成する</div></div><p>　続いて、テーブルの1行目に列見出しを作成します。図5-5-3のように、1行目のTRタグ要素をエンクロージャー、Ⓑのセルをリピーターとして、ページ合成を行います。ここではⒷのセルの中身を解析して、ターゲット指定の設定を集めて、一番多く使われているコンテキスト名を決定し、そのコンテキスト名の定義に基づいてデータベース処理を行います。つまり、通常のエンクロージャー/リピーターの展開が行われます。そして、コンテキストオブジェクト自体も生成されます。もちろん、クエリー結果のレコードの個数だけⒷのセルが複製されて、その中ではフィールドの内容がタグ要素に合成され、データベースのデータがセルに見えることになります。もちろん、複数のリンクノードを記述して複数のフィールドを指定しても構いません。なお、内部にさらにエンクロージャー/リピーターが見つかれば展開は行いますが、一般には処理速度を考慮すべきところであり、1回のデータベースアクセスで必要なデータを取り出すようにデータベース側を設計しておくことが求められます。</p><div class="picture"><img class="picture-in-fig" src="figs/fig17.png" altsrc="figs/fig17.pdf"/><div class="caption">図5-5-3　テーブルに列見出しを合成する</div></div><p>　次にテーブル2行目から、行見出しの合成を行います。図5-5-4のように、TBODYタグをエンクロージャーとし、ⒸのセルをTRタグで包んだ要素をリピーターとして通常通りの手順で合成を行います。したがって、Ⓒのセルに含まれるリンクノードのターゲット指定によってコンテキスト名が決まりデータベースアクセスして、取り出されたレコードのフィールドの値が2行目以降の1セル目に合成されます。Ⓒのセルを包むTRタグ要素も、元からページファイルにあったものではなく、単にプログラムで生成したものです。Ⓒのセル内に複数のリンクノードを設けても構いませんし、さらにその中にエンクロージャー/リピーターのセットがあれば展開を進めるのも同様です。</p><div class="picture"><img class="picture-in-fig" src="figs/fig18.png" altsrc="figs/fig18.pdf"/><div class="caption">図5-5-4　テーブルに行見出しを合成する</div></div><p>　そして、2行目の2列目以降、列見出しのレコード数分Ⓓのセルを付加します。最初は単にセルを付加して、行列をセルで埋める作業を行います。そして、Ⓓのセルを解析してコンテキスト名を求めてコンテキストを決定し、データベースアクセスを行います。クエリー結果のレコードを順番に合成するのではなく、順番に調べて置き場所がテーブル内にある場合、その交差セルに対して合成、つまりリンクノードの指定に応じてフィールドの値をタグ要素内に埋め込む処理を行います。したがって、交差セル用コンテキストで得られた結果でも、対応する行あるいは列がなければ無視されます。この処理はクロステーブルだけで行われており、エンクロージャー/リピーターによる展開とは異なる処理が組み込まれています。したがって、エンクロージャーに相当するノードはないため、図の中ではエンクロージャーに対しては「規定なし」と記載をしました。なお、Ver.5.4-dev現在の実装では、交差セルへの合成は、単に合成するだけなので、同一のセルに2回以上合成すると、それらの数値の文字列がつながって見えるだけです。加算等は実装されていませんので、コンテキストから得られるデータは集計結果になっているものを利用するようにしてください。</p><div class="picture"><img class="picture-in-fig" src="figs/fig19.png" altsrc="figs/fig19.pdf"/><div class="caption">図5-5-5　テーブルを交差セルで埋める</div></div><p>　最後の交差セルを埋める部分はデータを見ながら説明をしましょう。サンプルファイルはSamples/Practice/<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Practices/crosstable.html" target="_blank">crosstable.html</a>および<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Practices/crosstable.php" target="_blank">crosstable.php</a>にあります。VMを利用している場合には、ブラウザーで「http://localhost:9080」に接続し、そこにある「サンプルプログラム」のリンクをクリックして、サンプルプログラムの一覧を表示します。そこにあるPracticesにある「cross table」の項目をクリックして、動作を確かめることができます。図5-5-6は、そのサンプルを動かした結果です。このサンプルのページファイルは、このセクションで示したページファイルの記述のサンプルと同一のものです。定義ファイルには、item、customer、salesummaryの3つのコンテキストが指定されていて、それぞれ、列見出し、行見出し、交差セルのコンテキストです。</p><div class="picture"><img class="picture-in-fig" src="figs/ng-shot-253.png"/><div class="caption">図5-5-6　クロステーブルのサンプルプログラム</div></div><p>　以下、3つのコンテキストの具体的な値をもとに、クロステーブルの動作を検討しましょう。列見出しのコンテキスト「item」と、行見出しのコンテキスト「customer」に関して、クエリー結果のデータを示すと、表5-5-1と表5-5-2のような結果になります。それぞれの値が、セルの中に表示されているのが分かります。</p><div class="table"><table><tr><th>id</th><th>name</th></tr><tr><td>25</td><td>Onion </td></tr><tr><td>26</td><td>Parsnip </td></tr><tr><td>27</td><td>Peppers </td></tr><tr><td>28</td><td>Potato </td></tr><tr><td>29</td><td>Pumpkin </td></tr><tr><td>30</td><td>Peas </td></tr><tr><td>31</td><td>Rhubarb </td></tr><tr><td>32</td><td>Shallots </td></tr><tr><td>33</td><td>Spinach </td></tr><tr><td>34</td><td>Squash </td></tr><tr><td>35</td><td>Sweet Potato</td></tr></table><div class="caption">表5-5-1　コンテキスト「item」へのクエリー結果</div></div><div class="table"><table><tr><th>id</th><th>name</th></tr><tr><td>250</td><td>Danio Food, Co.</td></tr><tr><td>251</td><td>Darter Food, Co.</td></tr><tr><td>252</td><td>Dartfish Food, Co.</td></tr><tr><td>253</td><td>Dealfish Food, Co.</td></tr><tr><td>254</td><td>Death Valley pupfish Food, Co.</td></tr><tr><td>255</td><td>Deep sea anglerfish Food, Co.</td></tr><tr><td>256</td><td>Deep sea bonefish Food, Co.</td></tr><tr><td>257</td><td>Deep sea eel Food, Co.</td></tr><tr><td>258</td><td>Deep sea smelt Food, Co.</td></tr><tr><td>259</td><td>Deepwater cardinalfish Food, Co.</td></tr></table><div class="caption">表5-5-2　コンテキスト「customer」へのクエリー結果</div></div><p>　salessummaryクエリーの結果は多数のレコードが取り出されますが、その一部を抜粋したのが表5-5-3です。id=1の最初のレコードですが、item_id=38、customer_id=549です。これらは、列見出しおよび行見出しのコンテキストの中には含まれていませんので、id=1のレコードは無視します。同様に、id=2のレコードも無視します。id=3のレコードは、item_id=30ですので、列見出しのコンテキストから「6列目」であることが分かります。また、customer_id=251であり行見出しのコンテキストから2行目であることが分かります。したがって、交差セルの行列で言えば2行目の6列目、テーブルで数えれば見出しの行が増えているので3行目の6列目に当たるセルに対して、id=3のレコードが展開されることになります。そして、実際に該当するセルに、qtyの値の「8」とtotalの値の「2984」が見えています。</p><p>　id=4はどうでしょうか？ item_id=32なので8列目ですが、customer_id=496に対するレコードが行見出しにはないので、このレコードも無視します。こうして、この後沢山のレコードが無視された後、id=95のレコードが見つかります。item_id=27なので3列目、customer_id=255なので6行目であることが確定するので、対応するセルに対してqtyとtotalの値「41」「12177」が表示されます。salessummaryではこの2つのレコードだけが、クロステーブルの中にあるデータなので、2つのレコードだけが見える結果になったということです。</p><p>　なお、ここでの突き合わせは、交差セルのコンテキストのrelationキーでのフィールドで決まります。列見出しに対応する設定はforeign-keyは「customer_id」、join-fieldは「id」でした。つまり、列見出しのコンテキストのidフィールドの値と、交差セルのコンテキストのcustomer_idの値を付き合わせるということです。通常、join-fieldは見出しのコンテキストのkeyキーで指定するものかもしれませんが、必ずしもそうでないような場合もあり、その場合に見出しコンテキストでテキストフィールドを設定してフィールドを編集したいこともあるので、見出しコンテキスト側の突き合わせ対象フィールドは、relationキーでの指定から得るようにしました。</p><div class="table"><table><tr><th>id</th><th>dt</th><th>item_id</th><th>customer_id</th><th>qty</th><th>unitprice</th><th>total</th></tr><tr><td>1</td><td>2010-01-01 00:00:00</td><td>38</td><td>549</td><td>7</td><td>528</td><td>3696</td></tr><tr><td>2</td><td>2010-01-01 00:04:45</td><td>24</td><td>632</td><td>16</td><td>781</td><td>12496</td></tr><tr><td>3</td><td>2010-01-01 00:14:10</td><td>30</td><td>251</td><td>8</td><td>373</td><td>2984</td></tr><tr><td>4</td><td>2010-01-01 00:27:02</td><td>32</td><td>496</td><td>46</td><td>331</td><td>15226</td></tr><tr><td>:</td><td>:</td><td>:</td><td>:</td><td>:</td><td>:</td><td>:</td></tr><tr><td>94</td><td>2010-01-01 22:02:29</td><td>16</td><td>860</td><td>4</td><td>472</td><td>1888</td></tr><tr><td>95</td><td>2010-01-01 22:24:34</td><td>27</td><td>255</td><td>41</td><td>297</td><td>12177</td></tr><tr><td>:</td><td>:</td><td>:</td><td>:</td><td>:</td><td>:</td><td>:</td></tr></table><div class="caption">表5-5-3　コンテキスト「salessummary」へのクエリー結果</div></div><p>　クロステーブルで3つのコンテキストを用意しますが、注意深く設定しなければならないのは、交差セル用コンテキストのrelationキーの値です。列見出しと行見出しとの対応が取れるようなフィールドを指定しなければなりません。また、交差セル用コンテキストは、集計した結果が得られるようにしておく必要があります。ページ合成の中で、合計を取るなどの処理は現在はできません。</p><h3><span id="H3-ANC-30"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　コンテキストを3つ用意することで、それらを列見出し、行見出し、交差セルに展開して、クロステーブルを作成できます。交差セルには、relationキーで指定したフィールドにおいて見出しと対応した値を持つものが配置されます。また、行列の合計を自動的に追加することもできます。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-6"><span style="display:none">→</span></span><span class="sectionnumber">5-6</span><span xmlns="" id="ix-97"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-98"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>スタイルの設定を自動化する<span xmlns="" id="ix-99"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>テーマ</h2><p class="section-lead">見栄えの良いページを作成するには、<span xmlns="" id="ix-100"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>CSSによるスタイルをかなり細かく設定しなければなりませんが、そのスタイル設定をテーマとしてひとつのフォルダーにまとめておき、それをページあるいはサイト全体に適用する機能をVer.5.6-devで組み込みました。</p><h3><span id="H3-ANC-31"><span style="display:none">→</span></span>テーマの機能とdefaultテーマについて</h3><p>　原則としてCSSの定義はアプリケーションごとに作るものであるとも言えるのですが、CSSを適用しないでWebページを作成すると、INTER-Mediatorが生成するようなページネーションやログインパネルがHTMLの定義そのままの形で出てきてしまいます。機能としては実現していても、次のページに移動するボタンがボタンらしく見えていないとユーザーが戸惑う原因になりますし、作っている時も画面がそっけなさ過ぎてモチベーションが落ちてしまいそうです。そこで、テーマの機能を内蔵して、Webページを作った段階で、ある程度のスタイルや画像リソースが自動的に適用されるようにしました。</p><p>　INTER-Mediatorで自動的に適用されるデザインテーマは、太木裕子氏（京都造形芸術大学キャラクターデザイン学科専任講師）に開発していただきコントリビュートしていただきました。テーマ自体のシステム名称は「<span xmlns="" id="ix-101"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>default」としていますが、テーマ名として『「楝」OUCHI』という名称がつけられています。「楝色（おうちいろ）」は薄い紫の和色名です。基本となるスタイルであることから、楝＝家＝HOMEといった言葉の連想に由来しているそうです。テーブルのTHやTD、INPUT等、よく利用するタグについても、見栄えが良くなるようなCSS定義がなされています。</p><h3><span id="H3-ANC-32"><span style="display:none">→</span></span>テーマの適用と選択</h3><p>　INTER-Mediatorには、表5-6-1に示すテーマがバンドルされています。defaultは何も指定しないと適用されるものですが、実際にはINTER-Mediatorがページファイルのヘッダー部分に自動的にテーマの定義を取り出してページに適用するlinkタグ要素を付加することで、CSSなどを適用しています。</p><div class="table"><table><tr><th>テーマ名</th><th>内容</th></tr><tr><td>default</td><td>テーマに対する設定がない場合に「楝」テーマが適用される</td></tr><tr><td><span xmlns="" id="ix-102"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>least</td><td>ページネーションおよびログインパネルのCSSと、処理中を示す表示のためのリソース</td></tr><tr><td><span xmlns="" id="ix-103"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>thosedays</td><td>「楝」テーマの機能を組み込む以前のサンプル用CSSファイル「sample.css」を適用した状態と同じにする</td></tr></table><div class="caption">表5-6-1　INTER-Mediatorに付属のテーマ</div></div><p>　テーマの設定は、以下のいずれかの方法で行えます。IM_Entry関数はもちろん定義ファイルに記述するもので、このテーマの設定は、定義ファイルを参照しているページにだけ適用されます。params.phpファイルに指定すると、そのファイルを参照しているINTER-Mediator全体に適用されるので、例えばサイト全体をまとめて設定したいときに利用できます。</p><ul><li>IM_Entry関数の第2引数（オプション設定）で、themeキーによる値にテーマ名を指定する。</li><li><span xmlns="" id="ix-104"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>params.phpファイルに、<span xmlns="" id="ix-105"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>$themeName変数に対して文字列でテーマ名を指定する。</li></ul><p>　default以外の付属のテーマについて説明します。leastは、ページネーションとログインパネル以外の設定がない、最小限のテーマです。テーブルや段落等のCSSは全くされていない、文字通り最小限のテーマです。thosedaysは、テーマを実装する以前の状態という意味ですが、そのとき、サンプルファイル用のCSSファイルであるsample.cssをコピーしてアプリケーションに利用していたことに由来します。その時と同じ状態をテーマで実現しています。以前に作成したWebページにdefaultを適用すると、自分自身でCSSの定義を行なっている場合には異なる定義が混在してしまってかえって見栄えには問題が出てくるかもしれません。そこで、最小限ながら以前のsample.cssと同じ状態にするテーマを、既存のWebページ向けに用意してあります。</p><h3><span id="H3-ANC-33"><span style="display:none">→</span></span>テーマのカスタマイズ</h3><p>　テーマを自分自身で変更したい場合には、大きくわけて2通りのアプローチがあるでしょう。ひとつは、既存のテーマを使いつつ、特定のページでは、その定義を上書きして変更するというものです。もうひとつは、スタイルそのものを自分で作るかあるいは既存のものを作り変えるという方法です。後者の方法はこの次で説明します。</p><p>　ページネーションのカスタマイズをしたい場合の例を示しましょう。ページネーションのそれぞれの要素には、表5-6-2のようなスタイルが設定されています。</p><div class="table"><table><tr><th>スタイルシートのセレクタ</th><th>ページネーションの該当部分</th></tr><tr><td>#IM_NAVIGATOR</td><td>コントローラーの外側</td></tr><tr><td>.<span xmlns="" id="ix-106"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_NAV_panel</td><td>コントローラー全体</td></tr><tr><td>span.<span xmlns="" id="ix-107"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_NAV_info</td><td>文字を表示する部分</td></tr><tr><td>span.<span xmlns="" id="ix-108"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_NAV_button</td><td>ボタンになる部分（機能するボタン）</td></tr><tr><td>span.I<span xmlns="" id="ix-109"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>M_NAV_disabled</td><td>機能しないボタンの部分</td></tr></table><div class="caption">表5-6-2　ページネーションで割り当てられたスタイルシートのセレクタ</div></div><p>　ここでボタンの背景と、黄色いマーキングを別のものに変えたいとします。色のセンスはさておいて、ボタンを白背景の赤文字にしたいとした場合、リスト5-6-1のようにヘッダー部にstyleタグ要素を追加して、ボタンに対するCSSの設定を上書きしてしまいます。</p><div class="code"><div class="caption">リスト5-6-1　ページネーションの要素に対するCSS定義の上書き</div><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def01.php"&gt;&lt;/script&gt;
+  &lt;style&gt;
+    span.IM_NAV_button {
+        color: red;
+        background-color: white;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;</code></pre></div><h3><span id="H3-ANC-34"><span style="display:none">→</span></span>テーマの構造とカスタマイズ</h3><p>　INTER-Mediator既定のテーマは、INTER-Mediatorフォルダーの直下の<span xmlns="" id="ix-110"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>「themes」フォルダーに収められています。このフォルダー以下は、「テーマ名」、「css」か「images」、実際のファイル、といった構成になっています。cssとimagesは決められたフォルダー名です。通常、cssフォルダーに入れてある拡張子が.cssのファイルは、自動的にマージされて、ページに適用されます。</p><p>　独自にテーマを作る場合には、defaultフォルダーをコピーして名前を付け直し、その中のファイルを変更するのが一番効率良い方法でしょう。その作成したテーマのフォルダーは、もちろん、INTER-Mediatorフォルダーの直下に配置して構いません。また、可能であれば、コミットしていただければ、テーマのバリエーションが増えるので、開発者としては歓迎です。</p><p>　しかしながら、INTER-Mediatorフォルダーの中にテーマを入れるとなると、もし、改めてレポジトリからpullしたときに、自分で作ったものが追加されていることでなんらかの対処が必要になるかもしれません。自分だけでテーマを使いたい場合にはINTER-Mediatorフォルダー外にテーマを置きたいと思われるでしょう。その場合、リスト5-6-2のように、params.phpファイルで$altThemePath変数に、テーマが保持されているフォルダーへのパスを文字列で指定します。そのサーバーで認識できる絶対パスを記述してください。また、テーマ名もその場合自分で作ったものになるでしょうから、$themeName変数も記述します。</p><div class="code"><div class="caption">リスト5-6-2　独自のテーマを独自のディレクトリに配置するときのparams.phpの一部</div><pre><code><span xmlns="" id="ix-111"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>$altThemePath = "/var/www/thmeme";    //Your original thmeme directory.
+$themeName = "blackbird";      //Default theme name.</code></pre></div><p>　テーマ内のファイルの内容を取得するには、一般には次の形式で得られます。[ ] の部分は適切な文字列に置き換えますが、css|imagesは、cssないしはimagesのどちらかの文字列が入るということです。以下の形式を、例えば、linkタグ要素のhref属性や、imgタグ要素のsrc属性等に指定して、テーマの中身を取り出すことができます。なお、type=cssの場合にname=を省略することで、cssフォルダーにある全ての.cssファイルの中身をマージして返します。</p><div class="code"><div class="caption">リスト5-6-3　テーマの中身を取り出すURL</div><pre><code>[定義ファイル名]?theme=[テーマ名]&amp;type=[css|images]&amp;name=[ファイル名]</code></pre></div><h3><span id="H3-ANC-35"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　テーマの機能によって、特にスタイルシートの設定をしなくても、おおむねデザイン的に整ったサイトを作ることができるようになりました。テーマを自分で定義したり、テーマの定義内容を変更することもできます。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-7"><span style="display:none">→</span></span><span class="sectionnumber">5-7</span>ステップ動作を行うシングルページアプリケーション</h2><p class="section-lead"><span xmlns="" id="ix-112"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>モバイルアプリケーションによく見られる「ステップ動作」を実装できる機能をVer.5.7-devで組込みました。ステップ動作は、リスト形式で選択肢が表示され、タップすると次の選択肢が表示されるといった形式のユーザーインターフェースです。また、「戻る」ボタンがあることも特徴です。このひとつひとつの画面をコンテキストで定義し、それぞれの画面をひとつのページファイル内に記述する、<span xmlns="" id="ix-113"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>シングルページアプリケーション形式でステップ動作のアプリケーションを組み込むことができます。このセクションの内容は、JavaScriptのプログラミングが必須であり、書籍内の順序では後の部分の説明を理解している必要があります。</p><h3><span id="H3-ANC-36"><span style="display:none">→</span></span><span xmlns="" id="ix-114"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ステップ動作のサンプルアプリケーション</h3><p>　ステップ動作の機能を理解するために、サンプルアプリケーションを動かしてみましょう。VMを利用しているのであれば、まず、INTER-Mediator Ver.5.7-devの「2017年12月25日」以降にリリースされたものにアップデートしてから以下の解説を読み進めてください。『1-2　演習を行うための準備』の『演習環境内のINTER-Mediatorのアップデート』にある「VM内のINTER-Mediatorを開発中のバージョンにするコマンド」に示したコマンドを参考にINTER-Mediatorを更新してください。Ver.5.7の正式版以降は確実にステップ動作の機能が組み込まれています。</p><p>　さて、INTER-MediatorをVer.5.7にアップデートできましたら、VMのトップページにある「サンプルプログラム」のリンクをクリックし、Practicesの表にある、「Mobile」の「step」を、クリックしてください。ステップ動作は、マスター/ディテール形式のユーザーインターフェースと同じ仕組みを使っているため、モバイル対応しています。モバイル端末だとセル全体のどこをタップしても構いませんが、PC動作だと「詳細」ボタンが表示されます。PC/Macで手軽にモバイル端末のシミュレーションをするには、Chromeのデバッガにあるデバイスツールバーを表示する方法が手軽でしょう。デバッガの画面を表示すると、上部に「Elements Console…」とメニューが並びます。その「Elements」のすぐ左側にあるモバイルデバイスのアイコンをクリックしてオンにし、青い色になることを確認してください。そして、画面を更新すると、モバイル端末での表示状態になります。</p><p>　図5-7-1は、VMを稼働させて表示されるサンプルアプリケーションの最初のページです。Chromeでモバイルのシミュレーションを行っています。まずは、東京近辺の都県の名前が並んでいます。あとでコードを確認しますが、TABLEタグを利用しています。そして、ページ上部にはタイトルバー、ページ下部にはINTER-Mediatorを示すバーがあり、残りの部分はテーブルだけで埋め尽くされているのを確認してください。また、サンプルの郵便番号データベースには東京都のデータしかなかったことにお気づきの方は、「神奈川県」などはどういうことかと思われるかもしれませんが、これも後で説明します。なお、次のページに移動して何か表示されるのは、「東京都」だけです。</p><div class="picture"><img class="picture-in-fig" src="figs/shot3504.png"/><div class="caption">図5-7-1　ステップ動作を示すサンプルアプリケーション</div></div><p>　「東京都」をタップすると、東京都の市区町村名が一覧されます（図5-7-2）。ここで、まず、市区町村のリストもテーブルで構築していますが、スクロールすることを確認してください。その時、タイトルバーとページ下部の表示は画面に固定され、その間でスクロールされるという典型的なモバイルアプリケーションの動作になっていることを確認してください。この動作はINTER-Mediatorとは関係なく、CSSの設定で可能です。これについても、あとで説明します。また、ヘッダーの左側に、◀︎ボタンが表示され、これをタップすると、東京都などの最初のリストが表示されることが分かります。つまり、これは「戻る」ボタンであり、最初の画面では表示されていないことも確認してください。</p><div class="picture"><img class="picture-in-fig" src="figs/shot3505.png"/><div class="caption">図5-7-2　次の画面に移動すると「戻る」ボタンが表示される</div></div><p>　「市区町村」をタップしたあとは、町域名の一覧が表示されます。この時、前に選択した市区町村に含まれる町域名だけが表示されていることを確認してください。つまり、前のステップの選択肢が、次のステップの一覧表示に対して影響を与えている、つまり検索条件を与えるということができています。そして、最後は、郵便番号、都道府県、市区町村、町域名が一覧され、そこから先にはステップ動作での移動は行いません（図5-7-3）。戻ってまた別の場所を選択することもできます。郵便番号が見える画面では、いずれのセルをタップしても画面遷移は行いませんが、デバッガのコンソールにオブジェクトの内容が出力され、これまでの4つのステップで、何をタップしたのかが記録されていることが分かります。ここで、記録されている状況を例えばデータベースに書き込むなどすることになることも多いかもしれませんが、その作業はJavaScriptでプログラムを記述する必要があります。</p><div class="picture"><img class="picture-in-fig" src="figs/shot3506.png"/><div class="caption">図5-7-3　最後の画面のセルをタップすると、コンソールで遷移の履歴が参照できる</div></div><h3><span id="H3-ANC-37"><span style="display:none">→</span></span>ステップ動作のためのコンテキスト定義</h3><p>　定義ファイルの内容を参照しましょう。定義ファイルは、INTER-Mediatorフォルダーの中では、Samples/Sample_Mobile/step_MySQL.phpにあります。ソースコードをWebで参照するには<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Mobile/step_MySQL.php">こちら</a>をクリックしてください。リスト5-7-1は、ちょっと長いですが、IM_Entryの第1引数であるコンテキスト定義部分を示しています。全体的に見て、4つのコンテキストが定義されています。ここで、ステップ動作に特有の設定は、<span xmlns="" id="ix-115"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>navi-controlキーのstepと、step-hideです。INTER-Mediatorは最初にページ全体の合成を行うとき、step-hideのコンテキストについては、エンクロージャーの要素のdisplayスタイル属性にnoneを設定して、全て非表示にします。また、そのとき、データベースアクセスを行わず、データをリピーターに合成する処理は行いません。一方、stepの方は、通常通り、ページ合成中にデータベースアクセスを行い、リピーターにデータを合成します。つまり、ひとつのstepと複数のstep-hideがnavi-controlに設定されたコンテキスト定義を作ることが、一般的な手法です。</p><p>　あるステップ動作のコンテキストでタップを行った時に、「次に表示するコンテキスト」をどのように決定するかを説明しましょう。まず、既定の動作をここで説明します。次々と表示されるコンテキストは、定義ファイルの定義の順番になります。つまり、prefectureコンテキストを表示している時にタップすると、次にnavi-controlキーの値がstep-hideのコンテキストを探し、その結果cityコンテキストが選択され、このコンテキストを利用しているページファイルの一部分が更新され、データベース処理が行われてクエリー結果をリピーターに合成します。そして、「次へ」という動作の時にスタック動作を行うグローバル変数に情報を残すので、「戻る」ことも自動的に行えるようになっています。</p><div class="code"><div class="caption">リスト5-7-1　ステップ動作のサンプルのコンテキスト定義</div><pre><code>array(
+    array(
+        'name' =&gt; 'prefecture',
+        'table' =&gt; 'not_available',
+        'view' =&gt; 'postalcode',
+        'aggregation-select'=&gt;'MIN(id) AS pref_id, f7 AS pref',
+        'aggregation-from'=&gt;'postalcode',
+        'aggregation-group-by'=&gt;'f7',
+        'records' =&gt; 10000,
+        'maxrecords' =&gt; 10000,
+        'key' =&gt; 'pref_id',
+        'navi-control' =&gt; 'step',
+        'before-move-nextstep'=&gt;'doAfterPrefSelection',
+        'appending-data'=&gt;array(
+            array('pref_id'=&gt;101, 'pref'=&gt;'埼玉県'),
+            array('pref_id'=&gt;102, 'pref'=&gt;'神奈川県'),
+            array('pref_id'=&gt;103, 'pref'=&gt;'千葉県'),
+        )
+    ),
+    array(
+        'name' =&gt; 'city',
+        'table' =&gt; 'not_available',
+        'view' =&gt; 'postalcode',
+        'aggregation-select'=&gt;'MIN(id) AS city_id, f8 AS city',
+        'aggregation-from'=&gt;'postalcode',
+        'aggregation-group-by'=&gt;'f8',
+        'records' =&gt; 10000,
+        'maxrecords' =&gt; 10000,
+        'key' =&gt; 'city_id',
+        'navi-control' =&gt; 'step-hide',
+        'before-move-nextstep'=&gt;'doAfterCitySelection'
+    ),
+    array(
+        'name' =&gt; 'town',
+        'table' =&gt; 'not_available',
+        'view' =&gt; 'postalcode',
+        'aggregation-select'=&gt;'MIN(id) AS town_id, f9 AS town',
+        'aggregation-from'=&gt;'postalcode',
+        'aggregation-group-by'=&gt;'f9',
+        'records' =&gt; 10000,
+        'maxrecords' =&gt; 10000,
+        'key' =&gt; 'town_id',
+        'navi-control' =&gt; 'step-hide',
+        'before-move-nextstep'=&gt;'doAfterTownSelection'
+    ),
+    array(
+        'name' =&gt; 'wrapup',
+        'table' =&gt; 'not_available',
+        'view' =&gt; 'postalcode',
+        'records' =&gt; 10000,
+        'maxrecords' =&gt; 10000,
+        'key' =&gt; 'id',
+        'navi-control' =&gt; 'step-hide',
+        'before-move-nextstep'=&gt;'doAfterLastSelection'
+    ),
+),</code></pre></div><p>　他に、コンテキスト定義では<span xmlns="" id="ix-116"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>navi-titleキーによる<span xmlns="" id="ix-117"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-118"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>タイトルの指定が可能です。ただし、spanなどの要素で、「data-im="<span xmlns="" id="ix-119"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>_@<span xmlns="" id="ix-120"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>navi_title"」という属性が指定されたものをページ内のどこかに記述する必要があります。</p><h3><span id="H3-ANC-38"><span style="display:none">→</span></span>ページファイルの記述内容</h3><p>　ページファイルは定義ファイルと同じフォルダーにあるstep_MySQL.htmlという名前のフォルダーです。ソースコードをWebで参照するには<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Mobile/step_MySQL.html">こちら</a>をクリックしてください。リスト5-7-2に、定義ファイルで定義した4つのコンテキストを展開する部分を含む、ページファイルのボディ部を示しました。それぞれの展開部分は、特別なものはなく、単にフィールドをセルの値としているだけです。なお、データベース処理については、後でまとめて説明をします。ここで、ステップ動作に必要な準備は、<span xmlns="" id="ix-121"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>「戻る」ボタンの確保です。リストの最初の方に、class属性が「<span xmlns="" id="ix-122"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IM_Button_StepBack」のspanタグがあります。タグの種類はおおむね何でもよく、class属性に必ず前述の名前を指定します。それが、ページ内の見えている場所に配置されていれば構いません。通常はひとつの要素だけで十分と思われますが、複数あってもかまいません。</p><div class="code"><div class="caption">リスト5-7-2　ページファイル内でのページ合成を行う部分</div><pre><code>&lt;div id="header"&gt;
+    &lt;span class="IM_Button_StepBack"&gt;◀︎&lt;/span&gt;
+    郵便番号検索
+&lt;/div&gt;
+&lt;div id="content"&gt;
+    &lt;table class="stepbox"&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;span data-im="prefecture@pref"&gt;&lt;/span&gt;&lt;/td&gt;
+            &lt;td class="accessary"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+    &lt;table class="stepbox"&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;span data-im="city@city"&gt;&lt;/span&gt;&lt;/td&gt;
+            &lt;td class="accessary"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+    &lt;table class="stepbox"&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;span data-im="town@town"&gt;&lt;/span&gt;&lt;/td&gt;
+            &lt;td class="accessary"&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+    &lt;table class="stepbox"&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;span data-im="wrapup@f3"&gt;&lt;/span&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;span data-im="wrapup@f7"&gt;&lt;/span&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;span data-im="wrapup@f8"&gt;&lt;/span&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;span data-im="wrapup@f9"&gt;&lt;/span&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;</code></pre></div><h3><span id="H3-ANC-39"><span style="display:none">→</span></span><span xmlns="" id="ix-123"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>画面遷移時に呼び出されるメソッド</h3><p>　これまでの設定で、navi-controlの値がstepおよびstep-hideをもつコンテキストを展開したページの一部分が切り替わり表示できるようになっています。しかしながら、切り替わり前に、何か処理をしたいことが多いでしょう。サンプルでは、例えば、市区町村に「中野区」を選んだ時と、「渋谷区」を選んだ時では、町域名の検索条件が変わります。そうした処理などを組み込むために、コンテキスト定義に、<span xmlns="" id="ix-124"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>before-move-nextstepキーを定義します。値はメソッド名を示す文字列です。例えば、prefectureコンテキストでは、「'before-move-nextstep'=&gt;'doAfterPrefSelection'」という記述がありますが、これに対して、ページファイルのヘッダー部で、リスト5-7-3のようなメソッドを定義します。メソッドは、<span xmlns="" id="ix-125"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>INTERMediatorOnPage変数のオブジェクトとして定義します。引数はありません。</p><div class="code"><div class="caption">リスト5-7-3　doAfterPrefSelectionメソッドの定義</div><pre><code>INTERMediatorOnPage.doAfterPrefSelection = function () {
+    var lastSelection = IMLibPageNavigation.getStepLastSelectedRecord()['pref'];
+    INTERMediator.clearCondition('city');
+    INTERMediator.addCondition('city', {field: 'f7', operator: '=', value: lastSelection});
+};</code></pre></div><p>　この例では返り値がありませんが、返り値によって、表5-7-1のように、画面遷移の動作をコントロールできます。したがって、最後の画面で何かの動作を組み込んだり、あるいはコンテキスト定義の順番とは関係のない任意のコンテキストを次に表示するなど、ナビゲーション自体を返り値でコントロールできます。</p><div class="table"><table><tr><th>返り値</th><th>動作</th></tr><tr><td>false</td><td><span xmlns="" id="ix-126"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>画面遷移せず、現在のステップに留まる</td></tr><tr><td>null</td><td>コンテキスト定義の順番で決まる<span xmlns="" id="ix-127"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-128"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>次のステップに画面遷移する（returnなしの場合もこれに相当する）</td></tr><tr><td>文字列</td><td>文字列で指定したnameキーを持つコンテキストに対応した画面に遷移する</td></tr></table><div class="caption">表5-7-1　before-move-nextstepキーで指定するメソッドの返り値</div></div><p>　コンテキスト定義内には、表5-7-2に示すキーで、メソッド名を定義できます。いずれも、INTERMediatorOnPage変数のオブジェクトとして、キーに対する値を名前に持つメソッドを定義します。before-move-nextstepキーのメソッドは前に示すように返り値により動作を定義できますが、残り2つのキーに対するメソッドは、引数も返り値も不要です。例えば、あるステップだけ、特定のフッターが必要な場合には、あらかじめdisplayスタイルをnoneにしておいて画面には見えないようにしておき、just-move-thisstepキーの値の名前のメソッドでフッターを表示します。また、just-leave-thisstepキーの値の名前のメソッドでフッターを非表示にします。</p><div class="table"><table><tr><th>コンテキスト定義でのキー</th><th>メソッドの呼び出しタイミング</th></tr><tr><td>before-move-nextstep</td><td>セルをタップしたとき</td></tr><tr><td><span xmlns="" id="ix-129"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>just-move-thisstep</td><td>コンテキストのページ合成を終えた直後</td></tr><tr><td><span xmlns="" id="ix-130"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>just-leave-thisstep</td><td>次のコンテキストに移行する直前</td></tr></table><div class="caption">表5-7-2　コンテキスト定義で指定できるステップ動作関連のメソッド</div></div><p>　before-move-nextstepキーで指定するメソッド内では、現在のステップや、それ以前のステップで選択した項目など得るために、以下の変数や、メソッドを利用することができます。</p><h4><span xmlns="" id="ix-131"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibPageNavigation.stepNavigation</h4><p style="padding-left: 20px">　<span xmlns="" id="ix-132"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-133"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ステップ動作で選択したそれぞれのセルが順番に入力された配列。最後の要素が、今表示されている画面での選択結果となる。要素は、key、contextの2つのプロパティを持つオブジェクトである。contextは、そのステップで利用されたコンテキストオブジェクト（IMLibContextクラス）を参照するので、選択したデータはもちろん、関連するフィールドや他のレコードを含めて参照できる。keyは、選択したレコードのキーで、「主キーフィールド名=主キー値」の形式を持つ。コンテキストのstoreプロパティで、keyの値をキーにすると、選択したレコードが取り出せる。</p><h4><span xmlns="" id="ix-134"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibPageNavigation.getStepLastSelectedRecord()</h4><p style="padding-left: 20px">　現在のコンテキストで選択したレコードを得る。</p><p>　なお、ページの冒頭にスタティックな内容を表示して、ボタンをクリックすればステップ動作が始まるようにしたい場合には、全てのコンテキストのnavi-controlをstep-hideにして、以下のメソッドを実行して、ステップ動作のきっかけを作ることができます。</p><h4><span xmlns="" id="ix-135"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibPageNavigation.startStep()</h4><p style="padding-left: 20px">　コンテキスト定義でのnavi-controlキーの値が全部step-hideの場合、このメソッドを実行することで、コンテキスト定義で最初にnavi-controlキーを持つコンテキストに対応する画面がページ上に表示する。</p><p>　ステップ動作を自分でコントロールしたい場合には、次のようなメソッドを利用できます。いずれも、ボタンをタップした場合に、特別な処理をするような場合に利用できるでしょう。</p><h4><span xmlns="" id="ix-136"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibPageNavigation.backToPreviousStep()</h4><p style="padding-left: 20px">　「戻る」ボタンと同等な処理を行う。なお、複数<span xmlns="" id="ix-137"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-138"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ステップを戻るには、このメソッドを必要回数指定する。</p><h4><span xmlns="" id="ix-139"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibPageNavigation.moveNextStep(key)</h4><p style="padding-left: 20px">　セルをタップしたのと同じく<span xmlns="" id="ix-140"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-141"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ステップを進める処理を行う。この時、引数keyが、IMLibPageNavigation.stepNavigationの要素のkeyプロパティに設定される。</p><p>　例えば、ボタンをタップしたら、別のステップに進みたいとします。ボタンのonclick属性に指定した関数で、「IMLibPageNavigation.moveNextStep("buttontapped");」のように、moveNextStepメソッドを呼び出します。引数は適当な文字列ですが、レコードを選択したときには通常は「主キー=値」の形式になるものの、ここでは確実にレコードを選択したときと異なる値になるようなkeyプロパティを選んであります。そして、before-move-nextstepキーで指定したメソッド内で以下のように、直近の選択結果のkeyプロパティがmoveNextStepメソッドと同じかどうかを判定して、ボタンから次のステップに移動するのか、セルをタップするのかを判別することができます。</p><div class="code"><div class="caption">リスト5-7-4　moveNextStepメソッドでのステップ移動をbefore-move-nextstepキーで指定したメソッド内で判定する</div><pre><code>var lastKey = IMLibPageNavigation.stepNavigation[IMLibPageNavigation.stepNavigation.length - 1].key;
+if (lastKey === 'buttontapped') {
+    /* ボタンをタップした場合の処理 */
+} else {
+    /* セルをタップした場合の処理 */
+}</code></pre></div><h3><span id="H3-ANC-40"><span style="display:none">→</span></span>サンプルでのデータベースアクセス</h3><p>　ここでまず、データベースへのアクセスがどのようになっているのかを説明します。利用するテーブルは他のサンプルでもおなじみの、postalcodeです。日本郵便が配布しているデータで、f3フィールドが郵便番号、f7フィールドが都道府県名、f8フィールドが市区町村名、f9フィールドが町域名を示しています。また、idフィールドに連番が入力されていて、このフィールドが主キーになります。表5-7-3は、4つのコンテキスト定義で指定されている値で合成されるSQLステートメント</p><div class="table"><table><tr><th>コンテキスト名</th><th>基本のSQLステートメント</th></tr><tr><td>prefecture</td><td>SELECT MIN(id) AS pref_id, f7 AS pref FROM postalcode GROUP BY f7</td></tr><tr><td>city</td><td>SELECT MIN(id) AS city_id, f8 AS city FROM postalcode GROUP BY f8</td></tr><tr><td>town</td><td>SELECT MIN(id) AS town_id, f9 AS town FROM postalcode GROUP BY f9</td></tr><tr><td>wrapup</td><td>SELECT * FROM postalcode</td></tr></table><div class="caption">表5-7-3　それぞれのコンテキストで実行される基本のSQLステートメント</div></div><p>　まず、最初のprefectureコンテキストでのデータベースアクセス結果を検討しましょう。表5-7-3にあるようにSQLステートメントを実施します。都道府県はf7フィールドで得られますが、単に取ってくるだけだと、大量に「東京都」が出てきてしまいます。ここで、DISTINCTを使ったSELECT文も考えられるのですが、主キーフィールドを設定したいと考えます。この時、f3=東京都のレコードはたくさんありますが、ひとつのidフィールドの値を、コンテキストで得られるリレーションの主キーにするために、f7フィールドが同じレコードをGROUP BYでひとつにまとめるとともに、その中のidフィールドのうち、MIN関数で最小のものを取り出しています。仮にidが1から1000まで全部が東京都のレコードだったとします。その時、id=1なのか、id=2なのか、id=333なのかは、現実にはどれでもいいのです。ただし、f7フィールドしか参照しないというルールが守られていれば、idその中のひとつでいいので、ここでは最小値を取ってきています。prefectureコンテキストでは、appending-dataキーもあるので、結果的には、表5-7-4のようなリレーションが得られます。</p><div class="table"><table><tr><th>pref_id</th><th>pref</th><th>注釈</th></tr><tr><td>1</td><td>東京都</td><td>SQL文で得られた結果</td></tr><tr><td>101</td><td>埼玉県</td><td>appending-dataキーで追加された結果</td></tr><tr><td>102</td><td>神奈川県</td><td>appending-dataキーで追加された結果</td></tr><tr><td>103</td><td>千葉県</td><td>appending-dataキーで追加された結果</td></tr></table><div class="caption">表5-7-4　prefectureコンテキストで得られるリレーション</div></div><p>　ここで「東京都」をタップしたとします。すると、リスト5-7-4に示したINTERMediatorOnPage.doAfterPrefSelectionメソッドがスタートします。「IMLibPageNavigation.getStepLastSelectedRecord()['pref'];」の実行により、「東京都」のレコードのprefフィールドの値、つまり「東京都」という文字列が得られ、lastSelection変数にセットされています。そして、次のコンテキストcityに対して、「f7 = '東京都'」という検索条件が追加され、つまりは、「SELECT MIN(id) AS city_id, f8 AS city FROM postalcode WHERE f7 = '東京都' GROUP BY f8」というSQLステートメントが実施されます。結果的には、表5-7-5のようなリレーションが得られます。ここでも、同一のf8フィールドでグループ化して、その中の最小のidフィールドの値を利用して、主キーのcity_idを求めています。</p><div class="table"><table><tr><th>city_id</th><th>city</th></tr><tr><td>1</td><td>千代田区</td></tr><tr><td>447</td><td>中央区</td></tr><tr><td>605</td><td>港区</td></tr></table><div class="caption">表5-7-5　cityコンテキストで検索条件「f7 = '東京都'」を付与して得られるリレーション</div></div><p>　cityやtownのコンテキストでセルをタップしたときに呼び出すメソッドは、prefectureコンテキスト同様に、次のコンテキストに検索条件を加えるものです。具体的には、ソースコードを参照してください。</p><h3><span id="H3-ANC-41"><span style="display:none">→</span></span><span xmlns="" id="ix-142"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-143"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>画面に固定されたヘッダーとフッター</h3><p>　まず、モバイルブラウザーでの縮小処理が行われないように、ページファイルのヘッダー部に「&lt;<span xmlns="" id="ix-144"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>meta name="<span xmlns="" id="ix-145"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>viewport" content="initial-scale=1"/&gt;」というタグを記述します。必要に応じて、ほかの記述も加えます。</p><p>　モバイルアプリケーションの特徴である、固定されたヘッダーやフッターは、CSSの機能を利用します。サンプルでは、ページファイル内にスタイルシートを記述しました。ヘッダーとフッターに関連する部分を、リスト5-7-5に示しました。まず、画面全体は、id=containerで囲まれています。その中に、id=headerのヘッダー、スクロールするテーブルのid=contentのブロック、そしてフッターに相当するのはid=IM_CREDITの要素です。container内部はdisplayを<span xmlns="" id="ix-146"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>flexにして、固定値に配置されるようにしています。id=contentはdivタグで、その中にtableタグのテーブルがあります。そこでスクロールされるように、<span xmlns="" id="ix-147"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>overflowの値をscrollにしています。</p><div class="code"><div class="caption">リスト5-7-5　ページファイル内に記述されたスタイルシートの一部</div><pre><code>#container {
+    display: flex;
+    flex-direction: row;
+}
+
+#header {
+    width: 100%;
+    text-align: center;
+    background-color: #2a2780;
+    color: white;
+    font-size: 160%;
+    padding: 8px 0;
+}
+
+#content {
+    overflow: scroll;
+}
+
+#IM_CREDIT {
+    width: 100%;
+    white-space: nowrap;
+}</code></pre></div><p>　しかしながら、CSSの定義だけでは画面にきっちりと配置はされません。画面の高さに応じて、id=contentの高さを調整することで、ヘッダーとフッターが画面上下のぴったりとした位置に配置されます。そのために、リスト5-7-6のようなプログラムをページファイル内に記述しました。ページ合成後や、デバイスを回転させた後に関数adjastObjectsを呼び出しています。そして、ヘッダー、フッター、画面の高さから、id=contentの高さを求めて設定をしています。なお、このプログラムは、ページデザインを変更した場合など、ヘッダーやフッターの状況によって作り変えが必要になります。</p><div class="code"><div class="caption">リスト5-7-6　id属性がcontentの高さを調整するプログラム</div><pre><code>INTERMediatorOnPage.doAfterConstruct = function () {
+    document.getElementById('container').style.display = "block";
+    adjastObjects();
+};
+
+window.addEventListener("orientationchange", function () {
+    adjastObjects();
+});
+
+function adjastObjects() {
+    var headerNode = document.getElementById('header');
+    var footerNode = document.getElementById('IM_CREDIT');
+    var wHeight = screen.availHeight;
+    var stepBoxHeight = wHeight - headerNode.clientHeight - footerNode.clientHeight;
+    document.getElementById('content').style.height = stepBoxHeight + "px";
+}</code></pre></div><h3><span id="H3-ANC-42"><span style="display:none">→</span></span>そのほかのスタイル設定</h3><p>　リスト5-7-7も、ページファイル内に定義したスタイルシートです。まず、stepboxクラスは、tableタグに適用されており、テーブルを画面はばいっぱいに表示するとともに、余計なマージンが設定されないようにして、空白なくヘッダーや画面左右の境界までレイアウトされています。セルについては、高さを32pxにするとともに、フォントサイズを大きめにしました。また、セルの右にある▶︎は、このようにセルを分離してクラスaccessaryを設定し、CSS属性でキャラクタを表示しています。最後には、ヘッダーの左端にある「戻る」ボタンのクラスであるIM_Button_StepBackに対しての設定があります。ヘッダー内で固定位置に配置されるように、positionをabsoluteにして、座標位置や幅を数値で与えています。</p><div class="code"><div class="caption">リスト5-7-7　そのほかのスタイル設定</div><pre><code>.stepbox {
+    width: 100%;
+    margin: 0;
+}
+
+td.accessary {
+    width: 20px;
+    text-align: right;
+}
+
+td.accessary::after {
+    content: "︎▶";
+    color: #9b9b9b;
+}
+
+td {
+    height: 32px;
+    font-size: 130%;
+}
+
+.IM_Button_StepBack {
+    position: absolute;
+    top: 8px;
+    left: 4px;
+    width: 40px;
+    cursor: pointer;
+    color: #9393ee;
+}
+</code></pre></div><h3><span id="H3-ANC-43"><span style="display:none">→</span></span><span class="exsign">演習</span>入力のあるステップ動作のページ</h3><p>　ステップ動作を行うページでは、表示されたものの選択をすることが一般的な使い方ですが、さらに、テキストエリアなどの入力可能なコンポーネントがある場合のサンプルを演習で作ってみます。ここまでに説明したサンプルでは、選択結果はそのままではデータベースにバインドされていないので、もし、データベースに反映させるとしたら、JavaScriptで書き込みを行うようなプログラムが必要でした。同様に入力可能なコンポーネントがあっても直接バインドはできませんので、ローカルコンテキストにバインドして、必要な時にプログラムで入力した値を得られるようにします。なお、この演習は、FileMakerではできません。</p><h4>定義ファイルエディターを開き最初のコンテキストを入力</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、演習環境を起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://localhost:9080」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def15.phpを編集する」をクリックし、定義ファイルエディターでdef15.phpファイルを編集します。（もし、他の用途で15番目を利用しているのなら、例えば、def21.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>ページ上の「Show All」ボタンをクリックして、全ての項目を表示します。</div><div class="step"><span class="stepnumber">4</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">5</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">6</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">7</span>nameを「citylist」、tableを「dummy」、viewを「postalcode」、keyを「city_id」、pagingを空欄、repeat-controlを空欄、navi-controlを「step」、recordsを「10000」、maxrecordsを「10000」、before-move-nextstepを「doAfterCitySelection」とします。</div><div class="step-wo-number">さらに、Aggregation Query Accessにあるselectを「MIN(id) AS city_id, f8 AS city」、fromを「postalcode」、group-byを「f8」とします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-254.png"/></div><h4>2つ目のコンテキストを入力</h4><div class="step"><span class="stepnumber">1</span>引き続き定義ファイルエディターでの作業を続けます。Contextsのすぐ下にある「追加」ボタンをクリックして、新たにコンテキスト定義を追加します。</div><div class="step"><span class="stepnumber">2</span>nameを「opinion」、tableを「dummy」、viewを「postalcode」、navi-controlを「step-hide」、recordsを「1」、maxrecordsを「1」、before-move-nextstepを「doAfterOpinion」とします。その他は空欄にします。</div><div class="picture"><img class="picture-small" src="figs/shot3508.png"/></div><div class="step"><span class="stepnumber">3</span>Database Settingsにあるdb-classは「PDO」のままでかまいません。dsnには「mysql:host=db;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step"><span class="stepnumber">4</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行っても構いませんが、ブラウザーをモバイルシミュレーション動作させるとページ上でのデバッグ情報の参照ややりにくくなるので、コンソール等で参照してください。</div><h4>ページファイルの修正</h4><div class="step"><span class="stepnumber">1</span>「http://localhost:9080」で開いたページに戻り「page15.htmlを編集する」をクリックし、ページファイルのpage15.htmlを編集するページファイルエディターが開きます。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">2</span>最初にヘッダー部に、metaタグの要素をひとつ追加します。</div><div class="code"><pre><code>&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    <strong>&lt;meta name="viewport" content="initial-scale=1"&gt;</strong>
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="def15.php"&gt;&lt;/script&gt;</code></pre></div><div class="step"><span class="stepnumber">3</span>ヘッダー部の、def15.phpを含むscriptタグの次に、以下のプログラムをscriptタグで囲んで記載します。なお、最初の方は、<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Mobile/step_MySQL.html">サンプルプログラムのページファイル</a>にあるものと同一ですので、そちらからコピーしてペーストしましょう。後半は入力します。太字の部分は入力、それ以外の部分はサンプルファイルからのコピー&amp;ペーストを行います。</div><div class="step-wo-number">citylist、opinionのそれぞれのコンテキストで定義されたbefore-move-nextstepキーの値がメソッド名になります。INTERMediatorOnPage変数のオブジェクトに、そのメソッドを定義します。citylistでのタップにより、その時にcity_idフィールド値を次のopinionコンテキストの検索条件に設定しています。opinionコンテキストは最後のページなので、遷移しないようにfalseを返しています。</div><div class="code"><pre><code><strong>&lt;script&gt;</strong>
+    INTERMediatorOnPage.doAfterConstruct = function () {
+        document.getElementById('container').style.display = "block";
+        adjastObjects();
+    };
+
+    window.addEventListener("orientationchange", function () {
+        adjastObjects();
+    });
+
+    function adjastObjects() {
+        var headerNode = document.getElementById('header');
+        var footerNode = document.getElementById('IM_CREDIT');
+        var wHeight = screen.availHeight;
+        var stepBoxHeight = wHeight - headerNode.clientHeight - footerNode.clientHeight;
+        document.getElementById('content').style.height = stepBoxHeight + "px";
+    }
+
+<strong>    INTERMediatorOnPage.doAfterCitySelection = function () {
+        var lastSelection = IMLibPageNavigation.getStepLastSelectedRecord()['city_id'];
+        INTERMediator.clearCondition('opinion');
+        INTERMediator.addCondition('opinion', {field: 'id', operator: '=', value: lastSelection});
+    };
+
+    INTERMediatorOnPage.doAfterOpinion = function () {
+        return false;
+    };
+    
+    function finishSurvey() {
+        IMLibQueue.setTask(function(completeTask) {
+            var opinion = IMLibLocalContext.getValue('opinion');
+            var selkey = IMLibPageNavigation.stepNavigation[0].key;
+            var city = IMLibPageNavigation.stepNavigation[0].context.store[selkey]['city'];
+            alert('市区町村: ' + city +'\nご意見: ' + opinion);
+            completeTask();
+        });
+    }
+&lt;/script</strong>&gt;</code></pre></div><div class="step"><span class="stepnumber">4</span>ヘッダー部の、末尾に以下のスタイルシートをstyleタグで囲んで記載します。なお、最初の方は、<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Mobile/step_MySQL.html">サンプルプログラムのページファイル</a>にあるものと同一ですので、そちらからコピーしてペーストしましょう。後半は入力します。太字の部分は入力、それ以外の部分はサンプルファイルからのコピー&amp;ペーストを行います。</div><div class="step-wo-number">ボタンとテキストフィールドの枠線が消えてしまうので、そのためのスタイルを追加しました。</div><div class="code"><pre><code><strong>&lt;style&gt;</strong>
+            #container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #header {
+            width: 100%;
+            text-align: center;
+            background-color: #2a2780;
+            color: white;
+            font-size: 160%;
+            padding: 8px 0;
+        }
+
+        #content {
+            overflow: scroll;
+        }
+
+        .stepbox {
+            width: 100%;
+            margin: 0;
+        }
+
+        td.accessary {
+            width: 20px;
+            text-align: right;
+        }
+
+        td.accessary::after {
+            content: "︎▶";
+            color: #9b9b9b;
+        }
+
+        td {
+            height: 32px;
+            font-size: 130%;
+        }
+
+        #IM_CREDIT {
+            width: 100%;
+            white-space: nowrap;
+        }
+
+         .IM_Button_StepBack {
+            position: absolute;
+            top: 8px;
+            left: 4px;
+            width: 40px;
+            cursor: pointer;
+            color: #9393ee;
+         }
+    
+<strong>    textarea {
+        margin: 2px;
+        padding: 2px;
+        border: 1px solid gray;
+    }
+    
+    button {
+        margin: 2px;
+        padding: 2px;
+        border: 1px solid gray;
+  }
+&lt;/style&gt;</strong>
+</code></pre></div><div class="step"><span class="stepnumber">5</span>ボディ部は以下のように記述します。bodyタグ以外は全て手入力する必要があります。</div><div class="code"><pre><code>&lt;body&gt;
+&lt;div id="container" style="display: none"&gt;
+    &lt;div id="header"&gt;
+        &lt;span class="IM_Button_StepBack"&gt;◀︎&lt;/span&gt;
+        アンケート
+    &lt;/div&gt;
+    &lt;div id="content"&gt;
+        &lt;table class="stepbox"&gt;
+            &lt;thead&gt;
+              &lt;tr&gt;&lt;td colspan="2"&gt;住んでみたい市区町村を選択してください。&lt;/td&gt;&lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;&lt;span data-im="citylist@city"&gt;&lt;/span&gt;&lt;/td&gt;
+                &lt;td class="accessary"&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+        &lt;table class="stepbox"&gt;
+            &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;
+                  &lt;span data-im="opinion@f7"&gt;&lt;/span&gt;
+                  &lt;span data-im="opinion@f8"&gt;&lt;/span&gt;
+                  を選択しました
+              &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;
+                  この市区町村に関する感想を書いてください&lt;br&gt;
+                  &lt;textarea data-im="_@opinion" style="width: 90%; height: 80px;"&gt;&lt;/textarea&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+              &lt;td&gt;&lt;button onclick="finishSurvey()"&gt;アンケート結果を送る&lt;/button&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+</code></pre></div><div class="step-wo-number">テキストエリアにあるdata-im属性は、ローカルコンテキストを利用することを示しています。ターゲット指定の最初の部分であるコンテキストの指定が「_」であれば、ローカルコンテキストです。</div><h4>Chromeを利用してモバイルシミュレーションで稼働させる</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Chromeを使います。ここまで別のブラウザーで作業をしていて、ここからChromeを使うこともできます。「http://localhost:9080」で開いたページに戻り、「page15.htmlを表示する」をクリックして、ページを開きます。</div><div class="step"><span class="stepnumber">2</span>デベロッパーツールを開きます。Macだと、command+option+I（アルファベットの「アイ」）、Windowsのだとctrl+shift+Iです。</div><div class="step"><span class="stepnumber">3</span>デベロッパーツールのElementsの左にあるモバイルツールボタンをクリックするなどして、画面をモバイルシミュレーションにします。必要に応じて、ツールの設定後に更新を行います。最初のページが表示され、市区町村の一覧が見えています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-255.png"/></div><div class="step"><span class="stepnumber">4</span>適当なセルをタップして、次の画面に移動します。テキストエリアが見ているので、適当に入力します。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-256.png"/></div><div class="step"><span class="stepnumber">5</span>「アンケート結果を送る」ボタンをクリックすると、ダイアログボックスに、最初の画面での選択結果と、次の画面での入力値が表示されました。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-257.png"/></div><div class="step-wo-number">ダイアログボックスで表示する部分は、finishSurvey関数です。ここで例えば、データベースに書き込むスクリプトを記述すれば、アンケート結果の保存ができるようになります。データベース処理の記述は、『6-3　データベースへの書き込みを直接行う』で説明しています。</div><h4>演習のまとめ</h4><ul><li>navi-controlキーの値がstepあるいはstep-hideのコンテキストに対応したエリアをそれぞれ1画面として、画面が切り替わるステップ動作のページを作成することができます。ページ内は、データベースの内容を表示することができます。</li><li>クラスがIM_Button_StepBackのspanタグ要素が「戻る」ボタンになります。オブジェクトの配置をするだけで、ボタンが適切に動作します。</li><li>画面遷移の時に呼び出されるメソッドをbefore-move-nextstepキーで指定します。画面でセルをタップしたときに呼び出され、次の画面のデータベースアクセスの条件設定などができます。</li><li>ページ内にテキストエリアなどを配置した場合、ローカルコンテキストとしてバインドしておけば、後から値をプログラムで取り出すことができます。</li></ul><h3><span id="H3-ANC-44"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　ステップ動作は、ひとつのコンテキストごとに画面に表示する機能で、ある種のモバイルアプリケーションでよく見られる形式であるとも言えます。画面の構築はもちろん、タップ後の画面遷移もコンテキスト定義に定義されている順序で順番に行われます。また、戻るボタンの動作も自動的に行われます。タップ時には定義したメソッドを呼び出せるので、そこでさまざまな処理を記述できますし、遷移をやめたり順序と関係ない別のコンテキストに遷移したり、さまざまな動作を実装できます。ただし、JavaScriptのプログラミングが必要になります。</p></div></body></html>

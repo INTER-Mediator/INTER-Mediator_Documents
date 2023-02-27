@@ -1,0 +1,1017 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" class="hltr"><head><title>INTER-Mediator基礎 - Chapter 1　INTER-Mediatorの概要と開発ツール利用のポイント</title><link href="00_default.css" rel="stylesheet" media="all"/></head><body xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:msyk="http://msyk.net/Editorial" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/"><div id="main"><h1><span id="H1-ANC-1"><span style="display:none">→</span></span><span class="chapternumber">Chapter 8</span><br/>サーバーサイドでのプログラミング</h1><p class="version-notation">この章は、INTER-Mediator Ver.5をもとに記載しました。現在、Ver.10以降の状況に合わせてこの章の内容は書き換える予定です。バージョンが異なっても共通の部分もありますので、必要に応じて製品ドキュメントなどを併読の上、本章を参照してください。</p><p class="chapter-lead">この章では、サーバーサイドで稼働するスクリプトのプログラミングを解説します。アプリケーションの実行のために、サーバー上で動くPHPのプログラムを記述できます。なお、PHPのプログラミングについての詳細は、PHPのマニュアルサイトや解説書等をご覧ください。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-1"><span style="display:none">→</span></span><span class="sectionnumber">8-1</span>定義ファイルの設定内容と外部での設定</h2><p class="section-lead">コンテキストなどを記述する定義ファイルにはさまざまな設定が可能ですが、その設定はさらに一部は外部のファイルに設定して、複数の定義ファイルにも記述できます。この外部の設定ファイル「params.php」の利用方法と、設定可能な内容について説明をします。</p><h3><span id="H3-ANC-1"><span style="display:none">→</span></span>設定ファイル<span xmlns="" id="ix-1"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>params.php</h3><p>　INTER-Mediatorで作成するアプリケーションの設定は、ほとんどが定義ファイルに記述できます。定義ファイルには複数のコンテキストを記述できます。ひとつのページファイルに対してひとつの定義ファイルを作るのが基本ですが、複数のページファイルからひとつの定義ファイルを利用するのもかまいません。しかしながら、アプリケーションの開発ではたくさんの定義ファイルを作るのが一般的な状況でしょう。そうなると、その中で共通の設定をどこかにまとめて書きたくなります。特に、データベースへの接続設定は、さまざまな場所に記述できますが、一般には接続設定はアプリケーション全体で一通りしかないこともあります。</p><p>　こうした、「定義ファイルをまたがった設定」をサポートするために、ファイル名を決め打ちしたparams.phpファイルを利用できます。INTER-Mediatorは同名の「INTER-Mediator」フォルダーにまとめられています。そのフォルダーのルートに、params.phpファイルがあり、PHPでのプログラムで記述されています。プログラムファイルではありますが、実際には変数に値を設定している程度のものなので、クォーテーションの対応や行の最後のセミコロンを忘れない限りは大きく間違えることはないでしょう。</p><p>　params.phpファイルは、「INTER-Mediator」フォルダー内だけでなく、そのひとつ上の階層の「INTER-Mediator」フォルダーと同じフォルダーにも配置できます。両方のフォルダーにparams.phpファイルが存在するときには、上位のparams.phpファイルが優先されます。つまり、「INTER-Mediator」フォルダー内のparams.phpよりも、「INTER-Mediator」フォルダーと同じ階層のparams.phpの方が優先的に利用されます。そして、2つのparams.phpファイルのうち、どちらか一方だけが利用されます。</p><p>　実際にアプリケーションを作成する場合には、「INTER-Mediator」フォルダーと同じ階層にparams.phpを用意します。「INTER-Mediator」フォルダー内のparams.phpを書き直した場合、レポジトリから最新版を取り込むような場合に事態は複雑になります。レポジトリとの連動を重視する場合やフォルダーの上書きでアップデートをしたい場合には、「INTER-Mediator」フォルダー内のparams.phpファイルは修正しないでおきます。開発を始める当初に「INTER-Mediator」フォルダー内にあるparams.phpを上位のフォルダーへコピーし、そしてそのファイルを開いて値を修正すれば良いでしょう。データベース接続に関連する情報はこのレベルにあるparams.phpファイルに書き込んでおきます。こうすれば、後からINTER-Mediatorフォルダーを、フォルダーごと変更するようなことがあっても、変更した設定を消してしまうこともありません。</p><h3><span id="H3-ANC-2"><span style="display:none">→</span></span><span xmlns="" id="ix-2"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベース接続情報の管理</h3><p>　データベースへの接続の基本的なことは『2-1　データベースからの取り出し設定』で、そして実際に定義ファイル上での記述方法は『2-2　ページ構築のための基本設定』で説明してきました。この設定をparams.phpを使って共通化する方法を説明しましょう。</p><p>　まず、定義ファイルのIM_Entryの第3引数に指定する連想配列のキーをリスト8-1-1にまとめましたが、それに対応するparams.php内での変数名と対比して示しました。</p><div class="table"><table><tr><th>キー</th><th>値</th><th>params.phpでの変数名</th></tr><tr><td>'db-class'</td><td><span xmlns="" id="ix-3"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データアクセスクラスの名前（例：PDO、FileMaker_FX）</td><td>$dbClass</td></tr><tr><td>'dsn'</td><td>[PDO]接続時に指定する<span xmlns="" id="ix-4"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DSN</td><td>$dbDSN</td></tr><tr><td>'option'</td><td>[PDO]オプション指定。array型で指定</td><td>$dbOption</td></tr><tr><td>'database'</td><td>[FileMaker_FX]<span xmlns="" id="ix-5"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベース名</td><td>$dbDatabase</td></tr><tr><td>'user'</td><td>[PDO][FileMaker_FX]<span xmlns="" id="ix-6"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ユーザー名</td><td>$dbUser</td></tr><tr><td>'password'</td><td>[PDO][FileMaker_FX]<span xmlns="" id="ix-7"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>パスワード</td><td>$dbPassword</td></tr><tr><td>'server'</td><td>[FileMaker_FX]<span xmlns="" id="ix-8"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>サーバーアドレス（例：127.0.0.1）</td><td>$dbServer</td></tr><tr><td>'port'</td><td>[FileMaker_FX]<span xmlns="" id="ix-9"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>サーバーポート（例：80）</td><td>$dbPort</td></tr><tr><td>'protocol'</td><td>[FileMaker_FX]サーバーへの<span xmlns="" id="ix-10"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>接続プロトコル（例：HTTP）</td><td>$dbProtocol</td></tr><tr><td>'datatype'</td><td>[FileMaker_FX]サーバーがサポートするデータ形式（例：FMPro14）</td><td>$dbDataType</td></tr></table><div class="caption">表8-1-1　データベース接続情報に記述できる配列のキー</div></div><p>　例えば、リスト8-1-1は、INTER-Mediatorに含まれているparams.phpの内容です。そして、リスト8-1-2は、定義ファイルのIM_Entry関数の第3引数で、db-classキーしか設定していません。この定義ファイルでは、db-classは「PDO」が指定されていますが、その他の情報は、リスト8-1-1から取得します。PDOで実際に使用される設定は、DSN、ユーザー名、パスワードです。それぞれ、変数の$dbDSN、$dbUser、$dbPasswordに代入されているものが、実際にページ合成等で利用されます。この場合、$dbServerから$dbProtocolまでの変数はFileMakerの場合だけに使われる変数なので、実際の作動時には無視することになります。</p><div class="code"><div class="caption">リスト8-1-1　INTER-Mediatorフォルダーにあるparams.phpの冒頭部分</div><pre><code>&lt;?php
+$dbUser = 'web';
+$dbPassword = 'password';
+
+$dbServer = '127.0.0.1';
+$dbPort = '80';
+$dbDataType = 'FMPro12';
+$dbDatabase = 'TestDB';
+$dbProtocol = 'HTTP';
+
+$dbDSN = 'mysql:unix_socket=/tmp/mysql.sock;dbname=test_db;charset=utf8';
+$dbOption = array();
+	:</code></pre></div><div class="code"><div class="caption">リスト8-1-2　定義ファイルのIM_Entry関数の第3引数</div><pre><code>array(
+    'db-class' =&gt; 'PDO',
+),</code></pre></div><p>　データベース接続に対する設定は、コンテキスト定義、IM_Entry関数の第3引数、そしてparams.phpのいずれでも設定が可能です。コンテキスト定義内でも、db-classなどのキーで指定可能で、この設定はそのコンテキスト単独に適用されます。IM_Entry関数の引数だと定義ファイルのコンテキストすべてに適用されます。params.phpだと複数の定義ファイルすべてに渡って設定が適用されます。もちろん、値が「PDO」の設定もparams.phpに記述することはできるのですが、定義ファイル内にデータベースエンジンの種類が分かる記述があった方が、定義ファイルの編集時に参照しやすいという効果もあります。効率の良い設定方法を採用して、運用管理をしましょう。</p><h3><span id="H3-ANC-3"><span style="display:none">→</span></span>設定ファイルparams.phpに記述できるその他の変数</h3><p>　データベースの接続以外にparams.phpファイルに指定できる変数は、表8-1-2にまとめました。それぞれ、実際の説明のところでも、params.phpファイルへの指定が可能な点を記載しますので、設定方法は、解説を参考にしてください。INTER-Mediatorに含まれているparams.php（レポジトリにあるものは<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/params.php" target="_blank">こちらをクリック</a>）には、コメントにしているものが多いものの、すべての変数が定義されているので、コメントを外したり、あるいは値を書き換えるだけで通常は利用できると思われます。値の指定例も、INTER-Mediatorに含まれるparams.phpに記載があります。この表の内容について、表に続いて説明します。認証関連の変数および設定内容は、『8-2　PHPでの記述が必要な認証処理』で説明します。</p><div class="table"><table><tr><th>変数名</th><th>既定値</th><th>用途</th></tr><tr><td>$browserCompatibility</td><td>（未定義）</td><td>クライアントの<span xmlns="" id="ix-11"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-12"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ブラウザーのバージョン判定に使う配列（『8-6　ブラウザーを判断するページ』で解説）</td></tr><tr><td>$nonSupportMessageId</td><td>"nonsupportmessage"</td><td>ページをロードしたときの自動ページ合成において、JavaScriptがオフの場合などに表示することを意図した<span xmlns="" id="ix-13"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-14"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>エラーメセージのタグ要素のid属性値を任意の文字列に設定する</td></tr><tr><td>$prohibitDebugMode</td><td>false</td><td>trueなら<span xmlns="" id="ix-15"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>デバッグモードに一切入らないようにする</td></tr><tr><td>$appLocale</td><td>"ja_JP"</td><td><span xmlns="" id="ix-16"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-17"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アプリケーションのロケール</td></tr><tr><td>$appCurrency</td><td>"JP"</td><td><span xmlns="" id="ix-18"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-19"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アプリケーションの通貨。省略時は$appLocaleの設定に対応する</td></tr><tr><td>$defaultTimezone</td><td>（未定義）</td><td>PHPの設定ファイルの不備などで、PHPのdate_default_timezone_setが適切になされていないときに指定する<span xmlns="" id="ix-20"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>タイムゾーン</td></tr><tr><td>$xFrameOptions</td><td>"SAMEORIGIN"</td><td>変数に指定した値を<span xmlns="" id="ix-21"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>X-Frame-Optionsヘッダーの値として応答に含める。使用できる文字列は、"SAMEORIGIN", "DENY", "ALLOW-FROM uri"の形式で、""（空文字列）にすれば、X-Frame-Optionsヘッダー自体を出力しない</td></tr><tr><td>$contentSecurityPolicy</td><td>""(空文字列)</td><td>変数に指定した値を<span xmlns="" id="ix-22"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Content-Security-Policyヘッダーの値として応答に含める。""（空文字列）にすれば、Content-Security-Policyヘッダー自体を出力しない</td></tr><tr><td>$accessControlAllowOrigin</td><td>（未定義）</td><td>変数に指定した値を<span xmlns="" id="ix-23"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Access-Control-Allow-Originヘッダーの値として応答に含める。未定義ないしは ""（空文字列）の場合は、Content-Security-Policyヘッダー自体を出力しない</td></tr><tr><td>$webServerName</td><td>設定なし</td><td>Webアプリケーションが稼働しているホストのFQDN名を配列で指定してCSRF攻撃対策を行う。例えば、array('www.inter-mediator.com', 'inter-mediator.org')など。ひとつだけであってもarrayで指定する</td></tr><tr><td>$uploadFilePathMode</td><td>""(空文字列)</td><td><span xmlns="" id="ix-24"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ファイルアップロード時にコンテキスト名、キーフィールド、その値で構成されるパスの扱いを指定する。""（空文字列）にすれば、urlencode関数を通した結果がディレクトリ名となる。Ver.5.4-dev現在、"assjis" "asucs4" をサポートし、それぞれ文字列をUTF-8からShift JISあるいはUCS-4に変換して元に戻すことで不正なUTF-8コードの排除を試みて、変換結果（通常は元と同一文字列）をディレクトリ名にする</td></tr><tr><td>$pusherParameters</td><td>（未定義）</td><td>リアルタイム更新のための<span xmlns="" id="ix-25"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Pusherのサービスを利用するためのパラメーター指定。値の連想配列には、app_id、key、secretをキーに指定可能</td></tr><tr><td>$sendMailSMTP</td><td>（未定義）</td><td><span xmlns="" id="ix-26"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SMTPサーバーを経由したメール送信のための設定、値は連想配列でキーにはserver、port、username、passwordを指定可能</td></tr><tr><td>$documentRootPrefix</td><td>（未定義）</td><td><span xmlns="" id="ix-27"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-28"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>定義ファイルへのパスに追加の文字列が必要な場合に指定する</td></tr><tr><td>$scriptPathPrefix</td><td>""(空文字列)</td><td>$_SERVER['SCRIPT_NAME']が正しいパスを返さないとき、パスの前につける文字列</td></tr><tr><td>$scriptPathSuffix</td><td>""(空文字列)</td><td>$_SERVER['SCRIPT_NAME']が正しいパスを返さないとき、パスの後につける文字列</td></tr><tr><td>$callURL</td><td>（未定義）</td><td>定義ファイルでダウンロードされたスクリプト内部で、さらに定義ファイルを別のパスで呼び出す場合のURL</td></tr><tr><td>$valuesForLocalContext</td><td>（未定義）</td><td><span xmlns="" id="ix-29"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-30"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ローカルコンテキストの初期値。値はキーと値のペアの連想配列</td></tr></table><div class="caption">表8-1-2　params.phpに記述できるその他の変数（認証やアクセス権除く）</div></div><h3><span id="H3-ANC-4"><span style="display:none">→</span></span>ブラウザーの限定とJavaScript非対応時のエラーメッセージについての設定</h3><p>　ページを開いた<span xmlns="" id="ix-31"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-32"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ブラウザーのバージョンを判定する仕組みは、『8-6　ブラウザーを判断するページ』で説明したように、定義ファイルでのIM_Entry関数の第2引数でbrowser-compatibilityキーの配列で指定できます。それと同様な設定が、params.phpファイルでも可能です。もちろん、ここで指定すると、複数のページに渡ってブラウザーの判定の基準が適用されます。リスト8-1-3は、params.phpファイル内で判定基準を与える$browserCompatibility変数の指定例です。なお、判定基準はひとつ記述したものを複数のページで共有できますが、各ページには、『ユーザー管理の簡易アプリケーションを使ってみる』で示したように、ページファイルのロード時にJavaScriptのプログラムを記述してサポート対象でないブラウザーでの表示処理などを記述する必要があります。</p><div class="code"><div class="caption">リスト8-1-3　params.phpファイルでの$browserCompatibility変数の指定例</div><pre><code>$browserCompatibility = array(
+	'msie' =&gt; '7+',
+	'firefox' =&gt; '2+',
+	'safari' =&gt; array( 'win' =&gt; '4+', 'mac' =&gt; '3+' ),
+	'chrome' =&gt; '1+',
+	'opera' =&gt; '1+',
+);</code></pre></div><p>　<span xmlns="" id="ix-33"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-34"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ページ合成はVer.5.4-devの途中で自動的に行われるようになりました。合成前に、もし、「nonsupportmessage」というid値を持つタグ要素があれば、前述のブラウザーの判定を行います。その時、JavaScriptが稼働しなかった時のエラーメッセージを「nonsupportmessage」というid値を持つタグ要素内に記述しておき、ブラウザーの判定が正しいと判断されると、「nonsupportmessage」というid値を持つタグ要素は非表示になってエラーメッセージは見えなくなります。この「nonsupportmessage」というid値を別の値で扱いたい時には、$nonSupportMessageId変数を指定します。</p><h3><span id="H3-ANC-5"><span style="display:none">→</span></span>セキュリティ設定に関連するヘッダー</h3><p>　HTTPレスポンスに含めるセキュリティ関連のヘッダーについての変数が、$xFrameOptionsと$contentSecurityPolicyです。<span xmlns="" id="ix-35"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>X-Frame-Optionsヘッダーは通常、値が<span xmlns="" id="ix-36"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SAMEORIGINでヘッダーに含まれています。異なるドメイン名のサイトの内部にINTER-Mediatorのページをiframeタグ要素で挿入するような場合、このヘッダーを非表示にしたり、特定URIに対する許可を与えるなどする必要がありますが、その場合<span xmlns="" id="ix-37"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>クロスサイトスクリプティング攻撃の可能性が高まりますので注意が必要です。<span xmlns="" id="ix-38"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Content-Security-Policyヘッダーは通常は出力されていませんが、こちらも必要なら指定ができます。このヘッダーを適切に指定することで、クロスサイトスクリプティング攻撃の機会を減らすことができます。設定の記述は多岐に渡りますので、詳細は<a href="https://developer.mozilla.org/ja/docs/Web/Security/CSP/Using_Content_Security_Policy">こちら</a>を参照してください。さらに、$webServerName変数を指定することで、<span xmlns="" id="ix-39"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>CSRF対策を行います。URLと接続した先のサーバー名が同一FQDNかどうかを判定する仕組みを稼働させます。Webアプリケーションのセキュリティに関することは、『7-1　Webアプリケーションセキュリティの前提』も参照してください。</p><p>　Webアプリケーションは通常サーバーに配備され、クライアントはそのサーバーとのやりとりだけで完結できます。しかしながら、クライアントがさらに<span xmlns="" id="ix-40"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-41"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>別のサーバーに対してAjax通信を行おうとしても、ブラウザーはセキュリティ上の理由（<span xmlns="" id="ix-42"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Same-Originポリシー）から通常は阻止をします。その時は、<span xmlns="" id="ix-43"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Access-Control-Allow-Originヘッダーを応答に追加すれば、値に指定したURLの通信は別のサーバーでも許可されます。params.phpファイルに$accessControlAllowOrigin変数を定義して、URLを含む文字列の値を代入します。サーバーAとクライアントCがあって、サーバーAにあるWebアプリケーションにクライアントCから接続して利用している場合を想定してください。この場合、AとCのやり取りは特に何もしなくても可能です。もし、Cのクライアントアプリケーションで、別のサーバーBに対してAjaxつまりXMLHTTPRequestクラスを使った通信を行おうとするとき、通常はエラーになります。このとき、AのサーバーのURLを値に持つAccess-Control-Allow-OriginヘッダーをBのサーバーがクライアントCに返すことで、Aの配下のクライアントCであってもBへのアクセスを許可します。Access-Control-Allow-OriginヘッダーをINTER-Mediatorで使う場面として、<span xmlns="" id="ix-44"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Web APIを作成するような場合があります。任意のクライアントからWeb APIを利用できるようにこのヘッダーの指定が必要になります。もしくは、定義ファイルを複数のサーバーで分散処理する場合にもこのヘッダーを利用する必要があります。INTER-Mediatorが扱う分散処理の例として、ページファイルのサーバーと定義ファイルのサーバーが異なるURLになる場合があります。そのような場合にはこのヘッダーの設定を利用して、ページファイルのURLからの要求を定義ファイルを供給する側のサーバーで許可するように設定します。</p><h3><span id="H3-ANC-6"><span style="display:none">→</span></span><span xmlns="" id="ix-45"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-46"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アップロードしたファイルのパスの扱い</h3><p>　ファイルのアップロードを、『5-4　JavaScriptコンポーネントの利用』などのJavaScriptコンポーネントを使った方法で実現したとき、レコードに対してユーザー単位でのアクセス権を設定している場合の動作に関する設定が、変数$uploadFilePathModeです。例えばコンテキスト「files」があり、キーフィールドが「id」で、idフィールドの値が「56」のレコードに対してファイルのアップロードをしたとします。その時のアップロードコンポーネントにバインドしているフィールドが「path」であったとします。すると、ファイルは定義ファイルのIM_Entryに記述した2つ目の引数にあるmedia-root-dirキーのパスに加えて、Linuxサーバーの場合は「files/id=56/path」という相対パスを付与したディレクトリにアップロードしたファイルを保存します。この時、既定の状態では、パスの区切り文字列以外はPHPのurlencode関数でエンコードします。したがって、フィールド名が日本語だと、パスにその日本語が見えないことになります。これは、UTF-8での冗長なエンコーディングによるディレクトリを遡る処理を許してしまうセキュリティホールを回避するものです。INTER-Mediatorでは相対パスに含むドット文字はアンダーラインに変換しますが、<span xmlns="" id="ix-47"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>冗長なエンコーディングによりそれが回避される可能性があるので、このような措置にしています。しかしながら、ディレクトリ名を日本語で見たいという場合もあります。その時は、$uploadFilePathModeに表8-1-2に示した文字列を指定してください。そうすれば、mb_stringを利用して、文字列を一度Shift JISあるいはUCS-4に変換し、さらにUTF-8に戻すことによって、不正であるとされている冗長なエンコーディングの文字が正しいエンコードになります。こうして安全かつ日本語でディレクトリ名が見える状況にもできるようになっています。</p><h3><span id="H3-ANC-7"><span style="display:none">→</span></span>メールサーバーに関する設定</h3><p>　データベース処理の後にメールを送る仕組みを『5-2　メールの送信』で説明しました。そして、<span xmlns="" id="ix-48"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SMTPサーバーを経由して送信する場合に、IM_Entry関数の第2引数で指定できることを、『SMTPサーバーを利用してメールを送信する』で説明しました。このSMTPに関する設定を、params.phpに指定することができます。$sendMailSMTP変数に、連想配列で指定をします。キーは、定義ファイルで指定するsmtpキーの配列と同様です。</p><h3><span id="H3-ANC-8"><span style="display:none">→</span></span><span xmlns="" id="ix-49"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-50"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ローカルコンテキストの初期値</h3><p>　IM_Entryの第2引数でlocal-contextキーで指定したローカルコンテキストの初期値は、params.phpでも指定できます。アプリケーション全体にわたって同じ値を指定したいのであれば、この方法が利用できます。params.phpファイルでの値は、keyキーやvalueキーを使わないで、キーと値を普通に連想配列で指定します。なお、同じキーのものが定義ファイルとparams.phpにあれば定義ファイルの設定が有効になります。</p><div class="code"><div class="caption">リスト8-1-4　ローカルコンテキストでの初期値の設定例</div><pre><code>$valuesForLocalContext = array(
+    "pageTitle" =&gt; "INTER-Mediator Samples",
+    "copyright" =&gt; "INTER-Mediator Directive Committee",
+);</code></pre></div><h3><span id="H3-ANC-9"><span style="display:none">→</span></span>INTER-Mediator自身や定義ファイルの<span xmlns="" id="ix-51"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-52"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>呼び出しパスをカスタマイズする</h3><p>　INTER-Mediator自身へのアクセスをクライアントから行うために、INTER-Mediatorフォルダーのルートを識別する必要があります。定義ファイルで呼び出されたクラス（GenerateJSCode.php）内では、自分自身のサーバー上での絶対パスから、$_SERVER['DOCUMENT_ROOT']によって得られたWebサーバーのルートへの絶対パスを取り除くことで、クライアントから見たINTER-Mediatorフォルダーのルートを求めています。しかしながら、共有サーバーを利用するような場合に、パスのズレが発生してしまうことがあります。その場合、params.phpファイルに$documentRootPrefixを定義して、$_SERVER['DOCUMENT_ROOT']で得られる前に設定するパスを記述します。こうして、パスのズレを修正することができます。なお、INTER-Mediatorのパスは、スタイルを設定するテーマの機能（現状は未実装）でのみ利用されているため、パスのズレがあっても、基本的な動作は行います。</p><p>　定義ファイルはサーバー側で実行します。PHPの仕組みにより、$_SERVER['SCRIPT_NAME']によって、自分自身、つまりサーバー上で稼働している定義ファイルのパスが分かります。このパスは、Webサーバーのルートからのパスです。クライアント側にロードされたINTER-MediatorのJavaScript部分は、この値をもとに、定義ファイルを何度もクライアントから呼び出します。</p><p>　しかしながら、クライアント側からの呼び出しパスが、$_SERVER['SCRIPT_NAME']によって得られた値と異なることがあります。例えば、ユーザーのホームフォルダーにあるpublic_htmlフォルダーをルートにする「~user」といったチルダとユーザー名を記述したURLを記述する場合があります。この時にparams.phpファイルに記述する$scriptPathPrefix、$scriptPathSuffixを利用して、$_SERVER['SCRIPT_NAME']によって得られた値の前後に文字列を追加したり、$callURLによってクライアントから定義ファイルを呼び出すパスを完全に違うものにすることができます。これらの方法で、正しくクライアントから定義ファイルを呼び出すようにすることができるようになります。</p><p>　params.phpファイルに記述する$callURLは、定義ファイルの呼び出しURLを変更できます。通常は、定義ファイルの呼び出しURLは自動的に処理されるのですが、他のフレームワークと連動してINTER-Mediatorを利用するような場合には、こうした設定が必要になるかもしれません。なお、この変数の利用においては、INTER-Mediatorのソースおよび対象とするフレームワークのソースを読み込んだ上での改造が必要な場合になります。本書では詳細は説明しません。</p><h3><span id="H3-ANC-10"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　params.phpファイルへは、データベースの設定などを記述することができ、通常はこの設定を、アプリケーション全体、すなわち複数の定義ファイルを設定するのと同じ効果が得られます。データベース設定以外にも設定可能な項目もありますが、データベース設定で利用されることが多いでしょう。「INTER-Mediator」フォルダーの中だけでなく、同じ階層にparams.phpを配置することもできます。「INTER-Mediator」フォルダーの入れ替えをアップデート時に行うとすれば、「INTER-Mediator」フォルダーと同じ階層にparams.phpを置く方が間違えて消してしまう危険性は低くなります。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-2"><span style="display:none">→</span></span><span class="sectionnumber">8-2</span>PHPでの記述が必要な認証処理</h2><p class="section-lead">認証やアクセス権の処理については、定義ファイルへの記述で多くのことができますが、params.phpファイルへの記述が可能な設定や、一部はPHPのプログラムの記述が必要なものがあります。これらの設定について、このセクションで説明をします。</p><h3><span id="H3-ANC-11"><span style="display:none">→</span></span>params.phpに記述できる認証やアクセス権に関する変数</h3><p>　params.phpファイルに記述できる認証やアクセス権に関連する変数を、表8-2-1にまとめました。表に続いて、それらの内容について説明します。</p><div class="table"><table><tr><td>$issuedHashDSN</td><td>（未定義）</td><td>認証で利用する<span xmlns="" id="ix-53"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>issuedhashテーブルを運用するSQLiteデータベースへの絶対パス</td></tr><tr><td>$generatedPrivateKey</td><td>（適当なもの）</td><td>データベースに登録したアカウントで認証するときの<span xmlns="" id="ix-54"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>鍵</td></tr><tr><td>$passPhrase</td><td>""(空文字列)</td><td>データベースに登録したアカウントで認証するときの<span xmlns="" id="ix-55"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-56"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>鍵のパスフレーズ</td></tr><tr><td>$emailAsAliasOfUserName</td><td>（未定義）</td><td>trueにすると認証時に<span xmlns="" id="ix-57"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-58"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>電子メールアドレスをユーザー名の代わりに使用できる</td></tr><tr><td>$customLoginPanel</td><td>""(空文字列)</td><td>HTML文字列を指定して、独自に作成した<span xmlns="" id="ix-59"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-60"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ログインパネルを表示する</td></tr><tr><td>$passwordPolicy</td><td>（未定義）</td><td>パスワードの変更時に変更後の<span xmlns="" id="ix-61"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-62"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>パスワードのルールを設定する</td></tr><tr><td>$ldapServer</td><td>（未定義）</td><td>認証で使用する<span xmlns="" id="ix-63"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>LDAPサーバーのURL</td></tr><tr><td>$ldapPort </td><td>389</td><td>認証で利用するポート</td></tr><tr><td>$ldapBase</td><td>（未定義）</td><td>サーバーのルートオブジェクトのDN</td><td/></tr><tr><td>$ldapContainer</td><td>（未定義）</td><td>ログインするユーザーの設定が存在するコンテナへのDN</td></tr><tr><td>$ldapAccountKey</td><td>（未定義）</td><td>ユーザーレコードでユーザー名を取り出す属性名</td></tr><tr><td>$ldapExpiringSeconds</td><td>（未定義）</td><td>LDAP認証による結果のキャッシュが有効な秒数。これを過ぎると改めてLDAPプロトロコルによる認証を行って確認する</td></tr><tr><td>$oAuthProvider</td><td>（未定義）</td><td><span xmlns="" id="ix-64"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>OAuthプロバイダ（Ver.5.3現在 "Google" だけをサポート）</td></tr><tr><td>$oAuthClientID</td><td>（未定義）</td><td>OAuthプロバイダより発行されるクライアントID</td></tr><tr><td>$oAuthClientSecret</td><td>（未定義）</td><td>OAuthプロバイダより発行されるシークレット</td></tr><tr><td>$oAuthRedirect</td><td>（未定義）</td><td>OAuth認証を行った結果リダイレクトされる自信のサイト内へのURL</td></tr></table><div class="caption">表8-2-1　params.phpに記述できる認証やアクセス権に関する変数</div></div><h3><span id="H3-ANC-12"><span style="display:none">→</span></span><span xmlns="" id="ix-65"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-66"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>電子メールアドレスをユーザー名としても利用可能にする設定</h3><p>　通常は、authuserテーブルのusernameフィールドの値を認証時のユーザー名として利用しますが、IM_Entry関数の第2引数（オプション設定）の連想配列において、authenticationキーの連想配列のemail-as-usernameキーの値をtrueにすることで実現できました（『7-3　認証とアクセス権の設定』の『認証の動作の設定』で解説）。この設定は、params.phpファイルに$emailAsAliasOfUserName変数を記述して、trueを代入しておくことでも設定可能です。</p><h3><span id="H3-ANC-13"><span style="display:none">→</span></span>params.phpファイルにも設定可能な認証の設定</h3><p>　params.phpファイルには、$issuedHashDSN変数で、<span xmlns="" id="ix-67"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>issuedhashテーブルを利用するためのDSNを記述することができます。IM_Entry関数の第2引数（オプション設定）の連想配列において、authenticationキーの連想配列のissuedhash-dsnキーに指定することでも設定可能です（『7-3　認証とアクセス権の設定』の『認証の動作の設定』で解説）。</p><p>　この設定は、もっぱらFileMaker Serverを利用して認証の処理を利用するときに利用します。認証の処理では、issuedhashテーブルを利用して、クライアントに送ったチャレンジ等の管理を行いますが、多数のレコードの作成や削除が伴います。その処理をFileMaker Serverで行うとパフォーマンスが悪くなるので、issuedhashテーブルのみは独立して処理できることもあって、その部分だけ例えばSQLiteで運用するなどの工夫を行います。運用するサーバー上でSQLiteが使える状態にした上で、INTER-Mediatorのレポジトリ内のdist-docs/sample_schema_sqlite.txtファイルを利用して、新たにデータベースファイルを作成します。そのデータベースファイルを含むDNSを例えばリスト8-2-1のようにparams.phpファイルに記述します。dist-docs/sample_schema_sqlite.txtファイルで作ったデータベースにはサンプルを稼働するための余分なテーブルがありますが、消して運用する必要があるほどのものでもありません。使用するのはissuedhashテーブルだけです。</p><div class="code"><div class="caption">リスト8-2-1　$issuedHashDSN関数の指定例</div><pre><code>$issuedHashDSN = 'sqlite:/var/db/im/sample.sq3';</code></pre></div><h3><span id="H3-ANC-14"><span style="display:none">→</span></span><span xmlns="" id="ix-68"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-69"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ログインパネルのカスタマイズ</h3><p>　params.phpファイルで$customLoginPanel変数を定義して、HTMLの断片を文字列として記述することで、ログインパネルのカスタマイズが可能です。ログインパネルのカスタマイズは、JavaScriptでINTERMediatorOnPage.loginPanelHTMLへの代入でも可能でした（『7-3　認証とアクセス権の設定』の『ログインパネルとカスタマイズ』で解説）。指定するHTMLについても説明がありますが、INPUTタグなどを利用してパネルを定義します。その時に決められたid属性を指定する必要があります。</p><h3><span id="H3-ANC-15"><span style="display:none">→</span></span><span xmlns="" id="ix-70"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>パスワードポリシーの定義</h3><p>　params.phpファイルで$passwordPolicy変数を定義して、パスワードのルールを指定できます。表8-2-2に設定可能なキーワードを示します。これらの文字列を空白で区切ってひとつの文字列で指定します。例えば、"useNumber useAlphabet length(10)" は、指定したパスワードに、数字、アルファベットが必ず含まれ、かつ10文字以上である必要があることを定義します。</p><div class="table"><table><tr><th>キーワード</th><th>適用されるルール</th></tr><tr><td>useAlphabet</td><td>アルファベットが必ず入っている</td></tr><tr><td>useNumber</td><td>数字が必ず入っている</td></tr><tr><td>useUpper</td><td>アルファベットの大文字が必ず入っている</td></tr><tr><td>useLower</td><td>アルファベットの小文字が必ず入っている</td></tr><tr><td>usePunctuation</td><td>記号類が必ず入っている</td></tr><tr><td>length(n)</td><td>長さがn文字以上</td></tr><tr><td>notUserName</td><td>ユーザー名と同一ではいけない</td></tr></table><div class="caption">表8-2-2　パスワードのルールに指定できる文字列</div></div><p>　なお、この設定は、authuserテーブルに単にパスワードを指定するときには適用されません。初期パスワードをSQLステートメントのテキストで与えるような場合には、ここで指定したルールに合致しているかどうかの判定は行われません。ここで指定したパスワードのルールは、ログインパネル上でパスワードの変更したときや、ログインパネルのパスワード変更処理で呼び出されるJavaScriptあるいはPHPのメソッドを利用した場合に、ルールが適用できます。したがって、このルール適用は、パスワード変更時に適用されるという理解で問題はありませんが、初期値がルール通りかどうかは開発者あるいはシステム管理者が決定して必要なら自身でチェックをしてください。</p><h3><span id="H3-ANC-16"><span style="display:none">→</span></span><span xmlns="" id="ix-71"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ネイティブ認証のための<span xmlns="" id="ix-72"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>暗号鍵</h3><p>　params.phpファイルに記述する$generatedPrivateKeyには、ネイティブ認証やLDAP認証で、パスワードの文字列をネットワークを通じてやり取りするときの暗号/復号のためのキーデータを記述します。もともと適当なキーが証明書のフォーマットであるPEM形式の文字列で入力されていますが、これはアプリケーションとして利用するサイトごとに新たに生成をし直してください。Ver.5.3現在、製品に含まれているキーをそのまま使うと、デバッグメッセージに警告が表示されますが、将来的にはより目立つ方法（エラー等）でキーの置き換えをしていないことを示すようになるかもしれません。キーの生成には、OpenSSLを利用します。例えば、macOSであれば、ターミナルにリスト8-2-2のコマンドを入力することで、キーの生成ができます。そして、同じディレクトリに作られたgen.keyの内容を、params.phpファイル内のものと置き換えます。</p><div class="code"><div class="caption">リスト8-2-2　キーを生成するためのコマンド</div><pre><code>openssl genrsa -out gen.key 512</code></pre></div><p>　この時、512はキーの長さのビット数です。このビット数が大きいほど暗号の安全性が高くなります。暗号化するデータはパスワードなので、多くても10数バイト程度なので、キーの方が長いことが一般的です。その場合、暗号化した結果は、おおむねこのビット数に比例したサイズになります。ビット数を大きくすれば安全ですが、通信量は増加します。しかしながら、1024ビットとしても、128バイトなので、よほどの低速通信でもない限りは影響はないと思われます。可能な限り、1024以上の数値で作成するのが望ましいでしょう。なお、ビット数はなんでもいいのですが、一般には2のべき乗の値で指定をします。</p><p>　生成されるキーは、RSAつまり秘密鍵と公開鍵を使う暗号化方式です。生成されたバイナリに、秘密鍵も公開鍵も含まれています。実際の通信では、公開鍵だけを抜き出してクライアントに送ります。鍵自身にパスワードを設定する場合もあります。そのパスワードは、$passPhrase変数へ代入しておきます。</p><h3><span id="H3-ANC-17"><span style="display:none">→</span></span><span xmlns="" id="ix-73"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-74"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>LDAPを認証に利用する</h3><p>　<span xmlns="" id="ix-75"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>LDAPサーバーを利用してユーザー情報を共有し、そのユーザーで認証をしている組織は多いでしょう。INTER-MediatorもLDAPに対応しています。具体的には、macOSのServer.appを利用して構築した<span xmlns="" id="ix-76"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Open Directoryのマスター/複製、<span xmlns="" id="ix-77"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Active Directoryの<span xmlns="" id="ix-78"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ドメインコントローラーがLDAPサーバーとして稼働します。したがって、OpenLDAPで構築したものも使用できますが、OpenLDAPはディレクトリー構築をユーザー自身で行う必要があるなど、単にインストールするだけでは使えないものです。ここでは、Open DirectoryとActive Directoryでの設定例を紹介します。リスト8-2-3およびリスト8-2-4に示す通り、いずれの場合もparams.phpファイルに6つの変数を指定します。</p><div class="code"><div class="caption">リスト8-2-3　Open Directoryマスターを使用するときの設定例</div><pre><code>$ldapServer = "ldap://server.msyk.net";
+$ldapPort = 389;
+$ldapBase = "dc=homeserver,dc=msyk,dc=net";
+$ldapContainer = "cn=users";
+$ldapAccountKey = "uid";
+$ldapExpiringSeconds = 1800;</code></pre></div><div class="code"><div class="caption">リスト8-2-4　Active Directoryのドメインコントローラーを使用するときの設定例</div><pre><code>$ldapServer = "ldap://192.168.1.21/";
+$ldapPort = 389;
+$ldapBase = "DC=winserver,DC=msyk,DC=net";
+$ldapContainer = "OU=sales,OU=bigcompany";
+$ldapAccountKey = "CN";
+$ldapExpiringSeconds = 1800;</code></pre></div><p>　$ldapServer変数は、「ldap://」に続いて、サーバーのホスト名やIPアドレスを指定します。$ldapPortはLDAPサーバーのポート番号を指定します。通常は、ldapプロトコルでは389、TLSを利用したldapsプロトコルでは636となります。Active Directoryの場合でも「ドメイン」ではなく、特定のサーバーのホスト名やIPアドレスを指定します。したがって、Active Directoryの冗長化の仕組みとは連動していません。</p><p>　$ldapBaseは、そのLDAPサーバーのルートオブジェクトの名前に相当する文字列を指定します。通常は「検索ベース」と呼ばれる設定です。ホストやサイトのドメイン名をdc=と値のエントリーに分解し、それをつなげて表現します。Open Directoryの場合は、Server.appで検索ベースを確認できます。Active Directoryの場合は、ドメイン名の各ワードを、DC=につなげてカンマで区切って指定します。なお、これらの表記は、LDAPのDistinguish Name（DN）の記述ルールに沿ったものです。</p><p>　$ldapContainerはユーザーレコードがあるコンテナまでのルートからの階層を記述します。Open Directoryの場合、値は必ず「cn=users」という文字列になります。Active Directoryで既定のUsersコンテナにユーザーを作った場合は「CN=Users」を指定します。組織単位（OU）を利用して階層的にユーザーのレコードを定義した場合には、ルートからの階層の逆順に、「OU=コンテナ名」をカンマで区切って指定します。INTER-Mediatorの現在の実装では、特定の階層にあるユーザーでの認証が必要です。ある階層よりも下にあるユーザーを探しての認証はできませんので、その点を注意してご利用ください。$ldapAccountKeyは、ユーザーオブジェクトの中で、「ユーザー名」として利用できる値が設定されている属性名です。Open Directoryでは「uid」、Active Directoryでは「CN」を指定することになります。</p><p>　現在のINTER-Mediatorの実装では、LDAPの管理ユーザー等を指定する必要はありません。ユーザー名とパスワードを利用して、LDAPサーバーへのバインドを行い、バインドが成功すれば認証したものとみなすという手法を利用しています。そのため、ディレクトリの階層を自動的にトレースするような機能を組み込んでおらず、LDAP管理ユーザーの指定は不要になります。</p><p>　実際に認証を行うと、authuserテーブルに、そのユーザー名のレコードを新規に作り、パスワードをそのままハッシュ値に直してテーブルに保管します。つまり、1回認証を行うと、その後はINTER-Mediatorに組み込まれた認証の処理に引き継がれます。毎回LDAP認証の確認を行うとパフォーマンスが非常に悪くなるため、こうした実装をしました。ただし、その場合、アカウントを無効化したり、あるいはパスワード変更が反映されないなどの問題が生じるので、$ldapExpiringSeconds変数で指定した秒数経過すると、LDAPサーバーに対して再度認証の確認を行います。パスワードの変更は例えば、1800を指定すると30分は反映しないことになりますが、一定時間後にLDAPサーバーへの確認を行い認証エラーが出て、新たなパスワードの入力が必要になり、その後しばらくはauthuerテーブルのレコードのパスワードを更新して、そのまま認証状態が継続します。</p><p>　LDAPユーザーのパスワード変更は、INTER-Mediatorではサポートしていません。LDAPサーバー側の管理機能を利用して、パスワードの変更を行ってください。また、その場合にログインパネルにパスワード変更のテキストフィールドが見えているのは適切ではありません。ページ合成を行う前に、INTERMediatorOnPage.doBeforeConstructメソッド（『8-6　ブラウザーを判断するページ』を参照）内などで「INTERMediatorOnPage.isShowChangePassword = false;」を実行して、パスワード変更がログインパネルに出てこないようにしてください。</p><h3><span id="H3-ANC-18"><span style="display:none">→</span></span>OAuth2を認証に利用する</h3><p>　INTER-Mediator Ver.5.3より、<span xmlns="" id="ix-79"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-80"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>OAuth2での認証に対応しました。しかしながら、Ver.5.3の段階では、GoogleのアカウントによるOAuth2認証（もしくはOpenID認証）にのみ対応しています。今後のバージョンで、他のサービスプロバイダーにも対応が進むと思われますが、その場合には設定方法に若干違いが出てくる可能性もあります。</p><p>　OAuth2での認証を行うには、認証プロバイダーによって発行されるIDやパスフレーズなどを入手しなければなりません。以下、Googleでの準備の流れを記述しますが、Googleの開発者向けサイトは変更が多く、ここで記述した通りではないかもしれません。この画面は、2016年1月27日に撮影したものです。また、Googleには多種多様なアカウントがありますが、以下の流れは個人で取得したGmailのアカウントを利用しています。少なくとも、<span xmlns="" id="ix-81"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Google Apps for NPOで作成したアカウントでは異なる応答をすることが分かっており、そのバリエーションはINTER-Mediatorに実装済みです。その他のバリエーションは確認のしようがないため、このセクションでは演習とせずに、手順のみを示します。</p><div class="step"><span class="stepnumber">1</span><span xmlns="" id="ix-82"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Google Developers Console（<a href="https://console.developers.google.com/">https://console.developers.google.com/</a>）に接続します。自分自身のGoogleのアカウントで認証してください。</div><div class="step"><span class="stepnumber">2</span>最初にプロジェクトを作成します。ひとつのWebアプリケーションでひとつのプロジェクトを作成するのが適切と考えられます。ページの上部の青背景のバーの中で右寄りの位置で文字が見えている箇所があります。画面ショットでは「IM-OAuth-Test」と見えていますが、この文字列はログインした人によって変わります。ここをクリックするとドロップダウンが表示されるので、「プロジェクトの作成」を選択します。</div><div class="picture"><img class="picture-small" src="figs/shot3151.png"/></div><div class="step"><span class="stepnumber">3</span>新しいプロジェクトを作成するパネルが表示されました。ここでは適当にプロジェクト名を指定して、「作成」ボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot3152.png"/></div><div class="step"><span class="stepnumber">4</span>ダッシュボードの冒頭に新しく作られたプロジェクトが表示されました。ページ上部の青背景のバーでは、作成したプロジェクト名が見えていて、現在、そのプロジェクトが選択されていることが分かります。プロジェクト名の下の部分をクリックすると、プロジェクトIDなどを表示したり非表示にしたりができます。これらの番号は、Webアプリケーションでは使用しません。</div><div class="picture"><img class="picture-small" src="figs/shot3153.png"/></div><div class="step"><span class="stepnumber">5</span>続いて「API Manager」の機能を利用します。前の手順の画面ショットのように、「Google APIを利用する」という青いボックスが見えていれば、そのボックスをクリックします。すでにある程度の設定があれば青いボックスは見えないかもしれませんが、プロジェクトの概要の下に「API」マークのアイコンが見えている場合もあります。状況によって移動方法が変わりますので、臨機応変に作成をしてください。</div><div class="picture"><img class="picture-small" src="figs/shot3163.png"/></div><div class="step"><span class="stepnumber">6</span>多数のAPI名がありますが、Social APIのグループにあるにある「Google+ API」をクリックします。画面ショットの状態から、少しスクロールすると、左側にSocial APIのグループが出てきます。</div><div class="picture"><img class="picture-small" src="figs/shot3154.png"/></div><div class="step"><span class="stepnumber">7</span>Google+ APIは最初は無効になっていますが、ページ上部の「APIを有効にする」ボタンをクリックして、Google+ APIを有効にしてください。GoogleのOAuth2の仕組みを利用するには、このAPIをオンにしておく必要があります。</div><div class="picture"><img class="picture-small" src="figs/shot3166.png"/></div><div class="step"><span class="stepnumber">8</span>左側にある「認証情報」をクリックします。そして、「新しい認証情報」ボタンをクリックして認証情報を追加します。</div><div class="picture"><img class="picture-small" src="figs/shot3156.png"/></div><div class="step"><span class="stepnumber">9</span>ポップアップメニューでは「OAuthクライアントID」をクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot3157.png"/></div><div class="step"><span class="stepnumber">10</span>何も項目がないときには、同意画面の仕様を決める必要があります。「同意画面を設定」をクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot3158.png"/></div><div class="step"><span class="stepnumber">11</span>同意画面では、ログインしているユーザーのメールアドレスとサービス名を指定します。他はオプションになっていますが、同意を求める時のアイコンなどは後からでも指定できます。「保存」ボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot3159.png"/></div><div class="step"><span class="stepnumber">12</span>アプリケーションの種類では「ウェブアプリケーション」を選択します。「名前」は適当な識別名を記述します。そして、「承認済みのリダイレクトURI」の指定を行います。このURLのファイルは、Webアプリケーション側に用意しておく必要があり、Webアプリケーションの利用者のブラウザーからアクセス可能なものを指定します。このファイルの内容については、この後に説明をします。「作成」ボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot3160.png"/></div><div class="step"><span class="stepnumber">13</span>クライアントIDとクライアントシークレットの2つのコードが発行されました。このコードは2つともWebアプリケーションの設定として追加します。OKボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot3161.png"/></div><div class="step"><span class="stepnumber">14</span>認証情報に、項目が追加されました。右端のボタンをクリックすると、Webアプリケーションに必要な値を含むJSON形式のファイルがダウンロードできるので、実際に開発しているアプリケーションで指定するときにはそのファイルを利用すると良いでしょう。</div><div class="picture"><img class="picture-small" src="figs/shot3162.png"/></div><p>　以上の手順で認証情報をGoogle側に作成します。後からの変更や参照は、API Managerに移動して、左側で「認証情報」を選択することで可能です。その時、プロジェクトをページ上部の青背景のバーで選択をしておきます。</p><p>　認証情報の一覧の右にあるアイコンからダウンロードしたファイルの内容を整形したものをリスト8-2-5に示します。params.phpファイルにはリスト8-2-6のように指定をします。$oAuthProviderは「Google」、$oAuthClientIDはJSONファイルのclient_idキーの値、$oAuthClientSecretはJSONファイルのclient_secretキーの値、$oAuthRedirectはJSONファイルのredirect_urisキーの値のひとつを指定します。JSONファイルのその他の値は指定しなくて構いません。</p><div class="code"><div class="caption">リスト8-2-5　生成した認証情報（一部のデータは省略）</div><pre><code>{
+    "web": {
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", 
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth", 
+        "client_id": "672355285449-utu17kjmnk70k06rauro2l....", 
+        "client_secret": "Dp6Rhoc6V3KMH....", 
+        "project_id": "bustling-shape-120216", 
+        "redirect_uris": [
+            "http://msyk.net/awosomesystem/OAuthCatcher.php"
+        ], 
+        "token_uri": "https://accounts.google.com/o/oauth2/token"
+    }
+}</code></pre></div><div class="code"><div class="caption">リスト8-2-6　params.phpファイルに指定するOAuth2関連の設定</div><pre><code>$oAuthProvider = "Google";
+$oAuthClientID = '672355285449-utu17kjmnk70k06rauro2l....';
+$oAuthClientSecret = 'Dp6Rhoc6V3KMH....';
+$oAuthRedirect = 'http://msyk.net/awosomesystem/OAuthCatcher.php';</code></pre></div><p>　この状態で、例えばサンプルにある認証付きのフォームのページを動作してみます。サンプルの一覧では、左側の列で「Authentication Pages」に記述されているサンプルを動作させます。ファイルは、Samples/Sample_Authにあります。この段階でのテストでは、アクセス権の設定はしないで、認証だけが有効になるようにします。つまり、定義ファイルのコンテキストにはauthenticationキーの指定はなく、第2引数（オプション指定）にauthenticationキーがあり、そのキーの値の配列では、storingキーとrealmキーだけが指定されている状態にします。</p><p>　ページを開くと、通常は最初にログインパネルが表示されます。ログインパネルには図8-2-1のように「OAuth認証」ボタンが見えており、Googleのアカウントでログインをするにはこのボタンをクリックします。ログインパネルにあるパスワード変更では、Googleなどの認証サービスプロバイダー側のパスワードの更新はできません。通常のログインのためのユーザーやパスワードを入れる枠も、不要といえば不要です。ただし、Google等の外部のプロバイダーによるアカウント以外に、authuserテーブルに追加したユーザーでも認証して利用した場合には、このままでも可能です。つまり、OAuth2対応にしても通常のログイン認証もできます。</p><div class="picture"><img class="picture-small" src="figs/shot3164.png"/><div class="caption">図8-2-1　OAuth2をサポートするページでの認証パネル</div></div><p>　「OAuth認証」ボタンにより、ブラウザーのページは認証情報にあるauth_uriのURLを開きます。すると、認証情報の利用の許可を求められます。図8-2-2はその例ですが、ちょっと殺風景です。しかしながら、見出しにはプロジェクト名があるので、プロジェクト名を適当な名前にしないで、きちんとWebアプリケーションを連想させる名前を付けておくべきでしょう。Google Developer ConsoleのAPI Managerにある「認証情報」の「OAuth同意画面」のところに情報を加えれば、そこに指定した情報もこの許可をリクエストするページに表示されます。つまり、利用者は自分自身の手作業で、Googleのアカウントを認証情報として利用する許可を行います。なお、複数のGoogleアカウントにログインをしている場合は、どのアカウントを利用するのかをたずねるページも表示されるので、どちらかを選択します。</p><div class="picture"><img class="picture-small" src="figs/shot3165.png"/><div class="caption">図8-2-2　認証情報の利用の許可を求められる</div></div><p>　「許可」をすれば、認証情報にあるredirect_urisキーのURLに対して、自動的にパラメーターが付与されて<span xmlns="" id="ix-83"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>リダイレクトされます。この「リダイレクトURL」はWebアプリケーション側で用意をします。そのための雛型的なファイルが<span xmlns="" id="ix-84"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Auth_Support/<span xmlns="" id="ix-85"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>OAuthCatcher.phpです。実際に利用する場合には、このファイルをフォルダーの外にコピーして、改変して利用するのが良いでしょう。OAuthCatcher.phpでは、リダイレクトされたときにGoogleと通信を行い、まず、認証の確認を行います。その後、Googleと通信をして、そのアカウントのさまざまな情報を得ます。その中から、氏名と電子メール、そしてユーザー名に相当する情報を得て、authuserテーブルに対してそれぞれrealname、email、usernameのフィールドに追加します。realnameやemailフィールドがない場合には、氏名を記録できる文字型のフィールドを用意します。</p><p>　usernameに相当するユーザー名は、プロバイダーから与えられる一意な番号と、プロバイダーを示すドメイン名を@で結んで指定しています。この名前は自動的に入力するだけなので、手で打ち込むことはありません。初めて認証が成功したときには、authuserテーブルにユーザーを追加します。その時に、ランダムな文字列のパスワードを生成して、それをクライアントに伝達します。クライアントはユーザー名とパスワードのハッシュを保持することで、以後、認証状態を継続します。つまり、OAuth2による認証後は、INTER-Mediatorの通常の認証処理を行います。そして、24時間は認証結果を継続します（この有効時間はいずれ変数等で指定できるようにします）。</p><p>　OAuthCatcher.phpによってGoogleと通信して、認証の確認が行われ、その後に、「OAuth認証」ボタンを押したページにリダイレクトします。通常は、認証が成り立った後となるので、ページは自動的に開きます。図8-2-3ではページネーションコントローラー（一定範囲のレコードだけを表示する仕組み）にユーザー名が見えていますが、長い数字がGoogleが識別のために利用している数値で、@以降が認証プロバイダーを示すドメイン名です。これがユーザー名です。</p><div class="picture"><img class="picture-small" src="figs/shot3169.png"/><div class="caption">図8-2-3　Googleのアカウントで認証したページ</div></div><p>　ここでauthuserテーブルを参照します。サンプルデータベースを利用しているのなら、サンプルの一覧ページでは左側の列に「Account Manager」と記述された部分のリンクより参照できます。図8-2-4ではリストの最後に見えるユーザーが、Googleアカウントで認証したことで作られたアカウントです。ここには表示していませんが、realnameフィールドには筆者の名前が入っているはずです。また、どのグループにも所属していません。パスワードのハッシュ値は自動生成され、認証の確認があるごとにパスワードは更新します。</p><div class="picture"><img class="picture-small" src="figs/shot3168.png"/><div class="caption">図8-2-4　authuserに追加されたレコードを確認する</div></div><p>　実際にアプリケーションを作る場合には、OAuthCatcher.phpをニーズに合わせて改変します。まず最初に、冒頭の方には$pathToIM変数で、INTER-Mediator.phpファイルがあるディレクトリへのパスを記述しています。そして、認証に関わる処理をOAuthAuthクラスで実施しています。通常は「OAuth認証」ページにリダイレクトされますが、setDoRedirectメソッドを使えば、リダイレクトしません。認証を受け付けてから、後で手作業等でグループに所属させたいような場合には、リダイレクトをしないようにして、OAuthCatcher.phpに必要な案内等を記述します。OAuthAuthクラスで利用できるメソッドとプロパティは、表8-2-3の通りです。オブジェクトを生成したときに、サーバーのURL等がセットアップされ、isActiveでその状態を確認します。そして、afterAuthメソッドで認証処理を行うのが基本的な利用方法です。OAuthCatcher.phpには基本的な流れが作られているので、例えばメール送信を追加するなどの改変が必要になるかもしれません。認証したユーザーの情報は、getUserInfoメソッドで得られた連想配列から取得できます。</p><div class="table"><table><tr><th>種別</th><th>記述</th><th>動作</th></tr><tr><td>プロパティ</td><td><span xmlns="" id="ix-87"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>isActive</td><td>プロバイダの設定がなされていればtrue</td></tr><tr><td>プロパティ</td><td><span xmlns="" id="ix-88"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>debugMode</td><td>trueならデバッグモード（リダイレクトはしない）</td></tr><tr><td>メソッド</td><td><span xmlns="" id="ix-89"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDoRedirect(value)</td><td>引数をfalseにするとリダイレクトしない（既定値はリダイレクトを実施）</td></tr><tr><td>メソッド</td><td><span xmlns="" id="ix-90"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>afterAuth()</td><td>認証の処理を行い、成功すればtrueを返す</td></tr><tr><td>メソッド</td><td><span xmlns="" id="ix-91"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>javaScriptCode()</td><td>認証が成功したときのクライアント側の処理プログラムを出力</td></tr><tr><td>メソッド</td><td><span xmlns="" id="ix-92"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>errorMessage()</td><td>エラーメッセージをカンマで区切った文字列</td></tr><tr><td>メソッド</td><td><span xmlns="" id="ix-93"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getUserInfo()</td><td>afterAuthが成功した後に得られるアカウント情報の配列。キーはそれぞれ、username、realname、emailが指定されている</td></tr><tr><td>メソッド</td><td><span xmlns="" id="ix-94"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>isCreate()</td><td>afterAuthが成功した後新たにユーザーレコードを作ったらtrue、既存のレコードを更新したらfalse</td></tr></table><div class="caption">表8-2-3　<span xmlns="" id="ix-86"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>OAuthAuthクラスのプロパティとメソッド</div></div><h3><span id="H3-ANC-19"><span style="display:none">→</span></span>メールを利用したユーザー登録</h3>
+INTER-Mediator Ver.5.4には、メールを利用してのユーザー登録や、メールを利用したパスワードのリセットを行う仕組みを組み込む最低限の機能を持ったファイルを、Auth_Support/User_EnrollmentおよびAuth_Support/PasswordResetフォルダーに入れています。こちらについてはサーバーサイドのプログラムについての全般的な知識が必要なので、この章の後半の、『8-5　メールを利用したユーザー登録とパスワードのリセット』でまとめて説明をします。
+
+<h3><span id="H3-ANC-20"><span style="display:none">→</span></span>このセクションのまとめ</h3>
+<p>　認証の機能のうち、PHPでのプログラムを少しだけ修正する必要があるものについて、このセクションでまとめました。特に、LDAPサーバーによる認証、OAuth2による認証、ネイティブ認証は、それらの仕組みで利用する設置値をparams.phpファイルで指定をするため、設定値をPHPプログラムとして指定をします。</p>
+
+<!-- ============ SECTION START ============ -->
+<h2><span id="H2-ANC-3"><span style="display:none">→</span></span><span class="sectionnumber">8-3</span>サーバーサイドでの処理の追加</h2>
+<p class="section-lead">このセクションでは、サーバーサイドでの拡張機能の概要を説明します。最初に、拡張をしない状態でのサーバー側の構成を改めて説明し、その後、拡張可能な仕組みごとに、基本的なプログラムの作成方法を説明します。そして、INTER-Mediatorで提供するクラスの詳細についても説明します。拡張機能の作成例は、さらに先のセクションでまとめて示します。</p>
+
+<h3><span id="H3-ANC-21"><span style="display:none">→</span></span><span xmlns="" id="ix-95"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-96"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>サーバーサイドのプログラム記述で実現できる機能</h3>
+<p>　定義ファイルとページファイルでの記述方法を前の章までで説明しました。その時のサーバーサイドでの状況を示したのが、図8-3-1です。「Webブラウザー」、「Webサーバー」、PHPベースで稼働するINTER-Mediator、そして「データベース」の4つのコンポーネントに大別できます。</p>
+
+<div class="picture"><img class="picture-small" src="figs/fig11.png" altsrc="figs/fig11.pdf"/><div class="caption">図8-3-1　サーバーサイドで拡張しない時のINTER-Mediatorの動作</div></div>
+
+<p>　データベースクラスは、『2-1　データベースからの取り出し設定』でのdb-classキーに対する設定として解説をしました。このクラスは、データベースに一番近い場所で稼働して、クライアントからの要求をデータベースに送り、結果をまたクライアントに返すという仕組みの中心的な存在になります。そのため、通常は必ず設定を行います。データコンバータークラス（『4-6　データコンバータークラスを使ったフィールド単位の変換』）を使用して、フィールド単位での変換処理を、データベース処理前後に追加することもできました。INTER-Mediatorには数値や日付自国の書式設定が可能なコンバータークラスが付属しており、その仕組みを使うことができました。なお、定義ファイルは、INTER-Mediatorに働きかけて、クライアントで稼働させるJavaScriptプログラムを生成してクライアントに届けることに使われます。つまり、ページファイルのヘッダー部にあるSCRIPTタグが定義ファイル自身の呼び出しになっていたわけです。図では明示していませんが、定義ファイルはサーバー側のさまざまな動作にも影響を与えます。</p>
+<p>　サーバーサイドの仕組みを抜き出し、そこでの拡張可能な仕組みを太い枠で示したものが図8-3-2です。データベースクラスやデータコンバータークラスそのものは自作できるので、必要な仕様のものを作成することができます。データコンバータークラスは、データの変換処理だけを組み込めばよいので、それほど難しくはありません。通常は双方向、つまりデータベースへの読み書きに対する処理をそれぞれ記述しますが、読み出ししかしないのであれば、一方だけでも構いません。これに対して、データベースクラスはかなり複雑であるため、データ処理のカスタマイズのための手法には向きません。データの更新時にさらに別のテーブルにも書き込みをしたいような場合には、「アドバイス定義クラス」を利用します。こちらは、「新規レコード作成時」など、特定のデータベース処理の前後に必要なものだけを定義することができるので、より手軽な方法になります。さらに、PHPのプログラムからINTER-Mediatorの仕組みを利用してデータベース処理を行うこともできます。</p>
+
+<div class="picture"><img class="picture-small" src="figs/fig12.png" altsrc="figs/fig12.pdf"/><div class="caption">図8-3-2　サーバーサイドで拡張可能な仕組み</div></div>
+
+<h3><span id="H3-ANC-22"><span style="display:none">→</span></span><span xmlns="" id="ix-97"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>PHPファイルの置き場所</h3>
+<p>　サーバーサイドでの拡張処理は、すべてPHP言語で記述します。そのスクリプトは、.php拡張子のファイルに記述します。PHPでは、クラスの定義をする場合にはクラス名に.phpを付与したファイル名にすることが一般的です。一方、ブラウザーから呼び出されるスクリプトはその限りではありません。</p>
+<p>　独自に作成するPHPファイルをどこに置くのかということがまず検討すべき課題です。「PHPのスクリプト」以外について、もっとも単純な手法は、定義ファイルと同じディレクトリーに保存をしておくことで、ほとんどの場合は問題がありません。INTER-Mediatorフォルダー内でも構わないのですが、GitHubのレポジトリとの連動を考えれば、INTER-Mediatorフォルダー内には配置しない方が、更新処理などをスムーズに進めることができるでしょう。</p>
+<p>　もし、いくつかのフォルダーにまたがる定義ファイル同士で同じ拡張のためのPHPファイルを利用するような、定義ファイルと別の場所に置く必要があるとしたら、次のように対処してください。それぞれの定義ファイルの最初に、INTER-Mediator.phpファイルへの読み込みをrequire_once関数等で行っていますが、その直後に、自分で作成したPHPファイル自身の読み込みを、require_once等で行ってください。パスは、絶対パスでも、相対パスでも構いません。処理の実行前に、確実にクラスをロードするためです。</p>
+<p>　PHPでは、php.iniファイルに記述したinclude_pathの値にしたがって、パスを検索します。このパスには、「.」つまりスクリプトを稼働させた時のディレクトリーを必ず探すような設定が既定値なので、定義ファイルと同一のディレクトーに配置するのが確実な方法です。場合によっては、php.iniファイルのinclude_pathの設定に参照するパスを追加して、作成したPHPファイルへの参照をPHPのシステムレベルで行うようにすることも検討しましょう。ただし、ファイルが数個程度なら、定義ファイルの最初にrequire_onceで読み込んでおくのが手軽です。</p>
+
+<h3><span id="H3-ANC-23"><span style="display:none">→</span></span>データコンバータークラスの作成</h3>
+<p>　<span xmlns="" id="ix-98"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データコンバータークラス（『4-6　データコンバータークラスを使ったフィールド単位の変換』）は、定義ファイルに記述するIM_Entry関数の第2引数（オプション設定）に記述すれば、formatterキーで指定して呼び出すことができました。このためのクラスを作る手順は次の通りですが、INTER-Mediatorフォルダーには、DataConverter_template.phpファイルがあり、このファイルをコピーして作成することもできます。必要な要件は以下のとおりです。</p>
+
+<ul><li>クラス名の最初は「DataConverter_」とする。定義ファイルで指定するコンバーター名は、この文字列の後の文字列になる。</li><li>クラス名に.phpをつけたものをファイル名とする。</li><li>文字列を引数に持つconverterFromDBtoUserメソッドを定義する。データベースから読み出したデータをWebページ上に移動する、つまり「読み出し」をしたときに適用されるメソッドで、返り値も文字列で返す。引数はデータベースにあったデータで、フィールドの型にかかわらず、文字列で渡される。</li><li>文字列を引数に持つconverterFromUserToDBメソッドを定義する。Webページのデータをデータベースに書き込む、つまり「書き込み」処理をしたときに適用されるメソッドで、返り値も文字列で返す。引数はテキストフィールドにあったデータなどで、文字列で渡される。</li><li>定義ファイルのparameterキーによる動作の変更をしたい場合は、引数がひとつのコンストラクター（__constructメソッド）を定義する。paramterキーの値がコンストラクターの引数として得られるので、適当なメンバー変数に保存しておけば、別のメソッドでparameterキーの値を利用できる。</li></ul>
+
+<p>　リスト8-3-1は、データコンバータークラスのテンプレート的なコードです。なお、データベースの読み出しにしか利用しないクラスであれば、converterFromUserToDBメソッドは定義しなくても動作します。</p>
+
+<div class="code"><div class="caption">リスト8-3-1　データコンバータークラスのテンプレート</div><pre><code>&lt;?php
+class DataConverter_template
+{
+    protected $param;
+
+    function __construct($p = 0)
+    {
+        $this-&gt;param = $p
+    }
+
+    function converterFromDBtoUser($str)
+    {
+        // データ変換処理
+        return $str;
+    }
+
+    function converterFromUserToDB($str)
+    {
+        // データ変換処理
+        return $str;
+    }
+}</code></pre></div>
+
+<h3><span id="H3-ANC-24"><span style="display:none">→</span></span><span xmlns="" id="ix-99"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アドバイス定義クラスの作成</h3>
+<p>　「アドバイス」とは、アスペクト指向プログラミングにおける振る舞いを示す用語です。オブジェクト指向にアスペクト指向を適用した場合、複数のクラスに対して横断的な仕組みが存在する場合、それを「アスペクト」として認識します。アスペクトとして定義されたモジュールには、アドバイスとして例えばメソッドとして実装されるものがあります。そして、クラスの中では、「ジョイントポイント」としてアドバイスを織り込む（「ウィーブする」と表現される）位置を指定します。この手法では、つまりは既存のクラスの中で、特定の振る舞いを注入することになります。もちろん、INTER-Mediatorはオブジェクト指向的な開発環境ではなく、アスペクト指向的な要素も薄いのですが、こうした動作に近い動きをする拡張機能を「アドバイス定義クラス」と命名しました。</p>
+<p>　アドバイス定義クラスは、簡単に言えば、データベース処理の前後に、メソッドの実行ができるものです。その意味では、<span xmlns="" id="ix-100"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>フィルタ的な動作と思っていただいて構いません。前処理のメソッドでは、コンテキストのnameキーの文字列が引数として渡されます。データベース処理前後では、クライアントから送られたデータは、アドバイス定義クラスから参照可能なDB_Settingsクラスのオブジェクトより参照できるので、検索条件等はもちろん、JavaScriptで追加した条件や、あるいはコンテキストに定義されたさまざまな設定、更新や新規レコード時のフィールドのデータの取得や設定など、さまざまな処理を追加できます。どのようなメソッドがあるかは次のセクションで解説します。</p>
+<p>　後処理のメソッドでは、前処理と同様にコンテキストのnameキーの値に加えて、データベースから取り出したデータも、連想配列の配列の形式で引数より得られます。もちろん、DB_Settingsクラスのオブジェクトより、コンテキストに関わるさまざまな設定を取り出すこともできます。データベースからデータを取り出す処理の後処理を組み込む場合、1レコード分に相当する連想配列が、レコード数だけ集まった配列が引数として得られます。その配列を自由に変更して構いませんが、何らかの同一形式、つまり、連想配列の配列を返り値として返す必要があります。その配列が、クライアントに送り届けられます。FileMakerの場合はカスタムWebで集計処理をするのがやりにくい面がありますが、むしろ、生データから独自に集計するプログラムを記述する方が柔軟に対処できるかもしれません。返り値のフィールド名は、データベースのテーブルに定義したフィールドでなくても構いませんが、ページファイルのターゲット指定では、後処理のメソッドで指定されたフィールド名を記述する必要があります。</p>
+<p>　アドバイス定義クラスで利用する<span xmlns="" id="ix-101"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>インターフェースを以下のように定義しています。このインターフェースを使わなくてもメソッド呼び出しは行われますが、インターフェースを利用することで、メソッドの定義段階で、名前がちょっと間違っていたと言ったようなことが開発ツールによって検出できるので、インターフェースを使うことを基本とします。インターフェース定義はリスト8-3-2に示し、クラスの定義例は、その後に紹介します。</p>
+
+<div class="code"><div class="caption">リスト8-3-2　アドバイス定義クラスで利用できるインターフェース</div><pre><code>//データベースから読み出す処理の前処理のためのメソッド
+interface <span xmlns="" id="ix-102"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_BeforeRead {
+    public function <span xmlns="" id="ix-103"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doBeforeReadFromDB();
+}
+
+//データベースから読み出す処理の後処理のためのメソッド
+interface <span xmlns="" id="ix-104"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_AfterRead {
+    public function <span xmlns="" id="ix-105"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterReadFromDB($result);
+}
+
+//データベースから読み出す処理の後処理のためのメソッド（ページネーションを行うとき）
+interface <span xmlns="" id="ix-106"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_AfterRead_WithNavigation {
+    public function doAfterReadFromDB($result);
+    public function <span xmlns="" id="ix-107"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>countQueryResult();
+    public function <span xmlns="" id="ix-108"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getTotalCount();
+}
+
+//データベースを更新する処理の前処理のためのメソッド
+interface <span xmlns="" id="ix-109"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_BeforeUpdate {
+    public function <span xmlns="" id="ix-110"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doBeforeUpdateDB();
+}
+
+//データベースを更新する処理の後処理のためのメソッド
+interface <span xmlns="" id="ix-111"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_AfterUpdate {
+    public function <span xmlns="" id="ix-112"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterUpdateToDB($result);
+}
+
+//データベースに新規レコードを作成する処理の前処理のためのメソッド
+interface <span xmlns="" id="ix-113"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_BeforeCreate {
+    public function <span xmlns="" id="ix-114"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doBeforeCreateToDB();
+}
+
+//データベースに新規レコードを作成する処理の後処理のためのメソッド
+interface <span xmlns="" id="ix-115"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_AfterCreate {
+    public function <span xmlns="" id="ix-116"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterCreateToDB($result);
+}
+
+//データベースからレコード削除する処理の前処理のためのメソッド
+interface <span xmlns="" id="ix-117"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_BeforeDelete {
+    public function <span xmlns="" id="ix-118"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doBeforeDeleteFromDB();
+}
+
+//データベースからレコード削除する処理の後処理のためのメソッド
+interface <span xmlns="" id="ix-119"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_AfterDelete {
+    public function <span xmlns="" id="ix-120"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterDeleteFromDB($result);
+}
+
+//データベースでレコードの複製処理を行う前処理のためのメソッド
+interface <span xmlns="" id="ix-121"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_BeforeCopy {
+    public function <span xmlns="" id="ix-122"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doBeforeCopyInDB();
+}
+
+//データベースでレコードの複製処理を行った後処理のためのメソッド
+interface <span xmlns="" id="ix-123"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_AfterCopy {
+    public function <span xmlns="" id="ix-124"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterCopyInDB($result);
+}</code></pre></div>
+
+<p>　基本的には、いずれのインターフェースも、メソッドがひとつだけです。ただし、Extending_Interface_AfterRead_WithNavigationについては3つのメソッドの実装が必要になります。アドバイス定義クラスで、レコード数が変わってしまうような処理をした場合、そのコンテキストをページネーションに結びつけていると、ページネーションのコントールに対して、アドバイス定義クラスによる変更前の現在のレコード数や全レコード数が供給されます。これらの値を、アドバイス定義クラスのメソッドで修正した後の現在のレコード数や全レコード数をクライアントに供給できるように、それらの結果を返すメソッドも実装してください。</p>
+<p>　ここであるコンテキスト「salesitems」に対して、前処理と後処理を追加したいとします。その処理を記述するクラス名は、自分で命名します。もちろん、PHPのクラス名になり得るものを指定します。ここでは、「AdditionalProccess」とします。このクラス名は、コンテキスト定義にextending-classキーで記述する必要があります。したがって、定義ファイルでのコンテキスト定義は、例えば、リスト8-3-3のようになります。</p>
+
+<div class="code"><div class="caption">リスト8-3-3　アドバイス定義クラス名を指定したコンテキストの例</div><pre><code>&lt;?php
+require_once("pathTo/INTER-Mediator.php");
+
+IM_Entry(
+    array(
+        array(
+            "name" =&gt; "salesitems",
+            "view" =&gt; "items",
+            "query" =&gt; array(
+                             array("field" =&gt; "year", "operator" =&gt; "=", "value" =&gt; "2016"),
+                           ),
+            "extending-class" =&gt; "AdditionalProccess",
+        ),</code></pre></div>
+
+<p>　そして、アドバイス定義クラスを、定義ファイルと同一のディレクトリーに作ります。ファイル名は、クラス名に.phpをつけた「AdditionalProccess.php」にします。こうすれば、ファイルを自動的に検出できるようにINTER-Mediatorではクラスローダーが機能します。したがって、アドバイス定義クラスを定義ファイル内でrequre_once等で読み出す必要は通常はないと思われます。AdditionalProccessクラスは、リスト8-3-4のように定義します。まず、classによってクラスを定義するとき、implementsで使用するメソッドのインターフェースを列挙します。そして、それらのインターフェースで定義されている2つのメソッドを実装します。ここでは、サンプルなので、何も処理をしないものを記述しますが、実際にはメソッド内にはさまざまな記述がなされるでしょう。データベース処理前後に行いたい作業を、それぞれのメソッドに記述します。$resultには検索結果のレコードが、連想配列の配列で返されます。アドバイス定義クラスがないときと同一の動きをさせるには、$result変数をreturnで返すだけでOKです。</p>
+
+<div class="code"><div class="caption">リスト8-3-4　アドバイス定義クラスの作成例</div><pre><code>&lt;?php
+class AdditionalProccess 
+    implements Extending_Interface_BeforeRead, 
+       Extending_Interface_AfterRead
+{
+    public function doBeforeReadFromDB()  {
+    }
+
+    public function doAfterReadFromDB($result)  {
+         return $result;
+    }
+}</code></pre></div>
+
+<h3><span id="H3-ANC-25"><span style="display:none">→</span></span><span xmlns="" id="ix-125"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベースクラスの作成</h3>
+<p>　INTER-Mediatorには、データベースクラスのDB_PDO、DB_FileMaker_FXが含まれていて、それぞれ、オープンソース系のデータベースやFileMaker Serverを利用することができるようになっています。また、何もしないDB_Null、テキストファイルを利用するDB_TextFileも用意されています。DB_Nullはまさに何もせず、アドバイス定義クラスの処理だけをしたいような場合に便利です。なお、DB_TextFileはCSVファイルの読み出し処理だけしかサポートされておらず、また、現状では作りかけの状態ですので、実運用では必ずソースを確認して動作をチェックしてください。</p>
+<p>　場合によっては、これらのデータベースクラスを自作できますが、具体的な作業は、既存のデータベースクラスを参考にしていただくくらいしか情報はありません。さまざまな処理のためのメソッドを定義する必要があります。インターフェースや抽象クラスも用意されてはいますが、実際に自作するとなると、かなり大掛かりな作業になると考えてください。また、サーバーサイドの処理の拡張のために、例えばDB_PDOを継承するようなことも可能ですが、多くはアドバイス定義クラスでことが足りると思われます。</p>
+
+<h3><span id="H3-ANC-26"><span style="display:none">→</span></span><span xmlns="" id="ix-126"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-127"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>単独のスクリプトの作成</h3>
+<p>　ここまでの機能拡張の手法は、ページ合成やクライアントからのリクエストに対するサーバー側の処理のカスタマイズという側面がありました。こうしたフレームワークの動作とは別の呼び出しにおいて、INTER-Mediatorを利用することができます。この手法には2つの利用方法があります。ひとつは、定義ファイルに対してmediaキーによるパラーメーターを「<span xmlns="" id="ix-128"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>class://」で設定した場合です。そして、もうひとつは、拡張子がphpのファイルの中から、INTER-Mediatorのコンテキストを定義して直接フレームワークを使ってデータベース処理を行う方法です。</p>
+<p>　<span xmlns="" id="ix-129"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>mediaキーを使用する方法は、データベースの処理以外の仕組みとの統合を行うような場合に利用できます。クライアントからの定義ファイルの呼び出しが「def.php」で行える場合、つまり、ページファイルのヘッダー部に「&lt;script type="text/javascript" src="def.php"&gt;&lt;/script&gt;」と記述されていて、定義ファイルへのクライアントからのアクセスが可能になっているとします。そのような状態において、リスト8-3-5のような相対パスのURLにより、ClassNameで指定したクラス名のクラスを生成して、そこに定義されたprocessingメソッドを呼び出します。この時、呼び出し前に、定義ファイル内のContextNameで指定したコンテキストに対してConditionで指定した条件を付与した上でクエリーを行い、クエリー結果をprocessingメソッドで利用できるようにします。</p>
+
+<div class="code"><div class="caption">リスト8-3-5　定義ファイル呼び出しでの拡張クラスの指定</div><pre><code>def.php?media=class://ClassName/ContextName/Condition</code></pre></div>
+
+<p>　例えば、ページファイル内でのHTMLでの記述例は、リスト8-3-6の通りです。ここでは、aタグによって、「PDF作成」という文字列がリンクとなります。クリックすると、href属性のURLを開きます。ここで、ExtendedProcクラスのメソッドを実行することになりますが、その折に、tasklistというコンテキストに対して検索を行います。ここで、data-im属性があるので、例えば、idフィールド値が24であれば、href属性の最後に24が追加されます。そのURLを開くと、tasklistに対して「id=24」という検索条件が適用されることになります。検索条件は、省略もできますが、演算子は=のみ利用できます。</p>
+
+<div class="code"><div class="caption">リスト8-3-6　ページファイルでの利用例</div><pre><code>&lt;a href="def.php?media=class://ExtendProc/tasklist/id="
+   data-im="tasklist@id@#href"&gt;PDF作成&lt;/a&gt;</code></pre></div>
+
+<p>　拡張プログラムを記述するクラスExtendProcについては、リスト8-3-7のように定義します。また、ファイルのロードを自動的に行うために、ファイル名は「ExtendProc.php」としておいて、定義ファイルと同じ階層に配置します。クラス名は、mediaキーの値に記述したものなので、ページファイルの記述内容によってその都度異なる名前になります。しかしながら、processingメソッドであり引数が2つなのは、常に同じです。processingメソッドは返り値は必要ありません。$contextDataには、mediaキーに指定したコンテキストと検索条件によって検索された結果が得られます。1レコードを示すフィールド名をキーとした連想配列がレコードの数だけ含む配列として得られます。2つ目の引数には、定義ファイルに記述したIM_Entryの第2引数の値がそのまま得られます。</p>
+
+<div class="code"><div class="caption">リスト8-3-7　新たに定義するクラスの基本構成</div><pre><code>class ExtendProc
+{
+    public function processing($contextData, $options) {
+    }
+}</code></pre></div>
+
+<p>　このExtendProcクラスは、aタグのリンク先になっています。processingメソッドの記述は、ページファイルでの用途に応じた記述を行います。例えば、実際にPDFを生成したいのなら、processingメソッド内でデータベースから取り出した結果をもとにしてライブラリ等を使ってPDFを生成します。そして、header関数を使って適切なMIMEタイプを返し、さらにechoステートメント等でPDFデータを出力します。PDFの生成のサンプルは、INTER-MediatorのフォルダーのSamples/Sample_pdfにあります。</p>
+<p>　もし、リンク先からHTMLやテキストを返したいなら、echoステートメント等で、文字列を返します。例えば、リンクをクリックすればiCalendar対応のデータがダウンロードされるようにしたい場合には、header関数とechoステートメントで、適切なMIMEタイプのレスポンスヘッダーを返して、iCalendar形式のテキストをechoで出力します。</p>
+<p>　他には、データに応じて加工した画像を返したり、圧縮ファイルを返すなどの使い方もあります。これも、基本的に同様で、processingの中でサーバーからの応答を記述することになります。なお、processingの最初の引数で、必要なデータを得ておくのが手軽な方法ですが、それで足りない場合には、さらにデータベースアクセスを行うプログラムを記述する必要があります。</p>
+<p>　なお、mediaキーによる拡張プログラムの記述を行いたい場合には、定義ファイルにおいて、IM_Entry関数の第2引数の配列で、media-contextキーに対する値を指定しておく必要があります。認証に関係がないような場合でも、使用するコンテキスト名を指定してください。</p>
+<p>　拡張子がphpのファイルの中から、INTER-Mediatorの機能を利用することができます。そのためには、INTER-Mediator.phpファイルをrequire_once等の関数を使って読み込みを行ってください。それだけで利用できます。スクリプトとしては、INTER-Mediatorの機能を使うか、あるいは通常のPHPのプログラムを記述することになるでしょう。この仕組みを利用したものとして、OAuth2のリダイレクト先のページとして機能するAuth_Support/OAuthCatcher.phpや、パスワードの変更をメールを経由して行うAuth_Support/PasswordResetフォルダーの内容などがあります。</p>
+
+<h3><span id="H3-ANC-27"><span style="display:none">→</span></span>サーバーサイドで利用できるAPI</h3>
+<p>　INTER-Mediatorには多数のPHPファイルがあり、もちろん、それらはサーバーサイドのスクリプトから利用することは可能です。しかしながら、現実的には、その全てを把握する必要はありません。むしろ、多くはフレームワークの動作に必要なものです。サーバーサイドのスクリプトを組むという観点からは、把握すべきクラスは表8-3-1に示したものです。その他のクラスは名称と機能のみを表8-3-2に示しました。表8-3-1に関しても、インターフェースはメソッドのスペックのみであり、データベース処理クラスについてはスクリプトからは直接は利用しないことが一般的で、多くの処理は、DB_Proxyクラスからデータの読み書き等ができるようになっています。したがって、このセクションでは、DB_Proxyおよび「処理の支援クラス」に記載したクラスの利用方法の説明が中心となります。</p>
+
+<div class="table"><table><tr><th>種別</th><th>ファイル名</th><th>動作</th></tr><tr><td>インターフェース</td><td>DB_Interfaces.php</td><td>さまざまなインターフェース定義をまとめてこのファイルに記述</td></tr><tr><td rowspan="5">データベース処理</td><td>DB_Proxy.php</td><td>データベース処理の入り口にあたるクラス</td></tr><tr><td>DB_PDO.php</td><td>PDOを利用したデータベースクラス</td></tr><tr><td>DB_FileMaker_FX.php</td><td>FX.phpをベースにしたFileMaker Serverを利用するためのデータベースクラス。FX.phpは、lib/FXに配置済み</td></tr><tr><td>DB_Null.php</td><td>何の動作もしないデータベースクラス</td></tr><tr><td>DB_TextFile.php</td><td>CSVファイルからの読み出しのためのデータベースクラス</td></tr><tr><td rowspan="3">処理の支援クラス</td><td>DB_UseSharedObjects.php</td><td>ログや設定を参照するプロパティを自動挿入する</td></tr><tr><td>DB_Logger.php</td><td>ログ出力のためのクラス</td></tr><tr><td>DB_Settings.php</td><td>定義ファイルやJavaScriptで設定した内容を参照できるクラス</td></tr></table><div class="caption">表8-3-1　サーバーサイドの処理のためのファイルと役割</div></div>
+
+<div class="table"><table><tr><th>ファイル名</th><th>役割</th></tr><tr><td>INTER-Mediator.php</td><td>クラスは定義されていない。ここにIM_Entry関数が定義されている</td></tr><tr><td>DefinitionChecker.php</td><td>デバッグモードの時に定義ファイルの記述内容をチェックする</td></tr><tr><td>GenerateJSCode.php</td><td>クライアントで使用するプログラムを生成する。SCRIPTタグで定義ファイルを呼び出したときに利用</td></tr><tr><td>IMUtil.php</td><td>各種ユーティリティ</td></tr><tr><td>DB_Formatters.php</td><td>formatterキーに対応するコンバータークラスを稼働させるためのクラス</td></tr><tr><td>MediaAccess.php</td><td>画像など、データベース外のリソースに対するアクセスを行うクラス</td></tr><tr><td>MessageStrings.php</td><td>各種メッセージ。デフォルト（つまり英語）で利用される</td></tr><tr><td>MessageStrings_ja.php</td><td>ブラウザーが日本語で稼働している時の各種メッセージ</td></tr><tr><td>NotifyServer.php</td><td>クライアント関連系（Pusherを利用した機能）のためのクラス</td></tr><tr><td>DB_AuthCommon.php</td><td>データベースクラスで共通の認証処理を記述した抽象クラス</td></tr><tr><td>LDAPAuth.php</td><td>LDAP認証で利用する機能のクラス</td></tr><tr><td>OAuthAuth.php</td><td>OAuth認証で利用する機能のクラス</td></tr><tr><td>FileUploader.php</td><td>ファイルのアップロード時に利用するクラス</td></tr><tr><td>SendMail.php</td><td>メール送信時に利用するクラス。lib/mailsendにあるOME.phpやqdsmtp.phpも利用</td></tr></table><div class="caption">表8-3-2　その他のPHPファイルの役割</div></div>
+
+<h3><span id="H3-ANC-28"><span style="display:none">→</span></span>サーバーサイドの処理の中心となるクラス</h3>
+<p>　サーバーサイドのスクリプトを記述する場合、INTER-Mediatorのサーバー側での動作についての理解がまずは必要です。キーになるクラスは<span xmlns="" id="ix-130"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DB_Proxyです。DB_Proxyはデータベースクラスと同様なインターフェースを持ちますが、クライアントからのリクエストをいきなりデータベースクラスに処理させるのではなく、いったんDB_Proxyが受け取ってさまざまな処理を行い、データベースクラスは文字通りデータベースに関する処理をもっぱら行うように設計されています。データベースの処理をするまでに、受け取ったパラメーターの整理、ログの処理、認証に関する複雑な処理などがあり、それらをDB_Proxyを中核としていくつかのクラスでまかなうようにしています。</p>
+<p>　DB_Proxyクラスのオブジェクトをnewキーワードとともに引数のないコンストラクターで生成した後、以下のinitializeメソッドを利用して初期化します。このメソッドの最初の4つの引数は、定義ファイルのIM_Entry関数に渡す内容と同一です。つまり、定義ファイルの内容を取り込んで処理する部分等でこの仕組みを利用しています。以下、PHPのメソッドの説明での「<span class="object">DB_Proxy</span>」という記述は「DB_Proxyクラスのオブジェクトを参照する変数」に置き換わることを意味します。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-131"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>initialize($datasource, $options, $dbspec, $debug, $target = null)</h4>
+<p class="exp">DB_Proxyクラスを初期化する。返り値はなし。生成したDB_Proxyクラスのオブジェクトに対して適用することで、さまざまな設定が反映されたオブジェクト群を形成する。</p>
+<div class="table"><table><tr><th>引数</th><th>指定する内容</th></tr><tr><td>$datasource</td><td>IM_Entry関数の第1引数と同様に、連想配列で表現されたコンテキストの配列</td></tr><tr><td>$options</td><td>IM_Entry関数の第2引数と同様、さまざまな設定を含む連想配列</td></tr><tr><td>$dbspec</td><td>IM_Entry関数の第3引数と同様、データベース接続に関する連想配列</td></tr><tr><td>$debug</td><td>IM_Entry関数の第4引数と同様、falseならデバッグ出力なし、1ないしは2なら出力あり</td></tr><tr><td>$target</td><td>コンテキストのnameキーの値のひとつを文字列で指定する。省略することも可能</td></tr></table><div class="caption">表8-3-3　initializeメソッドの引数</div></div>
+
+<p>　DB_Proxyクラスのオブジェクトを生成して、initializeメソッドで初期化した後は、図8-3-3のようなオブジェクト構成となります。例えば、ページ合成の時にエンクロージャー／リピーターを識別してデータベースアクセスをしたときには、サーバー側ではこのようなオブジェクト群が生成されて、クライアントから要求された処理をこなします。DB_Proxyクラスのオブジェクトからは、<span xmlns="" id="ix-132"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>dbClassプロパティを経て、定義ファイル等で指定したデータベースクラスのオブジェクトを参照します。また、<span xmlns="" id="ix-133"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>loggerプロパティやdbSettingsプロパティの先にも、それぞれ<span xmlns="" id="ix-134"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DB_Logger、<span xmlns="" id="ix-135"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DB_Settingsクラスのオブジェクトを参照します。こうしたオブジェクト間の連携を行うクラスが<span xmlns="" id="ix-136"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DB_UseSharedObjectsですが、こちらのクラスは存在だけを知っておけば良いでしょう。</p>
+
+<div class="picture"><img class="picture-small" src="figs/fig13.png" altsrc="figs/fig13.pdf"/><div class="caption">図8-3-3　DB_Proxyクラスのオブジェクトと関連オブジェクト</div></div>
+
+<p>　さらに、FileMaker Serverを利用する場合には、認証で利用するissuedhashテーブルをSQLiteで運用することも可能です。その場合は、定義ファイル等に設定があれば、図8-3-4に示すように、authDbClassプロパティの先にissuedhashテーブルを運用するデータベースクラスのオブジェクトが生成されます。</p>
+
+<div class="picture"><img class="picture-small" src="figs/fig14.png" altsrc="figs/fig14.pdf"/><div class="caption">図8-3-4　FileMaker Serverで認証情報の記録にSQLiteを使う場合</div></div>
+
+<p>　<span xmlns="" id="ix-137"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-138"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DB_Proxyクラスのオブジェクトを再利用したいこともあります。DB_Proxyクラスのオブジェクトを新たに作成すると、例えばDB_PDOクラスを生成してデータベースへのコネクションが作成されますが、MySQLの場合はコネクションが150が上限になっており、繰り返し処理をしてDB_Proxyクラスのオブジェクトを生成していると、ドライバーのコネクション数の上限に達してエラーとなります。そのため、DB_Proxyクラスのオブジェクトを再利用したい場合もあるでしょう。その場合は、initializeメソッドを再度呼び出してください。initializeメソッドは、データベースクラスのインスタンスが存在すれば生成をしないで、再初期化を行うので、DB_Proxyクラスのオブジェクトを1度作り、繰り返しのループの中で、initializeメソッド以降を記述すれば良いでしょう。</p>
+
+<h3><span id="H3-ANC-29"><span style="display:none">→</span></span><span xmlns="" id="ix-139"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アドバイス定義クラスとサーバーサイドのオブジェクト</h3>
+<p>　ここまでの説明は、INTER-Mediatorのサーバー側の動作説明です。コードの改変を試みようとする場合には、もちろん知っておくべき基本的な知識です。ここで、少しサーバーサイドの拡張スクリプトと動作との関連を説明しましょう。例として、一番よく利用されるアドバイス定義クラスについて説明をします。例えばアドバイス定義クラスを読み出し後に実行したい場合には、Extending_Interface_AfterReadインターフェースをインプリメントして、自分で名前をつけたクラスを定義します。図8-3-5では、(UserDefined)の部分が、コンテキスト定義で指定したアドバイス定義クラスの名前になります。コンテキストに記述した名前をクラス名として利用し、そのクラスのインスタンスが用意されます。INTER-Mediatorのサーバーサイドでは、DB_Proxyクラスが、「アドバイス定義クラスのメソッドの前処理の実行」→「データベースクラスのメソッドの実行」→「アドバイス定義クラスのメソッドの後処理の実行」といった、「処理の前後にメソッドを実行する」という役割を担っています。</p>
+
+<div class="picture"><img class="picture-small" src="figs/fig15.png" altsrc="figs/fig15.pdf"/><div class="caption">図8-3-5　アドバイス定義クラスと関連オブジェクト</div></div>
+
+<div class="code"><div class="caption">リスト8-3-8　アドバイス定義クラスの作成例</div><pre><code>&lt;?php
+class AdditionalProccess extends DB_UseSharedObjects
+    implements Extending_Interface_BeforeRead, 
+       Extending_Interface_AfterRead
+{
+    public function doBeforeReadFromDB()  {
+    }
+
+    public function doAfterReadFromDB($result)  {
+         return $result;
+    }
+}</code></pre></div>
+
+
+<p>　アドバイス定義クラスのインスタンス生成よりも前に、図8-3-5の左側にあるDB_Proxyクラスのオブジェクトと、データベースクラス、DB_Logger、DB_Settingクラスのオブジェクトの生成が行われます。これらの主要なデータ処理を行うオブジェクトを参照するために、アドバイス定義クラスの定義において、DB_UseSharedObjectsクラスを継承します。すると、表8-3-4に示すようなプロパティ参照を利用して、DB_Proxyの初期化に伴って生成されたデータベースクラス、DB_Logger、DB_Settingsクラスのオブジェクトへの参照を、アドバイス定義クラス内からできるようになります。クエリーを行うときにコンテキストなどで指定した検索条件を取り出すなどの作業は、後述するDB_Settingsクラスのメソッドで行えます。</p>
+
+<div class="table"><table><tr><th>プロパティ名</th><th>クラス内からの参照</th><th>参照先</th></tr><tr><td><span xmlns="" id="ix-140"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>dbClass</td><td>$this-&gt;dbClass</td><td>データベースクラスのオブジェクト</td></tr><tr><td><span xmlns="" id="ix-141"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>logger</td><td>$this-&gt;logger</td><td>DB_Loggerクラスのオブジェクト</td></tr><tr><td><span xmlns="" id="ix-142"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>dbSettings</td><td>$this-&gt;dbSettings</td><td>DB_Settingsクラスのオブジェクト</td></tr></table><div class="caption">表8-3-4　DB_Proxyクラスやアドバイス定義クラスで利用できるプロパティ</div></div>
+
+<p>　アドバイス定義クラスの定義において、DB_UseSharedObjectsクラスを継承しなくてもかまいませんが、その時はデータベースの処理結果を配列でもらって処理する程度しかできず、定義ファイルの設定やクライアントのJavaScriptで追加された検索条件等へのアクセスはやりにくくなります。これらは、DB_Settingsクラスのメソッドで取得できるので、さまざまな処理を組み込みやすくするためにもDB_UseSharedObjectsクラスを継承しておくのが原則と考えてよいでしょう。なお、DB_ProxyクラスのuserExtendedプロパティから、生成されたアドバイス定義クラスのオブジェクトを参照できますが、これはprivateなプロパティです。</p>
+
+<h3><span id="H3-ANC-30"><span style="display:none">→</span></span>アドバイス定義クラスでの処理後に呼び出すメソッド</h3>
+<p>　処理後のメソッドでは、引数やメソッドを利用することで、処理結果の配列が得られます。読み出し（Read）の処理後には<span xmlns="" id="ix-143"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterReadFromDBメソッドが呼び出されます。この時、このメソッドのひとつだけある引数（以下、$resultとして説明）に、検索結果の連想配列のレコードをさらに配列として格納したものが得られます。すなわち「$result[0]["id"]」とすれば、最初のレコードのidフィールド値が得られます。ここで検索結果を変更したい場合には、doAfterReadFromDBメソッドの返り値として修正した結果を返します。返り値は、連想配列の配列の形式であれば、連想配列のキーがメソッドの引数で得られるものと違っていても、ページファイル側で辻褄が合っていれば問題ありません。つまり、doAfterReadFromDBメソッド内では、単にフィールドの値を追加したり、書き換えたりができると同時に、集計処理をしてその集計結果を返すといった使い方ができます。なお、以下に示す、updatedRecordやsetUpdatedRecordメソッドは、読み出し処理では利用できません。</p>
+<p>　更新（Update）の処理後に実行される<span xmlns="" id="ix-144"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterUpdateToDBメソッドの場合は、引数（以下、$resultとして説明）に、直前のデータベース処理が成功したかどうかを示す論理値が設定されます。その値を、原則としてメソッドの返り値としてください。もちろん、状況によってfalseを返して、エラーが発生したことにするという手段もあります。更新されたレコードを得るには、updatedRecordメソッドを利用します。</p>
+<p>　新規レコード作成（Create）後に呼び出される<span xmlns="" id="ix-145"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterCreateToDBメソッドや複製（Copy）後に呼び出される<span xmlns="" id="ix-146"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterCopyInDBメソッドの場合は、引数（以下、$resultとして説明）に、直前のデータベース処理によって作成されたレコードのすべてのフィールドを含む配列が得られます。もし、データベース処理が失敗すれば、論理値のFALSEが設定されます。その値を、原則としてメソッドの返り値としてください。このメソッド内で、新しく作られたレコードの値を取り出すには、updatedRecordメソッドを利用します。</p>
+<p>　レコード削除（Delete）後に呼び出される<span xmlns="" id="ix-147"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterDeleteFromDBメソッドの場合は、引数（以下、$resultとして説明）に、直前のデータベース処理が成功したかどうかを示す論理値が設定されます。その値を、原則としてメソッドの返り値としてください。このメソッド内では、削除されたレコードの情報は得られません。</p>
+<p>　データベースに対する処理のうち、Read/Update/Createの3つの処理に対して、終了後に<span xmlns="" id="ix-148"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-149"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>メールを送信する設定をコンテキスト定義に記述できます。このとき、データベースで処理したレコードの配列を元にメールを送信するので、フィールドに送信時に使用する宛先や文面などのデータがあれば、コンテキスト定義上で使用するフィールドあるいは固定値を記述してメールの送信ができます。状況によってはレコードにない情報を追加したり、あるいは変更してメール送信に利用したい場合もあり、例えばレコード作成直後にメールを送りたい場合にフィールド値の修正を組み込むため、doAfterCreateToDB($result)メソッドを実装します。このとき、書き直したフィールドや、追加したいフィールドがある場合には、読み出し（Read）であるならば、doAfterReadFromDBメソッドの引数を元に、変更した結果を返すことで、メール処理にデータを送り出します。この場合、クライアント側にはデータベース処理で得られたものとは異なるデータを返すことにもなります。</p>
+<p>　一方、更新（Update）とレコード作成（Create）の処理については、updatedRecordメソッドで処理対象のレコードの値を取り出す一方、setUpdatedRecordを利用して追加および変更をしてください。setUpdatedRecordで変更したデータを元に、メール処理が進められます。なお、setUpdatedRecordメソッドは、データベース上の値は書き直しません。アドバイス定義クラスでは、DB_UseSharedObjectsクラスを継承しておけば、現在使用しているデータベース定義クラスは、dbClassプロパティで得られます。したがって、n番目のレコードのフィールドfに値vを書き込む場合は、「$this-&gt;dbClass-&gt;setUpdatedRecord(f, v, n)」というプログラムを書きます。これで、メール処理クラスに変更されたり追加されたフィールドを持つレコードが送信されます。</p>
+
+<h4><span class="object">DB_Class</span>-&gt;<span xmlns="" id="ix-150"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>updatedRecord()</h4>
+<p class="exp">データベース処理後、処理した結果のレコードの配列が得られる。更新なら更新したレコード、新規レコードなら作成したレコードが得られる。なお、読み出しと削除の処理ではこのメソッドは利用できず、更新あるいは新規の処理のみ利用できる。</p>
+<h4><span class="object">DB_Class</span>-&gt;<span xmlns="" id="ix-151"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setUpdatedRecord($f, $v, $n)</h4>
+<p class="exp">処理した結果のレコードの特定のフィールドを修正する。$fがフィールド、$vがその値、$nは0から始まる番号でレコードを指定するが、$nを省略すると最初のレコードを参照する。返り値はなし。</p>
+
+<h3><span id="H3-ANC-31"><span style="display:none">→</span></span>DB_Proxyクラスを利用した<span xmlns="" id="ix-152"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベース処理</h3>
+<p>　初期化したDB_Proxyクラスのオブジェクトに対して、以下のprocessingRequestメソッドを実行することで、データベース処理を進めることができます。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-153"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>processingRequest($access, $bypassAuth)</h4>
+<p class="exp">初期化したDB_Proxyクラスのオブジェクトに対して処理を行う。返り値はない。引数$bypassAuthは、認証やアクセス権設定を無視するが、この指定は慎重に行う必要がある。既定値はfalse。引数$accessに、行うデータベース処理を示す文字列を指定する。nullを指定したときや省略したときにはPOST時のパラメーターの"access"キーの値を使用する。$accessに指定できる値と動作は次の通り：'create'（レコードの作成）、'read'（データベースへのクエリー）、'update'（レコードの更新）、'delete'（レコードの削除）、'copy'（レコードの複製）、'challenge'（チャレンジの生成＝原則として何もしない）、'changepassword'（パスワード変更）、'unregister'（Pusherによるクライアント同期の登録解除）、'describe'（スキーマ情報を得る）。他に'select' 'new'が過去の互換性のために利用可能となっている。それ以外の文字列の場合は、特に何もしない。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-154"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ignoringPost()</h4>
+<p class="exp">通常、DB_Proxyのinitializeメソッドは、サーバーに対してクライアントから引き渡されるPOSTによるデータを取り込んだ結果が反映されます。サーバーへリクエストを送るとき、クライアントサイドでの条件追加や認証、アクセス権のデータなどがPOSTデータとして追加されます。こうした付随的な情報の追加処理は必要であり、クライアントからリクエストされたコンテキストに対する操作を行うときにはPOSTデータに含まれる追加情報を参照します。一方、アドバイス定義クラス内で、新たにコンテキストを定義してinitializeおよびprocessingRequestメソッドを使って処理する場合、現在処理されているコンテキストに対し、POSTを通じて得られるデータが追加されてしまいます。処理中のコンテキストと、アドバイス定義クラスで新たにコンテキストを記述してデータベース処理をする場合、その時点で扱っているテーブルが異なっている場合もあり、POSTされたデータを設定として組み込むことで、エラーや意図しない動作が発生してしまいます。その場合、initializeメソッドの前にignoringPostメソッドを呼び出しておけば、クライアントから送り込まれたデータは無視して、プログラム上で定義したコンテキストやDB_Settingsクラスのメソッドで追加したデータだけを使い、データベース処理を正しく完了させることができます。</p>
+
+<p>　例えば、データベースに対して検索して結果を得たい場合には、最初の引数に "read" を指定します。検索条件や対象となるテーブルなどは、initializeメソッドを呼び出すときの引数で指定ができるわけです。もちろん、INTER-Mediatorのクライアントからのリクエストは、このprocessingRequestメソッドが処理をしています。processingRequestメソッドによって処理された結果は、以下のメソッドを利用して取得することができます。</p>
+ 
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-155"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDatabaseResult()</h4>
+<p class="exp"><span xmlns="" id="ix-156"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-157"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベースからの検索結果などで、1レコードが連想配列として表現され、その連想配列がレコード数分ある配列が返される。利用可能なprocessingRequestメソッドの最初の引数は、create（作成されたレコード）、read（検索結果）、update（更新後のレコード）、copy（複製後のレコード）、describe（スキーマ情報）。</p>
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-158"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDatabaseResultCount()</h4>
+<p class="exp">processingRequestメソッドの最初の引数がreadの場合、検索結果に含まれる<span xmlns="" id="ix-159"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>レコード数を返す。コンテキストのrecordsキーが上限値となるが、実際に検索されたレコード数はそれより少ない場合もある。</p>
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-160"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDatabaseTotalCount()</h4>
+<p class="exp">processingRequestメソッドの最初の引数がreadの場合、<span xmlns="" id="ix-161"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-162"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>検索条件に合致したレコード数を返す。</p>
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-163"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDatabaseNewRecordKey()</h4>
+<p class="exp">processingRequestメソッドの最初の引数がcreateあるいはcopyの場合、新たに<span xmlns="" id="ix-164"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-165"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>作成されたレコードの主キーの値を返す。</p>
+
+<p>　クライアントからのリクエストの処理は、さまざまなデータを作りJSONで返すので、これらのメソッドではなく、応答用の別のメソッドを使っています。それらはアプリケーション作成時のサーバー拡張スクリプトでは通常は利用しないと思われるので、ここではその存在だけを紹介します。すなわち、通常の処理は、DB_Proxyの生成 →initizalize →processingRequest →finishCommunication →exportOutputDataAsJSON、の順番でメソッドを呼び出して処理が進められます。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-166"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>finishCommunication($notFinish)</h4>
+<p class="exp">出力するためのさまざまな準備を行う。</p>
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-167"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>exportOutputDataAsJSON()</h4>
+<p class="exp">JSON形式のテキストで各種データを出力する。</p>
+
+<h3><span id="H3-ANC-32"><span style="display:none">→</span></span><span xmlns="" id="ix-168"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ログ作成の機能</h3>
+<p>　<span xmlns="" id="ix-169"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>エラーメッセージやデバッグメッセージは、サーバー側では以下のメソッドを使うことで、追加や参照が可能です。処理の途中でエラーがあるかどうかについては、getErrorMessagesメソッドが返す配列の要素数をcount関数で調べることで分かります。</p>
+
+<h4><span class="object">DB_Logger</span>-&gt;<span xmlns="" id="ix-170"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDebugMessage($str, $level)</h4>
+<p class="exp">引数$strに指定した文字列を、引数$levelに指定したレベルでの<span xmlns="" id="ix-171"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>デバッグメッセージとして記録する。レベルは1ないしは2のみをサポートし、引数$levelを省略すると1になる。</p>
+<h4><span class="object">DB_Logger</span>-&gt;<span xmlns="" id="ix-172"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setErrorMessage($str)</h4>
+<p class="exp">引数$strに指定した文字列を、<span xmlns="" id="ix-173"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>エラーメッセージとして記録する。</p>
+<h4><span class="object">DB_Logger</span>-&gt;<span xmlns="" id="ix-174"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDebugMessages()</h4>
+<p class="exp">記録されたデバッグメッセージを要素として含む配列を返す。</p>
+<h4><span class="object">DB_Logger</span>-&gt;<span xmlns="" id="ix-175"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getErrorMessages()</h4>
+<p class="exp">記録されたエラーメッセージを要素として含む配列を返す。</p>
+
+<h3><span id="H3-ANC-33"><span style="display:none">→</span></span>コンテキストの指定と基本情報取得のAPI</h3>
+<p>　コンテキストおよびそれに関連したさまざまな設定のためのAPIが以下のように用意されています。通常の処理では、DB_Proxyクラスのオブジェクトが生成されてinitializeメソッドを実行し、その時に引数より以下のAPIを使って値が<span xmlns="" id="ix-176"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>DB_Settingsクラスのオブジェクトに設定されます。例えば、使用するコンテキスト名はinitializeメソッドの5つ目の引数で指定されていて、それが、setDataSourceNameメソッドで記録されています。したがって、拡張プログラムを作成する場合、以下に示すメソッドのうちゲッターメソッドを使うことがほとんどかと思われます。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-177"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDataSourceName($dataSourceName)</h4>
+<p class="exp">引数に指定した文字列をnameキーの値として持つ<span xmlns="" id="ix-178"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-179"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストを選択する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-180"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDataSourceName()</h4>
+<p class="exp">現在、選択されている<span xmlns="" id="ix-181"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストのnameキーに対する値。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-182"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDataSourceTargetArray()</h4>
+<p class="exp">現在、選択されている<span xmlns="" id="ix-183"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-184"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストの定義内容を連想配列で返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-185"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDataSourceDefinition($dataSourceName)</h4>
+<p class="exp">引数に指定した文字列をnameキーの値として持つコンテキスト定義の連想配列を返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-186"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getEntityForRetrieve()</h4>
+<p class="exp">クエリー処理に利用するエンティティ名を返す。つまり、viewキーの値が指定されていればその値、指定されていない場合にはnameキーの値が返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-187"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getEntityForUpdate()</h4>
+<p class="exp">更新処理に利用するエンティティ名を返す。つまり、tableキーの値が指定されていればその値、指定されていない場合にはnameキーの値が返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-188"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setStart($st)</h4>
+<p class="exp">検索結果の最初のいくつ目から結果として取り出すかを、引数の数値で指定する。クライアントのINTERMediator.startFromの値が自動的に設定される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-189"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getStart()</h4>
+<p class="exp">検索結果の最初のいくつ目から結果として取り出すかが得られる。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-190"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setRecordCount($sk)</h4>
+<p class="exp">検索結果の中から、最大でいくつのレコードを取り出すかを引数の数値で指定する。コンテキストのrecordsキーの値や、クライアントINTERMediator.pageSizeの値など、すでに決まっている値が指定される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-191"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getRecordCount()</h4>
+<p class="exp">検索結果の中から、最大でいくつのレコードを取り出すかが得られる。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-192"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAggregationSelect()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-193"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setAggregationSelect($value)</h4>
+<p class="exp">選択されているコンテキストに指定したaggregation-selectキーの設定と取得</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-194"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAggregationFrom()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-195"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setAggregationFrom($value)</h4>
+<p class="exp">選択されているコンテキストに指定したaggregation-fromキーの設定と取得</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-196"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAggregationGroupBy()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-197"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setAggregationGroupBy($value)</h4>
+<p class="exp">選択されているコンテキストに指定したaggregation-group-byキーの設定と取得</p>
+
+<h3><span id="H3-ANC-34"><span style="display:none">→</span></span>IM_Entry関数の呼び出し引数の設定と取り出し</h3>
+<p>　アドバイス定義関数の中で、定義ファイルに指定した内容、つまりinitializeメソッドの引数をそのまま利用したいときのために、以下のようなそれぞれの引数の記録および取り出しのメソッドを定義しています。現状のDB_Proxyと同一の設定を持つ新たなオブジェクトの生成をしてデータベース処理をさせたいような場合、これらのゲッターメソッドから引数の値を取り出して、initizalizeメソッドを適用し、その後にprocessingRequestメソッドを適用するといった方法もあります。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-198"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDataSource($src)</h4>
+<p class="exp">引数には定義ファイルのIM_Entry関数の第1引数の値を指定して、コンテキスト定義の配列をオブジェクトに記録する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-199"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDataSource()</h4>
+<p class="exp">定義ファイルのIM_Entry関数の第1引数の値が返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-200"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setOptions($src)</h4>
+<p class="exp">引数には定義ファイルのIM_Entry関数の第2引数の値を指定して、オプション指定の配列をオブジェクトに記録する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-201"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getOptions()</h4>
+<p class="exp">定義ファイルのIM_Entry関数の第2引数の値が返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-202"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpec($src)</h4>
+<p class="exp">引数には定義ファイルのIM_Entry関数の第3引数の値を指定して、データベース設定の配列をオブジェクトに記録する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-203"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpec()</h4>
+<p class="exp">定義ファイルのIM_Entry関数の第3引数の値が返される。</p>
+
+<h3><span id="H3-ANC-35"><span style="display:none">→</span></span><span xmlns="" id="ix-204"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>検索条件や<span xmlns="" id="ix-205"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>設定値などフィールドと値に関するAPI</h3>
+<p>　DB_Settingsには「フィールドの配列」と「値の配列」を保持するプロパティを持ちます。フィールドと値が対になる場合には要素数はそれぞれ同数になりますが、フィールドだけを指定した処理も想定して連想配列としないで、別々の配列を用意しています。その配列への設定や取り出しのメソッドが以下のように用意されています。このプロパティの解釈は、processingRequestメソッドの2つ目の引数（オペレーション）によって変わります。</p>
+<p>　オペレーションが「read」の場合は、リピーター内にあるターゲット指定のフィールドがフィールドの配列に設定され、値の配列には何も設定されません。オペレーションが「update」の場合は、更新するフィールドとその値が、それぞれフィールドの配列と値の配列に設定されます。オペレーションが「delete」の場合はフィールドの配列も値の配列も使用しません。オペレーションが「create」の時は、新しいレコードの初期値の指定をフィールドの配列と値の配列で設定されます。通常は、コンテキストのdefault-valuesキーの値と、INTERMediator.additionalFieldValueOnNewRecordプロパティの値の両方が、フィールドの配列と値の配列に設定されます。オペレーションが「copy」の場合にはフィールドの配列も値の配列も使われません。</p>
+<p>　これらのメソッドは、アドバイス定義クラスでのデータベース処理前に呼び出されるメソッド、例えばレコード作成の場合のdoBeforeCreateToDBメソッド等で利用できます。新規作成されたレコードのフィールドの値を、PHPのプログラムで指定できるので、単にユーザーインターフェースから入力された値を初期値として利用するだけでなく、Web APIを呼び出して得られた値をあるフィールドの初期値として指定するようなことも可能です。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-206"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setFieldsRequired($fieldsRequired)</h4>
+<p class="exp">フィールドの配列として、引数の配列を設定する。このメソッドは、配列そのものを設定するが、addValueWithField、addTargetFieldメソッドにより、フィールド一覧を管理する配列へ要素が追加される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-207"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getFieldsRequired()</h4>
+<p class="exp">フィールドの配列を返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-208"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addTargetField($field)</h4>
+<p class="exp">フィールドの配列の要素として、引数に指定した文字列を追加する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-209"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getFieldOfIndex($ix)</h4>
+<p class="exp">フィールドの配列から、引数に指定した番号の要素を返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-210"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setValue($values)</h4>
+<p class="exp">値の配列として、引数の配列を設定する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-211"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getValue()</h4>
+<p class="exp">値の配列を返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-212"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addValue($value)</h4>
+<p class="exp">値の配列の要素として、引数に指定した文字列を追加する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-213"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addValueWithField($field, $value)</h4>
+<p class="exp">フィールドの配列および値の配列の要素として、引数に指定した文字列をそれぞれ追加する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-214"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getValuesWithFields()</h4>
+<p class="exp">フィールドの配列にある値をキー、そのキーに対する値を要素にした連想配列を返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-215"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getValueOfField($targetField)</h4>
+<p class="exp">引数に指定したフィールド名をフィールドの配列の何番目なのかを判別し、値の配列の同じ番号の要素を返す。つまり、フィールド名に対応した値を返す。</p>
+
+<p>　以下のメソッドは、DB_Settingsオブジェクトが持つ「<span xmlns="" id="ix-216"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>外部キー値の配列」を利用するためのものです。この外部キー値の配列は、オペレーションがreadの時にだけ使用され、親子関係にあるエンクロージャー／リピーターのセットを発見したとき、子のエンクロージャーに対するデータベースアクセス時において、その外部キーに対応する親のリピーターにあるフィールド名と値を記録します。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-217"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setForeignFieldAndValue($foreignFieldAndValue)</h4>
+<p class="exp">引数を外部キーの値を保持する配列に指定する。引数は、field、valueをキーとした連想配列の配列である必要がある。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-218"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getForeignFieldAndValue()</h4>
+<p class="exp">外部キーの値を保持する配列を返す。返される値は、field、valueをキーとした連想配列の配列。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-219"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addForeignValue($field, $value)</h4>
+<p class="exp">引数に指定したフィールド名と値を、外部キーの値を保持する配列に追加する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-220"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getForeignKeysValue($targetField)</h4>
+<p class="exp">外部キーの値を保持する配列から、引数に指定したフィールドに対する値を返す。ない場合はnullが返る。</p>
+
+<p>　以下のメソッドは、DB_Settingsオブジェクトが持つ「<span xmlns="" id="ix-221"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>検索条件の配列」に対するものです。createを除くオペレーションでは、コンテキストのqueryキーによる配列の設定が必ず適用されます。これらは、検索条件の配列には入力されず、データベースクラスが実際のデータベース処理を行うときにコンテキスト定義から取り出して検索条件として設定されます。オペレーションがreadの場合は、INTERMediator.additionalConditionプロパティの内容がこの配列に設定されます。オペレーションがreadやupdate、delete、copyの場合は、JavaScriptのAPIで追加した検索条件もこの配列に設定されます。オペレーションがcreateの場合はこの設定は利用されません。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-222"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addExtraCriteria($field, $operator, $value)</h4>
+<p class="exp">追加的な検索条件を保持する配列に、引数の3つの要素を持つ連想配列として追加する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-223"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getExtraCriteria()</h4>
+<p class="exp">追加的な検索条件を保持する配列を返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-224"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>unsetExtraCriteria($index)</h4>
+<p class="exp">追加的な検索条件を保持する配列の中にある引数に指定したインデックスの要素を削除する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-225"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getCriteriaValue($targetField)</h4>
+<p class="exp">追加的な検索条件を保持する配列から、引数に指定した文字列をfieldキーの値として持つ最初の要素を特定し、その要素のvalueキーの値を返す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-226"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getCriteriaOperator($targetField)</h4>
+<p class="exp">追加的な検索条件を保持する配列から、引数に指定した文字列をfieldキーの値として持つ最初の要素を特定し、その要素のoperatorキーの値を返す。</p>
+
+<p>　FileMaker Serverを使う場合に、データベース処理前に<span xmlns="" id="ix-227"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>グローバルフィールドの設定をするとき、コンテキストのglobalキーを使用できますが、その値は実行時に動的に設定することができません。そこで、INTERMediator.additionalConditionプロパティに指定した上でアドバイス定義クラスのデータベース処理前のメソッドにおいて、getCriteriaValueを利用して検索条件から値を取り出し、setGlobalInContextでグローバルフィールドの設定に値を追加します。unsetExtraCriteriaを利用して追加の検索条件から設定値を取り除く必要があります。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-228"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setGlobalInContext($contextName, $operation, $field, $value)</h4>
+<p class="exp">引数に指定したコンテキストに、残りの引数で指定した設定内容を持つglobalキーの連想配列を追加する。もちろん、FileMaker Serverのみで意味のある機能である。</p>
+
+<p>　楽観的ロックにおいては、レコードの特定を主キーだけを使い、他の条件を無視する必要があるかもしれません。他のユーザーがフィールドの値を変更して検索条件に合わない状態になっているとします。コンテキストの検索条件をすべて適用すると、レコードがヒットせず、今現在のフィールドの値を取得できません。そのために、検索においては主キーのみを使うという動作をサポートしています。通常は自動的に設定されますが、以下のメソッドで意図的に設定したり、あるいは現在の設定が分かります。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-229"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setPrimaryKeyOnly($primaryKeyOnly)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-230"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getPrimaryKeyOnly()</h4>
+<p class="exp">検索条件の中から、主キー（コンテキストのkeyキー）で指定されたものだけを利用する設定とその状態の取得。なお、主キーのみを利用する検索は、データベースの更新前に楽観的ロックの仕組みを利用して、現在の値を取り出す場合に利用している。</p>
+
+<p>　データベースへのオペレーションがreadのとき、INTERMediator.<span xmlns="" id="ix-231"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>additionalSortKeyプロパティに指定したソートフィールドの昇順／降順の設定は以下のメソッドを使用して、DB_Settingsオブジェクトに記録されます。なお、コンテキストに指定したsortキーによるソート条件は、データベースクラスで適用されます。値を得たい場合は、コンテキストの定義を取り出して読み出せばよいでしょう。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-232"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addExtraSortKey($field, $direction)</h4>
+<p class="exp">追加のソート条件を記録した配列に、引数にしていたフィールドと基準（昇順ないしは降順）を追加する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-233"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getExtraSortKey()</h4>
+<p class="exp">追加のソート条件を記録した配列を得る。</p>
+
+<p>　オペレーションがcopyの時で、コピーするレコードを含むコンテキストに対してrelationキーによって関連レコードが定義されているときに関連レコードも含めてコピーしたいときがあります。その場合は、関連レコードのコンテキストと検索条件を以下のAPIで記録します。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-234"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addAssociated($name, $field, $value)</h4>
+<p class="exp">レコードのコピーにおいて、関連するコンテキストに対する設定を追加する。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-235"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAssociated()</h4>
+<p class="exp">レコードのコピーにおいて使用される関連するコンテキストに対する配列を得る。</p>
+
+<h3><span id="H3-ANC-36"><span style="display:none">→</span></span><span xmlns="" id="ix-236"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベース設定に関連するAPI</h3>
+<p>　以下のDB_Settingsクラスのメソッドは、データベース接続の設定、すなわちIM_Entry関数の3つ目の引数の配列に指定するデータの設定と取得ができるものです。メソッド名と配列のキーを対応付けているので、メソッド名のみの紹介で意味は理解できるので、メソッド名の紹介のみとします。ここで、ゲッターメソッドは、IM_Entryの引数の値ではなく、もし、params.phpファイル、あるいは現在のコンテキストに指定がある場合に、その値が設定されます。つまり、実際にデータベース処理で使われるサーバーのホスト名やデータベース名がゲッターから得られることになります。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-237"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecServer($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-238"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecServer()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-239"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecPort($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-240"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecPort()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-241"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecUser($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-242"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecUser()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-243"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecPassword($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-244"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecPassword()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-245"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecDataType($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-246"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecDataType()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-247"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecDatabase($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-248"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecDatabase()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-249"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecProtocol($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-250"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecProtocol()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-251"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecDSN($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-252"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecDSN()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-253"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDbSpecOption($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-254"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDbSpecOption()</h4>
+<p class="exp">データベース処理に関する設定を行ったり取り出したりするメソッド。</p>
+
+<h3><span id="H3-ANC-37"><span style="display:none">→</span></span>認証やアクセス権に関わるAPI</h3>
+<p>　<span xmlns="" id="ix-255"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ログインしているユーザー名を得たり、あるいはネイティブ認証時の<span xmlns="" id="ix-256"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>パスワードを得るには、以下のようなメソッドを利用します。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-257"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setCurrentUser($str)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-258"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getCurrentUser()</h4>
+<p class="exp">クライアントから申告されたユーザー名の設定および取得を行うメソッド。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-259"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setUserAndPasswordForAccess($user, $pass)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-260"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAccessUser()<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-261"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAccessPassword()</h4>
+<p class="exp">クライアントから申告されたユーザー名とパスワードの設定および取得を行うメソッド。ネイティブ認証時にチャレンジに対応するレスポンスによって返されたユーザー名とパスワードが設定され、それ以外の時には設定されない。</p>
+
+<p>　認証に関するさまざまな設定を取得したい場合には、以下のメソッドを利用します。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-262"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setAuthentication($authentication)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-263"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAuthentication()</h4>
+<p class="exp">IM_Entry関数の第2引数（オプション設定）の、authenticationキーに対する値を記録あるいは取り出す。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-264"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getAuthenticationItem($key)</h4>
+<p class="exp">IM_Entry関数の第2引数（オプション設定）のauthenticationキーに対する値に対し、さらに引数の文字列のキーの値を取り出す。もし、引数に与えたキーに対する値が定義されていない場合で、引数がテーブル名の場合には、規定のテーブル名を返す。あるいは認証継続時間の場合には既定値として8時間が返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-265"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getUserTable()</h4>
+<p class="exp">認証に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthuserが返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-266"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getGroupTable()</h4>
+<p class="exp">グループ管理に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthgroupが返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-267"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getCorrTable()</h4>
+<p class="exp">グループ所属記録に使用するテーブル名を返す。定義ファイル等で未設定の場合には既定値のauthcorrが返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-268"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getHashTable()</h4>
+<p class="exp">認証でのチャレンジ等を記録するためのテーブル名を返す。定義ファイル等で未設定の場合には既定値のissuedhashが返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-269"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getExpiringSeconds()</h4>
+<p class="exp">認証結果を保持する時間を返す。定義ファイル等で未設定の場合には既定値の8時間が返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-270"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setRequireAuthentication($requireAuthentication)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-271"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getRequireAuthentication()</h4>
+<p class="exp">ゲッターは、定義ファイルの内容から、認証が必要かどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-272"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setRequireAuthorization($requireAuthorization)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-273"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getRequireAuthorization()</h4>
+<p class="exp">ゲッターは、定義ファイルの内容から、アクセス権の判定が必要かどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-274"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDBNative($isDBNative)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-275"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>isDBNative()</h4>
+<p class="exp">ゲッターは、定義ファイルの内容から、<span xmlns="" id="ix-276"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ネイティブ認証を行うかどうかを求めた結果を返す。セッターはprocessingRequestメソッド内で判定結果を記録するために利用される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-277"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setEmailAsAccount($emailAsAccount)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-278"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getEmailAsAccount()</h4>
+<p class="exp">ゲッターは、定義ファイルの内容から、電子メールを認証時のユーザー名として使用できるかどうかを返す。セッターはprocessingRequestメソッド内で設定を記録するために利用される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-279"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getLDAPSettings()</h4>
+<p class="exp">params.phpファイルで定義されたLDAPの設定値を持つ配列を返す。要素は順番に、サーバー名、ポート番号、検索ベース、コンテナ名、ユーザー名のキー名。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-280"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setLDAPExpiringSeconds($sec)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-281"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getLDAPExpiringSeconds()</h4>
+<p class="exp">ゲッターは、params.phpファイルの内容から得られた<span xmlns="" id="ix-282"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-283"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>LDAP認証の継続時間を返す。セッターは設定を記録するために利用される。</p>
+
+<h3><span id="H3-ANC-38"><span style="display:none">→</span></span>その他の動作に関連するカスタマイズ</h3>
+<p>　<span xmlns="" id="ix-284"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-285"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ターゲット指定の区切り文字に関するメソッドや、メール送信の場合に利用される<span xmlns="" id="ix-286"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SMTPサーバーの設定については、以下のメソッドを利用して取得することができます。</p>
+
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-287"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setSeparator($sep)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-288"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getSeparator()</h4>
+<p class="exp">ターゲット指定の区切り文字（通常は「@」）を記録したり取得するメソッド。設定しない場合には、＠が返される。</p>
+<h4><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-289"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setSmtpConfiguration($config)<br/><span class="object">DB_Settings</span>-&gt;<span xmlns="" id="ix-290"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getSmtpConfiguration()</h4>
+<p class="exp">IM_Entry関数の第2引数（オプション設定）の、smtpキーに対する値を記録あるいは取り出す。</p>
+
+<h3><span id="H3-ANC-39"><span style="display:none">→</span></span>このセクションのまとめ</h3>
+<p>　INTER-Mediatorのサーバー側の動作を追加したりカスタマイズする方法として、データコンバータークラスの作成、アドバイス定義クラスの作成、そして、データベースアクセスクラスの作成があります。このうち最初のデータコンバータークラスは一般的なものはすでに用意されていますし、最後のデータベースアクセスクラスの作成はかなり難しい作業になります。アプリケーション開発時の拡張は、主としてアドバイス定義クラスの追加で行うことになるでしょう。また、画像などのメディア利用（すなわちデータベース外のリソースの利用）の仕組みを拡張して、独自にプログラムを組む方法もありますし、PHPのスクリプトの中から直接INTER-Mediatorを利用する方法もあります。</p>
+<p>　これらの拡張の仕組みを利用する上で、INTER-Mediatorの機能を利用したり、INTER-Mediatorが管理している情報を取得するなどのニーズがあるため、そうした処理が可能なメソッドや、あるいはオブジェクト参照のためのプロパティについてもこのセクションにまとめておきました。</p>
+
+<!-- ============ SECTION START ============ -->
+<h2><span id="H2-ANC-4"><span style="display:none">→</span></span><span class="sectionnumber">8-4</span>プログラムの実例</h2>
+<p class="section-lead">このセクションでは、PHP言語によるサーバー拡張を扱ったサンプルの解説を行います。ここでは、定義ファイルとページファイルというエディターを用意しているファイルだけでなく、拡張のプログラムファイルを作成する必要があります。そのため、VMでの開発作業はPHP経験者でないと難しい面もあるかと思います。一方、PHP経験者の方なら、結果だけを見ることで、開発方法の実例になると思われます。以上の理由でサンプルでの解説を行います。説明するのは、アドバイス定義クラス、メディアアクセスクラス、PHPのプログラムからのINTER-Mediatorの利用方法、そしてFileMaker Serverでのグローバルフィールドの内容を動的に指定する方法です。最後の例は、JavaScriptでクライアントサイドでの拡張と、PHPによるサーバーサイドの両方を連携する必要があるような例となります。</p>
+
+<h3><span id="H3-ANC-40"><span style="display:none">→</span></span>アドバイス定義クラスで<span xmlns="" id="ix-291"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>集計処理を行う</h3>
+<p>　<span xmlns="" id="ix-292"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アドバイス定義クラスは、データベース処理の前後に割り込むことで、サーバー側の動作をカスタマイズすることができます。もっとも理解しやすい例は、コンテキストで指定したレコードを取り出した後、そのレコード群をもとに集計処理を組み込むといったことです。しかしながら、MySQLなどのPDOを使ったデータベースについては、INTER-Mediator Ver.5.3より、aggregaton-selectキー等で、コンテキストに集計を行うSQLの生成を行うための定義を追加することができるようになりましたので、SQLで記述可能な集計はむしろそちらを利用した方がパフォーマンスが高くなります。一方、FileMaker Serverの場合、レイアウトによる集計機能はありますが、小計の機能をカスタムWebアクセス側では利用できないなどの制約があるので、集計やレコード間を跨ぐようなデータ処理をした結果をページに出したいような場合には、アドバイス定義クラスで検索後のデータを変更するプログラムを記述したほうが良い場合もあります。</p>
+<p>　サンプルプログラムのひとつで、アドバイス定義クラスを利用しています。アドバイス定義クラスにより集計処理をしているコンテキストもありますが、さらにレコードの生成をアドバイス定義クラスで行うといったことも行っています。VMを利用している場合には、ブラウザーで「http://192.168.56.101」に接続し、そこにある「サンプルプログラム」のリンクをクリックして、サンプルプログラムの一覧を表示します。そして、「Server-side Extension」の行の「show(setting the class)」をクリックすると、図8-4-1のようにデータを集計したページが表示されます。</p>
+
+<div class="picture"><img class="picture-small" src="figs/shot3193.png"/><div class="caption">図8-4-1　アドバイス定義クラスを使ったサンプルプログラムの動作結果</div></div>
+
+<p>　このサンプルのページファイルは<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Extensible/aggregation2.html">こちら</a>、定義ファイルは<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Extensible/definecontexts2.php">こちら</a>から参照できます。ページファイルは、TABLEタグによる表の中に別のTABLEタグの表がある形式になっています。外側はeverymonthという名前のコンテキストで、内側は、summary1、summary2、dataというコンテキストが展開されていることを、ページファイルよりまずは読み取ってください。</p>
+<p>　リスト8-4-1は定義ファイルにあるeverymonthコンテキストの定義内容です。このコンテキストにより、連続した年月日のレコードを作成しています。viewキーによりitem_masterテーブルから検索を行っていますが、queryによる検索条件やrecordsによるレコード数は、単になるべく短く、しかしながらエラーなく検索が行われるようにするための設定であり、取り出すデータとは関係ありません。ここでのポイントになるのは、extending-classキーによってYearMonthGenクラスを指定していることです。</p>
+
+<div class="code"><div class="caption">リスト8-4-1　everymonthコンテキストの定義</div><pre><code>array(
+    'name' =&gt; 'everymonth',
+    'view' =&gt; 'item_master',
+    'query' =&gt; array(array('field' =&gt; 'id', 'operator' =&gt; '=', 'value' =&gt; '1'),),
+    'records' =&gt; 1,
+    'extending-class' =&gt; "YearMonthGen",
+),</code></pre></div>
+
+<p>　同じフォルダーに、YearMonthGen.phpというクラス名と同じファイル名の.phpファイルがあります。リスト8-4-2がそのクラス定義の部分です（ファイル全体は<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Extensible/YearMonthGen.php">こちら</a>から参照できます）。アドバイスはデータベースの読み出し後に処理をするので、クラスにはインターフェースのExtending_Interface_AfterReadをインプリメントしておき、doAfterReadFromDBを定義します。引数の$resultは、メソッドの最初の行で空の配列を代入しているように、実際にはデータベースから取り出された結果は一切利用をしません。最後には、$resultを返していますが、プログラムを見ると、12のレコードを持つ配列が返されます。配列のひとつの要素は連想配列になっており、JSON記述で示すと {"year": 2010, "month": 1, "startdt": "2010-01-01 00:00:00", "enddt": "2010-02-01 00:00:00"} といった配列になります。つまり、yearとmonthが年と月、そして、日付やタイムスタンプのデータがあれば、startdt以上でenddtより小さいのであれば、yearとmonthで示される年月に含まれるデータであると判断するために利用することができます。</p>
+
+<div class="code"><div class="caption">リスト8-4-2　</div><pre><code>class YearMonthGen implements <span xmlns="" id="ix-293"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Extending_Interface_AfterRead
+{
+    public function <span xmlns="" id="ix-294"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterReadFromDB($result)
+    {
+        $result = array();
+        $year = 2010;
+        for ($month = 1; $month &lt; 13; $month++) {
+            $startDate = new DateTime("{$year}-{$month}-1 00:00:00");
+            $endDate = $startDate-&gt;modify("next month");
+            $result[] = array(
+                "year" =&gt; $year,
+                "month" =&gt; $month,
+                "startdt" =&gt; "{$year}-{$month}-1 00:00:00",
+                "enddt" =&gt; $endDate-&gt;format("Y-m-d H:i:s"),
+            );
+        }
+        return $result;
+    }
+}</code></pre></div>
+
+<p>　この後に紹介するコンテキストは月ごとにデータ集計をすることを意図しており、そのための基本的な検索条件をstartdtとenddtキーの値から生成します。年や月は、もちろん、PHPのプログラムを修正することで、例えば2016年4月から2017年3月といった範囲に変更できます。また、recordsキーの値は1になっていますが、実際に得られたレコードが12個あれば、ページファイルを展開するときに12レコード分の生成を行います。ページネーションにより一定数のレコードずつ表示する場合でない場合は、必要なレコードを含む配列を返すようにPHPのプログラムを作成すれば十分です。ページネーションを伴う場合には、この章の『8-3　サーバーサイドでの処理の追加』にある『アドバイス定義クラスの作成』で説明したExtending_Interface_AfterRead_WithNavigationインターフェースを実装して、結果の配列だけでなく、レコードの個数や検索条件に合うレコードの総数を返すメソッドも記述してください。</p>
+<p>　続いて別のコンテキストであるsummary1を見てみましょう。定義はリスト8-4-3の通りです。こちらはviewキーにあるように、saleslogテーブルにあるレコードを検索します。ページファイルではeverymonthコンテキストを展開したノードの中にあり、relationキーによる定義が検索時に条件として付加されます。つまり、year=2010、month=1のeverymonthコンテキスト内では、summary1コンテキストの内容は「dt &gt;= "2010-01-01 00:00:00" AND dt &lt; "2010-02-01 00:00:00"」という検索条件でsaleslogテーブルを検索した結果、すなわち2010年1月に含まれるレコードに絞られます。しかしながら、extending-classキーにSumForItemsクラスが指定されています。</p>
+
+<div class="code"><div class="caption">リスト8-4-3　summary1コンテキストの定義</div><pre><code>array(
+    'name' =&gt; 'summary1',
+    'view' =&gt; 'saleslog',
+    'relation' =&gt; array(
+        array('foreign-key' =&gt; 'dt', 'operator' =&gt; '&gt;=', 'join-field' =&gt; 'startdt',),
+        array('foreign-key' =&gt; 'dt', 'operator' =&gt; '&lt;', 'join-field' =&gt; 'enddt',),
+    ),
+    'extending-class' =&gt; "SumForItems",
+),</code></pre></div>
+
+<p>　SumForItemsクラスのPHPプログラムは、リスト8-4-4の通りです（ファイル全体は<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_Extensible/SumForItems.php">こちら</a>から参照できます）。これも、Extending_Interface_AfterReadインターフェースを実装したクラスです。doAfterReadFromDBメソッドの引数$resultには、saleslogテーブルから検索したデータが引き渡されます。このテーブルには1レコードが1件の販売データといった形式ですが、引数で得られるのはその販売データのうち、特定の月のものだけではありますが、1レコードはやはり1件の販売データを示すものです。そして、最初の繰り返し部分で、saleslogテーブルのitemフィールドの値ごとに、totalフィールドの値を合計しています。変数$recordは1レコードの連想配列が設定されるので、$record["フィールド名"] により特定のフィールドの値を取り出せます。arsortにより、合計金額の多い順からソートされます。後半の繰り返しは、上位10件を取り出し、レコードにitemnameおよびtotalpriceキーに対して商品名と合計金額を値として与えています。もちろん、itemnameおよびtotalpriceはページファイル内のフィールド名として利用されます。</p>
+
+<div class="code"><div class="caption">リスト8-4-4　SumForItemsクラス</div><pre><code>class SumForItems implements Extending_Interface_AfterRead
+{
+    public function doAfterReadFromDB($result)
+    {
+        $sum = array();
+        foreach ($result as $record) {
+            if(! isset($sum[$record["item"]]))  {
+                $sum[$record["item"]] = $record["total"];
+            } else {
+                $sum[$record["item"]] += $record["total"];
+            }
+        }
+        arsort($sum);
+        $result = array();
+        $counter = 10;
+        foreach ( $sum as $product =&gt; $totalprice )  {
+            $result[] = array(
+                "itemname"=&gt;$product,
+                "totalprice"=&gt;number_format($totalprice)
+                );
+            $counter--;
+            if ( $counter &lt;= 0 )    {
+                break;
+            }
+        }
+        return $result;
+    }
+}</code></pre></div>
+
+<p>　ページファイルでは、1か月ごとに合計3種類の集計結果を表示しています。残りの2つは、計算方法は違いますが、計算処理の組み込み方法は、summary1コンテキストと同様です。</p>
+
+<h3><span id="H3-ANC-41"><span style="display:none">→</span></span><span xmlns="" id="ix-295"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>メディアアクセスクラスを利用して<span xmlns="" id="ix-296"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-297"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>PDFを生成する</h3>
+<p>　サンプルプログラムには、データベースにあるデータをもとにPDFを生成可能なものがあります。しかしながら、PHPでPDFを生成するための<span xmlns="" id="ix-298"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>tcpdfを、サンプルのあるフォルダーに入れなければなりません。また、PHPのプログラムは、tcpdfのクラスライブラリに従って記述する必要があります。tcpdfは、<a href="https://sourceforge.net/projects/tcpdf/files/">こちらのサイト</a>からダウンロードしてください。「tcpdf」にバージョン名のついたzipファイルが得られますが、展開するとフォルダー名は「tcpdf」になります。</p>
+<p>　INTER-Mediator VMを利用しているのであれば、macOSの場合はFinderから「移動」→「サーバーへ接続」と進み「smb://192.168.56.101/webroot」、Windowsの場合はエクスプローラーのアドレス欄に「¥¥192.168.56.101¥webroot」と入力して接続します。ユーザー名とパスワードは「developer」および「im4135dev」です。そして、マウントしたwebrootから、INTER-Mediator/Samples/Sample_pdfとディレクトリをたどったところに、ダウンロードして展開したtcpdfフォルダーをコピーします。図8-4-2はコピーした後の状態です。VMを利用していないのであれば、INTER-Mediator/Samples以下の該当するディレクトリに、tcpdfフォルダーをコピーしてください。</p>
+
+<div class="picture"><img class="picture-small" src="figs/shot3195.png"/><div class="caption">図8-4-2　INTER-Mediator/Samples/Sample_pdfにtcpdfフォルダーをコピー</div></div>
+
+<p>　実際にサンプルを稼働させてみましょう。VMを利用している場合には、ブラウザーで「http://192.168.56.101」に接続し、そこにある「サンプルプログラム」のリンクをクリックして、サンプルプログラムの一覧を表示します。そして、「PDF Generating」の行の「show」をクリックすると、図8-4-3のように、まず、商品一覧のようなページが見えています。そして、PDFのリンクをクリックすると、図8-4-4のように対応するレコードの内容がPDFに変換され、ブラウザーの画面に表示されます。PDFの見え方は、ブラウザーの設定により異なる可能性もあります。</p>
+
+<div class="picture"><img class="picture-small" src="figs/shot3194.png"/><div class="caption">図8-4-3　商品の一覧ページにPDFリンクがある</div></div>
+<div class="picture"><img class="picture-small" src="figs/shot3196.png"/><div class="caption">図8-4-4　特定のレコードのデータがPDFに表示された</div></div>
+
+<p>　実際にどのようにページが構築されているかを確認しましょう。まず、定義ファイルは「<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_pdf/contexts_MySQL.php">contexts_MySQL.php</a>」、ページファイルは「<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_pdf/list_detail_MySQL.html">list_detail_MySQL.html</a>」です。ページ上に商品の一覧が出ていますが、この商品名などのコンテキストは、puroductlistコンテキストを利用しています。定義ファイルのコンテキストの定義はリスト8-4-5の通りで、viewキーの値がproductであり、productテーブルの内容を一覧しています。queryキーによる検索条件は、nameフィールドに何か入力されているという意味ではありますが、あまり深い意味はありません。ともかく、productテーブルのレコードをページに一覧表示しています。</p>
+
+<div class="code"><div class="caption">リスト8-4-5　productlistコンテキストの定義</div><pre><code>array(
+    'records' =&gt; 10,
+    'name' =&gt; 'productlist',
+    'view' =&gt; 'product',
+    'key' =&gt; 'id',
+    'query' =&gt; array(array('field' =&gt; 'name', 'value' =&gt; '%', 'operator' =&gt; 'LIKE')),
+    'sort' =&gt; array(array('field' =&gt; 'name', 'direction' =&gt; 'ASC'),),
+),</code></pre></div>
+
+<p>　ここでページファイルの中でもPDFというリンク部分のタグがどのようになっているかを見てみましょう。そこを抜き出したのが、リスト8-4-6です。aタグにより、PDFという文字列を囲んでいます。そして、data-im属性を見ると、productlistコンテキストのidフィールドの値を、aタグ要素のhref属性内の$の文字と置き換えるという指定になっています。idフィールドはもちろん、主キーとなる連番のフィールドです。このdata-im関数により、もしidフィールドの値が「4」ならば、aタグ要素のhref属性は「contexts_MySQL.php?media=class://PDFSample/productlist/id=2/」といったURLになります。つまり、定義ファイルへのクライアントからのアクセスがあり、mediaというキーによるパラメーターが付与されているとうことです。mediaキーの値は「class://PDFSample/productlist/id=2/」です。</p>
+
+<div class="code"><div class="caption">リスト8-4-6　PDFリンクのタグ要素</div><pre><code>&lt;a href="contexts_MySQL.php?media=class://PDFSample/productlist/id=$/"
+                   data-im="productlist@id@$href"&gt;PDF&lt;/a&gt;</code></pre></div>
+
+<p>　このmediaキーの値「class://PDFSample/productlist/id=2/」は次のように解釈されます。まず、class:なので、引き続いて、クラス名、コンテキスト名、検索条件が記述されることになります。ここではまず2つ目の項目である「productlist」があることに注目します。これにより、PDFのリンクをクリックして定義ファイルへアクセスしたとき、INTER-Mediatorはまずproductlistコンテキストに対して検索を行います。この時の条件「id=2」は、idフィールドが2であるレコードを意味します。idフィールドは主キーなので、ひとつのレコードが検索されます。そして、その検索した結果のレコードを引数に伴って、リスト8-4-7に示すPDFSampleクラス（ファイルは<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_pdf/PDFSample.php">こちら</a>から参照できます）のprocessingメソッドを呼び出します。ここで、idが2のレコードは、nameフィールドが「Orange」、unitpriceフィールドが「1540」などになっているので、processingメソッドの最初の引数には、JSON形式で記述すると、[{"id": 2, "name": "Orange", "unitprice": 1540, ...}] といった連想配列の配列が得られます。レコードがひとつしかない場合でも、全体は配列になります。例えば、nameフィールドの値は「$contextData[0]['name']」で得られます。processingメソッドの最初の部分で検索して得られたデータを変数に入れ、あとはtcpdfの機能を使ってPDFを生成しています。PDFの生成に関する部分は省略しますが、最後のOutputメソッドにより、PDFのデータが出力されます。ここでは、aタグ要素であったことを思い出してください。つまり、リンクをクリックすることにより、定義ファイルが呼び出されて、PDFのデータを出力します。したがって、header関数を使って応答のヘッダーのContent-Typeキーの値などを適切に設定しておくことで、ページ上に表示したり、あるいはダウンロードしたりといったことを、ブラウザーの設定に依存する面はあるかもしれませんが、ある程度はコントロールできるでしょう。</p>
+
+<div class="code"><div class="caption">リスト8-4-7　PDFSampleクラス</div><pre><code>class PDFSample
+{
+    function processing($contextDatas)
+    {
+        $prodId = $contextData[0]['id'];
+        $prodName = $contextData[0]['name'];
+        $unitPrice = $contextData[0]['unitprice'];
+        $pFile = $contextData[0]['photofile'];
+        $timestamp = new DateTime();
+        $tsString = $timestamp-&gt;format("Y-m-d H:i:s");
+        $fileName = "{$prodId}.pdf";
+        require_once './tcpdf/tcpdf.php';
+
+        $pdf = new TCPDF("P", "mm", "A4", true, "UTF-8");
+        $pdf-&gt;setPrintHeader(false);
+        $pdf-&gt;setPrintFooter(false);
+        $pdf-&gt;SetMargins(0, 0, 0, 0);
+        $pdf-&gt;AddPage();
+        $pdf-&gt;setTextColor(100, 100, 100);
+        $pdf-&gt;SetFont('', '', 14);
+        $pdf-&gt;Text(40, 40, "Product ID: {$prodId}");
+        $pdf-&gt;Text(40, 50, "Product Name: {$prodName}");
+        $pdf-&gt;Text(40, 60, "Unit Price: {$unitPrice}");
+        $pdf-&gt;Text(40, 70, "Today: {$tsString}");
+        $pdf-&gt;Image("../Sample_products/images/{$pFile}", 40, 80, 100);
+
+        header("Content-Type: application/pdf");
+        header("Content-Disposition: attachment; filename=\"{$fileName}\"");
+        header('X-Frame-Options: SAMEORIGIN');
+        $pdf-&gt;Output();
+    }
+}</code></pre></div>
+
+<h3><span id="H3-ANC-42"><span style="display:none">→</span></span><span xmlns="" id="ix-299"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Web APIを作成する</h3>
+<p>　サンプルプログラムには、Web APIとして稼働するものがあります。実際にサンプルを稼働させてみましょう。なお、このサンプルは、Ver.5.4-devで追加されているので、サンプルがないようなら、VM内のINTER-Mediatorを『1-2　演習を行うための準備』の『演習環境内のINTER-Mediatorのアップデート』で説明した方法でアップデートしてください。</p>
+<p>　VMを利用している場合には、ブラウザーで「http://192.168.56.101」に接続し、そこにある「サンプルプログラム」のリンクをクリックして、サンプルプログラムの一覧を表示します。そして、「API」の行の「show」をクリックすると、図8-4-5のようなフォームが見えます。このサンプルは、データベースに用意されたproductテーブルへidフィールド値を指定して検索を行い、その結果を上のテキストエリアに表示します。下のテキストエリアは、デバッグ情報を表示します。idは初期値では1〜5が用意されていますが、それ以外の値を指定するエラーメッセージが返されます。Web APIのデータベースアクセス部分はINTER-Mediatorで作成したものですが、HTMLページの方はごく簡単なWeb APIのデモ実行環境です。</p>
+
+<div class="picture"><img class="picture-small" src="figs/shot3218.png"/><div class="caption">図8-4-5　Web APIのサンプルの実行結果</div></div>
+
+<p>　実際にどのようにページが構築されているかを確認しましょう。まず、ページのHTMLファイルは「<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_API/api-test.html">api-test.html</a>」です。このファイルのヘッダー部分にはSCRIPTタグによって定義ファイルへのアクセスを行う記述はありません。つまり、単独で稼働しているHTMLファイルです。id属性値が設定されたテキスト入力要素は、検索条件に含めるidフィールドの値を設定するテキストフィールド（id属性値は「product_id」）と、結果を表示するテキストエリア（id属性値は「result」）、デバッグ情報を表示するテキストエリア（id属性値は「log」）です。ボタンを押して呼び出されるプログラムは、リスト8-4-8に示しました。一部、重要でない部分は省略しています。</p>
+
+<div class="code"><div class="caption">リスト8-4-8　HTMLファイルにあるAPIを呼び出すプログラム</div><pre><code>function callAPI() {
+    var myRequest, jsonObject;
+    document.getElementById("result").value = "";
+    document.getElementById("log").value = "";
+    var id = document.getElementById("product_id").value;
+    try {
+        myRequest = new XMLHttpRequest();
+        myRequest.open("GET", "api.php?id=" + id, true);
+        myRequest.onreadystatechange = function () {
+            switch (myRequest.readyState) {
+				:
+                case 4:
+                    try {
+                        jsonObject = JSON.parse(myRequest.responseText);
+                    } catch (e) {
+                        jsonObject = null
+                    }
+                    if (jsonObject.data) {
+                        document.getElementById("result").value = JSON.stringify(jsonObject.data);
+                        document.getElementById("log").value = JSON.stringify(jsonObject.log);
+                    } else {
+                        document.getElementById("log").value = myRequest.responseText;
+                    }
+                    break;
+            }
+        };
+        myRequest.send();
+    } catch (e) {
+        document.getElementById("result").value = "Exception in commnication."
+    }
+}</code></pre></div>
+
+<p>　最初に2つのテキストエリアのクリア、そして検索条件をid変数に設定し、tryで囲まれた部分に入ります。ここは、通常のAJAX通信を行っていますが、通信先は、同じフォルダーにあるapi.phpというファイルで、URLのパラメーターにidという名前のキーで、idフィールドの値を指定しています。例えば、idフィールドの値が3であれば、「api.php?id=3」というURLが得られて通信を行うことになります。通信後、onreadystatechangeプロパティに設定した関数が呼び出され、通信が成功すればreadyStateプロパティの値が4になります。その場合、通信結果のJSONデータをパースしたのち、dataプロパティ、logプロパティをそれぞれテキストエリアに表示させています。api-test.htmlのプログラムはこのように簡単なAJAX通信を行うものです。</p>
+<p>　Sample_APIフォルダーにあるもうひとつのファイル「<a href="https://github.com/INTER-Mediator/INTER-Mediator/blob/master/Samples/Sample_API/api.php">api.php</a>」が、Web APIの本体で、このひとつのファイルで構成しています。ファイルのコメント以外をリスト8-4-9に示します。</p>
+
+<div class="code"><div class="caption">リスト8-4-9　Web APIのサンプル</div><pre><code>require_once(dirname(__FILE__) . '/../../INTER-Mediator.php');
+spl_autoload_register('loadClass');
+$pid = mb_eregi_replace("/[^0-9]/", "", $_GET["id"]);
+if ($pid &lt; 1) {
+    echo json_encode(array("ERROR" =&gt; "Invalid Product Number."));
+    exit();
+}
+$contextDef = array(
+    array(
+        'records' =&gt; 10,
+        'name' =&gt; 'product',
+        'key' =&gt; 'id',
+        'query' =&gt; array(array('field' =&gt; 'name', 'value' =&gt; '%', 'operator' =&gt; 'LIKE')),
+        'sort' =&gt; array(array('field' =&gt; 'name', 'direction' =&gt; 'ASC'),),
+    ),
+);
+$dbInstance = new DB_Proxy();
+$dbInstance-&gt;ignoringPost();
+$dbInstance-&gt;initialize($contextDef, array(), array("db-class" =&gt; "PDO"), 2, "product");
+$dbInstance-&gt;dbSettings-&gt;addExtraCriteria("id", "=", $pid);
+$dbInstance-&gt;processingRequest("read");
+$pInfo = $dbInstance-&gt;getDatabaseResult();
+$logInfo = $dbInstance-&gt;logger-&gt;getMessagesForJS();
+echo json_encode(array("data"=&gt;$pInfo,"log"=&gt;$logInfo));</code></pre></div>
+
+<p>　最初にINTER-Mediator本体を読み込むのは定義ファイルと同じですが、続いて、spl_autoload_register関数で、INTER-Mediator内に存在するloadClass関数を、クラスロードの時に利用する関数として定義をします。この記述は場合によっては不要ですが、一部のクラスのロードでは必須なので、記述を加えておいてください。</p>
+<p>　続く$pid変数への代入部分と引き続くif文は、URLのパラメーターからidキーに対応する値を取り出し、数値として正しくない（0以下の数値や空白）の場合にはエラーを返して終了するというものです。大雑把ではありますが、最低限のエラー処理として組み込みました。</p>
+<p>　そして$contextDef変数がありますが、ここは、見てお分かりのように定義ファイルのPHPによる記述を行った結果です。「product」という名前のコンテキスト定義があり、主キーフィールドは「id」、レコード数の最大は「10」（ただし実際には1レコード以上は取り出されない）、検索条件は「name LIKE '%'」ということでnameフィールドに何かあるもの（これも実質意味はありません）、並べ替えはnameフィールド（これも1レコードなので意味はありません）といった定義です。しかしながら、実質的には、主キーがidのproductテーブルを利用できるproductコンテキストが定義されていますが、それだけだとコンテキストらしくないので、sort、query、recordsも影響がないように記述しておきました。</p>
+<p>　その後、DB_Proxyクラスを生成して、コンテキスト定義を引数に与えてinitializeメソッドを実行しています。initializeメソッドの前に、ignoringPostメソッドを呼び出していて、クライアントから送られた情報を無視するようにしています。定義ファイルのオプション設定やデータベース設定は、引数に直接記述しましたが、もちろん、それが多くの項目があるなら、変数で指定してもいいでしょう。4つ目の引数が「2」なので、デバッグメッセージの記録も行います。最後の"product"は、productコンテキストを利用することを記述したものです。そして、addExtraCriteriaメソッドを利用して、追加の検索条件を指定します。つまり、idフィールドがURLのパラメーターで与えた値であるといった検索条件をこれで記述できます。そして、processingRequestメソッドで引数に"read"を与えることで、データベースからの読み出し、つまりクエリーを実行します。</p>
+<p>　クエリー結果は、getDatabaseResultメソッドで取り出します。1レコードがフィールド名と値のセットになった連想配列が、レコードの数だけ存在する配列が結果として得られます。また、getMessagesForJSメソッドで、デバッグメッセージを取り出しています。それらをさらに連想配列にまとめた上で、json_encodeメソッドでJSON文字列を得てechoで返しています。</p>
+
+<h3><span id="H3-ANC-43"><span style="display:none">→</span></span>サーバー側でのデータベース利用</h3>
+<p>　前の例では、WebAPIを任意の仕様で作成する方法を説明しましたが、その中で、データベース処理のうち、データの読み出しを行う方法を説明しました。データベースの更新処理を行う方法についても、サンプルプログラムを紹介しておきます。リスト8-4-10は、テーブルに<span xmlns="" id="ix-300"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-301"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>新しいレコードを作成する方法を示しています。</p>
+
+<div class="code"><div class="caption">リスト8-4-10　データベースにレコードを作成するプログラム</div><pre><code>require_once(dirname(__FILE__) . '/../../INTER-Mediator.php');
+
+$dbInstance = new DB_Proxy();
+$dbInstance-&gt;ignoringPost();
+$dbInstance-&gt;initialize(
+    array(array('name' =&gt; 'table', 'key' =&gt; 'id',),), 
+    array(), array("db-class" =&gt; "PDO"), 2, "table");
+$dbInstance-&gt;dbSettings-&gt;addValueWithField("fieldA", $aValue);
+$dbInstance-&gt;dbSettings-&gt;addValueWithField("fieldB", $bValue);
+$dbInstance-&gt;processingRequest("create");
+$pInfo = $dbInstance-&gt;getDatabaseResult();
+$logInfo = $dbInstance-&gt;logger-&gt;getMessagesForJS();
+echo json_encode(array("data"=&gt;$pInfo,"log"=&gt;$logInfo));</code></pre></div>
+
+<p>　データベースからの読み出しと同様、DB_Proxyクラスを生成して、ignoringPost、initializeメソッドで初期化します。initializeメソッドでコンテキスト定義と、使用するコンテキストを指定します。その後、addValueWithFieldメソッドを利用して、フィールドの初期値を設定することができます。2つの引数はそれぞれ、フィールド名とその値を示しています。そして、引数を"create"として、processingRequestメソッドを呼び出します。レコードの作成時の場合は、getDatabaseResultメソッドで、新たに作成したレコードを取得することができるので、その値に応じた処理を引き続き記述することができます。</p>
+
+<p>　続いて、<span xmlns="" id="ix-302"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-303"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>レコードの更新を行うデータベース処理を行う方法を示します。リスト8-4-11に作成例を示しましたが、これまでの読み出しや新規レコードと基本的には同じです。更新を行う前にレコードの検索が必要で、そのためにはaddExtraCriteriaメソッドを利用して、条件を付与します。この時、コンテキストのqueryキーで指定した検索条件も適用されます。更新するフィールドと値は、addValueWithFieldメソッドを利用して指定をします。そして、引数として、"update"を与えて、processingRequestメソッドを呼び出します。getDatabaseResultで、更新したレコードの内容を取り出すこともできます。</p>
+
+<div class="code"><div class="caption">リスト8-4-11　データベースのレコードを更新するプログラム</div><pre><code>require_once(dirname(__FILE__) . '/../../INTER-Mediator.php');
+
+$dbInstance = new DB_Proxy();
+$dbInstance-&gt;ignoringPost();
+$dbInstance-&gt;initialize(
+    array(array('name' =&gt; 'table', 'key' =&gt; 'id',),), 
+    array(), array("db-class" =&gt; "PDO"), 2, "table");
+$dbInstance-&gt;dbSettings-&gt;addExtraCriteria("id", '=', $targetId);
+$dbInstance-&gt;dbSettings-&gt;addValueWithField("fieldA", $aValue);
+$dbInstance-&gt;dbSettings-&gt;addValueWithField("fieldB", $bValue);
+$dbInstance-&gt;processingRequest("update");
+$pInfo = $dbInstance-&gt;getDatabaseResult();
+$logInfo = $dbInstance-&gt;logger-&gt;getMessagesForJS();
+echo json_encode(array("data"=&gt;$pInfo,"log"=&gt;$logInfo));</code></pre></div>
+
+<p>　以上のように、INTER-Mediatorのデータベース処理部分を、PHPのプログラムで利用できます。他のフレームワークに比べると、処理の流れとしては特殊であり、細かな設定ができないのは確かです。しかしながら、主要な部分をINTER-Mediatorで作ると、さまざまなコンテキストを定義するでしょう。そのコンテキストを再利用しつつ、Web API等を付加的に利用できるものとして、この機能を位置付け、システム設計での検討に加えてください。この例ではクエリーだけですが、もちろん、更新や新規レコードなどのWeb APIもprocessingRequestの引数に「update」や「create」を与えたり、また、さまざまなパラメーターをメソッドで与えることで可能です。この例のプログラムはクエリーしかできませんし、PHPファイルはサーバーにあるものなので、createやupdateのリクエストに置き換えることは無理です。もちろん、読み出しは誰でもできます。通常のコンテキストは、書き込み不可にするなどの対処が必要になりますが、内部で使用するだけのコンテキストではそうした対処は不要です。</p>
+<p>　なお、DB_Proxyを生成してデータベースアクセスする方法は、アドバイス定義クラスのメソッドでも可能です。複数のコンテキストに対して処理をしたい場合は、主要なデータベース以外のデータベースアクセスを、この方法で実装することが可能です。そうした場面で、複雑なビジネスロジックを組むときには、アドバイス定義クラスでの追加のデータベース処理が必要になるでしょう。もちろん、MySQLのデータベースをPDOを使って直接処理をしても構いませんが、INTER-Mediatorでのデータベース処理ができることも知っておくと手軽にデータベース処理を組み込めるかもしれません。</p>
+
+<h3><span id="H3-ANC-44"><span style="display:none">→</span></span>FileMaker Serverで動的にグローバルフィールドを指定する</h3>
+<p>　FileMakerの特徴として「グローバールフィールド」があります。グローバルフィールドは、どのレコードでもフィールドの値が一定という意味で「グローバル」です。データの実態はデータベースには保存されず、例えばFileMaker Proでログインした場合、そのFileMaker Proで開いた状態、すなわちFileMakerのセッションに対してデータが記録されます。そのため、グローバルフィールドの値は、共有はされません。</p>
+<p>　このグローバルフィールドの値を利用して検索条件を与えるようなことがよく行われてきました。例えば、会計システムの場合、複数年度に渡る会計データがデータベースに記録されています。一方、実際に集計したいのは2016年度だけといったことが普通です。この時、年度の指定を、グローバルフィールドで記録すれば、それを基にした検索条件を組み立てたり、あるいは年度を変更するユーザーインターフェースを構築できたりと便利な場合があります。もちろん、グローバルフィールドを使うのがこうした「全体に渡る検索条件」を実現する唯一の実装方法ではありませんが、FileMakerで古くからある方法であり、ユーザーインターフェースを構築するためにはフィールドとしての定義がどうしても必要であることなどから、利用されることは少なくないでしょう。</p>
+<p>　グローバルフィールドは、テーブルに定義されるので、通常のフィールドと同じに扱えそうに思われるかもしれませんが、FileMaker ServerのXML共有の仕様では、グローバルフィールドへの値の設定方法と、それ以外のフィールドへの値の設定方法が異なっていることに注意しなければなりません。そのために、コンテキスト定義にglobalキーを用意して、グローバル値の設定ができるようにしてあります。なお、読み出しは通常のフィールドと同様ですが、何もしなければ、グローバルフィールドは空白のままです。XML共有のアクセスは大まかに言って、FileMaker Proで開いて閉じる作業を毎回アクセスのたびに行っているのと同じです。グローバルフィールドに何か値が入った状態で読み出しをしたい場合は、globalキーを使うか、あるいはグローバルフィールドに値を入れるスクリプトを動かすなどの手立てが必要です。通常はグローバルフィールドに値を設定するニーズがほとんどだと思われます。</p>
+<p>　コンテキスト定義のglobalキーに値を与えることはできるとはいえ、それをクライアント側で動的に値を変更させるためのJavaScriptの変数等は用意されていません。その場合、クライアント側では、INTERMediator.addConditionメソッドを利用して、まずは普通に検索条件の追加を行います。リスト8-4-12はその例です。なお、INTER-Mediatorに付属するFileMakerのデータベースでは、グローバルフィールドの定義はなされていないので、以下は実際に稼働できるものではなく、作成例としてご覧ください。</p>
+
+<div class="code"><div class="caption">リスト8-4-12　コンテキストに動的に検索条件を与えて再合成する</div><pre><code>var y = document.getElementById("annual");
+INTERMediator.addCondition(
+    "product",
+    {field: "gYear", operator: "=", value: y}
+);
+var targetContext = IMLibContextPool.contextFromName("product");
+INTERMediator.constructMain(targetContext);</code></pre></div>
+
+<p>　この例を見ると分かるとおり、productコンテキストが参照するFileMakerデータベースのテーブル内にgYearというグローバルフィールドが必要です。そして、extending-classクラスにリスト8-4-13に示したクラスの名前の「FMGlobalSeparate」を指定したとします。すると、gYearフィールドに対する検索条件は、データベースアクセス時には利用されず、グローバルフィールドの設定のためのパラメーターに置き換えられます。FMGlobalSeparateクラスはほぼ汎用的に作られており、最初の$fieldName変数に代入されている配列の要素に入れたフィールドは、検索条件からグローバルに移動するように作成してあります。</p>
+
+<div class="code"><div class="caption">リスト8-4-13　FMGlobalSeparateクラス</div><pre><code>class FMGlobalSeparate implements Extending_Interface_BeforeRead
+{
+    public function doBeforeReadFromDB()
+    {
+        $fieldName = array("gYear");
+        $dataSourceName = $this-&gt;dbSettings-&gt;getDataSourceName();
+        $criteria = $this-&gt;dbSettings-&gt;getExtraCriteria();
+        $counter = 0;
+        foreach ($criteria as $item) {
+            if (array_search($item["field"], $fieldName) !== FALSE) {
+               $this-&gt;dbSettings-&gt;setGlobalInContext(
+                    $dataSourceName, "read", $item["field"], $item["value"]);
+               $this-&gt;dbSettings-&gt;unsetExtraCriteria($counter);
+            }
+            $counter += 1;
+        }
+    }
+}</code></pre></div>
+
+<p>　まず、全体的に、アドバイス定義クラスなので、$this-&gt;dbSettingsというプロパティは、現在のデータベース処理のDatabase_DBSettingクラスのインスタンスを参照しています。getDataSourceNameは選択されているコンテキスト名が得られますが、ここでは「product」という名前が得られるはずです。引数なしでgetExtraCriteriaメソッドを呼び出すと、クライアントで動的に指定した検索条件をすべて配列で取り出すことができます。その配列ひとつひとつについてフィールド名を調べ、変数$fieldNameにあるものであれば、そのフィールド名と値をsetGlobalInContextメソッドにより、グローバル変数の設定に追加します。そして、unsetExtraCriteriaメソッドにより、追加の検索条件の配列から削除しておきます。なお、unsetExtraCriteriaメソッドは、配列の要素をunsetするものですので、例えば、要素のインデックスが0、1、2…とある時に、1のインデックスの要素をunsetで削除すると、0、2、3…のように、その他の要素のインデックスは保持された状態になります。INTER-Mediatorはインデックスの数値自体を使わないので、unsetでの削除で問題ありません。</p>
+
+<h3><span id="H3-ANC-45"><span style="display:none">→</span></span>このセクションのまとめ</h3>
+<p>　このセクションでは、サンプルに含まれている内容をもとにして、サーバーサイドの拡張の手法をそれぞれ解説しました。INTER-Mediatorの基本的な考え方は、サーバー側でプログラムを作るのではなく、コンテキスト定義とページファイルをもとにして、PHPやJavaScriptのプログラムを作成しなくても、データベース連動のWebアプリケーションの骨格が作成できるようにするという点です。しかしながら、それだけでは利用範囲は限られます。より完成度の高いアプリケーション開発を支援するためのプログラミングインターフェースの用意です。データベース処理の前後や、あるいはURLで指定したクラスを経由したもの、さらにはWebAPIといった仕組みがそのための手法として用意されています。他のフレームワークとこうした拡張の仕方が大きく異なりますが、定義ファイルでできることやJavaScriptでやった方が良いことをPHPで実装するのはかえって手間取るかもしれません。フレームワークの機能とうまく折り合いをつけて設計を進めてください。</p>
+
+<!-- ============ SECTION START ============ -->
+<h2><span id="H2-ANC-5"><span style="display:none">→</span></span><span class="sectionnumber">8-5</span>メールを利用したユーザー登録とパスワードのリセット</h2>
+<p class="section-lead">INTER-Mediatorのレポジトリの中には、ユーザー登録をメール確認後に行う機能を作るためのファイルや、パスワードのリセットをメール経由で行うためのファイルが含まれています。これらは、全くそのまま使えるものではないかもしれませんが、主要な機能は組み込まれているので、ページのデザインを合わせれば即座に使えるものです。これらの機能の動作やカスタマイズのポイントを説明しましょう。</p>
+
+<h3><span id="H3-ANC-46"><span style="display:none">→</span></span>メールを利用した<span xmlns="" id="ix-304"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-305"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ユーザー登録</h3>
+<p>　INTER-Mediatorのレポジトリにある「<span xmlns="" id="ix-306"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Auth_Support/<span xmlns="" id="ix-307"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Auth_Support/User_Enrollment」フォルダーには、ユーザー登録を自動的に行う仕組みのための素材が入っています。管理者が1人ずつauthuserテーブルにレコードを作ればユーザーを増やすことができますが、オンラインサービスなどいつどこからアカウントの申し込みがあるか分からない場合には、リクエストごとにユーザーを追加するのは多大な手間を必要とします。そこで、オンラインから自動的に申し込みたいのですが、そうなると勝手に人のメールアドレスで登録をしてしまうことのトラブルが懸念されます。そこで、メールアドレスとともに申し込みを行い、そのメールアドレス宛に本当に登録をしていいのかどうかを問い合わせ、メールを受信できた人が手作業で登録許可を行うという仕組みが一般的に利用されます。その仕組みの必要最小限の機能をコードで提供しますので、ご自分のニーズに合わせてデザインを行い、必要に応じて改変をしてください。ただし、改変にはPHPによるWebアプリケーションの開発に関する知識は必要です。</p>
+<p>　なお、メールアドレスでの確認プロセスを行うサイトでは、ユーザー名をメールアドレスにすることが一般的と思われます。ここで紹介するプログラムも基本的にはユーザー名はメールアドレスにすることを前提にしています。そのためには、例えばparams.phpファイルに「$emailAsAliasOfUserName = true;」という行を指定します。しかしながら、改造をすればユーザー名もユーザー自身で指定できるようにできます。ただしそれはかなり大幅な改造になります。</p>
+<p>　ユーザーの登録を「申し込み」と「確認」の2段階で行います。表8-5-1には、INTER-Mediatorに含まれるファイルのファイル名と主な用途をまとめました。</p>
+
+<div class="table"><table><tr><th>段階</th><th>ファイル名</th><th>用途</th></tr><tr><td rowspan="5">申し込み</td><td>enroll.html</td><td>申し込みのページの基本HTML。JavaScriptのプログラムを含む</td></tr><tr><td>EnrollStart.php</td><td>ユーザーレコードを追加後に行う処理</td></tr><tr><td>enrollmail.txt</td><td>申し込みをした後に送られるメールの本文。ここに確認に必要な情報が含まれる</td></tr><tr><td>context.php</td><td>enroll.htmlで利用する定義ファイル</td></tr><tr><td>accountcheck.php</td><td>enroll.htmlで利用する指定したメールアドレスがすでに登録されているかを得るスクリプト</td></tr><tr><td rowspan="2">確認</td><td>confirm.php</td><td>確認の段階で呼び出される。処理は呼び出したときに実行されるが、処理結果はHTMLで表示</td></tr><tr><td>confirmmail.txt</td><td>確認をした後に送られるメールの本文。ここにログインに必要な情報が含まれる</td></tr></table><div class="caption">表8-5-1　User_Enrollmentフォルダーにあるファイル</div></div>
+
+<p>　これらのファイルに記述された処理のポイントを説明し、読者の皆さんが改造して自身のアプリケーションに組み込むことができるようになることをここでの解説の目標とします。</p>
+
+<h3><span id="H3-ANC-47"><span style="display:none">→</span></span>名前とメールアドレスを入力するページ</h3>
+<p>　まず、accountcheck.phpは、指定したメールアドレスのレコードがすでに存在するかどうかを確認するためのものです。URLに「m=メールアドレス」で指定して呼び出すと、そのメールアドレスのレコードがauthuserテーブルにいくつあるかを返します。単独のファイルで、INTER-Mediatorのデータベースからの読み出しを行ってレコード数を数えて、クライアントにその数値のみを返します。</p>
+<p>　enroll.htmlは、ポストオンリーモードで稼動するINTER-Mediatorのページファイルで、定義ファイルとしてcontext.phpを利用しています。authuserテーブルのrealnameとemailフィールドに入力するデータを受け付ける2つのテキストフィールドが用意されています。INTERMediatorOnPage変数のオブジェクトに定義するprocessingBeforePostOnlyContextメソッドを定義して、新規レコード作成のための通信を行う前に、メールアドレスがすでに登録されているものかどうかをaccountcheck.phpを同期通信で利用してレコード数を求め、すでに存在していればアラートボックスを表示して、新規レコードは作りません。</p>
+<p>　context.phpにはuser-enrollというコンテキストがひとつ定義されています。authenticationキーの指定により、新規レコードの処理しかできなくしてあります。また、validationキーにより、名前の入力やメールアドレスの形式判定を行っています。メールアドレスの形式判定の正規表現は、非常に大雑把なものですので、厳密な検査が必要な場合には、正規表現を変更してください。さらにsend-mailキーにより、新規レコードを作った時に、enrollmail.txtファイルの内容を本文のテンプレートとして、作成したテーブルのemail, realname, hashの3つのフィールドの値をテンプレートに埋め込んで、テキストフィールドに指定したメールアドレスにメールが送信されます。enrollmail.txtファイルはもちろん、送信者等はご自分で利用可能なメールアドレスに変更してください。enrollmail.txtファイルでは、confirm.phpを呼び出す正しいURLを記述します。</p>
+
+<h3><span id="H3-ANC-48"><span style="display:none">→</span></span>ユーザーレコードの作成前後に行う処理</h3>
+<p>　コンテキストでは、extending-classキーで「EnrollStart」が指定されています。これにより、EnrollStart.phpファイルに記述された同名のクラスの処理が加わります。このクラスでは、新規レコードを作成する前に呼び出されるdoBeforeCreateToDBメソッドおよび作成後に呼び出されるdoAfterCreateToDBメソッドの2つのメソッドが定義されています。まず、doBeforeCreateToDBメソッドでは、authuserテーブルのハッシュ化したパスワードを保存するhashedpasswordフィールドの値として、無効な値であることが分かるように「dummydummydummy」を設定します。そして、usernameフィールドの値として、現在の日時とメールアドレスをつなげたものを指定しています。ここでは、usernameフィールドはユーザー側には見せないでシステム内部で使うためのものとして位置付けています。そのため、確実に重複のないユーザー名になるように文字列を作っています。もっとも、存在しないメールアドレスを利用しているのでシステム内のユニークIDとしてメールアドレスだけを使ったとしても、理論上は問題ありません。しかし、手作業でユーザーのレコードを作ることと併用したときに確実に区別できるように、意図的に日時とメールアドレスを組み合わせています。</p>
+<p>　doAfterCreateToDBメソッドでは、updatedRecordメソッドにより、新規に作成されたレコードを取得しています。そして、userEnrollmentStartメソッドで、ランダムな文字列を作成し返り値として得ます。そのランダムな文字列は、issuedhashテーブルに保存されます。clientidフィールドをNULLにして、ユーザー登録時のランダム文字列であることが分かるようにしています。そして、setUpdatedRecordメソッドで、新規作成したレコードの中にhashフィールドを新たに付け加えて、ランダム文字列を値に指定しています。これで、送信するメールのテンプレートの3つ目のフィールドがレコードに加わり、ランダム文字列をメールに含めて送信できるのです。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-308"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>userEnrollmentStart($userID)</h4>
+<p class="exp">引数に指定したユーザーID（idフィールドの値）のユーザーを、userEnrollmentStartメソッドで有効化するためのコードを生成して返す。ユーザー作成時にコードを生成してメールとしてユーザーに送り、そのメールを受け取ったユーザーがコードを利用してアカウントをアクティベートする仕組みを提供する。</p>
+
+<h3><span id="H3-ANC-49"><span style="display:none">→</span></span>レコード作成の確認とパスワードの設定</h3>
+<p>　ユーザーレコードを作った後のメールに記載されたURLにより、confirm.phpが「c=ランダム文字列」のパラメーターを伴って呼び出されます。confirm.phpは、単独で稼働するファイルです。DB_Proxyクラスを生成してデータベース処理を2回行っています。まず、アルファベットと数字を使って6文字の初期パスワードを作成します。最初のDB_Proxyの生成ではコンテキストとは関係なく、userEnrollmentActivateUserメソッドを利用して、ランダム文字列を作成したユーザーのhashedpasswordフィールドに値を設定します。その処理に成功すると、2回目のDB_Proxyの生成を行い、その前に変数で定義したコンテキストに対するクエリーを行います。ここでは、作成したauthuserテーブルのレコードを検索して、その結果をもとにメールを送信することを行っています。メールのテンプレートはconfirmmail.txtです。このテンプレートによって出されるメールで、ユーザー名（メールアドレス）に対するパスワードが確定して通知されます。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-309"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>userEnrollmentStart(userEnrollmentActivateUser($challenge, $password, $rawPWField = false))</h4>
+<p class="exp">引数$challengeにはuserEnrollmentStartメソッドの返り値、$passwordには新たに設定するパスワードを指定して、ユーザーをアクティベートする。その結果、ユーザーには引数に指定したパスワードのハッシュが設定され、事前に決められたユーザー名とこのパスワードでログインができるようになる。もし、パスワードそのものをどこかのフィールドに残したい場合は3つ目の引数に、生のパスワードを残すフィールド名を指定する。</p>
+
+<h3><span id="H3-ANC-50"><span style="display:none">→</span></span>メールを利用した<span xmlns="" id="ix-310"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-311"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>パスワードリセット</h3>
+<p>　authuserテーブルのemailフィールドに、ユーザーごとに一意なメールアドレスが設定されている場合、そのメールアドレスを利用してパスワードのリセットを行うのが、INTER-Mediatorのディストリビューションにある「<span xmlns="" id="ix-312"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Auth_Support/<span xmlns="" id="ix-313"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>PasswordReset」フォルダーにある一連のファイルです。</p>
+<p>　パスワードのリセットの処理は2段階で行います。最初の「変更要求」の段階では、フォーム上でメールアドレスを入力すると、そのメールアドレスに、ランダムな文字列を伴ったURLが送られます。その文字列はシステム側で、メールアドレスに対応したユーザーを特定することができます。メールのURLにアクセスすると、2段階目の「変更処理」に移行し、メールアドレスに対応するユーザーのパスワードを入力してリセットできるページが開きます。メールアドレスに届くメールが特定のユーザーにしか参照できない状況が保持されていれば、他人にパスワードのリセットは行えない仕組みです。しかしながら、メール自体は暗号化されていないこともあり、絶対安全とは言えない方法です。Webアプリケーション自体の通信がTLSで暗号化されているのであれば、2段階の処理をなるべく早く行い、リセットを行った後、ログインパネルからパスワードを変更するのが安全な方法であると言えます。ログインパネル上での通信はTLSで暗号化されていて盗聴の危険性はないからです。</p>
+<p>　それぞれのファイルについては表8-5-2に概要を示します。</p>
+
+<div class="table"><table><tr><th>段階</th><th>ファイル名</th><th>用途</th></tr><tr><td rowspan="2">変更要求</td><td>requestpwreset.php</td><td>メールアドレスを指定して、変更処理が可能なURLをメールで知らせる</td></tr><tr><td>requestmail.txt</td><td>変更処理可能なURLを通知するメールのテンプレート</td></tr><tr><td rowspan="3">変更処理</td><td>resetpassword.php</td><td>パスワードの変更処理を行うフォーム形式のページ</td></tr><tr><td>resetcontext.php</td><td>resetpassword.phpから利用する定義ファイル</td></tr><tr><td>resetmail.txt</td><td>パスワード変更を通知するメールのテンプレート</td></tr></table><div class="caption">表8-5-2　Auth_Support/PasswordResetフォルダーにあるファイル</div></div>
+
+<h3><span id="H3-ANC-51"><span style="display:none">→</span></span>パスワードの変更要求処理</h3>
+<p>　パスワードの変更要求を行うrequestpwreset.phpには、メールアドレスを入力するテキストフィールドが2つあります。この部分は、INTER-Mediatorを使わない普通のフォーム形式になっています。Submitボタンをクリックすると、同じくrequestpwreset.phpを呼び出し、ファイルの前半に記述した処理を実行します。この部分のポイントは、DB_ProxyクラスのresetPasswordSequenceStartメソッドを呼び出しているところです。引数にはフォームで指定したメールアドレスを引数に指定します。そのメールアドレスを持つauthuserテーブルのレコードを特定し、issuedhashmテーブルにランダムな文字列をユーザーレコードのキーフィールドの値とともにレコードを作成して記述します。返り値はfalseなら処理が失敗、処理が成功すると連想配列が帰りますが、キーがranddataなら生成したランダム文字列、usernameならばauthuserテーブルのusernameフィールドを取り出すことができます。</p>
+<p>　その後に、requestmail.txtをテンプレートとしてパスワードの変更要求があったことを、メールで知らせます。requestmail.txtでは、次の段階であるresetpassword.phpを呼び出すURLを正しく記述します。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-314"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>resetPasswordSequenceStart($email)</h4>
+<p class="exp">引数に指定したメールアドレスemailフィールドに持つレコードのユーザーのパスワードをリセットするために呼び出す。返り値は連想配列で、'randdata'キーはランダムな値、'username'キーはユーザー名を得られる。ランダム値をresetPasswordSequenceReturnBackメソッドで与えてパスワードのリセットの可否を決める。</p>
+
+<h3><span id="H3-ANC-52"><span style="display:none">→</span></span>パスワードのリセット処理</h3>
+<p>　resetpassword.phpは、定義ファイルをresetcontext.phpとするページファイルのようにも見えますが、このresetpassword.phpも一般的なフォームを利用したページです。定義ファイルを指定しているのは、パスワードのハッシュを生成するための関数を使うためだけです。</p>
+<p>　フォームには、メールアドレスと、パスワードを2つ入力する場所があります。メールアドレスは、パスワード要求時にクッキーに記憶させているので、その情報で自動入力可能ですが、もちろん、要求を出したときに使っていたブラウザーを開いたままパスワードリセットの処理に入る必要があります。フォームへの入力が正しく行われているかどうかなどは、一般的なPHPによるフォームのアプリケーションの作成方法です。</p>
+<p>　パスワードなどが入力されると、DB_ProxyクラスのresetPasswordSequenceReturnBackメソッドが呼び出されます。このメソッドは、メールアドレス、要求時に生成したランダムな文字列、そしてパスワードをハッシュ化した文字列を引数として持ちます。issuedhashテーブルを検索するなどして、ランダムな文字列がそのメールアドレスに対して発行されたものが確認されると、hashedpasswordフィールドの値を設定してパスワードのリセットが完了します。その結果trueが戻されます。</p>
+<p>　trueが戻されると、念のために、パスワードが変更されたことを指定したメールアドレス宛にメールを送ります。もちろん、自分が行っていないようなパスワードリセットが何かの問題（未知の問題）で発生したときの手がかりになります。</p>
+
+<h4><span class="object">DB_Proxy</span>-&gt;<span xmlns="" id="ix-315"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>resetPasswordSequenceReturnBack($username, $email, $randdata, $newpassword)</h4>
+<p class="exp">引数には順番にユーザー名、メールアドレス、resetPasswordSequenceStartで得られるランダムなコード、そして設定する新しいパスワードを指定する。設定に成功すればtrueが返され、失敗するとfalseが返される。</p>
+
+<h3><span id="H3-ANC-53"><span style="display:none">→</span></span>このセクションのまとめ</h3>
+<p>　オンラインでメールを利用して承認を進める形式のユーザー登録、そしてメールアドレス宛にパスワード変更可能なURLを送付することでのパスワードリセット、これらの機能を持つ最小限のアプリケーションをINTER-Mediatorに含めています。オンラインサービスを構築するための素材として利用できます。このセクションではその動作の説明と、改良する場合のポイントをまとめてあります。</p>
+
+
+
+
+
+
+<!-- ============ SECTION START ============ -->
+<h2><span id="H2-ANC-6"><span style="display:none">→</span></span><span class="sectionnumber">8-6</span>ブラウザーを判断するページ</h2>
+<p class="section-lead"><span xmlns="" id="ix-316"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-317"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ブラウザーの判定を行い、サポートするブラウザーとしないブラウザーの表示を切り替える方法を紹介します。設定や関数は単純なのですが、サポートしない理由はたくさんあり、それぞれの理由に対してどこまでの対処ができるのかを検討します。</p>
+
+<h3><span id="H3-ANC-54"><span style="display:none">→</span></span>ブラウザー制限のための戦略</h3>
+<p>　INTER-Mediatorでブラウザーの制限をする理由は、JavaScriptの対応がブラウザーによってまちまちであることが理由です。INTER-Mediatorのフレームワクーク自体は、HTML5に対応したブラウザーを使用することを前提にしているので、当然ながら、「対応しないブラウザー」が存在します。このように、フレームワークが動作対象としていないブラウザーの排除のために仕組みがまずは必要です。さらに、アプリケーションによっては、サポートあるいはポリシーの関係で、特定のブラウザーだけに限定したい場合もあるかもしれません。その場合、さらなる制約をかけたいと考えるでしょう。INTER-Mediatorでは、ブラウザーとそのバージョンに対しての制約を設定することができます。</p>
+<p>　まず、「ブラウザーでJavaScriptが稼働する」という常識は通用しません。利用者が、JavaScriptの実行ができないように、ブラウザーを設定している可能性があります。その場合、当然ながら、手も足も出ませんので、なんらかのメッセージを出したいところです。同様な状況として、DOMモデルでの動作が不可能なJavaScriptのサポートしかないような極めて古いブラウザーを使っている場合があります。ただし、極端に古いブラウザーを使っているのは、もはや例外中の例外くらい少ないと言えるでしょう。あとの演習で実例を出しますが、これらの場合の対策を実現するために、HTMLページの内容は、JavaScriptが稼働していない、あるいは稼働しようとしても動かないくらい古いブラウザーに対するメッセージだけを表示して、実際のページのコンテンツは初期状態では非表示にしておきます。そして、JavaScriptが切りあるいはDOM非対応なら、そのまま何もしないようにします。そのための判定をJavaScriptで行いますが、そのプログラム自体が実行されなくても、HTMLページの初期状態がそのまま見えるだけです。つまり、JavaScriptが動かない場合には、そのためのメッセージを表示して、それ以上は何もしません。なお、ブラウザーがDOM処理に対応していれば、ブラウザーの情報を出力して、対応外のブラウザーであることをメッセージとして表示します。</p>
+<p>　もし、ブラウザーが対応しているバージョンであれば、非対応の場合のメッセージを見えないようにし、それまで非表示だったページ内容を表示するようにして、ページ生成の処理を行います。つまり、非対応メッセージは自動的に消されるという動作を期待しますが、これについては1行で済む処理なので、プログラムを記述していただく必要があります。具体的にはあとの演習を参照してください。</p>
+
+<h3><span id="H3-ANC-55"><span style="display:none">→</span></span>ブラウザーがサポートする<span xmlns="" id="ix-318"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-319"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>バージョンについて</h3>
+<p>　INTER-Mediator Ver.5.2現在の状況で言えば、単体テストはFirefoxで行い、Chrome、Safari、Internet Explorerについてはマニュアルで動作チェックを行っています。バージョンごとの動作が極端に違うInternet Explorerに対しては、INTER-Mediator Ver.5.0より前はVer.8以降としていましたが、INTER-Mediator Ver.5.0よりVer.9以降としました。そのほかのブラウザーがどのバージョンからサポートしているのかという点については、確認は行っていません。Chrome、Firefox、Safariについては、最新版での動作チェックを随時行っています。</p>
+
+<h3><span id="H3-ANC-56"><span style="display:none">→</span></span>ブラウザーを限定するための指定</h3>
+<p>　ブラウザーに関連する設定は、定義ファイルのIM_Entry関数の2つ目の引数（定義ファイルエディターではOptionsの領域）に、<span xmlns="" id="ix-320"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>browser-compatibilityキーで記述します。このキーに指定する値は少し複雑で、表8-6-1のようになっています。指定例はリスト8-6-1に記載します。ブラウザーの種類はJavaScriptの標準APIに含まれる<span xmlns="" id="ix-321"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>navigator.userAgentを利用しており、大文字小文字は関係なく指定をします。Internet Explorerは「msie」で選択ができるのは、Ver.10までで、それ以降はtridentというキーワードで判定します。OSの種類はnavigator.platform、バージョンはnavigator.appVersionやnavigator.userAgentに含まれる数値から適宜判断して取得しています。OSの種類を指定しないと、OSの種類に関係なく判定されます。バージョン番号のあとに+をつければ、その番号を含むより新しいブラウザーも含まれます。なお、Internet Explorer Ver.9は、tridentでVer.5に対応します。また、最近のスマートフォン用ネイティブアプリケーションでは、内部にWebブラウザーの機能を持つこともあります。そのようなブラウザー内での動作をさせるには、ブラウザーの種類に「webkit」という文字列を指定します。</p>
+
+<div class="table"><table><tr><th>次元</th><th>指定内容</th><th>指定する値の例</th></tr><tr><td>第1次元</td><td>ブラウザーの種類</td><td>chrome, msie, firefox, opera, safari, trident, webkit</td></tr><tr><td>第2次元</td><td>配列（OSを示すキー）</td><td>mac, win</td></tr><tr><td/><td>バージョン記述文字列</td><td>3+, 4-</td></tr><tr><td>第3次元</td><td>バージョン記述文字列（第2次元が配列のとき）</td><td>3+, 4-</td></tr></table><div class="caption">表8-6-1　対応ブラウザーを指定する配列の構成</div></div>
+
+<div class="code"><div class="caption">リスト8-6-1　対応ブラウザーを指定する配列の定義ファイルでの記述例</div><pre><code>IM_Entry(
+  array( ... ),
+  array(
+    'browser-compatibility' =&gt; array(
+      'chrome' =&gt; '1+',
+      'firefox' =&gt; '2+',
+      'msie' =&gt; '8+',
+      'opera' =&gt; '1+',
+      'safari' =&gt; array(
+        'win' =&gt; '4+', 
+        'mac' =&gt; '3+',
+      ),
+      'trident' =&gt; '5+',
+      'webkit' =&gt; '1+',
+   ), ....
+  ),
+	....
+);</code></pre></div>
+
+<p>　なお、ここで、browser-compatibilityキーに対する連想配列のキーにおいては、safariよりも前にchromeを指定してください。Chromeのnavigator.userAgentにはSafariという単語が含まれているためです。browser-compatibilityキーがない場合には、判定において、すべてのブラウザーは非対応とみなします。このキーに、対応するブラウザーのバージョンを記述するというのが基本です。</p>
+<p>　定義ファイルに記述したbrowser-compatibilityキーを手がかりにして、ブラウザーの判定を行うのは、INTERMediatorOnPage.INTERMediatorCheckBrowserというINTER-Mediatorが用意したAPIのメソッドです。このメソッドは単独で使う物ではなく、他の処理と併せて利用するものです。具体的には演習で示します。</p>
+
+<h3><span id="H3-ANC-57"><span style="display:none">→</span></span><span class="exsign">演習</span>ブラウザーの判定を含むページを作成する</h3>
+<p>　ブラウザーの判定を行うには、browser-compatibilityキーの値の指定と、INTER-Mediatorで用意されたAPIの呼び出しを利用し、かつ、JavaScriptを切りにしている場合、サポートしないブラウザーの場合、それぞれ異なるメッセージを表示し、さらにサポートするブラウザーの場合には合成したページを正しく表示する必要があります。</p>
+
+<h4>定義ファイルにデータベースアクセスに必要な設定を行う</h4>
+<div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div>
+<div class="step"><span class="stepnumber">2</span>「def16.phpを編集する」をクリックし、定義ファイルエディターでdef16.phpファイルを編集します。（もし、他の用途で16番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div>
+<div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div>
+<div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div>
+<div class="step-wo-number">Contextsのその他のテキストフィールドはそのまま利用します。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2282.png"/></div>
+<div class="step"><span class="stepnumber">5</span>Database Settingsに設定を行います。</div>
+<div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div>
+<div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_DataAPI」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「gateway.docker.internal」、portに「443」、protocolに「https」、cert-vefifyingに「false」と入力します。</div>
+<div class="step"><span class="stepnumber">6</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div>
+
+<h4>ブラウザーの制限の設定を行う</h4>
+<p>　ここからは、3つのブラウザーを利用します。演習の手順では、ChromeとFirefox、Safari（あるいはInternet Explorer）を利用します。利用しているMac/PCにインストールされていない場合には、インストールをしてください。</p>
+
+<div class="step"><span class="stepnumber">1</span>そのまま「def16.phpを編集する」をクリックして表示したページで作業を続けます。</div>
+<div class="step"><span class="stepnumber">2</span>ページ冒頭の「Show All」ボタンを押して、すべての設定項目を表示します。</div>
+<div class="step"><span class="stepnumber">3</span>Optionsのカテゴリにある「Browser Compatibilities」の部分を特定します。そこにある「追加」ボタンをクリックして、項目を追加します。追加しても構わないか、ダイアログボックスでたずねられるので、OKをクリックして、実際に追加します。最初は「agent0」と「= version =」が入力された行が出てきます。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2285.png"/></div>
+<div class="step"><span class="stepnumber">4</span>broser-agentを「chrome」、versionを「1+」とします。この設定により、Chromeについてはほぼすべてのバージョンでページ生成が行われて、ページの内容が参照できるようになります。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2286.png"/></div>
+<div class="step"><span class="stepnumber">5</span>「Browser Compatibilities」の「追加」ボタンをクリックし、追加の可否を訪ねるダイアログボックスでOKをクリックして、さらにもう1行増やします。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2287.png"/></div>
+<div class="step"><span class="stepnumber">6</span>broser-agentを「firefox」、versionを「100+」とします。執筆時点ではFirefoxの最新版はVer.40なので、この設定により、Firefoxについてはほぼすべてのバージョンでページ生成が禁止され、ページの内容は参照できなくなります。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2288.png"/></div>
+<div class="step-wo-number">上記の設定に合致しない、SafariやInternet Explorerに関しては、すべてのバージョンでページ生成が禁止され、ページの内容は参照できなくなります。つまり、「Browser Compatibilities」の設定を使用する場合は、使用可能なブラウザーのUserAgentの値とバージョン番号の記述を行わなければなりません。</div>
+<div class="step-wo-number">なお、定義ファイルエディターでは、OSごとに異なるバージョンを指定する記述はできません。この記述を行いたいのであれば、定義ファイルを直接開いて、PHPの記述を行ってください。</div>
+
+<h4>ページファイルの作成</h4>
+<div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page16.htmlを編集する」をクリックし、ページファイルのpage16.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div>
+<div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="def16.php"&gt;&lt;/script&gt;
+<strong>      &lt;script type="text/javascript"&gt;
+        INTERMediatorOnPage.doAfterConstruct = function () {
+            var node = document.getElementById('container');
+            node.style.display = "block"
+        }
+    &lt;/script&gt;</strong>
+&lt;/head&gt;
+<strong>&lt;body&gt;
+&lt;div id="nonsupportmessage" style="background-color:#333333"&gt;
+    &lt;div style="text-align:center;color:yellow"&gt;
+      If you see this, you must use any supported
+      web browser with Javascript enabled.
+    &lt;/div&gt;
+    &lt;div style="text-align:center;color:yellow"&gt;
+      この表示はサポート対象外のWebブラウザーを使っているために表示されています。
+      対応ブラウザーをJavaScriptを有効にした上でお使い下さい。
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="container" style="display: none"&gt;
+  &lt;table&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td data-im="postalcode@f3"&gt;&lt;/td&gt;
+        &lt;td data-im="postalcode@f7"&gt;&lt;/td&gt;
+        &lt;td data-im="postalcode@f8"&gt;&lt;/td&gt;
+        &lt;td data-im="postalcode@f0"&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+
+<p>　ページファイルのボディ部には、id属性が「nonsupportmessage」のDIVタグ要素があり、そこにはJavaScriptがオフになっていたり、極端に古いブラウザーを使っていた場合を想定したエラーメッセージが記述されています。一方、実際に見せたいページの内容は、id属性が「container」のDIVタグ要素で囲って記述しておき、こちらも初期状態は非表示にしておきます。このように、ページの中の最上位のノードにおいて、「JavaScriptが動かなかった時に表示される内容」と「動いた時に表示される正しい内容」の2つの要素を求めておきます。そして、JavaScriptが動かない場合はそのままid属性が「nonsupportmessage」のDIVタグ要素だけが見えていますが、INTER-Mediatorが稼働して正しくページ合成すると逆にid属性が「nonsupportmessage」のDIVタグ要素は非表示に、id属性が「container」のDIVタグ要素は表示にして、ページの内容が見えるとともにエラーメッセージは見えないようにします。</p>
+<p>　ページをロードしたときにページ合成が自動的に行われますが、id属性が「nonsupportmessage」のDIVタグ要素がある場合には、「Browser Compatibilities」の設定を使用して、対応ブラウザーかどうかのチェックを行います。対応ブラウザーでない場合には、何もせず、id属性が「nonsupportmessage」のDIVタグ要素だけが見えている状態になります。対応ブラウザーであれば、ページ合成を行います。なお、このままだと、id属性が「container」のDIVタグ要素は非表示のままです。そこで、ページ合成が終わったときに呼び出されるメソッド、INTERMediatorOnPage.doAfterConstruct（（『8-6　ブラウザーを判断するページ』を参照））において、ページ要素を含むid属性が「container」のDIVタグ要素のdisplayスタイルシート属性をblockに変更して、ページ要素を見えるようにしています。つまり、ブラウザー判定に合致して対応ブラウザーであると判定された場合、ページ合成を行い、ページ要素を見えるようにします。</p>
+<p>　id属性が「nonsupportmessage」のDIVタグ要素は、JavaScriptが稼働していない時のエラーメッセージであると同時に、ページロード時にブラウザー判定を行うための設定でもあると言えます。なお、id属性を別のものにしたい場合には、params.phpファイルに記述することで可能です。記述方法は、『8-1　定義ファイルの設定内容と外部での設定』に記載しました。</p>
+<p>　なお、ブラウザーの判定を含むページファイルの雛形として、INTER-MediatorフォルダーのSamples/templatesにあるpage_file_complex.htmlというファイルがあります。ページファイルを作るときには、このファイルをコピーして作成してもいいでしょう。もちろん、定義ファイルの参照パス等は適時変更が必要です。</p>
+
+<h4>各種ブラウザーで表示結果を確認する</h4>
+<div class="step"><span class="stepnumber">1</span>まず、SafariあるいはInternet Explorerで、「http://192.168.56.101/page16.html」を表示します（ファイル名は実際に利用している番号に対応したものを指定します）。URLは手で入力してもかまいませんが、ここまでの作業を行ったブラウザー上で「http://192.168.56.101」で開いたページに戻り、「page16.htmlを表示する」をクリックするなどして、そのURLをコピーしてもいいでしょう。</div>
+<div class="step"><span class="stepnumber">2</span>薄いグレーの文字で、対応していない旨が表示されます。このメッセージは、INTER-Mediator自身で定義されたものです。また、末尾から2行に渡って表示されているのは、INTER-Mediatorが認識しているUserAgentの値です。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2289.png"/></div>
+<div class="step-wo-number">INTER-Mediator Ver.5.2現在、このメッセージのカスタマイズは定義ファイル等では対応していません。文字列自体は、MessageStrings.phpおよびMessageStrings_ja.phpファイルで定義されています。</div>
+<div class="step"><span class="stepnumber">3</span>Chromeで「http://192.168.56.101/page16.html」を表示します。ページファイルで指定したコンテキストpostalcodeは郵便番号のテーブルです。ページ合成が正しく行われており、id属性がnonsupportの要素内の文字列は、ページ上では見えていません。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2290.png"/></div>
+<div class="step"><span class="stepnumber">4</span>Firefoxで「http://192.168.56.101/page16.html」を表示します。以下の図を作成したときのFirefoxは最優先言語に英語を指定していたので、英語のメッセージが見えていますが、こちらはChromeの場合と同様、INTER-Mediator内に定義された文字列が表示されて、ページの合成は行っていません。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2291.png"/></div>
+<div class="step"><span class="stepnumber">5</span>ここで定義ファイルエディターを使用して、設定の変更を行います。「def16.phpを編集する」をクリックして表示したページを開きます。閉じていれば、「http://192.168.56.101」で開いたページに戻り「def16.phpを編集する」をクリックして表示します。すべての項目が表示されていなければ、ページ冒頭のShow Allボタンをクリックします。そして、OptionsにあるBrowser Compatibilitiesの箇所の2行目の「firefox」に対応するversionの値を「1+」とします。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2292.png"/></div>
+<div class="step"><span class="stepnumber">6</span>Firefoxで「http://192.168.56.101/page16.html」を表示します。今度は対応ブラウザーであると判定されたので、ページ合成が行われ、郵便番号のテーブルの内容が表示されました。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2293.png"/></div>
+<div class="step"><span class="stepnumber">7</span>いずれかのブラウザーで、JavaScriptをオフにして（方法は図の後に記載）、「http://192.168.56.101/page16.html」を表示します。すると、id属性がnonsupportの部分だけが表示されました。つまり、この部分では、JavaScriptを使用できない状態のときのメッセージを自分で作成し、必要に応じて書式設定等を行っておきます。</div>
+<div class="picture"><img class="picture-small" src="figs/shot2334.png"/></div>
+<div class="step-wo-number">[Chromeの場合]<br/>アドレスバーの右側の「三」のようなアイコン部分をクリックして、メニューから「設定」を選択します。そして、ページ末尾の「詳細設定を表示」をクリックします。「プライバシー」の見出しにある「コンテンツの設定」にある「JavaScript」のところで、JavaScriptの利用の可否を設定できます。</div>
+<div class="step-wo-number">[Safariの場合]<br/>環境設定で「セキュリティ」のタブの「Webコンテンツ」に、JavaScriptの利用の可否を設定するチェックボックスがあります。</div>
+<div class="step-wo-number">[Firefoxの場合]<br/>アドレスバーに「about:config」とキータイプしてreturnキーを押します。ページ上の「細心の注意を払って使用する」をクリックすると設定リストが表示されるので、「javascript.enabled」の項目をダブルクリックして「false」にします。</div>
+<div class="step-wo-number">[Internet Explorlerの場合]<br/>ツールバー右端のギアのアイコンをクリックし、メニューから「インターネットオプション」を選択します。「セキュリティ」のタブで「インターネット」が選択されていることを確認し、「レベルのカスタマイズ」をクリックします。設定の中の「スクリプト」にある「Javaアプレットのスクリプト」と「アクティブスクリプト」で「無効にする」を選択します。</div>
+
+<h4>演習のまとめ</h4>
+<ul><li>定義ファイルに、アプリケーションが対応するブラウザーの情報を記述できます。なお、この設定はparams.php（『8-1　定義ファイルの設定内容と外部での設定』で解説）にも指定できます。</li><li>その指定を利用し、JavaScriptオフの場合、非対応ブラウザーの場合にメッセージを表示してページ合成をしないようにできます。そのためには、決められたid属性のエラーメッセージを表示したタグ要素が必要です。</li><li>結果的に、これらのプログラムとページ内容が連動するようにページファイルを構成します。</li></ul>
+
+<h3><span id="H3-ANC-58"><span style="display:none">→</span></span>このセクションのまとめ</h3>
+<p>　通常はすべてのブラウザーに対してページ合成を試みますが、Internet Explorer Ver.8以前など、以前のブラウザーではページは正しく表示されません。そのため、非対応のブラウザーでアクセスしたときにメッセージを表示して、ページ合成を行わない仕組みを持っています。この仕組みは、JavaScriptのプログラムを利用して実行しています。判定の設定を定義ファイルで行い、ページファイル側には、JavaScriptがオフのときのメッセージを追加します。また、そのメッセージとページ内容を初期状態では非表示にしておくのが良いでしょう。そして、判定とページ合成、合成後にページ内容を表示するプログラムを定義します。</p>
+
+
+</div></body></html>
