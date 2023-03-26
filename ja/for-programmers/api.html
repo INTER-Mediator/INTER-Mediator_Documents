@@ -100,6 +100,14 @@
         <p>ソート条件に追加される設定を、引数に指定したコンテキスト名のものついて初期化して、指定なしにする。</p>
         <h4>INTERMediator.additionalSortKey = {};</h4>
         <p>すべてのソート条件に追加される設定を消す。</p>
+        <h4>INTERMediator.setRecordLimit(contextName, n);</h4>
+        <p>引数に指定したコンテキスト名のコンテキストに対してクエリーを実施するとき、レコードの個数の上限値を設定できる。なお、同じことは、コンテキストのrecordsキーの値でも指定できる。</p>
+        <h4>INTERMediator.clearRecordLimit(contextName);</h4>
+        <p>setRecordLimitで指定した値をクリアする。</p>
+        <h4>INTERMediator.setRecordStart(contextName, n);</h4>
+        <p>引数に指定したコンテキスト名のコンテキストに対してクエリーを実施するとき、レコードの開始番号を指定できる。</p>
+        <h4>INTERMediator.clearRecordStart(contextName);</h4>
+        <p>setRecordStartで指定した値をクリアする。</p>
         <h4>INTERMediator.additionalFieldValueOnNewRecord</h4>
         <p>新規レコードを作った時のフィールドの既定値を、JavaScript上で追加定義する。INTERMediator.additionalFieldValueOnNewRecord["コンテキスト名"] = [{field: フィールド名, value: 値}, ...] の形式で利用する。</p>
         <h4>INTERMediator.additionalFieldValueOnUpdate</h4>
