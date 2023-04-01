@@ -48,7 +48,7 @@
 <body class="docs" data-page-title="for-developers">
     <div class="container clearfix">
         <div class="page-title">
-            <h1 id="pageTitle"></h1>
+            <h1 id="pageTitle">サイトのローカライズ</h1>
         </div>
         <ol id="breadcrumb" class="breadcrumb clearfix">
         </ol>
@@ -60,168 +60,93 @@
         </div>
         <article>
             <section>
-                <h1></h1>
-                <p></p>
-                <h3></h3>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-let config = {
-  theme: 'msyk3',
-  transition: 'fade',
-  openParen: '#',
-  closeParen: '#'
-}
-
-let contents = [
-  {
-    presubtitle: 'INTER-Mediator Study Meeting 2023-#01',
-    maintitle: 'サイトのローカライズ',
-    subtitle: '##IMG|images/im-logo.png|120px|120px##',
-    coveritems: [
-      'January 18, 2022 (Wed)',
-      'Masayuki Nii, Ph.D. in Engineering',
-      '##IMG|images/email.png|30px|30px## nii@msyk.net '
-      + '##IMG|images/facebook.png|30px|30px## msyknii '
-      + '##IMG|images/twitter.png|30px|30px## msyk_nii'
-    ]
-  },
-  {
-    title: 'ローカライズとは？',
-    items: [
-      'ブラウザやOSの言語に合わせてメッセージを切り替える',
-      '##IMG|images/fig1.png|100%##',
-    ]
-  },
-  {
-    title: 'ローカライズ可能な箇所',
-    items: [
-      '①システムが生成する文字列(従来機能)',
-      '-PHPソースをいじる、params.phpで定義',
-      '-オブジェクトによってはコンテキスト定義で「カスタマイズ」できるが、これは「ローカライズ」ではなく、決め打ちの文字列',
-      '②特定のHTML要素内の文字列(新機能)',
-      '-params.phpで定義、オプション指定で定義',
-      '③データベースから取り出した文字列(新機能)',
-      '-params.phpで定義、オプション指定で定義',
-      'そのほかの手法',
-      '-言語ごとにHTMLページを分離する（サイトで利用している手法）'
-    ]
-  },
-  {
-    title: '①システムが生成する文字列(従来機能)',
-    items: [
-      'ボタン名やエラーメッセージなどは、PHPのコードに配列として埋められている',
-      '-src/php/Message/MessageStrings.phpクラスに英語の文字列を定義',
-      '-src/php/Message/MessageStrings_ja.phpクラスに日本語の文字列を定義',
-      '-新たな言語対応するには、日本語のクラスのコピーを作って値を変更する',
-      '文字テーブルをparams.phpでカスタマイズ',
-      '-##highlight|PHP|$messages[\'default\'][1022] = "We don\'t support Internet Explorer. We\'d like you to access by Edge or any other major browsers.";\n' +
-      '$messages[\'ja\'][1022] = "Internet Explorerは使用できません。Edgeあるいは他の一般的なブラウザをご利用ください。";##',
-      '[参考]カスタマイズ',
-      '-コンテキスト定義にあるbutton-namesキーの値',
-    ]
-  },
-  {
-    title: '②特定のHTML要素内の文字列(新機能)',
-    items: [
-      '要素にdata-im-locale属性を指定する',
-      '-##highlight|php|<h1 data-im-locale="page|title">Contact Management</h1>\n<th data-im-locale="category">category</th>##',
-      'オプション指定の「terms/言語名」以下に、上記属性名をキーとして値を記述',
-      '-##highlight|yaml|options:\n' +
-      '  terms:\n' +
-      '    en:\n' +
-      '      header: INTER-Mediator - Sample - Form Style/MySQL\n' +
-      '      category: Category\n' +
-      '      check: Check\n' +
-      '      page:\n' +
-      '        title: Contact Management (Sample for Several Fundamental Features\n' +
-      '    ja:\n' +
-      '      header: INTER-Mediator - サンプル - フォーム形式/MySQL\n' +
-      '      category: カテゴリ\n' +
-      '      check: チェック\n' +
-      '      page:\n' +
-      '        title: コンタクト先管理 (さまざまな機能を確認するためのサンプル)##'
-    ]
-  },
-  {
-    title: '③データベースから取り出した文字列(新機能)',
-    items: [
-      '要素にdata-im-locale属性を指定する',
-      '-##highlight|html|<select data-im="contact@kind" class="_im_test-contact-kind">\n' +
-      '  <option data-im="cor_way_kindname@kind_id@value cor_way_kindname@name_kind"\n' +
-      '     data-im-locale="way"\n' +
-      '     class="_im_test-cor_way_kindname-kind_id"></option>\n' +
-      '</select>##',
-      'オプション指定の「terms/言語名」以下に上記属性名をキーとして、データベースで得られる値と表示する値を配列で記述',
-      '-##highlight|yaml|options:\n' +
-      '  terms:\n' +
-      '    en:\n' +
-      '      way:\n' +
-      '        Calling: Telephone\n' +
-      '        Mail: Paper Mail\n' +
-      '        Email: Electronic Mail\n' +
-      '    ja:\n' +
-      '      way:\n' +
-      '        Calling: 電話\n' +
-      '        Mail: 手紙\n' +
-      '        Email: 電子メール##',
-    ]
-  },
-  {
-    title: 'ページファイルでの定義のポイント',
-    items: [
-      'ページファイルの要素に必要な設定',
-      '-data-im-localeがあり、data-imがない場合は、テーブルから取り出した文字列を単に要素のテキストとして設定する',
-      '-data-im-localeとdata-imの両方がある場合は、データベースから得られた値に対して、テーブルから取り出した文字列に置き換えて設定する',
-      'data-im-localeに関して',
-      '-単一のキーでも良いが、|で区切って階層化が可能',
-      '設定の記述',
-      '-ページにまたがる共通の用語は、params.phpに指定（$terms変数）',
-      '--##highlight|php|$terms = [\n' +
-      '    \'en\' => [\n' +
-      '        \'header\' => \'INTER-Mediator - Sample - Form Style/MySQL\',\n' +
-      '        \'page-title\' => \'Contact Management (Sample for Several Fundamental Features)\',\n' +
-      '    ],\n' +
-      '    \'ja\' => [\n' +
-      '        \'header\' => \'INTER-Mediator - サンプル - フォーム形式/MySQL\',\n' +
-      '        \'page-title\' => \'コンタクト先管理 (さまざまな機能を確認するためのサンプル)\',\n' +
-      '        \'category\' => \'カテゴリ\',\n' +
-      '        \'check\' => \'チェック\',\n' +
-      '   ],\n' +
-      '];##',
-      '-ページごとに用語テーブルを提供するならオプション設定が便利',
-    ]
-  },
-  {
-    title: 'ほかのフレームワークとざっくり比較',
-    items: [
-      'Laravelの場合',
-      '-オブジェクトのプロパティ、あるいはテンプレート内で使える変数を用意してくれる、クライアントの言語に応じて値の文字列が変わる',
-      'Laravelと比較してINTER-Mediatorは...',
-      '-ローカライズされていないページをちょっとずつローカライズできる',
-      '-データベースの値のローカライズがやりやすい',
-      '-プログラミング言語によるプログラミングが不要、配列を構成するだけで良い',
-      '-単数形/複数形の処理はない',
-    ]
-  },
-  {
-    title: 'まとめ',
-    fig3: "images/qrcode_presen.msyk.net.png",
-    items: [
-      '-ブラウザの言語ごとに異なる文字列を表示できるようになった',
-      '-ページ上のスタティックな文字列はもちろん、データベースから得られる値を言語ごとに異なるものにもできる',
-      '-言語のテーブルを用意すれば、あとは、HTML要素への属性の設定だけで可能',
-      '-以前からあるメッセージの言語対応機能の使いこなしも必要',
-      '-本日のプレゼン→',
-   ]
-  },
-]                <div class="code"><pre><code></code></pre></div>
+                <h1>ローカライズとは？</h1>
+                <p>INTER-Mediatorでは、ブラウザあるいはOSの言語に応じて表示内容を異なるものにする仕組みが組み込まれています。言語に応じて変更する仕組みはもちろんですが、システムが生成するメッセージを自由に変更することができるものも、特定のニーズへ対応するという点ではローカライズの一貫とも言えるでしょう。さらに、ページを多言語対応するための仕組みについて詳細に説明します。</p>
+                <h1>メッセージのカスタマイズについて</h2>
+                <p>メッセージのカスタマイズとしては、①システムが生成する文字列のカスタマイズ、②特定のHTML要素内の文字列を言語に応じて指定、③データベースから取り出した文字列の指定に大きく分かれます。本来ローカライズとなると、②③による仕組みを指すことが通常ですが、まずここでは①についてもまとめておきます。</p>
+                <p>①については、[A] 定義ファイルで指定する文字列と、[B] メッセージを管理するクラスの定義文字列とその文字列のカスタマイズが可能です。①[A]は、例えば、repeat-controlキーにinsertというキーワードを指定すれば、「追加」ボタンが表示されますが、そのボタンの名前を定義ファイルのbutton-namesキー以下の配列で指定することができます。これについては、さまざまな側面でのカスタマイズが可能です。<a href="" target="_blank">こちらのページ</a>にある定義ファイルのリファレンスを参照してください。</p>
+                <p>①[B]は、PHPのプログラムに関わる話になります。INTER-Mediatorが表示するメッセージの一部については、PHPのクラスに指定されています。メッセージは、INTERMediator\Message\MessageStrings.phpファイルにあるMessageStringsクラスに定義されています。このクラスは英語のメッセージを定義していて、日本語についてはINTERMediator\Message\MessageStrings_ja.phpファイルに、MessageStrings_jaクラスとして定義されています。システムが割り当てた番号に応じてメッセージが表示されるので、同様な方法で日本語以外の言語についても定義が可能です。このクラスを修正すれば、任意のメッセージを表示することができますが、通常はフレームワーク内部のクラスを変更するのはかなり大変なことになります。そこで、アプリケーション単位で必要なメッセージだけを変更できるようにしています。そのためには、params.phpファイルに変数定義を行います。以下はその例です。</p>
+                <div class="code"><pre><code>$messages['default'][1022] = "We don\'t support Internet Explorer. We\'d like you to access by Edge or any other major browsers.";
+$messages['ja'][1022] = "Internet Explorerは使用できません。Edgeあるいは他の一般的なブラウザをご利用ください。";</code></pre></div>
+                <p>まず、$messages変数に配列として記述を行います。1次元目は言語です。英語については、'default'で指定をします。日本語は'ja'です。2次元目はメッセージの種類です。ここでは1022番のメッセージがイコールの右側の文字列に置き換わります。番号については、MessageStrings.phpクラスを参照して、該当するメッセージの番号を特定します。</p>
+                <h1>言語に応じてHTML要素内の文字列を切り替える</h2>
+                <p>前述の②の仕組みをここで説明します。ページ内に例えばタイトルを表示するとき、日本語のユーザは「請求書一覧」、英語のユーザは「Invoice List」と表示されるようにする仕組みです。まず、ページファイルの中の要素に、data-im-locale属性を指定を指定します。以下は例です。</p>
+                 <div class="code"><pre><code>&lt;h1 data-im-locale="page|title"&gt;Contact Management&lt;/h1&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th data-im-locale="category"&gt;category&lt;/th&gt;...</code></pre></div>
+               <p>一方、ページファイルが利用している定義ファイルのオプション指定の「terms/言語名」以下に、まず、言語名を2文字で記載して、さらにその下位の項目としてページファイルのdata-im-locale属性に指定したキーワードをキーとして値を記述します。以下は、YAML表記で示しますが、もちろん、PHPの配列で記述してもかまいません。</p>
+                 <div class="code"><pre><code>options:
+  terms:
+    en:
+      header: INTER-Mediator - Sample - Form Style/MySQL
+      category: Category
+      check: Check
+      page:
+        title: Contact Management (Sample for Several Fundamental Features)
+    ja:
+      header: INTER-Mediator - サンプル - フォーム形式/MySQL
+      category: カテゴリ
+      check: チェック
+      page:
+        title: コンタクト先管理 (さまざまな機能を確認するためのサンプル)</code></pre></div>
+                <p>ページファイルを表示してページを構築した後は、元々「category」と記述されているthタグのテキストは、日本語のブラウザで参照すると「カテゴリ」、英語のブラウザで参照すると「Category」となります。つまり、定義ファイルのtermsキーで指定した文字列に置き換わります。英語と日本語以外のブラウザで表示すると、ページ内容の要素のまま「category」と表示されます。</p>
+                <p>terms以下のキーは、階層的に配置することもできます。ページファイルのh1要素のdata-im-locale属性は「page|title」となっています。|でキーを区切って階層的に、つまり、pageキーの中のtitleキーでページに表示する文字列を指定できるので、分類をすることも可能です。</p>
+                <h1>言語に応じてデータベースから得られた文字列を切り替える</h2>
+                <p>前述の③の仕組みをここで説明します。以下のようにポップアップメニューが得られる要素がページファイルに記載されているとします。ポップアップの選択肢はoption要素を使っており、そこではcor_way_kindnameコンテキストが使われています。この要素は、Sample_formで使われているあるポップアップメニューの選択肢に応じて異なる選択肢を出すポップアップメニューで使われているちょっと複雑なものですが、ここではコンテキストとしてどのようなものが得られるかを表で示しますので、対照してください。</p>
+                 <div class="code"><pre><code>&lt;select data-im="contact@kind" class="_im_test-contact-kind"&gt;
+  &lt;option data-im="cor_way_kindname@kind_id@value cor_way_kindname@name_kind"
+     data-im-locale="way"&gt;&lt;/option&gt;
+&lt;/select&gt;
+＊＊＊＊cor_way_kindnameコンテキストの結果＊＊＊＊
++----+--------+---------+-------------+
+| id | way_id | kind_id | name_kind   |
++----+--------+---------+-------------+
+|  1 |      4 |       4 | Talk        |
+|  2 |      4 |       5 | Meet        |
+|  3 |      5 |       6 | Calling     |
+|  4 |      4 |       7 | Meeting     |
+|  5 |      5 |       8 | Mail        |
+|  6 |      5 |       9 | Email       |
+|  7 |      6 |      10 | See on Web  |
+|  8 |      5 |      11 | See on Chat |
+|  9 |      6 |      12 | Twitter     |
+| 10 |      5 |      12 | Twitter     |
+| 11 |      6 |      13 | Conference  |
++----+--------+---------+-------------+</code></pre></div>
+                <p>option要素ではdata-im-localeが指定されていますが、さらにdata-imもある場合は、データベースから取り出した結果を、ブラウザの言語に応じて置き換えることを行います。ページ上に見えている要素の文字列を置き換えますが、置き換えた結果をデータベースに書き戻すことは行わず、あくまで「見えるもの」だけを置き換えるようにします。上記、ポップアップメニュー用に定義ファイルで以下のようなtermsキーの記述があるとします。termsキーの直下は言語を示す文字列、その次はdata-im-localeに指定したキーワード、さらにその下にデータベースから得られる文字列をキーとして指定します。</p>
+                 <div class="code"><pre><code>options:
+  terms:
+    en:
+      way:
+        Calling: Telephone
+        Mail: Paper Mail
+        Email: Electronic Mail
+    ja:
+      way:
+        Calling: 電話
+        Mail: 手紙
+        Email: 電子メール</code></pre></div>
+                <p>例えば、cor_way_kindnameコンテキストのid=6は「Email」です。この値がデータベースから取り出されると、termsキーの内容を探り、日本語のブラウザでは「電子メール」、英語のブラウザでは「Electric Mail」がポップアップメニューに表示されます。これらを選択した場合、value要素にはkind_idの値があるので、データベースに書き戻されるのは数値になります。</p>
+                <h1>params.phpファイルに文字列置き換えの定義は可能</h1>
+                <p>置き換える文字列の指定は、定義ファイルのoptions/terms以下だけでなく、params.phpファイルにも指定できます。つまり、複数のページで共通の置き換え文字列を指定することができます。params.phpファイルに$terms変数を定義して、定義ファイルの内容と同じ構成で配列を定義します。以下はその例です。</p>
+                 <div class="code"><pre><code>$terms = [
+    'en' => [
+        'header' => 'INTER-Mediator - Sample - Form Style/MySQL',
+        'page' => [
+            'title' => 'Contact Management (Sample for Several Fundamental Features)',
+        ],
+    ],
+    'ja' => [
+        'header' => 'INTER-Mediator - サンプル - フォーム形式/MySQL',
+        'page' => [
+            'title' => 'コンタクト先管理 (さまざまな機能を確認するためのサンプル)',
+        ],
+        'category' => 'カテゴリ',
+        'check' => 'チェック',
+   ],
+];</code></pre></div>
             </section>
         </article>
     </div>
