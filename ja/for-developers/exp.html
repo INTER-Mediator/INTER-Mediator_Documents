@@ -551,6 +551,11 @@
                             <td>encodeURIComponent('(Z)') の結果は'%28Z%29' </td>
                             <td style="text-align: left">JavaScriptのencodeURIComponent関数と同一の動作</td>
                         </tr>
+                        <tr>
+                            <td>jsonparse(jsonstr, path)</td>
+                            <td>jsonparse('{"a":1,"b":2,"c":[4,5,6],"d":{"a":7,"b":8}}','c.1')の値は5</td>
+                            <td style="text-align: left">最初の引数は文字列化されたJSONを指定、pathにドットで区切ってルートからのキーを記述することで、JSON内部のデータを取り出すことができる。配列の場合は数値を指定する</td>
+                        </tr>
                     </table>
                 </div>
                 <h4>正規表現</h4>

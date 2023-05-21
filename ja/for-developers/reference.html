@@ -658,8 +658,30 @@
                     </tr>
                     <tr>
                         <td class="keyword">'container'</td>
-                        <td>アップロードしたファイルの置き場所を指定する。指定可能なキーワードは、"FileSystem"、"FileMakerContainer"、"S3"で、指定なしの場合は"FileSystem"が利用される。過去との互換性のために、値がTRUEの場合には"FileMakerContainer"が選択される。Amazon S3の場合は、params.phpファイルへの設定が必要になります。FileMakerについては、FileMaker Serverのバージョン13以降が必要、かつデータベースのフィールドオプションにおいて［入力値の自動化］オプションをあらかじめ設定しておく必要があります。詳細は<a href="/ja/for-programmers/jscomponent.html">ファイルのアップロードコンポーネント</a>の「FileMakerのオブジェクトフィールドにファイルをアップロードする」を参照
+                        <td>アップロードしたファイルの置き場所を指定する。指定可能なキーワードは、"FileSystem"、"FileMakerContainer"、"S3"、"Dropbox"、"FileURL"で、指定なしの場合は"FileSystem"が利用される。過去との互換性のために、値がTRUEの場合には"FileMakerContainer"が選択される。Amazon S3やDropboxの場合は、params.phpファイルへの設定が必要になります。FileMakerについては、FileMaker Serverのバージョン13以降が必要、かつデータベースのフィールドオプションにおいて［入力値の自動化］オプションをあらかじめ設定しておく必要があります。詳細は<a href="/ja/for-programmers/jscomponent.html">ファイルのアップロードコンポーネント</a>の「FileMakerのオブジェクトフィールドにファイルをアップロードする」を参照
                         </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h3>FileSystem, FileURLの場合にparams.phpファイルに指定する変数</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>変数名</th>
+                        <th>既定値</th>
+                        <th>指定内容</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                     <tr>
+                        <td>$mediaRootDir</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>ファイルを保存するディレクトリ。定義ファイルのoptionにあるmedia-root-dirでも同じ設定にできる。</td>
+                    </tr>
+                     <tr>
+                        <td>$cacheMediaAccess</td>
+                        <td style="white-space:nowrap">false</td>
+                        <td>「定義ファイル?media=」でファイルの内容を取り出すときに、キャッシュされるようにHTTPヘッダをセットする。期限（Expiresヘッダ）は1ヶ月先に固定。</td>
                     </tr>
                     </tbody>
                 </table>
@@ -671,7 +693,7 @@
                         <th>既定値</th>
                         <th>指定内容</th>
                     </tr>
-                    <thead>
+                    </thead>
                     <tbody>
                      <tr>
                         <td>$accessRegion</td>
@@ -709,6 +731,43 @@
                         <td>アップロード後にオブジェクトにアクセスするためのURLがS3より返されます。ファイルの読み出しを無制限に行う場合にはそのままのURLをフィールドに保存しますが、INTER-Mediatorのアクセス権設定を有効にするために、MediaAccessクラスを使う場合（「定義ファイル.php?media=URL」でメディア参照ができる仕組み）は、この設定をTRUEにします。すると、S3から得られたURLの冒頭のhttps://をs3://に変えます。変わったURLをそのままフィールドに保存し、mediaパラメータの値として指定すると、S3へはGetObjectメソッドを使って認証アクセスを行うようになります。つまり、INTER-Mediatorでアクセス権の管理を完全に行なっている状態になっています。</td>
                     </tr>
                    </tbody>
+                </table>
+                <h3>Dropboxの場合にparams.phpファイルに指定する変数</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>変数名</th>
+                        <th>既定値</th>
+                        <th>指定内容</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                     <tr>
+                        <td>$dropboxAppKey</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>認証のために利用されるAppKey</td>
+                    </tr>
+                     <tr>
+                        <td>$dropboxAppSecret</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>認証のために利用されるAppSecret</td>
+                    </tr>
+                     <tr>
+                        <td>$dropboxRefreshToken</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>リフレッシュトークン（<a target="_blank" href="https://towardsdev.com/dropbox-api-short-lived-tokens-and-refresh-tokens-spring-java-application-fc7264dcdcbd">このページ</a>に記載の方法で取得できる）</td>
+                    </tr>
+                     <tr>
+                        <td>$dropboxAccessTokenPath</td>
+                        <td style="white-space:nowrap">(設定なし)</td>
+                        <td>アクセストークンを保存するファイルへのパス。このファイルの作成や書き換えができる必要がある。つまり、Webサーバのプロセスのユーザによるアクセス権が必要</td>
+                    </tr>
+                     <tr>
+                        <td>$rootInDropbox</td>
+                        <td style="white-space:nowrap">/</td>
+                        <td>Dropbox内でのファイルの保存場所までのパス。パスを指定する場合、最後は/で終わらないようにする</td>
+                    </tr>
+                    </tbody>
                 </table>
                 <h2>
                     <div class="subtitle">[第1引数, コンテキスト定義]</div>
