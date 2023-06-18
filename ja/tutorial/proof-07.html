@@ -146,7 +146,7 @@ INTERMediatorOnPage.<span xmlns="" id="ix-121"><xhtml:span xmlns:xhtml="http://w
   &lt;/tbody&gt;
 &lt;/table&gt;</strong>
 &lt;/body&gt;
-&lt;/html&gt;</code></pre></div><div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページに戻り「page22.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）初期状態では3レコードが作られていますが、別の演習でレコードが増減しているかもしれません。ここでは内容はなんでも構いませんので、レコードが見えていることをまずは確認してください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-309.png"/></div><h4>ページを開くのに認証を必要とするように変更する</h4><div class="step"><span class="stepnumber">1</span>def22.phpを定義ファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「def22.phpを編集する」をクリックします。</div><div class="step"><span class="stepnumber">2</span>ページの最初にある「Show All」ボタンをクリックして、設定項目を全て表示します。そして、ページの最後の方に移動し、Optionsの中の「Authentication and Authorization」の「storing」に「credential」と入力します。Tabキー等をクリックして別のテキストフィールドに移動し、確実に設定を保存してください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-310.png"/></div><div class="step"><span class="stepnumber">3</span>page22.htmlを表示します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。そして、ブラウザーの更新ボタンをクリックして、画面の更新を行ってください。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page22.htmlを表示する」をクリックしてページを開きます。</div><div class="step"><span class="stepnumber">4</span>すると、ログインパネルが表示されます。このログインパネルは、INTER-Mediator標準のもので、フレームワークが生成しています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-312.png"/></div><div class="step"><span class="stepnumber">5</span>まずは、正しいユーザー名とパスワードを入力してみます。ユーザー名とパスワードいずれも「user1」と入力して、「ログイン」ボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-313.png"/></div><div class="step"><span class="stepnumber">6</span>ページが表示され、データベースの内容が表示されています。見えている内容が、認証を必須にする前と同様であれば問題はありません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-314.png"/></div><div class="step-wo-number">ここではすでに認証に必要なテーブルが用意されていて、ユーザーも最初から設定されているので、ページの定義ファイルに認証が必須になるような設定を追加するだけで認証ができるようになっています。作業は簡単ですが、実際の開発ではテーブルを用意したりといった作業が発生する点は知っておきましょう。</div><div class="step"><span class="stepnumber">7</span>ページナビゲーションには、ログインしているユーザーとして「user1」が見えています。また、「ログアウト」ボタンも見えています。「ログアウト」ボタンをクリックして、ログアウトしておきます。</div><h4>認証とパスワード変更の動作を確認する</h4><div class="step"><span class="stepnumber">1</span>ログアウトすると、またログインパネルが表示されます。ここで、ユーザー名は「user1」として、パスワードに空欄あるいは「user1」以外の間違えたパスワードを入力して、「ログイン」ボタンをクリックします。赤い文字でエラーが表示されログインができず、ページの内容やデータベースのデータは表示されません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-315.png"/></div><div class="step"><span class="stepnumber">2</span>間違ったパスワードを何度も入力してみてください。5回目に認証エラーとなって、これ以上作業はできなくなります。パスワードを空欄で入力した場合はカウントされませんので、適当に間違えたパスワードを何か入力してください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-316.png"/></div><div class="step"><span class="stepnumber">3</span>ブラウザーの更新ボタンをクリックして画面を更新します。するとログインパネルがまた表示されます。続いて、パスワードの変更を行ってみます。</div><div class="step"><span class="stepnumber">4</span>ユーザー名に「user1」と入力します。パスワードは「user1」以外の文字列を入力します。つまり、パスワードは違っている状況であるとします。「新パスワード」に「1234」と入力します。「パスワード変更」ボタンをクリックします。すると、パスワードの変更に失敗したことがレポートされています。この状態ではパスワードは変わっていません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-303.png"/></div><div class="step"><span class="stepnumber">5</span>ユーザー名とパスワードに、いずれも「user1」と入力します。つまり、正しいユーザー名とパスワードを入力します。「新パスワード」に「1234」と入力します。パスワードはなんでも構いませんが、以下の手順をこの通り進めるために、ここでは「1234」と入力してください。そして「パスワード変更」ボタンをクリックします。パスワード変更が成功したメッセージが表示されます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-302.png"/></div><h4>認証の継続の様子を確認する</h4><div class="step"><span class="stepnumber">1</span>ユーザー名「user1」、パスワード「1234」でログインを行って、認証された状態でページを表示します。ここでページのウインドウあるいはタブを閉じます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-304.png"/></div><div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページで「page22.htmlを表示する」をクリックしてページを再度開きます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-305.png"/></div><div class="step"><span class="stepnumber">3</span>元のページが表示されており、認証が成功したことを示しています。認証情報はクッキーで保存されているため、ページを閉じても認証情報は残っており、指定した一定時間内であれば認証は継続するようになっています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-306.png"/></div><h4>認証の継続の仕組みを確認する</h4><div class="step"><span class="stepnumber">1</span>クッキーにどのような情報が記録されているかを確認してみます。以下の操作はブラウザの「デベロッパーツール」を使います。場合によってはクッキーの情報は、ここでの画面ショットを見るだけでも結構です。</div><div class="step"><span class="stepnumber">2</span>デベロッパーツール（Safariでは「Webインスペクター」）を表示して、上のタブで、「ストレージ」を選択します。左側でCookieを選択すると、現在のページに設定されたクッキーが一覧されています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-307.png"/></div><div class="step"><span class="stepnumber">3</span>_im_usernameはユーザー名が設定されます。_im_clientidは、クライアントごとにサーバから振られるランダムな番号です。_im_credential_tokenは認証が成功した時にサーバ側から設定され、この値をサーバに接続するごとに送信して、以前に認証が成功したことを伝達します。この値は、第三者に漏れるとそのユーザーとしてサーバーにアクセスできてしまう可能性があるものですが、HttpOnlyのチェックがついており、クライアントのJavaScriptからは読み出すことができません。また、通常はドメイン制限をしているので、他のサイトに移動したときに取り出すこともできません。HTTPの通信を暗号化したHTTPSで通信していれば、第三者による取得が可能な明確な方法はないと言えます。</div><div class="step"><span class="stepnumber">4</span>データベースに保存されているhashedpasswdフィールドの値を調べてみます。データベースエンジンによって操作が違います。</div><div class="step"><span class="stepnumber">5</span>[MySQLの場合]「http://localhost:9080」のアドレスのページを開き、「ユーザー管理ページサンプル」をクリックして、ユーザー管理アプリケーションを起動します。ログパネルでは、ユーザー名に「user1」、パスワードに「1234」を入力して、認証を行います。user1のHashed Passwordの列の値と、_im_credential_tokenの値は違うものになっています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-311.png"/></div><div class="step"><span class="stepnumber">6</span>[FileMakerの場合]FileMaker Proで、Test_DBデータベースを開き、「authuser」レイアウトを開きます。そこで、該当するユーザーのhashedpasswdフィールドの値を確認してください。</div><div class="step-wo-number">セキュリティ上で考慮しなければならない点は、すでに説明しています。認証情報をクッキーに入れる場合にはクッキーのデータがHTTPのやり取りでネットワークを流れるので、少なくとも、TLSを利用して、通信を傍受されないようにすることは必須です。</div><h4>演習のまとめ</h4><ul><li>定義ファイルのIM_Entry関数の呼び出しにおいて、第2引数（オプション）にauthenticationキーの設定を行うことで、すべてのコンテキストの利用に認証が必要になります。</li><li>認証の継続のために、セッションストレージやクッキーに、認証情報を保存することができます。クッキーの場合はブラウザーを再起動しても認証は継続しますが、データベースに記録するハッシュ関数から得られた値をネットワークに流すので、最低限でもTLSでの運用が必要です。</li><li>パスワードの変更は、ユーザーによって、ログインパネル上で行うことができます。</li></ul><h3><span id="H3-ANC-27"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　認証のための設定は、多くは定義ファイル上で行うことで実現可能です。むしろ、データベースにユーザーやグループのテーブルを用意する方がよほど手間がかかる仕事と言えるでしょう。このセクションでは認証を実現する方法やそこでのさまざまな設定、ログインパネルやそのカスタマイズなどを説明しました。しかしながら、認証を伴うアプリケーションはセキュリティ上の問題を抱えやすいシステムでもありますので、どういう原理で認証が稼働していて、やってはいけないことや、運用上どうしても必要になることに対してなぜそのような結果になっているのかをなるべく正しく理解をするようにしましょう。</p><p class="version-notation">＿更新ここまで：以降は、INTER-Mediator Ver.5をもとに記載しました。現在、Ver.11以降の状況に合わせてこの章の内容は書き換える予定です。バージョンが異なっても共通の部分もありますので、必要に応じて製品ドキュメントなどを併読の上、本章を参照してください。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-4"><span style="display:none">→</span></span><span class="sectionnumber">7-4</span>コンテキストにおけるアクセス制御</h2><p class="section-lead">アクセス権の制御は、基本となる4つのデータ操作のCRUD（Create Read Update Delete）について、それぞれ、どのユーザーあるいはグループに対して許可しているのかをコンテキスト定義で規定します。操作ごとのアクセス権は、オプション設定では指定はできず、個々のコンテキスト定義で行います。</p><h3><span id="H3-ANC-28"><span style="display:none">→</span></span>設定例による<span xmlns="" id="ix-134"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-135"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アクセス権の設定</h3><p>　前のセクションに続いて、用途に応じてどのような設定を行うのかを例で示します。以下の表記は定義ファイルでのPHPでの記述を行います。なお、いずれも、『7-2　ユーザー認証とアクセス権適用を行う仕組み』で説明したテーブルが用意されていて、ユーザーやグループが定義されていることを前提として説明します。また、設定の詳細は、『7-3　認証とアクセス権の設定』の最初の部分に表で示してあります。</p><h4>読み出しはできて書き込みができないコンテキスト</h4><p>　読み出しはできても書き込みを一切できないようにしたい場合、認証の設定を使わない方法もあります。リスト7-4-1のように、コンテキストのviewキーの値には存在するビューやテーブル名を指定し、tableキーの値には存在しないエンティティ名（ビューあるいはテーブルの名前）を指定します。authenticationキーの設定はありません。もちろん、その状態で書き込みをしてもエラーになるということで何も起こらないことを意図したものです。ユーザーインターフェースで書き込み可能なものを配置しないだけでは、定義ファイルへネットワークを通じて直接アクセスされた場合に書き込みや更新ができてしまう可能性があります。この設定は、そうした意図しないアクセスからも、書き込み処理を排除してデータを保護します。単に読み出しだけでいいようなコンテキストは認証の有無にかかわらずよくあり、安全面からも、なるべくtableキーの値に存在しないエンティティ名を指定するようにすべきです。また、認証がされていても書き込みを排除したい場合には、この手法は有効です。</p><div class="code"><div class="caption">リスト7-4-1　読み出しはできて書き込みができないコンテキスト定義</div><pre><code>IM_Entry(
+&lt;/html&gt;</code></pre></div><div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページに戻り「page22.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）初期状態では3レコードが作られていますが、別の演習でレコードが増減しているかもしれません。ここでは内容はなんでも構いませんので、レコードが見えていることをまずは確認してください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-309.png"/></div><h4>ページを開くのに認証を必要とするように変更する</h4><div class="step"><span class="stepnumber">1</span>def22.phpを定義ファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「def22.phpを編集する」をクリックします。</div><div class="step"><span class="stepnumber">2</span>ページの最初にある「Show All」ボタンをクリックして、設定項目を全て表示します。そして、ページの最後の方に移動し、Optionsの中の「Authentication and Authorization」の「storing」に「credential」と入力します。Tabキー等をクリックして別のテキストフィールドに移動し、確実に設定を保存してください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-310.png"/></div><div class="step"><span class="stepnumber">3</span>page22.htmlを表示します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。そして、ブラウザーの更新ボタンをクリックして、画面の更新を行ってください。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page22.htmlを表示する」をクリックしてページを開きます。</div><div class="step"><span class="stepnumber">4</span>すると、ログインパネルが表示されます。このログインパネルは、INTER-Mediator標準のもので、フレームワークが生成しています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-312.png"/></div><div class="step"><span class="stepnumber">5</span>まずは、正しいユーザー名とパスワードを入力してみます。ユーザー名とパスワードいずれも「user1」と入力して、「ログイン」ボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-313.png"/></div><div class="step"><span class="stepnumber">6</span>ページが表示され、データベースの内容が表示されています。見えている内容が、認証を必須にする前と同様であれば問題はありません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-314.png"/></div><div class="step-wo-number">ここではすでに認証に必要なテーブルが用意されていて、ユーザーも最初から設定されているので、ページの定義ファイルに認証が必須になるような設定を追加するだけで認証ができるようになっています。作業は簡単ですが、実際の開発ではテーブルを用意したりといった作業が発生する点は知っておきましょう。</div><div class="step"><span class="stepnumber">7</span>ページナビゲーションには、ログインしているユーザーとして「user1」が見えています。また、「ログアウト」ボタンも見えています。「ログアウト」ボタンをクリックして、ログアウトしておきます。</div><h4>認証とパスワード変更の動作を確認する</h4><div class="step"><span class="stepnumber">1</span>ログアウトすると、またログインパネルが表示されます。ここで、ユーザー名は「user1」として、パスワードに空欄あるいは「user1」以外の間違えたパスワードを入力して、「ログイン」ボタンをクリックします。赤い文字でエラーが表示されログインができず、ページの内容やデータベースのデータは表示されません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-315.png"/></div><div class="step"><span class="stepnumber">2</span>間違ったパスワードを何度も入力してみてください。5回目に認証エラーとなって、これ以上作業はできなくなります。パスワードを空欄で入力した場合はカウントされませんので、適当に間違えたパスワードを何か入力してください。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-316.png"/></div><div class="step"><span class="stepnumber">3</span>ブラウザーの更新ボタンをクリックして画面を更新します。するとログインパネルがまた表示されます。続いて、パスワードの変更を行ってみます。</div><div class="step"><span class="stepnumber">4</span>ユーザー名に「user1」と入力します。パスワードは「user1」以外の文字列を入力します。つまり、パスワードは違っている状況であるとします。「新パスワード」に「1234」と入力します。「パスワード変更」ボタンをクリックします。すると、パスワードの変更に失敗したことがレポートされています。この状態ではパスワードは変わっていません。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-303.png"/></div><div class="step"><span class="stepnumber">5</span>ユーザー名とパスワードに、いずれも「user1」と入力します。つまり、正しいユーザー名とパスワードを入力します。「新パスワード」に「1234」と入力します。パスワードはなんでも構いませんが、以下の手順をこの通り進めるために、ここでは「1234」と入力してください。そして「パスワード変更」ボタンをクリックします。パスワード変更が成功したメッセージが表示されます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-302.png"/></div><h4>認証の継続の様子を確認する</h4><div class="step"><span class="stepnumber">1</span>ユーザー名「user1」、パスワード「1234」でログインを行って、認証された状態でページを表示します。ここでページのウインドウあるいはタブを閉じます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-304.png"/></div><div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページで「page22.htmlを表示する」をクリックしてページを再度開きます。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-305.png"/></div><div class="step"><span class="stepnumber">3</span>元のページが表示されており、認証が成功したことを示しています。認証情報はクッキーで保存されているため、ページを閉じても認証情報は残っており、指定した一定時間内であれば認証は継続するようになっています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-306.png"/></div><h4>認証の継続の仕組みを確認する</h4><div class="step"><span class="stepnumber">1</span>クッキーにどのような情報が記録されているかを確認してみます。以下の操作はブラウザの「デベロッパーツール」を使います。場合によってはクッキーの情報は、ここでの画面ショットを見るだけでも結構です。</div><div class="step"><span class="stepnumber">2</span>デベロッパーツール（Safariでは「Webインスペクター」）を表示して、上のタブで、「ストレージ」を選択します。左側でCookieを選択すると、現在のページに設定されたクッキーが一覧されています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-307.png"/></div><div class="step"><span class="stepnumber">3</span>_im_usernameはユーザー名が設定されます。_im_clientidは、クライアントごとにサーバから振られるランダムな番号です。_im_credential_tokenは認証が成功した時にサーバ側から設定され、この値をサーバに接続するごとに送信して、以前に認証が成功したことを伝達します。この値は、第三者に漏れるとそのユーザーとしてサーバーにアクセスできてしまう可能性があるものですが、HttpOnlyのチェックがついており、クライアントのJavaScriptからは読み出すことができません。また、通常はドメイン制限をしているので、他のサイトに移動したときに取り出すこともできません。HTTPの通信を暗号化したHTTPSで通信していれば、第三者による取得が可能な明確な方法はないと言えます。</div><div class="step"><span class="stepnumber">4</span>データベースに保存されているhashedpasswdフィールドの値を調べてみます。データベースエンジンによって操作が違います。</div><div class="step"><span class="stepnumber">5</span>[MySQLの場合]「http://localhost:9080」のアドレスのページを開き、「ユーザー管理ページサンプル」をクリックして、ユーザー管理アプリケーションを起動します。ログパネルでは、ユーザー名に「user1」、パスワードに「1234」を入力して、認証を行います。user1のHashed Passwordの列の値と、_im_credential_tokenの値は違うものになっています。</div><div class="picture"><img class="picture-small" src="figs/ng-shot-311.png"/></div><div class="step"><span class="stepnumber">6</span>[FileMakerの場合]FileMaker Proで、Test_DBデータベースを開き、「authuser」レイアウトを開きます。そこで、該当するユーザーのhashedpasswdフィールドの値を確認してください。</div><div class="step-wo-number">セキュリティ上で考慮しなければならない点は、すでに説明しています。認証情報をクッキーに入れる場合にはクッキーのデータがHTTPのやり取りでネットワークを流れるので、少なくとも、TLSを利用して、通信を傍受されないようにすることは必須です。</div><h4>演習のまとめ</h4><ul><li>定義ファイルのIM_Entry関数の呼び出しにおいて、第2引数（オプション）にauthenticationキーの設定を行うことで、すべてのコンテキストの利用に認証が必要になります。</li><li>認証の継続のために、セッションストレージやクッキーに、認証情報を保存することができます。クッキーの場合はブラウザーを再起動しても認証は継続しますが、データベースに記録するハッシュ関数から得られた値をネットワークに流すので、最低限でもTLSでの運用が必要です。</li><li>パスワードの変更は、ユーザーによって、ログインパネル上で行うことができます。</li></ul><h3><span id="H3-ANC-27"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　認証のための設定は、多くは定義ファイル上で行うことで実現可能です。むしろ、データベースにユーザーやグループのテーブルを用意する方がよほど手間がかかる仕事と言えるでしょう。このセクションでは認証を実現する方法やそこでのさまざまな設定、ログインパネルやそのカスタマイズなどを説明しました。しかしながら、認証を伴うアプリケーションはセキュリティ上の問題を抱えやすいシステムでもありますので、どういう原理で認証が稼働していて、やってはいけないことや、運用上どうしても必要になることに対してなぜそのような結果になっているのかをなるべく正しく理解をするようにしましょう。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-4"><span style="display:none">→</span></span><span class="sectionnumber">7-4</span>コンテキストにおけるアクセス制御</h2><p class="section-lead">アクセス権の制御は、基本となる4つのデータ操作のCRUD（Create Read Update Delete）について、それぞれ、どのユーザーあるいはグループに対して許可しているのかをコンテキスト定義で規定します。操作ごとのアクセス権は、オプション設定では指定はできず、個々のコンテキスト定義で行います。</p><h3><span id="H3-ANC-28"><span style="display:none">→</span></span>設定例による<span xmlns="" id="ix-134"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-135"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>アクセス権の設定</h3><p>　前のセクションに続いて、用途に応じてどのような設定を行うのかを例で示します。以下の表記は定義ファイルでのPHPでの記述を行います。なお、いずれも、『7-2　ユーザー認証とアクセス権適用を行う仕組み』で説明したテーブルが用意されていて、ユーザーやグループが定義されていることを前提として説明します。また、設定の詳細は、『7-3　認証とアクセス権の設定』の最初の部分に表で示してあります。</p><h4>読み出しはできて書き込みができないコンテキスト</h4><p>　読み出しはできても書き込みを一切できないようにしたい場合、認証の設定を使わない方法もあります。リスト7-4-1のように、コンテキストのviewキーの値には存在するビューやテーブル名を指定し、tableキーの値には存在しないエンティティ名（ビューあるいはテーブルの名前）を指定します。authenticationキーの設定はありません。もちろん、その状態で書き込みをしてもエラーになるということで何も起こらないことを意図したものです。ユーザーインターフェースで書き込み可能なものを配置しないだけでは、定義ファイルへネットワークを通じて直接アクセスされた場合に書き込みや更新ができてしまう可能性があります。この設定は、そうした意図しないアクセスからも、書き込み処理を排除してデータを保護します。単に読み出しだけでいいようなコンテキストは認証の有無にかかわらずよくあり、安全面からも、なるべくtableキーの値に存在しないエンティティ名を指定するようにすべきです。また、認証がされていても書き込みを排除したい場合には、この手法は有効です。</p><div class="code"><div class="caption">リスト7-4-1　読み出しはできて書き込みができないコンテキスト定義</div><pre><code>IM_Entry(
     array(
         array(
             'name' =&gt; 'person',
@@ -222,44 +222,37 @@ INTERMediatorOnPage.<span xmlns="" id="ix-121"><xhtml:span xmlns:xhtml="http://w
 <h4>アクセス権の設定と動作を確認する</h4>
 <div class="step"><span class="stepnumber">1</span>前のセクションの演習から続けて作業を行う場合には、いったんWebブラウザーを終了して、改めて起動し、「http://localhost:9080」に接続して演習環境のホームを表示してください。</div>
 <div class="step"><span class="stepnumber">2</span>def22.phpを定義ファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「def22.phpを編集する」をクリックします。</div>
-<div class="step"><span class="stepnumber">3</span>ページの最初にある「Show All」ボタンをクリックして、設定項目を全て表示します。そして、コンテキストの途中にある「Authentication, Authorization and Security」で入力を行います。read:groupに「group2」、update:group、create:group、delete:groupに存在しないグループである「dummy」を指定します。　最後にTabキーを押して、4つのテキストフィールドに対応するフィールドの更新を確実に行うようにします。（read:groupは画面ショットではload:group、new:groupはcreate:groupに対応します）</div>
-<div class="picture"><img class="picture-small" src="figs/shot2990.png"/></div>
+<div class="step"><span class="stepnumber">3</span>ページの最初にある「Show All」ボタンをクリックして、設定項目を全て表示します。そして、コンテキストの途中にある「Authentication, Authorization and Security」で入力を行います。readのgroupに「group2」、updateのgroup、createのgroup、deleteのgroupに存在しないグループである「dummy」を指定します。　最後にTabキーを押して、4つのテキストフィールドに対応するフィールドの更新を確実に行うようにします。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-318.png"/></div>
 <div class="step-wo-number">ここでの設定は、このコンテキストからの読み出しはgroup2に対して許可するが、その他の更新や新規レコード、レコード削除はdummyグループに対してのみ許可することを意味します。しかしながら、dummyグループは存在しないので、すべてのユーザーは更新などの書き込み処理はできません。コンテキストのユーザーやグループの設定を行うときには、4つのデータベース処理のすべてに対して設定を行ってください。空欄にすると、設定がないものとみなしてしまいます。</div>
 <div class="step"><span class="stepnumber">4</span>page22.htmlを表示します。すでにタブあるはウインドウで見えている場合はそれを呼び出ます。そして、ブラウザーの更新ボタンをクリックして、画面の更新を行ってください。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page22.htmlを表示する」をクリックしてページを開きます。</div>
-<div class="step"><span class="stepnumber">5</span>ログインパネルが表示されるので、ユーザー名とパスワードに「user2」と入力して、「ログイン」ボタンをクリックします。user2はgroup2には所属していないために、正しいパスワードを入力してもページの表示は行いません。つまり、アクセス権が設定されていないので、認証しても認証エラー扱いにして、実際のデータの表示をできないようにしています。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2991.png"/></div>
+<div class="step"><span class="stepnumber">5</span>ログインパネルが表示されるので、ユーザー名とパスワードに「user2」と入力して、「ログイン」ボタンをクリックします。user2はgroup2には所属していないために、正しいパスワードを入力してもページの表示は行いません。つまり、アクセス権が設定されていないので、認証はできても認可エラー扱いにして、再度認証パネルが表示されます。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-319.png"/></div>
 <div class="step"><span class="stepnumber">6</span>group2に所属する「user4」でログインします。ユーザー名もパスワードも「user4」です。すると、データベースの内容を表示することができました。ログインユーザーがuser4であることを確認してください。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2992.png"/></div>
-<div class="step"><span class="stepnumber">7</span>ここで、適当なテキストフィールドのデータを変更してTabキーを押して、更新を行います。ここで、このコンテキストのupdate:groupに存在しないグループのdummyが設定されていることを思い出してください。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2993.png"/></div>
-<div class="step"><span class="stepnumber">8</span>すると、またログインパネルが表示されます。ここで、ユーザー名とパスワードに「user4」と入力して「ログイン」ボタンをクリックします。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2994.png"/></div>
-<div class="step"><span class="stepnumber">9</span>ページが表示されます。ここでは書き直したデータが見えていますが、このデータはデータベースへは書き込まれていません。それを確認しましょう。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2995.png"/></div>
-<div class="step"><span class="stepnumber">10</span>ブラウザーの更新ボタンをクリックして、画面を更新し、データベースの値を再度取り出してみます。すると、フィールドに見えている値は修正前の値になっています。したがって、実際には、データベースの更新はアクセス権がないために行われませんでした。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2996.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-320.png"/></div>
+<div class="step"><span class="stepnumber">7</span>ここで、適当なテキストフィールドのデータを変更してTabキーを押して、更新を行います。ここで、このコンテキストのupdateのgroupに存在しないグループのdummyが設定されていることを思い出してください。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-321.png"/></div>
+<div class="step"><span class="stepnumber">8</span>ページが表示されますが、データは修正されていません。ブラウザーの更新ボタンをクリックして、画面を更新し、データベースの値を再度取り出してみます。すると、フィールドに見えている値は修正前の値になっています。したがって、実際には、データベースの更新はアクセス権がないために行われませんでした。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-322.png"/></div>
 <div class="step-wo-number">更新できない時の動作としてはあまりスマートな感じではありませんが、ここでの演習は、「コンテキストにアクセス権を設定すれば、更新が阻止できる」ことを示すためのものです。もし、あるデータベースフィールドの内容を表示しかしないのであれば、ここで作ったページのようにテキストフィールドを利用することはあり得ません。DIVやSPANタグで表示をすれば済みます。しかしながら、利用者がサーバー通信を独自に構築して更新をしようとしても、コンテキストの設定で阻止ができることをこの演習で確認していただきました。コンテキストの設定はサーバー側で記録されているので、コンテキストのアクセス権の設定はユーザーには変更できず、アクセス権の設定は設計者の意図通りに機能します。</div>
 
 <h4>レコード作成と削除の権限がない場合の動作</h4>
 <div class="step"><span class="stepnumber">1</span>def22.phpを定義ファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「def22.phpを編集する」をクリックします。</div>
-<div class="step"><span class="stepnumber">2</span>ページの最初にある「Show All」ボタンをクリックして、設定項目を全て表示します。そして、コンテキストの途中にある「Authentication, Authorization and Security」にあるupdate:groupに「group2」を指定します。Tabキーを押して、テキストフィールドに対応するフィールドの更新を確実に行います。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3001.png"/></div>
+<div class="step"><span class="stepnumber">2</span>ページの最初にある「Show All」ボタンをクリックして、設定項目を全て表示します。そして、コンテキストの途中にある「Authentication, Authorization and Security」にあるupdateのgroupに「group2」を指定します。Tabキーを押して、テキストフィールドに対応するフィールドの更新を確実に行います。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-323.png"/></div>
 <div class="step"><span class="stepnumber">3</span>page22.htmlを表示します。すでにタブあるはウインドウで見えている場合はそれを呼び出ます。そして、ブラウザーの更新ボタンをクリックして、画面の更新を行ってください。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page22.htmlを表示する」をクリックしてページを開きます。</div>
 <div class="step"><span class="stepnumber">4</span>適当なフィールドの内容を変更してTabキーを押し、データの更新を行います。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3002.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-324.png"/></div>
 <div class="step"><span class="stepnumber">5</span>問題なく、更新ができました。今度は、group2に対して更新の権限が与えられているので、group2に所属するuser4での更新ができたということです。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3003.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-325.png"/></div>
 <div class="step"><span class="stepnumber">6</span>何からのレコードの「削除」ボタンをクリックして、レコード削除を試みます。確認のダイアログボックスでは、OKをクリックします。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2997.png"/></div>
-<div class="step"><span class="stepnumber">7</span>更新時と同様に新たに認証パネルが表示されました。user4でログインをしても、なんどやってもログインパネルが表示されます。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2999.png"/></div>
-<div class="step"><span class="stepnumber">8</span>ブラウザーの更新ボタンをクリックして、ページを再表示します。削除しようとしたレコードは削除されずに残っています。つまり、user4には削除の権限が与えられていないので、レコード削除ができないのです。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3000.png"/></div>
-<div class="step"><span class="stepnumber">9</span>ページネーションコントロールにある「レコード追加: invoice」をクリックして、レコードの追加を試みます。ダイアログボックスが表示されれば、OKをクリックします。以降、適当にダイアログボックスへ対処してください。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3004.png"/></div>
-<div class="step"><span class="stepnumber">10</span>ログインパネルが表示されます。user4で認証すると、また、ダイアログボックスが表示されます。これが繰り返されます。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3005.png"/></div>
-<div class="step"><span class="stepnumber">11</span>ブラウザーの更新ボタンをクリックしてみます。レコードが追加された形跡はありません。user4にはレコード作成の権限が与えられていないのです。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-327.png"/></div>
+<div class="step"><span class="stepnumber">7</span>ページが再度表示されていますが、削除したレコードはそのままで削除はされていません。ブラウザーの更新ボタンをクリックして、ページを再表示しても、削除しようとしたレコードは削除されずに残っています。つまり、user4には削除の権限が与えられていないので、レコード削除ができないのです。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-328.png"/></div>
+<div class="step"><span class="stepnumber">8</span>ページネーションコントロールにある「レコード追加: invoice」をクリックして、レコードの追加を試みます。ダイアログボックスが表示されれば、OKをクリックします。以降、適当にダイアログボックスへ対処してください。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-329.png"/></div>
+<div class="step"><span class="stepnumber">9</span>ページが再表示されますが、レコードの個数を見ても、レコードが新しく作れていないことは確認できます。ブラウザーの更新ボタンをクリックしても、レコードが追加された形跡はありません。user4にはレコード作成の権限が与えられていないのです。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-330.png"/></div>
 <div class="step-wo-number">レコード作成や削除ができない時の動作としてはあまりスマートな感じではありませんが、ここでの演習は、「コンテキストにアクセス権を設定すれば、レコード作成や削除が阻止できる」ことを示すためのものです。もし、あるコンテキストに対してレコード作成や削除をしないのであれば、ここで作ったページのように作成や削除のボタンを表示することはあり得ません。しかしながら、利用者がサーバー通信を独自に構築してレコードの作成や削除をしようとしても、コンテキストの設定で阻止ができることをこの演習で確認していただきました。コンテキストの設定はサーバー側で記録されているので、コンテキストのアクセス権の設定はユーザーには変更できず、アクセス権の設定は設計者の意図通りに機能します。</div>
 
 <h4>演習のまとめ</h4>
@@ -376,35 +369,36 @@ data-im="context@id@$src context@imagefile@#src" /&gt;</code></pre></div>
 
 <h4>最初のページ用の定義ファイルに必要な設定を行う</h4>
 <div class="step"><span class="stepnumber">1</span>演習環境を起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://localhost:9080」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div>
-<div class="step"><span class="stepnumber">2</span>「def25.phpを編集する」をクリックし、定義ファイルエディターでdef25.phpファイルを編集します。（もし、25番を他の用途に使ってしまっていれば、別の番号のファイルを利用してください。異なる番号のセットを利用した場合、ソースコードの記述が変わる部分がありますが、以下の手順では可能な限り注記します。）</div>
+<div class="step"><span class="stepnumber">2</span>「def23.phpを編集する」をクリックし、定義ファイルエディターでdef23.phpファイルを編集します。（もし、23番を他の用途に使ってしまっていれば、別の番号のファイルを利用してください。異なる番号のセットを利用した場合、ソースコードの記述が変わる部分がありますが、以下の手順では可能な限り注記します。）</div>
 <div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれ背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div>
 <div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div>
 <div class="step"><span class="stepnumber">5</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div>
-<div class="step"><span class="stepnumber">6</span>Contextsでは、nameに「invoice-all」、table、viewに「invoice」、keyに「id」と指定します。Contextsにあるその他のテキストフィールドは空白にします。この設定によりinvoiceテーブルを表示します。単にすべてのレコードを一覧表示したいので、簡単な定義とします。</div>
+<div class="step"><span class="stepnumber">6</span>Contextsでは、nameに「invoice-all」、table、viewに「invoice」、keyに「id」、pagingに「true」と指定します。Contextsにあるその他のテキストフィールドは空白にします。この設定によりinvoiceテーブルを表示します。単にすべてのレコードを一覧表示したいので、簡単な定義とします。</div>
 <div class="step"><span class="stepnumber">7</span>Contextsの見出しの下にある「追加」ボタンをクリックして新たなコンテキスト定義を追加します。そして、name、table、viewに「invoice」、keyに「id」、repeat-controlに「delete insert」と指定します。Contextsにあるその他のテキストフィールドは空白にします。この設定によりinvoiceテーブルを表示し、レコードの追加や削除ができるようにします。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3006.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-336.png"/></div>
 <div class="step"><span class="stepnumber">8</span>定義ファイルエディターのページの冒頭にある「Show All」ボタンをクリックします。そして、nameが「invoice」の方のコンテキスト定義の中にある「Authentication, Authorizaton and Security」の見出しにあるall:targetを「field-user」、all:fieldを「authuser」とします。Tabキーを押すなどして、入力したフィールドから別のフィールドに移動して、確実に保存をしてください。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3007.png"/></div>
-<div class="step"><span class="stepnumber">9</span>Optionsの中にある「Authentication and Authorizaton」を探します。そして、storingに「session-storage」、realmに「Sample」と入力します。こちらも、Tabキーを押すなどして、入力したフィールドから別のフィールドに移動して、確実に保存をしてください。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3008.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-332.png"/></div>
+<div class="step"><span class="stepnumber">9</span>Optionsの中にある「Authentication and Authorizaton」を探します。そして、storingに「credential」、realmに「Sample」と入力します。こちらも、Tabキーを押すなどして、入力したフィールドから別のフィールドに移動して、確実に保存をしてください。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-333.png"/></div>
 <div class="step"><span class="stepnumber">10</span>Database Settingsに設定を行います。</div>
-<div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div>
+<div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=db;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div>
 <div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_DataAPI」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「gateway.docker.internal」、portに「443」、protocolに「https」、cert-vefifyingに「false」と入力します。</div>
 <div class="step"><span class="stepnumber">11</span>Debugについては、「2」のままにしてこの後の作業を行ってください。最後にデータベースとの通信結果を確認します。デバッグ情報を見ない場合には、ページの冒頭にある「clear」ボタンをクリックするなどして、適時画面から消しても構いません。</div>
 
 <h4>最初のページのページファイルの作成</h4>
-<div class="step"><span class="stepnumber">1</span>「http://localhost:9080」で開いたページに戻り「page25.htmlを編集する」をクリックし、ページファイルのpage25.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。番号にかかる部分は、SCRIPTタグのプログラムの内部にもあります。）</div>
+<div class="step"><span class="stepnumber">1</span>「http://localhost:9080」で開いたページに戻り「page23.htmlを編集する」をクリックし、ページファイルのpage23.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。番号にかかる部分は、SCRIPTタグのプログラムの内部にもあります。）</div>
 <div class="code"><pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="ja"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
     &lt;title&gt;&lt;/title&gt;
-    &lt;script type="text/javascript" src="def25.php"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="def23.php"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-<strong>&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
-&lt;table style="float: left"&gt;
+<strong>&lt;div style="display: flex"&gt;
+&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
   &lt;thead&gt;
     &lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;作成日&lt;/th&gt;&lt;th&gt;タイトル&lt;/th&gt;&lt;th&gt;ユーザー&lt;/th&gt;&lt;/tr&gt;
   &lt;/thead&gt;
@@ -417,8 +411,7 @@ data-im="context@id@$src context@imagefile@#src" /&gt;</code></pre></div>
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-
-&lt;table style="float: left; margin-left: 10px"&gt;
+&lt;table style="margin-left: 10px"&gt;
   &lt;thead&gt;
     &lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;作成日&lt;/th&gt;&lt;th&gt;タイトル&lt;/th&gt;&lt;th&gt;ユーザー&lt;/th&gt;&lt;/tr&gt;
   &lt;/thead&gt;
@@ -431,57 +424,52 @@ data-im="context@id@$src context@imagefile@#src" /&gt;</code></pre></div>
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-
-  &lt;br clear="all"/&gt;</strong>
+&lt;/div&gt;</strong>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre></div>
 
-<div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページに戻り「page25.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div>
+<div class="step"><span class="stepnumber">2</span>「http://localhost:9080」で開いたページに戻り「page23.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div>
 <div class="step"><span class="stepnumber">3</span>ログインパネルが表示されるので、ここではユーザー名、パスワードを「user2」としてログインを行います。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3010.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-334.png"/></div>
 <div class="step"><span class="stepnumber">4</span>ページが表示されました。authenticationのキーのある左側のinvoiceコンテキストはレコードが表示されていません。右側のinvoice-allのコンテキストは、invoiceテーブルのすべてのレコードを表示しています。ユーザー列は、authuserフィールドの値を示しており、おそらくすべてのレコードが空欄になっていると思われます。ページネーションコントロールでは、現在のログインユーザーを確認できます。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3011.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-337.png"/></div>
 
 <h4>コンテキストにレコードを追加する</h4>
-<div class="step"><span class="stepnumber">1</span>左側のテーブルの下にある「追加」ボタンをクリックします。すると、左側にレコードが追加されます。作成日とタイトルを適当に入力します。作成日は、MySQLでは「2015-10-01」のように年月日、FileMakerでは「10/01/2015」のように、月日年でスラッシュ区切りとなるように入力します。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3014.png"/></div>
-<div class="step"><span class="stepnumber">2</span>ページネーションコントロールの「更新」ボタンをクリックして、ページ内容を更新します。左側には追加されたレコードが見えていますが、右側のテーブルにも見えるようになりました。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3015.png"/></div>
+<div class="step"><span class="stepnumber">1</span>左側のテーブルの下にある「追加」ボタンをクリックします。すると、左側にレコードが追加されます。作成日とタイトルを適当に入力します。作成日は、MySQLでは「2023-7-1」のように年月日、FileMakerでは「07/01/2023」のように、月日年でスラッシュ区切りとなるように入力します。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-338.png"/></div>
+<div class="step"><span class="stepnumber">2</span>念のためにページネーションコントロールの「更新」ボタンをクリックして、ページ内容を更新します。左側には追加されたレコードが見えていますが、右側のテーブルにも見えるようになりました。</div>
 <div class="step"><span class="stepnumber">3</span>左側で「追加」ボタンをクリックしてもうひとつレコードを追加します。そして、適当にフィールドに入力し、「更新」ボタンをクリックして、右側のテーブルも更新します。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3016.png"/></div>
-<div class="step-wo-number">右側のテーブルは、inoviceテーブルをすべて表示しています。これに対して、authenticationキーを設定した左側は、「ログインをしているユーザー名が、authuserテーブルに設定されているレコードのみ見えている」という状況になっています。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-339.png"/></div>
+<div class="step-wo-number">右側のテーブルは、inoviceテーブルをすべて表示しています。これに対して、authenticationキーを設定した左側は、「ログインをしているユーザー名が、authuserフィールドに設定されているレコードのみ見えている」という状況になっています。</div>
 <div class="step"><span class="stepnumber">4</span>ページネーションコントロールの「ログアウト」ボタンをクリックして、ログアウトします。</div>
 <div class="step"><span class="stepnumber">5</span>ログインパネルが表示されるので、次は前と違うユーザーでログインをします。例えば、ユーザー名とパスワードに「user3」と入力して「ログイン」ボタンをクリックします。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3017.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-340.png"/></div>
 <div class="step"><span class="stepnumber">6</span>user3でログインをしました。まだ、authuserフィールドがuser3のレコードがないので、左側のテーブルにはレコードは表示されていません。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3018.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-341.png"/></div>
 <div class="step"><span class="stepnumber">7</span>「追加」ボタンをクリックします。左側の「ユーザー」列にはすでにuser3と見えており、ログインしているユーザーのユーザー名が自動的に設定されていることが分かります。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3019.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-342.png"/></div>
 <div class="step"><span class="stepnumber">8</span>フィールドに適当に入力し、ページを更新します。今度は、ログインしているuser3のレコードだけが左側で見えています。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3020.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-343.png"/></div>
 
 <h4>データベースへのリクエスト内容を確認する</h4>
 <div class="step"><span class="stepnumber">1</span>ページを更新し、レコードが表示された状態で、デバッグログは消さずに、左側のテーブルの下にある「追加」ボタンをクリックした状態にして、データベースへ送信されたSQLステートメントあるいはリクエストのパラメーターを確認します。なお、以下の画面は一例です。異なるユーザーでログインしている場合にはその名前に入れ替わるなど状況によって異なるので、手元の結果を確認してください。</div>
-<div class="step"><span class="stepnumber">2</span>まず、invoiceコンテキストのデータ取得部分を探します。ログの中に「クエリーアクセス: Accessing:/def25.php, Parameters:access=read&amp;name=invoice…」と記載された部分を特定します。</div>
-<div class="step"><span class="stepnumber">3</span>[MySQLの場合]その少し先に「SELECT * FROM invoice…」の部分をみてください。ここでは、ユーザー名がuser3であるユーザーのレコードに絞り込む検索条件が自動的に追加されています。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3021.png"/></div>
-<div class="step"><span class="stepnumber">4</span>[FileMakerの場合]その少し先にある「-db=TestDB…&amp;-find」を特定します。ここでは、「authuser=user3」などとパラメーターが記述されており、authuserフィールドに対する検索条件が設定されています。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3044.png"/></div>
-<div class="step"><span class="stepnumber">5</span>まず、invoiceコンテキストにレコードを追加する部分を探します。ログの中に「新規レコードアクセス: Accessing:/def25.php, Parameters:access=create&amp;name=invoice…」と記載された部分を特定します。（access=createの箇所は画面ショットではaccess=new）</div>
-<div class="step"><span class="stepnumber">6</span>[MySQLの場合]少し先にINSERTステートメントがあり、初期値としてauthuserフィールドに対してログインしているユーザーのユーザー名が見えています。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3022.png"/></div>
-<div class="step"><span class="stepnumber">7</span>[FileMakerの場合]その少し先にある「…-db=TestDB…&amp;-new」を特定します。ここでは、「authuser=user3」などと記述されており、ログインしているユーザーのユーザー名が、新規作成されたレコードのauthuserフィールドに自動的に設定されていることが分かります。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3045.png"/></div>
+<div class="step"><span class="stepnumber">2</span>まず、invoiceコンテキストにレコードを追加する部分を探します。ログの中に「新規レコードアクセス: Accessing:/def23.php, Parameters:access=create&amp;name=invoice…」と記載された部分を特定します。</div>
+<div class="step"><span class="stepnumber">3</span>[MySQLの場合]少し先にINSERTステートメントがあり、初期値としてauthuserフィールドに対してログインしているユーザーのユーザー名が入力されたレコードのみを検索しているSQLコマンドが見えています。（[FileMakerの場合]は表示が異なります。）</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-344.png"/></div>
+<div class="step"><span class="stepnumber">4</span>続いて、invoiceコンテキストのデータ取得部分を探します。ログの中に「クエリーアクセス: Accessing:/def23.php, Parameters:access=read&amp;name=invoice…」と記載された部分を特定します。</div>
+<div class="step"><span class="stepnumber">5</span>[MySQLの場合]その少し先に「SELECT * FROM `invoice`…」の部分をみてください。ここでは、authuserフィールドがログインしているユーザ名のuser3のレコードに絞り込む検索条件が自動的に追加されています。（[FileMakerの場合]は表示が異なります。）</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-345.png"/></div>
 
 <h4>ユーザー名のフィールドの更新を阻止する</h4>
-<div class="step"><span class="stepnumber">1</span>def25.phpを定義ファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「def25.phpを編集する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）「Show All」ボタンを押した状態でないのであれば、ページの冒頭にある「Show All」ボタンをクリックしてください。</div>
+<div class="step"><span class="stepnumber">1</span>def23.phpを定義ファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「def23.phpを編集する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）「Show All」ボタンを押した状態でないのであれば、ページの冒頭にある「Show All」ボタンをクリックしてください。</div>
 <div class="step"><span class="stepnumber">2</span>nameが「invoice」の方のコンテキストを特定します。「Authentication, Authorizaton and Security」の見出しにあるprotect-writingを「authuser」とします。Tabキーを押すなどして、入力したフィールドから別のフィールドに移動して、確実に保存をしてください。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3025.png"/></div>
-<div class="step"><span class="stepnumber">3</span>page25.htmlをページファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page25.htmlを編集する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-348.png"/></div>
+<div class="step"><span class="stepnumber">3</span>page23.htmlをページファイルエディターで編集します。すでにタブあるはウインドウで見えている場合はそれを呼び出します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page23.htmlを編集する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div>
 <div class="step"><span class="stepnumber">4</span>以下のように太字の箇所を変更します。左側のテーブルの「ユーザー」列のフィールドを、ページ上で変更可能にします。</div>
 <div class="code"><pre><code>&lt;body&gt;
-  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
-&lt;table style="float: left"&gt;
+&lt;div style="display: flex"&gt;
+&lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
   &lt;thead&gt;
     &lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;th&gt;作成日&lt;/th&gt;&lt;th&gt;タイトル&lt;/th&gt;&lt;th&gt;ユーザー&lt;/th&gt;&lt;/tr&gt;
   &lt;/thead&gt;
@@ -493,18 +481,19 @@ data-im="context@id@$src context@imagefile@#src" /&gt;</code></pre></div>
       <strong>&lt;td&gt;&lt;input type="text" data-im="invoice@authuser"/&gt;&lt;/td&gt;</strong>
     &lt;/tr&gt;
   &lt;/tbody&gt;
-&lt;/table&gt;</code></pre></div>
+&lt;/table&gt;
+:</code></pre></div>
 
-<div class="step"><span class="stepnumber">5</span>page25.htmlがすでにタブあるはウインドウで見えている場合はそれを呼び出し、ブラウザーの更新ボタンをクリックして、ページを再度表示します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page25.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div>
+<div class="step"><span class="stepnumber">5</span>page23.htmlがすでにタブあるはウインドウで見えている場合はそれを呼び出し、ブラウザーの更新ボタンをクリックして、ページを再度表示します。閉じてしまった場合には、「http://localhost:9080」で開いたページに戻り「page23.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div>
 <div class="step"><span class="stepnumber">6</span>左側のテーブルの「ユーザー」の列の適当なテキストフィールドの内容を書き換えてみます。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3026.png"/></div>
-<div class="step"><span class="stepnumber">7</span>Tabキーを押して更新処理をしますが、「No data to upate.」というエラーが表示されています。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3027.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-347.png"/></div>
+<div class="step"><span class="stepnumber">7</span>Tabキーを押して更新処理をしますが、更新ができない旨のエラーが表示されています。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-349.png"/></div>
 <div class="step"><span class="stepnumber">8</span>ページを更新してください。書き直したフィールドは、データベース上では更新されていません。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3028.png"/></div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-350.png"/></div>
 <div class="step-wo-number">テキストフィールドでなければ書き直しはできませんが、それでも、定義ファイルへのアクセスを独自に記述して直接行うことで書き直してしまうことは、技術的には不可能ではありません（もちろん、プログラムを自分で作ることになります）。しかしながら、protect-writingの設定があれば、更新可能なコンテキストでも指定したフィールドは更新ができなくなります。</div>
-<div class="step"><span class="stepnumber">9</span>「追加」ボタンをクリックして、レコードを追加してみます。レコードの追加はエラーなく行え、ユーザー列には現在ログインしているユーザーが見えています。</div>
-<div class="picture"><img class="picture-small" src="figs/shot3029.png"/></div>
+<div class="step"><span class="stepnumber">9</span>「追加」ボタンをクリックして、レコードを追加してみます。レコードの追加はエラーなく行え、ユーザー列には現在ログインしているユーザー名が見えています。</div>
+<div class="picture"><img class="picture-small" src="figs/ng-shot-351.png"/></div>
 
 <h4>演習のまとめ</h4>
 <ul><li>コンテキスト定義に設定を行うことで、レコード単位での参照や更新の可否を、ユーザーやグループに対して設定ができます。</li><li>参照時や更新、削除時には、ログインしているユーザー名であるものだけを絞り込む検索条件を付加します。新規レコード作成時には、自動的にログインしているユーザーの名前を指定したフィールドに設定します。</li><li>ユーザー名のフィールドだけをページ側から更新できなくすることもできます。</li></ul>
