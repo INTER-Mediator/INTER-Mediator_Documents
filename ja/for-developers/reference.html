@@ -406,16 +406,16 @@
 <tr><td>detail-top</td><td>ディテール側のコンテキスト</td><td>マスターに戻るボタンを上部に表示（マスター側がmaster-hide）</td></tr>
 <tr><td>detail-bottom</td><td>ディテール側のコンテキスト</td><td>マスターに戻るボタンを下部に表示（マスター側がmaster-hide）</td></tr>
 <tr><td>detail-update</td><td>ディテール側のコンテキスト</td><td>detail-topと同じ動作に加えて、マスター側を更新</td></tr>
-<tr><td>step</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時に見えている</td></tr>
-<tr><td>step-hide</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時には見えていない</td></tr>
-<tr><td>step-nonavi</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時に見えている</td></tr>
-<tr><td>step-nonavi-hide</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時には見えていない</td></tr>
-<tr><td>step-fullnavi</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時に見えている</td></tr>
-<tr><td>step-fullnavi-hide</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時には見えていない</td></tr>
+<tr><td>step</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時に見えている。あるコンテキストでタップすると、定義ファイル上での順序で次のstep*が指定されたコンテキストを表示するのが原則だが、before-move-nextstepでその挙動を変更できる。モバイルデバイスの場合はセル自体がタップに対応する。デスクトップ機での表示では、「詳細」ボタンにより、次のページに移動する</td></tr>
+<tr><td>step-hide</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時には見えていない（他はstepと同様）</td></tr>
+<tr><td>step-nonavi</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時に見えている。自動化のナビゲーションは表示しない、背景応答もしない、デスクトップとモバイルは同一動作。タップ時の挙動は、before-move-nextstepでのメソッドで記述する必要がある。</td></tr>
+<tr><td>step-nonavi-hide</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時には見えていない（他はstep-nonaviと同様）</td></tr>
+<tr><td>step-fullnavi</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時に見えている。背景のタップに対応し、加えてデスクトップの場合は次のコンテキストに移動する「詳細」ボタンも表示する。</td></tr>
+<tr><td>step-fullnavi-hide</td><td>ステップ動作の1つのコンテキスト</td><td>ページ表示時には見えていない（他はstep-fullnaviと同様）</td></tr>
 <tr><th>付加文字列</th><th>適用先</th><th>意味</th></tr>
 <tr><td>-hide</td><td>マスター</td><td>ディテール側に切り替えるとマスターは非表示</td></tr>
 <tr><td>-hide</td><td>ステップ</td><td>ページ表示時には見えていない</td></tr>
-<tr><td>-nonavi</td><td>マスター及びステップ</td><td>自動化のナビゲーションは表示しない、背景応答もしない、デスクトップとモバイルは同一動作</td></tr>
+<tr><td>-nonavi</td><td>マスター及びステップ</td><td>自動化のナビゲーションは表示しない、背景応答もしない、デスクトップとモバイルは同一動作。タップ時の挙動は、before-move-nextstepでのメソッドで記述する必要がある。</td></tr>
 <tr><td>-fullnavi</td><td>マスター及びステップ</td><td>あらゆるナビゲーションを表示し背景応答もする、デスクトップとモバイルは同一動作</td></tr>
 </table>
                         </td>
@@ -428,7 +428,7 @@
                     <tr>
                         <td class="keyword">'before-move-nextstep'</td>
                         <td></td>
-                        <td>ステップのセルをタップした時に呼び出されるメソッド名。INTERMediatorOnPageオブジェクトに、ここで指定した名前のメソッドを定義する</td>
+                        <td>ステップのセルをタップした時に呼び出されるメソッド名。INTERMediatorOnPageオブジェクトに、ここで指定した名前のメソッドを定義する。定義したメソッドでは、タップした先で合成されるコンテキストの検索条件の指定などを行う。通常、タップすると、定義ファイルの次にあるnavi-control="step*"のコンテキストを表示するが、このメソッドで、コンテキスト名（nameキーの値）を返すと、定義ファイルの順序と関係なくそのコンテキストのページを表示する。falseを返すと、ページ移動は発生しない。なお、前のページに戻る動作は、classがIM_Button_StepBackの要素を作れば自動的に行える。例えば、「&lt;span class="IM_Button_StepBack"&gt;◀︎&lt;/span&gt;」をページファイルのページ内に配置する。</td>
                     </tr>
                     <tr>
                         <td class="keyword">'just-move-thisstep'</td>
