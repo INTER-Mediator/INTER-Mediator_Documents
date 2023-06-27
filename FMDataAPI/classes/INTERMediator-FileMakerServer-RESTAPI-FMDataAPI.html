@@ -150,7 +150,7 @@
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">27</span>
+                                            <span class="phpdocumentor-tag-link">30</span>
                                                                                 
                                              
                                     </dd>
@@ -168,7 +168,7 @@
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>2017-2022 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
+                                                 <section class="phpdocumentor-description"><p>2017-2023 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
 </section>
 
                                     </dd>
@@ -206,8 +206,8 @@
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>FMDataAPI constructor. If you want to activate OAuth authentication, $user and $pasword are set as
-oAuthRequestId and oAuthIdentifier. Moreover call useOAuth method before accessing layouts.</dd>
+<dd>FMDataAPI constructor. If you want to activate OAuth authentication, $user and $password are set as
+oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before accessing layouts.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_curlErrorCode">curlErrorCode()</a>
@@ -236,6 +236,13 @@ oAuthRequestId and oAuthIdentifier. Moreover call useOAuth method before accessi
                                 &nbsp;: string    </span>
 </dt>
 <dd>The error message of the latest response from the REST API.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getContainerData">getContainerData()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Return the base64 encoded data in container field with with streaming url.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getDatabaseNames">getDatabaseNames()</a>
@@ -467,8 +474,8 @@ If the layout doesn't exist, no error arises here. Any errors might arise on met
 
     </aside>
 
-        <p class="phpdocumentor-summary">FMDataAPI constructor. If you want to activate OAuth authentication, $user and $pasword are set as
-oAuthRequestId and oAuthIdentifier. Moreover call useOAuth method before accessing layouts.</p>
+        <p class="phpdocumentor-summary">FMDataAPI constructor. If you want to activate OAuth authentication, $user and $password are set as
+oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before accessing layouts.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -551,7 +558,7 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>It it's set to true, the communication provider just works locally.</p>
+                    <section class="phpdocumentor-description"><p>If it's set to true, the communication provider just works locally.</p>
 </section>
 
             </dd>
@@ -704,6 +711,69 @@ This error code is associated with FileMaker's error code.</p>
     <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
             <section class="phpdocumentor-description"><p>The error messege.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getContainerData">
+        getContainerData()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getContainerData" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">388</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Return the base64 encoded data in container field with with streaming url.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getContainerData</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$url</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$url</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The container data URL.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>The exception from the accessToContainer method.</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The base64 encoded data in container field.</p>
 </section>
 
     

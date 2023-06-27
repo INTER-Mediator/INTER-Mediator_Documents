@@ -154,7 +154,7 @@ and you shouldn't call the constructor of this class.</p>
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">27</span>
+                                            <span class="phpdocumentor-tag-link">30</span>
                                                                                 
                                              
                                     </dd>
@@ -172,7 +172,7 @@ and you shouldn't call the constructor of this class.</p>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>2017-2022 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
+                                                 <section class="phpdocumentor-description"><p>2017-2023 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
 </section>
 
                                     </dd>
@@ -1118,7 +1118,7 @@ queries from the first record. The default value is 0.</p>
 specified in this parameter. If you want to include all portals, set it null or omit it.
 Simple case is array('portal1', portal2'), and just includes two portals named 'portal1' and 'portal2'
 in the query result. If you set the range of records to a portal, you have to build associated array as like:
-array('portal1' =&gt; array('offset'=&gt;1,'range'=&gt;5), 'portal2' =&gt; null). The record 1 to 5 of portal1 include
+array('portal1' =&gt; array('offset'=&gt;1,'limit'=&gt;5), 'portal2' =&gt; null). The record 1 to 5 of portal1 include
 the query result, and also all records in portal2 do.</p>
 </section>
 

@@ -8,7 +8,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "FMDataAPI\u0020constructor.\u0020If\u0020you\u0020want\u0020to\u0020activate\u0020OAuth\u0020authentication,\u0020\u0024user\u0020and\u0020\u0024pasword\u0020are\u0020set\u0020as\noAuthRequestId\u0020and\u0020oAuthIdentifier.\u0020Moreover\u0020call\u0020useOAuth\u0020method\u0020before\u0020accessing\u0020layouts.",
+            "summary": "FMDataAPI\u0020constructor.\u0020If\u0020you\u0020want\u0020to\u0020activate\u0020OAuth\u0020authentication,\u0020\u0024user\u0020and\u0020\u0024password\u0020are\u0020set\u0020as\noAuthRequestId\u0020and\u0020oAuthIdentifier.\u0020Moreover,\u0020call\u0020useOAuth\u0020method\u0020before\u0020accessing\u0020layouts.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method___construct"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003Alayout\u0028\u0029",
@@ -140,6 +140,11 @@ Search.appendIndex(
             "name": "getReturnedCount",
             "summary": "Get\u0020the\u0020returned\u0020record\u0020count\u0020of\u0020just\u0020previous\u0020query.\u0020Usually\u0020this\u0020method\u0020returns\u0020the\u0020information\u0020of\nthe\u0020FileMakerRelation\u0020class.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getReturnedCount"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetContainerData\u0028\u0029",
+            "name": "getContainerData",
+            "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020container\u0020field\u0020with\u0020with\u0020streaming\u0020url.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getContainerData"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider",
             "name": "CommunicationProvider",
