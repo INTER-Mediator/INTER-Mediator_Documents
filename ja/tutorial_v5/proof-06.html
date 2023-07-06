@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" class="hltr"><head><title>JavaScriptインターフェースの利用</title><link href="00_default.css" rel="stylesheet" media="all"/></head><body xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:msyk="http://msyk.net/Editorial" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/"><div id="main"><h1><span id="H1-ANC-1"><span style="display:none">→</span></span><span class="chapternumber">Chapter 6</span><br/>JavaScriptでのプログラミング</h1><p class="chapter-lead">INTER-Mediatorはアプリケーションの基本的な動作を宣言的な記述、つまりページファイルと定義ファイルの作成で行います。その上で、さまざまな要求に応えるために、プログラミングが可能になっています。この章では、クライアントサイドで稼働するJavaScriptのプログラミングについて、INTER-Mediatorが持つAPIを中心に説明します。アプリケーション開発で使うことを意図したメソッドやプロパティについては、マニュアルのサイトにある『<a href="http://inter-mediator.info/ja/for-programmers/api.html">クライアント側でのJavaScriptの処理</a>』にまとめてあります。JavaScriptの記述方法は、『2-3　JavaScriptプログラムの記述』に説明があります。この章では、その内容を受けて、実際のニーズに関わる内容を説明します。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-1"><span style="display:none">→</span></span><span class="sectionnumber">6-1</span>ブラウザーを判断するページ</h2><p class="section-lead"><span xmlns="" id="ix-1"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-2"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ブラウザーの判定を行い、サポートするブラウザーとしないブラウザーの表示を切り替える方法を紹介します。設定や関数は単純なのですが、サポートしない理由はたくさんあり、それぞれの理由に対してどこまでの対処ができるのかを検討します。</p><h3><span id="H3-ANC-1"><span style="display:none">→</span></span>ブラウザー制限のための戦略</h3><p>　INTER-Mediatorでブラウザーの制限をする理由は、JavaScriptの対応がブラウザーによってまちまちであることが理由です。INTER-Mediatorのフレームワクーク自体は、HTML5に対応したブラウザーを使用することを前提にしているので、当然ながら、「対応しないブラウザー」が存在します。このように、フレームワークが動作対象としていないブラウザーの排除のために仕組みがまずは必要です。さらに、アプリケーションによっては、サポートあるいはポリシーの関係で、特定のブラウザーだけに限定したい場合もあるかもしれません。その場合、さらなる制約をかけたいと考えるでしょう。INTER-Mediatorでは、ブラウザーとそのバージョンに対しての制約を設定することができます。</p><p>　まず、「ブラウザーでJavaScriptが稼働する」という常識は通用しません。利用者が、JavaScriptの実行ができないように、ブラウザーを設定している可能性があります。その場合、当然ながら、手も足も出ませんので、なんらかのメッセージを出したいところです。同様な状況として、DOMモデルでの動作が不可能なJavaScriptのサポートしかないような極めて古いブラウザーを使っている場合があります。ただし、極端に古いブラウザーを使っているのは、もはや例外中の例外くらい少ないと言えるでしょう。あとの演習で実例を出しますが、これらの場合の対策を実現するために、HTMLページの内容は、JavaScriptが稼働していない、あるいは稼働しようとしても動かないくらい古いブラウザーに対するメッセージだけを表示して、実際のページのコンテンツは初期状態では非表示にしておきます。そして、JavaScriptが切りあるいはDOM非対応なら、そのまま何もしないようにします。そのための判定をJavaScriptで行いますが、そのプログラム自体が実行されなくても、HTMLページの初期状態がそのまま見えるだけです。つまり、JavaScriptが動かない場合には、そのためのメッセージを表示して、それ以上は何もしません。なお、ブラウザーがDOM処理に対応していれば、ブラウザーの情報を出力して、対応外のブラウザーであることをメッセージとして表示します。</p><p>　もし、ブラウザーが対応しているバージョンであれば、非対応の場合のメッセージを見えないようにし、それまで非表示だったページ内容を表示するようにして、ページ生成の処理を行います。つまり、非対応メッセージは自動的に消されるという動作を期待しますが、これについては1行で済む処理なので、プログラムを記述していただく必要があります。具体的にはあとの演習を参照してください。</p><h3><span id="H3-ANC-2"><span style="display:none">→</span></span>ブラウザーがサポートする<span xmlns="" id="ix-3"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-4"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>バージョンについて</h3><p>　INTER-Mediator Ver.5.2現在の状況で言えば、単体テストはFirefoxで行い、Chrome、Safari、Internet Explorerについてはマニュアルで動作チェックを行っています。バージョンごとの動作が極端に違うInternet Explorerに対しては、INTER-Mediator Ver.5.0より前はVer.8以降としていましたが、INTER-Mediator Ver.5.0よりVer.9以降としました。そのほかのブラウザーがどのバージョンからサポートしているのかという点については、確認は行っていません。Chrome、Firefox、Safariについては、最新版での動作チェックを随時行っています。</p><h3><span id="H3-ANC-3"><span style="display:none">→</span></span>ブラウザーを限定するための指定</h3><p>　ブラウザーに関連する設定は、定義ファイルのIM_Entry関数の2つ目の引数（定義ファイルエディターではOptionsの領域）に、<span xmlns="" id="ix-5"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>browser-compatibilityキーで記述します。このキーに指定する値は少し複雑で、表6-1-1のようになっています。指定例はリスト6-1-1に記載します。ブラウザーの種類はJavaScriptの標準APIに含まれる<span xmlns="" id="ix-6"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>navigator.userAgentを利用しており、大文字小文字は関係なく指定をします。Internet Explorerは「msie」で選択ができるのは、Ver.10までで、それ以降はtridentというキーワードで判定します。OSの種類はnavigator.platform、バージョンはnavigator.appVersionやnavigator.userAgentに含まれる数値から適宜判断して取得しています。OSの種類を指定しないと、OSの種類に関係なく判定されます。バージョン番号のあとに+をつければ、その番号を含むより新しいブラウザーも含まれます。なお、Internet Explorer Ver.9は、tridentでVer.5に対応します。また、最近のスマートフォン用ネイティブアプリケーションでは、内部にWebブラウザーの機能を持つこともあります。そのようなブラウザー内での動作をさせるには、ブラウザーの種類に「webkit」という文字列を指定します。</p><div class="table"><table><tr><th>次元</th><th>指定内容</th><th>指定する値の例</th></tr><tr><td>第1次元</td><td>ブラウザーの種類</td><td>chrome, msie, firefox, opera, safari, trident, webkit</td></tr><tr><td>第2次元</td><td>配列（OSを示すキー）</td><td>mac, win</td></tr><tr><td/><td>バージョン記述文字列</td><td>3+, 4-</td></tr><tr><td>第3次元</td><td>バージョン記述文字列（第2次元が配列のとき）</td><td>3+, 4-</td></tr></table><div class="caption">表6-1-1　対応ブラウザーを指定する配列の構成</div></div><div class="code"><div class="caption">リスト6-1-1　対応ブラウザーを指定する配列の定義ファイルでの記述例</div><pre><code>IM_Entry(
+  array( ... ),
+  array(
+    'browser-compatibility' =&gt; array(
+      'chrome' =&gt; '1+',
+      'firefox' =&gt; '2+',
+      'msie' =&gt; '8+',
+      'opera' =&gt; '1+',
+      'safari' =&gt; array(
+        'win' =&gt; '4+', 
+        'mac' =&gt; '3+',
+      ),
+      'trident' =&gt; '5+',
+      'webkit' =&gt; '1+',
+   ), ....
+  ),
+	....
+);</code></pre></div><p>　なお、ここで、browser-compatibilityキーに対する連想配列のキーにおいては、safariよりも前にchromeを指定してください。Chromeのnavigator.userAgentにはSafariという単語が含まれているためです。browser-compatibilityキーがない場合には、判定において、すべてのブラウザーは非対応とみなします。このキーに、対応するブラウザーのバージョンを記述するというのが基本です。</p><p>　定義ファイルに記述したbrowser-compatibilityキーを手がかりにして、ブラウザーの判定を行うのは、INTERMediatorOnPage.INTERMediatorCheckBrowserというINTER-Mediatorが用意したAPIのメソッドです。このメソッドは単独で使う物ではなく、他の処理と併せて利用するものです。具体的には演習で示します。</p><h3><span id="H3-ANC-4"><span style="display:none">→</span></span><span class="exsign">演習</span>ブラウザーの判定を含むページを作成する</h3><p>　ブラウザーの判定を行うには、browser-compatibilityキーの値の指定と、INTER-Mediatorで用意されたAPIの呼び出しを利用し、かつ、JavaScriptを切りにしている場合、サポートしないブラウザーの場合、それぞれ異なるメッセージを表示し、さらにサポートするブラウザーの場合には合成したページを正しく表示する必要があります。</p><h4>定義ファイルにデータベースアクセスに必要な設定を行う</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def16.phpを編集する」をクリックし、定義ファイルエディターでdef16.phpファイルを編集します。（もし、他の用途で16番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step-wo-number">Contextsのその他のテキストフィールドはそのまま利用します。</div><div class="picture"><img class="picture-small" src="figs/shot2282.png"/></div><div class="step"><span class="stepnumber">5</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_FX」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「192.168.56.1」、portに「80」、protocolに「http」、datatypeに「FMPro12」と入力します。</div><div class="step"><span class="stepnumber">6</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><h4>ブラウザーの制限の設定を行う</h4><p>　ここからは、3つのブラウザーを利用します。演習の手順では、ChromeとFirefox、Safari（あるいはInternet Explorer）を利用します。利用しているMac/PCにインストールされていない場合には、インストールをしてください。</p><div class="step"><span class="stepnumber">1</span>そのまま「def16.phpを編集する」をクリックして表示したページで作業を続けます。</div><div class="step"><span class="stepnumber">2</span>ページ冒頭の「Show All」ボタンを押して、すべての設定項目を表示します。</div><div class="step"><span class="stepnumber">3</span>Optionsのカテゴリにある「Browser Compatibilities」の部分を特定します。そこにある「追加」ボタンをクリックして、項目を追加します。追加しても構わないか、ダイアログボックスでたずねられるので、OKをクリックして、実際に追加します。最初は「agent0」と「= version =」が入力された行が出てきます。</div><div class="picture"><img class="picture-small" src="figs/shot2285.png"/></div><div class="step"><span class="stepnumber">4</span>broser-agentを「chrome」、versionを「1+」とします。この設定により、Chromeについてはほぼすべてのバージョンでページ生成が行われて、ページの内容が参照できるようになります。</div><div class="picture"><img class="picture-small" src="figs/shot2286.png"/></div><div class="step"><span class="stepnumber">5</span>「Browser Compatibilities」の「追加」ボタンをクリックし、追加の可否を訪ねるダイアログボックスでOKをクリックして、さらにもう1行増やします。</div><div class="picture"><img class="picture-small" src="figs/shot2287.png"/></div><div class="step"><span class="stepnumber">6</span>broser-agentを「firefox」、versionを「100+」とします。執筆時点ではFirefoxの最新版はVer.40なので、この設定により、Firefoxについてはほぼすべてのバージョンでページ生成が禁止され、ページの内容は参照できなくなります。</div><div class="picture"><img class="picture-small" src="figs/shot2288.png"/></div><div class="step-wo-number">上記の設定に合致しない、SafariやInternet Explorerに関しては、すべてのバージョンでページ生成が禁止され、ページの内容は参照できなくなります。つまり、「Browser Compatibilities」の設定を使用する場合は、使用可能なブラウザーのUserAgentの値とバージョン番号の記述を行わなければなりません。</div><div class="step-wo-number">なお、定義ファイルエディターでは、OSごとに異なるバージョンを指定する記述はできません。この記述を行いたいのであれば、定義ファイルを直接開いて、PHPの記述を行ってください。</div><h4>ページファイルの作成</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page16.htmlを編集する」をクリックし、ページファイルのpage16.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="def16.php"&gt;&lt;/script&gt;
+<strong>      &lt;script type="text/javascript"&gt;
+        INTERMediatorOnPage.doAfterConstruct = function () {
+            var node = document.getElementById('container');
+            node.style.display = "block"
+        }
+    &lt;/script&gt;</strong>
+&lt;/head&gt;
+<strong>&lt;body&gt;
+&lt;div id="nonsupportmessage" style="background-color:#333333"&gt;
+    &lt;div style="text-align:center;color:yellow"&gt;
+      If you see this, you must use any supported
+      web browser with Javascript enabled.
+    &lt;/div&gt;
+    &lt;div style="text-align:center;color:yellow"&gt;
+      この表示はサポート対象外のWebブラウザーを使っているために表示されています。
+      対応ブラウザーをJavaScriptを有効にした上でお使い下さい。
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="container" style="display: none"&gt;
+  &lt;table&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td data-im="postalcode@f3"&gt;&lt;/td&gt;
+        &lt;td data-im="postalcode@f7"&gt;&lt;/td&gt;
+        &lt;td data-im="postalcode@f8"&gt;&lt;/td&gt;
+        &lt;td data-im="postalcode@f0"&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><p>　ページファイルのボディ部には、id属性が「nonsupportmessage」のDIVタグ要素があり、そこにはJavaScriptがオフになっていたり、極端に古いブラウザーを使っていた場合を想定したエラーメッセージが記述されています。一方、実際に見せたいページの内容は、id属性が「container」のDIVタグ要素で囲って記述しておき、こちらも初期状態は非表示にしておきます。このように、ページの中の最上位のノードにおいて、「JavaScriptが動かなかった時に表示される内容」と「動いた時に表示される正しい内容」の2つの要素を求めておきます。そして、JavaScriptが動かない場合はそのままid属性が「nonsupportmessage」のDIVタグ要素だけが見えていますが、INTER-Mediatorが稼働して正しくページ合成すると逆にid属性が「nonsupportmessage」のDIVタグ要素は非表示に、id属性が「container」のDIVタグ要素は表示にして、ページの内容が見えるとともにエラーメッセージは見えないようにします。</p><p>　ページをロードしたときにページ合成が自動的に行われますが、id属性が「nonsupportmessage」のDIVタグ要素がある場合には、「Browser Compatibilities」の設定を使用して、対応ブラウザーかどうかのチェックを行います。対応ブラウザーでない場合には、何もせず、id属性が「nonsupportmessage」のDIVタグ要素だけが見えている状態になります。対応ブラウザーであれば、ページ合成を行います。なお、このままだと、id属性が「container」のDIVタグ要素は非表示のままです。そこで、ページ合成が終わったときに呼び出されるメソッド、INTERMediatorOnPage.doAfterConstruct（（『6-1　ブラウザーを判断するページ』を参照））において、ページ要素を含むid属性が「container」のDIVタグ要素のdisplayスタイルシート属性をblockに変更して、ページ要素を見えるようにしています。つまり、ブラウザー判定に合致して対応ブラウザーであると判定された場合、ページ合成を行い、ページ要素を見えるようにします。</p><p>　id属性が「nonsupportmessage」のDIVタグ要素は、JavaScriptが稼働していない時のエラーメッセージであると同時に、ページロード時にブラウザー判定を行うための設定でもあると言えます。なお、id属性を別のものにしたい場合には、params.phpファイルに記述することで可能です。記述方法は、『8-1　定義ファイルの設定内容と外部での設定』に記載しました。</p><p>　なお、ブラウザーの判定を含むページファイルの雛形として、INTER-MediatorフォルダーのSamples/templatesにあるpage_file_complex.htmlというファイルがあります。ページファイルを作るときには、このファイルをコピーして作成してもいいでしょう。もちろん、定義ファイルの参照パス等は適時変更が必要です。</p><h4>各種ブラウザーで表示結果を確認する</h4><div class="step"><span class="stepnumber">1</span>まず、SafariあるいはInternet Explorerで、「http://192.168.56.101/page16.html」を表示します（ファイル名は実際に利用している番号に対応したものを指定します）。URLは手で入力してもかまいませんが、ここまでの作業を行ったブラウザー上で「http://192.168.56.101」で開いたページに戻り、「page16.htmlを表示する」をクリックするなどして、そのURLをコピーしてもいいでしょう。</div><div class="step"><span class="stepnumber">2</span>薄いグレーの文字で、対応していない旨が表示されます。このメッセージは、INTER-Mediator自身で定義されたものです。また、末尾から2行に渡って表示されているのは、INTER-Mediatorが認識しているUserAgentの値です。</div><div class="picture"><img class="picture-small" src="figs/shot2289.png"/></div><div class="step-wo-number">INTER-Mediator Ver.5.2現在、このメッセージのカスタマイズは定義ファイル等では対応していません。文字列自体は、MessageStrings.phpおよびMessageStrings_ja.phpファイルで定義されています。</div><div class="step"><span class="stepnumber">3</span>Chromeで「http://192.168.56.101/page16.html」を表示します。ページファイルで指定したコンテキストpostalcodeは郵便番号のテーブルです。ページ合成が正しく行われており、id属性がnonsupportの要素内の文字列は、ページ上では見えていません。</div><div class="picture"><img class="picture-small" src="figs/shot2290.png"/></div><div class="step"><span class="stepnumber">4</span>Firefoxで「http://192.168.56.101/page16.html」を表示します。以下の図を作成したときのFirefoxは最優先言語に英語を指定していたので、英語のメッセージが見えていますが、こちらはChromeの場合と同様、INTER-Mediator内に定義された文字列が表示されて、ページの合成は行っていません。</div><div class="picture"><img class="picture-small" src="figs/shot2291.png"/></div><div class="step"><span class="stepnumber">5</span>ここで定義ファイルエディターを使用して、設定の変更を行います。「def16.phpを編集する」をクリックして表示したページを開きます。閉じていれば、「http://192.168.56.101」で開いたページに戻り「def16.phpを編集する」をクリックして表示します。すべての項目が表示されていなければ、ページ冒頭のShow Allボタンをクリックします。そして、OptionsにあるBrowser Compatibilitiesの箇所の2行目の「firefox」に対応するversionの値を「1+」とします。</div><div class="picture"><img class="picture-small" src="figs/shot2292.png"/></div><div class="step"><span class="stepnumber">6</span>Firefoxで「http://192.168.56.101/page16.html」を表示します。今度は対応ブラウザーであると判定されたので、ページ合成が行われ、郵便番号のテーブルの内容が表示されました。</div><div class="picture"><img class="picture-small" src="figs/shot2293.png"/></div><div class="step"><span class="stepnumber">7</span>いずれかのブラウザーで、JavaScriptをオフにして（方法は図の後に記載）、「http://192.168.56.101/page16.html」を表示します。すると、id属性がnonsupportの部分だけが表示されました。つまり、この部分では、JavaScriptを使用できない状態のときのメッセージを自分で作成し、必要に応じて書式設定等を行っておきます。</div><div class="picture"><img class="picture-small" src="figs/shot2334.png"/></div><div class="step-wo-number">[Chromeの場合]<br/>アドレスバーの右側の「三」のようなアイコン部分をクリックして、メニューから「設定」を選択します。そして、ページ末尾の「詳細設定を表示」をクリックします。「プライバシー」の見出しにある「コンテンツの設定」にある「JavaScript」のところで、JavaScriptの利用の可否を設定できます。</div><div class="step-wo-number">[Safariの場合]<br/>環境設定で「セキュリティ」のタブの「Webコンテンツ」に、JavaScriptの利用の可否を設定するチェックボックスがあります。</div><div class="step-wo-number">[Firefoxの場合]<br/>アドレスバーに「about:config」とキータイプしてreturnキーを押します。ページ上の「細心の注意を払って使用する」をクリックすると設定リストが表示されるので、「javascript.enabled」の項目をダブルクリックして「false」にします。</div><div class="step-wo-number">[Internet Explorlerの場合]<br/>ツールバー右端のギアのアイコンをクリックし、メニューから「インターネットオプション」を選択します。「セキュリティ」のタブで「インターネット」が選択されていることを確認し、「レベルのカスタマイズ」をクリックします。設定の中の「スクリプト」にある「Javaアプレットのスクリプト」と「アクティブスクリプト」で「無効にする」を選択します。</div><h4>演習のまとめ</h4><ul><li>定義ファイルに、アプリケーションが対応するブラウザーの情報を記述できます。なお、この設定はparams.php（『8-1　定義ファイルの設定内容と外部での設定』で解説）にも指定できます。</li><li>その指定を利用し、JavaScriptオフの場合、非対応ブラウザーの場合にメッセージを表示してページ合成をしないようにできます。そのためには、決められたid属性のエラーメッセージを表示したタグ要素が必要です。</li><li>結果的に、これらのプログラムとページ内容が連動するようにページファイルを構成します。</li></ul><h3><span id="H3-ANC-5"><span style="display:none">→</span></span>ページ合成およびブラウザー判定に使用したAPI</h3><p>　このセクションのプログラムで使用したAPIや関連するAPIについて、まとめておきます。</p><h4>INTERMediator.<span xmlns="" id="ix-7"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>construct(context, recordset)</h4><p>　ページ全体あるいは部分<span xmlns="" id="ix-8"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-9"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>の合成を行います。データベースの内容を表示するには、必ずこのメソッドは呼び出す必要がありますが、ページをロードしたときには自動的にこのメソッドが呼び出されます。Ver.5.4-devの途中まではonloadイベントでこのメソッドの呼び出しが記述される必要がありましたが、現在は記述の必要はありません。記述の必要があるのは、ページ表示後に表示内容の更新を意図的に行うような場合です。（返り値はなし）</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>context</td><td>trueあるいは省略ならページ全てを合成する。contextを指定すると、そのコンテキストのみを再合成するが、その場合はIMLIbContext変数をクラスとしたコンテキストへの参照を指定する</td></tr><tr><td>recordset</td><td>ページ全体の合成では省略する。ここにオブジェクトの配列の形式でレコードを指定すると、そのレコードに関連したレコードを、contextで指定したコンテキストに対して再合成する</td></tr></table><div class="caption">表6-1-2　INTERMediator.constructメソッドの引数</div></div><h4>INTERMediatorOnPage.<span xmlns="" id="ix-10"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>INTERMediatorCheckBrowser(deleteId)</h4><p>　定義ファイルの設定、あるいはparams.phpを参照して、サポートしている<span xmlns="" id="ix-11"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-12"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ブラウザーなのかどうかを判定します。サポートしていない場合には既定のエラーメッセージのみを画面に表示します。なお、このメソッドは、ページをロードするときに自動的に呼びだされるため、通常は使用することはないと思われます。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>deleteId</td><td>判定の後、非対応ブラウザーであれば削除されるBODY要素内の要素のid属性の値</td></tr><tr><td>[返り値]</td><td>対応ブラウザーならtrue、そうでなければfalse</td></tr></table><div class="caption">表6-1-3　INTERMediatorOnPage.INTERMediatorCheckBrowserの引数と返り値</div></div><h4>INTERMediatorOnPage.<span xmlns="" id="ix-13"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doBeforeConstruct() = function() {...}</h4><p>　<span xmlns="" id="ix-14"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-15"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ページ合成が行われる直前で呼び出されるメソッドで、アプリケーションはこれを呼び出すのではなく、アプリケーション側で定義しておくことで、INTER-Mediatorによって呼び出されます。引数および返り値はありません。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-16"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>doAfterConstruct() = function() {...}</h4><p>　<span xmlns="" id="ix-17"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-18"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ページ合成が終わったときに呼び出されるメソッドで、アプリケーションはこれを呼び出すのではなく、アプリケーション側で定義しておくことで、INTER-Mediatorによって呼び出されます。引数および返り値はありません。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-19"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>isAutoConstruct</h4><p>　ページをロードしたときの自動的なページ合成を行うかどうかを指定します。既定値はtrueです。ページの自動合成をさせたくないような場合、これをfalseとします。例えば、doBeforeConstructメソッドの中で特定の条件が成り立てばこのプロパティにfalseを代入して、<span xmlns="" id="ix-20"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-21"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ページ合成処理をさせないようにできます。このプロパティの値に関係なくdoBeforeConstructメソッドは定義されていれば実行されますが、doAfterConstructメソッドはこのプロパティがtrueの時のみ実行されます。</p><h3><span id="H3-ANC-6"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　通常はすべてのブラウザーに対してページ合成を試みますが、Internet Explorer Ver.8以前など、以前のブラウザーではページは正しく表示されません。そのため、非対応のブラウザーでアクセスしたときにメッセージを表示して、ページ合成を行わない仕組みを持っています。この仕組みは、JavaScriptのプログラムを利用して実行しています。判定の設定を定義ファイルで行い、ページファイル側には、JavaScriptがオフのときのメッセージを追加します。また、そのメッセージとページ内容を初期状態では非表示にしておくのが良いでしょう。そして、判定とページ合成、合成後にページ内容を表示するプログラムを定義します。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-2"><span style="display:none">→</span></span><span class="sectionnumber">6-2</span>再合成を利用した検索ページ</h2><p class="section-lead"><span xmlns="" id="ix-22"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストの検索条件やソート条件は、JavaScriptのプログラムにより追加することができることを、『2-5　検索と並べ替えに関する設定』の『JavaScriptで検索条件を付加する方法』でも説明しました。このセクションでは、その機能や、URLからのパラメーター取得の機能、ページの再合成を行利用することで、検索ページを作成します。検索のユーザーインターフェースについては『2-5　検索と並べ替えに関する設定』でも説明しましたが、検索条件をJavaScriptのプログラムで与えることで、より柔軟に要求へ応えることができます。</p><h3><span id="H3-ANC-7"><span style="display:none">→</span></span>コンテキストの<span xmlns="" id="ix-23"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>検索条件および<span xmlns="" id="ix-24"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ソート条件</h3><p>　『2-5　検索と並べ替えに関する設定』での説明の通り、コンテキストには、queryおよびsortキーによって、検索条件とソート条件を付加することができます。これらの設定をもとに、単にデータベースのテーブルにアクセスするのではなく、必要なレコードに絞り込み、望む順序に並べたリレーションを得ることができます。この設定は、定義ファイルのコンテキストの中に行えば、固定的な設定となり、そのコンテキストでクエリーすなわちデータベースからの読み出しを行うときには常に適用されます。加えて、JavaScriptによって条件を追加することもできます。</p><p>　JavaScriptによる条件の追加は、INTERMediator変数のオブジェクトに対するadditionalConditionおよびadditionalSortKeyプロパティへの追加によって実現されますが、これらのプロパティはセッター／ゲッターで実装されています。プロパティの変更時に、ローカルストレージやクッキーに確実に残すためにそのような実装になっています。しかしながら、条件の追加はプロパティの直接の変更ではなく、メソッドを利用する必要があります。</p><h3><span id="H3-ANC-8"><span style="display:none">→</span></span>パラメーターを受け取るページ</h3><p>　URLの?の後に指定する<span xmlns="" id="ix-25"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>パラメーターを追加して、<span xmlns="" id="ix-26"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-27"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>リンク先のページで特定のデータだけを表示するという方法はよく使われます。『5-1　マスター/ディテール形式のナビゲーション』で説明したように、nav-controlキーを利用して、マスター/ディテール形式のユーザーインターフェースは宣言的な記述だけで作成できます。</p><p>　このようなユーザーインターフェースを、nav-controlの仕組みを使わないで作りたい場合、パラメーターの受け渡しを利用することで実現します。一覧ページがlist.html、詳細ページがdatail.htmlであったとします。一覧ページから、特定のレコードの詳細を表示するボタンは、detail.html?id=35のようなURLにしておきます。ここで、idの後の数値は、コンテキストのもとになるテーブルの主キー値です。list.htmlでは、リスト6-2-1のような詳細リンク、あるいは詳細ボタンが各行に登場するように、リピーターの内部を作成しておきます。SPANタグやDIVタグで詳細ボタンを作りたい場合も、BUTTONタグと同様にonclick属性に別のページに移動する1行のJavaScriptのプログラムを作成しておきます。</p><div class="code"><div class="caption">リスト6-2-1　詳細ページへの移動リンクやボタンの例</div><pre><code>&lt;a href="detail.html?id=" data-im="context@id@#href"&gt;詳細&lt;/a&gt;
+
+&lt;button onclick="location.href='detail.html?id=$';"
+        data-im="context@id@$onclick"&gt;詳細&lt;/button&gt;</code></pre></div><p>　最初のAタグの場合、idの値が「12」なら「detail.html?id=12」へリンクが生成されます。BUTTONタグの場合だとonclick属性のプログラムは「location.href='detail.html?id=12';」となります。ターゲット指定の#や$については、『4-1　ターゲット指定』で説明しています。</p><p>　詳細を表示するdetail.htmlでは、JavaScriptの標準機能でパラメーターは簡単に取得できますが、INTER-MediatorではJavaScriptのオブジェクトとして得られるAPIを用意しています。そのオブジェクトへの参照がparamだとすると、リスト6-2-1のようなリンクでページに移動したら、param["id"] でidフィールドの値が得られるので、その値を追加の検索条件として付加すればいいでしょう。</p><h3><span id="H3-ANC-9"><span style="display:none">→</span></span><span xmlns="" id="ix-28"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-29"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ページの再合成</h3><p>　『4-2　ページを合成するときのルール』で説明したように、INTER-Mediatorによるページファイルをベースにしたデータベースの内容との合成（ページ合成）を、通常はページを表示したときに行います。しかしながら、このページ合成は、INTERMediator.<span xmlns="" id="ix-30"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>constructメソッドを明示的に呼び出すことで実施されるようにしているのは、合成の処理を任意のタイミングで実施できるようにするためです。また、本コースのこれまでの部分は、ページ全体を合成することを基本としていましたが、ここでは、任意のコンテキストに関わる部分だけを再合成する手法で、「検索条件として与えたデータをもとに、新たにページを合成する」ということを行い、「検索ができるページ」を作成します。</p><h3><span id="H3-ANC-10"><span style="display:none">→</span></span><span class="exsign">演習</span>プログラムで条件を指定する検索機能を持つページ（MySQL）</h3><p>　テキストフィールドに入れた文字列を、JavaScriptのインターフェースで指定する検索条件として与える形式のページを作成します。この演習は、MySQLとFileMakerで細かな点で異なるため、同一の演習をそれぞれのデータベース向けに別々に記述します。MySQLで演習をされる場合には、このまま進んでください。FileMakerで演習される方は、この演習の後にあるFileMaker向けの演習手順『プログラムで条件を指定する検索機能を持つページ（FileMaker）』で進めてください。</p><h4>定義ファイルにデータベースアクセスに必要な設定を行う</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def18.phpを編集する」をクリックし、定義ファイルエディターでdef18.phpファイルを編集します。（もし、他の用途で18番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中にはすでにpostalcodeコンテキストが定義されています。repeat-controlキーの値を空白にします。</div><div class="step-wo-number">Contextsにあるその他のテキストフィールドはそのまま利用します。</div><div class="picture"><img class="picture-small" src="figs/shot2310.png"/></div><div class="step"><span class="stepnumber">4</span>Database Settingsに設定を行います。db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step"><span class="stepnumber">5</span>Debugについては、「2」のままにしてこの後の作業を行ってください。この演習は、デバッグ情報をみながら動作を確認します。</div><h4>ページファイルの作成</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page18.htmlを編集する」をクリックし、ページファイルのpage18.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def18.php"&gt;&lt;/script&gt;
+<strong>  &lt;script type="text/javascript"&gt;
+  INTERMediatorOnPage.doBeforeConstruct = function () {
+    var params = INTERMediatorOnPage.getURLParametersAsArray();
+    INTERMediator.clearCondition("postalcode");
+    if (params["q"]) {
+      INTERMediator.addCondition("postalcode",
+                                 {field: "f3", 
+                                  operator: "LIKE", 
+                                  value: params["q"]});
+    }
+  }
+  &lt;/script&gt;</strong>
+&lt;/head&gt;
+<strong>&lt;body&gt;
+  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;郵便番号&lt;/th&gt;&lt;th&gt;住所&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-im="postalcode@f3"&gt;&lt;/td&gt;
+      &lt;td&gt;
+        &lt;span data-im="postalcode@f7"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f8"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f9"&gt;&lt;/span&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">ヘッダー部にあるSCRIPTタグ内にスクリプトが記述されていて、ページ合成を行う前に呼び出されるメソッドでいくつかのことが行われています。INTERMediatorOnPage.getURLParametersAsArrayメソッドは、URLのパラメーター部分にあるデータをキーと値に分離し、キーをプロパティとして持つオブジェクトに変換した結果を返します。そして、INTERMediator.clearConditionにより、postalcodeコンテキストの追加の検索条件を消去します。コンテキストのqueryに記述した条件はこのメソッドでは消えません。そして、q=のパラメーターがある場合、addConditionによって、追加の検索条件をpostalcodeに追加します。ここでは、コンテキスト定義とaddConditionの2つの条件が設定され、他に指定はないので、ANDで結合されます。</div><h4>ページの表示と結果の確認</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page18.htmlを表示する」をクリックし、ページファイルのpage18.htmlを表示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">2</span>ページの冒頭にあるデバッグ情報には、データベースに与えた検索のためのSQLステートメントが見えています。その部分を特定します。</div><div class="code"><pre><code>SELECT * FROM postalcode WHERE (`f3` LIKE '1%') ORDER BY `f3` ASC LIMIT 10 OFFSET 0</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2311.png"/></div><div class="step-wo-number">ここに見えている検索条件は、コンテキストのqueryキーで指定したものだけです。URLにはパラメーターが付けられていないので、ページ合成前のに実行されるメソッドで追加した検索条件は追加されません。</div><div class="step"><span class="stepnumber">3</span>ページ末尾にあるページ合成の結果を参照します。検索条件に合致するレコードが一覧されています。</div><div class="picture"><img class="picture-small" src="figs/shot2312.png"/></div><div class="step"><span class="stepnumber">4</span>パラメーターを付加してページを表示してみます。ブラウザーのアドレス欄には「http://192.168.56.101/page18.html」が表示されているので、以下のように?以下のパラメーターをつけたURLへとキータイプし、returnキーを押してページアクセスを行います。</div><div class="code"><pre><code>http://192.168.56.101/page18.html?q=16%25</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2313.png"/></div><div class="step-wo-number">MySQLの場合、「f3 LIKE '16%'」すなわち、16で郵便番号が始まる地名を検索する条件を指定します。q=以降は値として設定されるものです。このとき、「16%」が設定したい値ですが、URLは独特のエンコーディングを行い、%は特別な意味を持ちます。そのため、%自体を文字列として指定したい場合には、その文字コードの16進数表記である「25」を交えて「%25」と記述することで、デコードされた場合には「%」という文字列になりなす。JavaScriptでは、エンコードやデコードのための関数としてencodeURIComponentやdecodeURIComponentが用意されています。</div><div class="step"><span class="stepnumber">5</span>ページの表示ができれば、ページの冒頭にあるデバッグ情報に見えているデータベースに与えた検索のためのSQLステートメントを特定します。</div><div class="code"><pre><code>SELECT * FROM postalcode WHERE (`f3` LIKE '1%') AND (`f3` LIKE '16%') ORDER BY `f3` ASC LIMIT 10 OFFSET 0</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2314.png"/></div><div class="step-wo-number">コンテキストのqueryキーで指定した条件と、URLのパラメーターの値をもとにJavaScriptのプログラムで追加した2つの条件が設定されており、ANDでそれぞれ結ばれています。</div><div class="step"><span class="stepnumber">6</span>ページ末尾にあるページ合成の結果を参照します。検索条件に合致するレコードが一覧されています。</div><div class="picture"><img class="picture-small" src="figs/shot2315.png"/></div><h4>検索のためのユーザーインターフェースと連動する</h4><div class="step"><span class="stepnumber">1</span>「page18.htmlを編集する」をクリックして表示したページに戻ります。閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page18.htmlを編集する」をクリックします。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def18.php"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript"&gt;
+  INTERMediatorOnPage.doBeforeConstruct = function () {
+    var params = INTERMediatorOnPage.getURLParametersAsArray();
+    INTERMediator.clearCondition("postalcode");
+    if (params["q"]) {
+      INTERMediator.addCondition("postalcode",
+                                 {field: "f3", 
+                                  operator: "LIKE", 
+                                  value: params["q"]});
+    }
+  }
+  
+<strong>  function search() {
+    var node, str, context;
+    node = document.getElementById("criteria");
+    INTERMediator.clearCondition("postalcode");
+    if (node.value) {
+      str = "%" + node.value + "%";
+      param = {field: "__operation__", operator: "ex"};
+      INTERMediator.addCondition("postalcode",param);
+      param = {field: "f7", operator: "LIKE", value: str};
+      INTERMediator.addCondition("postalcode",param);
+      param = {field: "f8", operator: "LIKE", value: str};
+      INTERMediator.addCondition("postalcode",param);
+      param = {field: "f9", operator: "LIKE", value: str};
+      INTERMediator.addCondition("postalcode",param);
+    }
+    context = IMLibContextPool.contextFromName("postalcode");
+    INTERMediator.construct(context);
+  }</strong>
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>  &lt;input type="text" id="criteria"/&gt;
+  &lt;button onclick="search()"&gt;検索&lt;/button&gt;</strong>
+  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;郵便番号&lt;/th&gt;&lt;th&gt;住所&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-im="postalcode@f3"&gt;&lt;/td&gt;
+      &lt;td&gt;
+        &lt;span data-im="postalcode@f7"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f8"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f9"&gt;&lt;/span&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">ページ上に新たにテキストフィールドと、ボタンが登場しました。テキストフィールドにはid属性を設定し、ボタンにはonclick属性を設定しています。ボタンをクリックすると、search関数が呼び出されます。テキストフィールドの値をもとに検索条件を与えていますが、都道府県名、市区町村名、町域名がそれぞれf7、f8、f9フィールドなので、それぞれに対して、部分一致で検索をかけています。f7〜f9についてはOR演算を行い、もともと、コンテキストのqueryキーの条件とはさらにANDとなるように、検索条件を指定しています。この検索条件の指定方法は『2-5　検索と並べ替えに関する設定』でも指定しています。ここでのポイントは、検索条件の文字列に対して、変数strへの代入部分にあるように、前後に%を付加しています。テキストフィールドに「北」と入れれば、検索条件は例えば「f7 LIKE '%北%'」となります。プログラムで記述すると、検索条件の指定も計算式等で記述でき、さまざまな処理を経て適用することができます。INTERMediator.constructでページ合成を行いますが、ここで引数にコンテキストオブジェクトを指定すると、そのコンテキストのみ再描画されます。コンテキストオブジェクトへの参照は、IMLibContextPool.contextFromNameメソッドを使って引数にコンテキスト名を指定することで得られます。</div><div class="step"><span class="stepnumber">2</span>「http://192.168.56.101」で開いたページに戻り「page18.htmlを表示する」をクリックし、ページファイルのpage18.htmlを表示します。パラメーターはなしで表示するので、もう一度「page18.htmlを表示する」をクリックして新たにページを開く方が手軽でしょう。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">3</span>スクロールしてページ合成した部分を参照します。ここで、検索条件を指定するテキストフィールドと、「検索」ボタンが表示されています。テキストフィールドに「北」と入力して、「検索」ボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot2318.png"/></div><div class="step"><span class="stepnumber">4</span>新たに表示されたデバッグエリアに検索のためのSQLステートメントがあります。次のようなステートメントです。</div><div class="code"><pre><code>SELECT * FROM postalcode WHERE (`f3` LIKE '1%') AND (`f7` LIKE '%北%' OR `f8` LIKE '%北%' OR `f9` LIKE '%北%') ORDER BY `f3` ASC LIMIT 10 OFFSET 0</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2319.png"/></div><div class="step"><span class="stepnumber">5</span>ページの末尾には、検索結果のレコードを基にしたページが合成されています。町名や区名に「北」が含まれる地名が検索されています。</div><div class="picture"><img class="picture-small" src="figs/shot2320.png"/></div><h4>演習のまとめ</h4><ul><li>JavaScriptのプログラムを利用すれば検索条件の追加が可能で、ページ合成前や、ボタンを押してページ合成ができます。後者の利用方は、「検索ページ」を構成するひとつの方法です。</li><li>検索条件を与えて検索をさせる場合、デバッグ情報に見えるSQLステートメントをよく確認して、意図した条件設定になるかを確認しましょう。</li></ul><h3><span id="H3-ANC-11"><span style="display:none">→</span></span><span class="exsign">演習</span>プログラムで条件を指定する検索機能を持つページ（FileMaker）</h3><p>　テキストフィールドに入れた文字列を、JavaScriptのインターフェースで指定する検索条件として与える形式のページを作成します。この演習は、MySQLとFileMakerで細かな点で異なるため、同一の演習をそれぞれのデータベース向けに別々に記述します。FileMakerで演習をされる場合には、このまま進んでください。FileMakerで演習される方は、この演習の前にあるMySQL向けの演習手順『プログラムで条件を指定する検索機能を持つページ（MySQL）』で進めてください。</p><h4>定義ファイルにデータベースアクセスに必要な設定を行う</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def18.phpを編集する」をクリックし、定義ファイルエディターでdef18.phpファイルを編集します。（もし、MySQLの演習に続いてこの演習を進めていたり、他の用途で18番目を利用しているのなら、例えば、def19.phpやdef31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中にはすでにpostalcodeコンテキストが定義されています。repeat-controlキーの値を空白にします。</div><div class="step"><span class="stepnumber">4</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、operatorを「bw」、valueを「1」に切り替えます。</div><div class="step-wo-number">Contextsにあるその他のテキストフィールドはそのまま利用します。</div><div class="picture"><img class="picture-small" src="figs/shot2321.png"/></div><div class="step"><span class="stepnumber">5</span>Database Settingsに設定を行います。db-classを「FileMaker_FX」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「192.168.56.1」、portに「80」、protocolに「http」、datatypeに「FMPro12」と入力します。</div><div class="step"><span class="stepnumber">6</span>Debugについては、「2」のままにしてこの後の作業を行ってください。この演習は、デバッグ情報をみながら動作を確認します。</div><h4>ページファイルの作成</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page18.htmlを編集する」をクリックし、ページファイルのpage18.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def18.php"&gt;&lt;/script&gt;
+<strong>  &lt;script type="text/javascript"&gt;
+  INTERMediatorOnPage.doBeforeConstruct = function () {
+    var params = INTERMediatorOnPage.getURLParametersAsArray();
+    INTERMediator.clearCondition("postalcode");
+    if (params["q"]) {
+      INTERMediator.addCondition("postalcode",
+                                 {field: "f8", 
+                                  operator: "cn", 
+                                  value: params["q"]});
+    }
+  }
+  &lt;/script&gt;</strong>
+&lt;/head&gt;
+<strong>&lt;body&gt;
+  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;郵便番号&lt;/th&gt;&lt;th&gt;住所&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-im="postalcode@f3"&gt;&lt;/td&gt;
+      &lt;td&gt;
+        &lt;span data-im="postalcode@f7"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f8"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f9"&gt;&lt;/span&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">ヘッダー部にあるSCRIPTタグ内にスクリプトが記述されていて、ページ合成を行うの前に実行されるメソッドでいくつかのことが行われています。INTERMediatorOnPage.getURLParametersAsArrayメソッドは、URLのパラメーター部分にあるデータをキーと値に分離し、キーをプロパティとして持つオブジェクトに変換した結果を返します。そして、INTERMediator.clearConditionにより、postalcodeコンテキストの追加の検索条件を消去します。コンテキストのqueryに記述した条件はこのメソッドでは消えません。そして、q=のパラメーターがある場合、addConditionによって、追加の検索条件をpostalcodeに追加します。ここでは、コンテキスト定義とaddConditionの2つの条件が設定され、他に指定はないので、ANDで結合されます。なお、FileMakerは同一のフィールドに関する条件式をURL内に複数記述することはできないので、コンテキストはf3、パラメーターで与える方はf8フィールドを対象としました。</div><h4>ページの表示と結果の確認</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page18.htmlを表示する」をクリックし、ページファイルのpage18.htmlを表示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">2</span>ページの冒頭にあるデバッグ情報には、データベースに与えた検索のためのURLの一部が見えています。その部分を特定します。</div><div class="code"><pre><code>-db=TestDB&amp;-lay=postalcode&amp;-lay.response=postalcode&amp;-max=10&amp;-sortfield.1=f3&amp;-sortorder.1=ascend&amp;f3.op=bw&amp;f3=1&amp;-find</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2322.png"/></div><div class="step-wo-number">この記述はFileMaker ServerのXML共有（あるいはPHP共有）を利用してデータベース処理を行う時のURLの一部です。詳細は、「<a href="https://fmhelp.filemaker.com/docs/14/ja/fms14_cwp_guide.pdf">FileMaker Server 14 カスタムWeb公開ガイド</a>」の第5章に示されています。ここで重要なことは、検索条件が「フィールド名.op=演算子」と「フィールド名=値」の2つのパラメーターで表現されることです。つまり、このURLでは、「f3 bw 1」、つまり、f3フィールドの値が1で始まるという条件がURLから読み取れます。これは、コンテキストのqueryキーで指定したものだけです。ページに接続したときのURLにはパラメーターが付けられていないので、ページ合成前に実行されるメソッドで記述した検索条件は追加されません。</div><div class="step"><span class="stepnumber">3</span>ページ末尾にあるページ合成の結果を参照します。検索条件に合致するレコードが一覧されています。</div><div class="picture"><img class="picture-small" src="figs/shot2331.png"/></div><div class="step"><span class="stepnumber">4</span>パラメーターを付加してページを表示してみます。ブラウザーのアドレス欄には「http://192.168.56.101/page18.html」が表示されているので、以下のように?以下のパラメーターをつけたURLをキータイプし、returnキーを押してページアクセスを行います。</div><div class="code"><pre><code>http://192.168.56.101/page18.html?q=北</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2333.png"/></div><div class="step-wo-number">qの値と、もともとプログラムに設定されているプロパティ値と合わせて、「f8 cn 北」つまりf8フィールド（市区町村名）に、「北」を含むレコードが検索される条件になります。</div><div class="step"><span class="stepnumber">5</span>ページの表示ができれば、ページの冒頭にあるデバッグ情報に見えているデータベースに与えた検索のためのURLの一部を特定します。</div><div class="code"><pre><code>-db=TestDB&amp;-lay=postalcode&amp;-lay.response=postalcode&amp;-max=10&amp;-sortfield.1=f3&amp;-sortorder.1=ascend&amp;f3.op=bw&amp;f3=1&amp;f8.op=cn&amp;f8=%E5%8C%97&amp;-find</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2323.png"/></div><div class="step-wo-number">コンテキストのqueryキーで指定した条件（f3 bw 1）と、URLのパラメーターの値をもとにJavaScriptのプログラムで追加した条件（f8 cn 北）が設定されています。f8キーに対する値「%E5%8C%97」は、「北」をUTF-8で表現し、それらをURLに組み入れられるようにエンコードした結果です。2つの検索条件がありますが、それらはANDで結ばれます。</div><div class="step"><span class="stepnumber">6</span>ページ末尾にあるページ合成の結果を参照します。検索条件に合致するレコードが一覧されています。</div><div class="picture"><img class="picture-small" src="figs/shot2324.png"/></div><h4>検索のためのユーザーインターフェースと連動する</h4><div class="step"><span class="stepnumber">1</span>「def18.phpを編集する」をクリックして表示したページに戻ります。閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「def18.phpを編集する」をクリックします。</div><div class="step"><span class="stepnumber">2</span>FileMakerでは複雑な条件の指定が難しいので、ここでは、コンテキストのqueryキーの設定を削除します。ContextsにあるQueryの見出しの下の行の右にある「削除」ボタンをクリックして、Query行を削除します。確認のダイアログボックスが表示されるので、OKボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot2328.png"/></div><div class="step"><span class="stepnumber">3</span>コンテキストの中のQueryの設定がなくなりました。</div><div class="picture"><img class="picture-small" src="figs/shot2329.png"/></div><div class="step"><span class="stepnumber">4</span>「page18.htmlを編集する」をクリックして表示したページに戻ります。閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page18.htmlを編集する」をクリックします。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def18.php"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript"&gt;
+  INTERMediatorOnPage.doBeforeConstruct = function () {
+    var params = INTERMediatorOnPage.getURLParametersAsArray();
+    INTERMediator.clearCondition("postalcode");
+    if (params["q"]) {
+      INTERMediator.addCondition("postalcode",
+                                 {field: "f8", 
+                                  operator: "cn", 
+                                  value: params["q"]});
+    }
+  }
+  
+<strong>  function search() {
+    var node, str, context;
+    node = document.getElementById("criteria");
+    INTERMediator.clearCondition("postalcode");
+    if (node.value) {
+      str = node.value;
+      param = {field: "__operation__", operator: "ex"};
+      INTERMediator.addCondition("postalcode",param);
+      param = {field: "f7", operator: "cn", value: str};
+      INTERMediator.addCondition("postalcode",param);
+      param = {field: "f8", operator: "cn", value: str};
+      INTERMediator.addCondition("postalcode",param);
+      param = {field: "f9", operator: "cn", value: str};
+      INTERMediator.addCondition("postalcode",param);
+    }
+    context = IMLibContextPool.contextFromName("postalcode");
+    INTERMediator.construct(context);
+  }</strong>
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>  &lt;input type="text" id="criteria"/&gt;
+  &lt;button onclick="search()"&gt;検索&lt;/button&gt;</strong>
+  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;郵便番号&lt;/th&gt;&lt;th&gt;住所&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-im="postalcode@f3"&gt;&lt;/td&gt;
+      &lt;td&gt;
+        &lt;span data-im="postalcode@f7"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f8"&gt;&lt;/span&gt;
+        &lt;span data-im="postalcode@f9"&gt;&lt;/span&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">ページ上に新たにテキストフィールドと、ボタンが登場しました。テキストフィールドにはid属性を設定し、ボタンにはonclick属性を設定しています。ボタンをクリックすると、search関数が呼び出されます。テキストフィールドの値をもとに検索条件を与えていますが、都道府県名、市区町村名、町域名がそれぞれf7、f8、f9フィールドなので、それぞれに対して、部分一致で検索をかけています。最初の{field: "__operation__", operator: "ex"}という検索条件により、f7〜f9についてはOR演算を行います。この検索条件の指定方法は『2-5　検索と並べ替えに関する設定』でも指定しています。ここではテキストフィールドの値をそのまま検索条件に指定していますが、プログラムで記述すると、検索条件の指定も計算式等で記述でき、さまざまな処理を経て適用することができます。INTERMediator.constructでページ合成を行いますが、ここで引数にコンテキストオブジェクトを指定すると、そのコンテキストのみ再描画されます。コンテキストオブジェクトへの参照は、IMLibContextPool.contextFromNameメソッドを使って引数にコンテキスト名を指定することで得られます。</div><div class="step"><span class="stepnumber">5</span>「http://192.168.56.101」で開いたページに戻り「page18.htmlを表示する」をクリックし、ページファイルのpage18.htmlを表示します。パラメーターはなしで表示するので、もう一度「page18.htmlを表示する」をクリックして新たにページを開く方が手軽でしょう。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">6</span>スクロールしてページ合成した部分を参照します。ここで、検索条件を指定するテキストフィールドと、「検索」ボタンが表示されています。テキストフィールドに「北」と入力して、「検索」ボタンをクリックします。</div><div class="picture"><img class="picture-small" src="figs/shot2325.png"/></div><div class="step"><span class="stepnumber">7</span>新たに表示されたデバッグエリアに検索のためのSQLステートメントがあります。次のようなステートメントです。</div><div class="code"><pre><code>-db=TestDB&amp;-lay=postalcode&amp;-lay.response=postalcode&amp;-max=10&amp;-sortfield.1=f3&amp;-sortorder.1=ascend&amp;f3.op=bw&amp;f3=1&amp;-lop=or&amp;f7.op=cn&amp;f7=%E5%8C%97&amp;f8.op=cn&amp;f8=%E5%8C%97&amp;f9.op=cn&amp;f9=%E5%8C%97&amp;-find</code></pre></div><div class="picture"><img class="picture-small" src="figs/shot2327.png"/></div><div class="step"><span class="stepnumber">8</span>ページの末尾には、検索結果のレコードを基にしたページが合成されています。町名や区名に「北」が含まれる地名が検索されています。</div><div class="picture"><img class="picture-small" src="figs/shot2330.png"/></div><h4>演習のまとめ</h4><ul><li>JavaScriptのプログラムを利用すれば検索条件の追加が可能で、ページ合成前や、ボタンを押してページ合成ができます。後者の利用方は、「検索ページ」を構成するひとつの方法です。</li><li>検索条件を与えて検索をさせる場合、デバッグ情報に表示されるXML共有のURLの一部をよく確認して、意図した条件設定になるかを確認しましょう。</li></ul><h3><span id="H3-ANC-12"><span style="display:none">→</span></span>ページ合成およびブラウザー判定に使用したAPI</h3><p>　このセクションのプログラムで使用したAPIについて、まとめておきます。INTERMediator.constructメソッドについては、『6-1　ブラウザーを判断するページ』の最後に説明があります。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-31"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getURLParametersAsArray()</h4><p>　自分自身のページのURLに含まれる<span xmlns="" id="ix-32"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>パラメーターを、オブジェクトとして返します。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>[返り値]</td><td>URLのパラメーターにある「キー=値」のそれぞれのセットについて、キーをプロパティ名、値をそのプロパティに対する値として持つオブジェクト</td></tr></table><div class="caption">表6-2-1　INTERMediatorOnPage.getURLParametersAsArrayの返り値</div></div><h4>INTERMediator.<span xmlns="" id="ix-33"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>clearCondition(contextName)</h4><p>　コンテキストに対して追加される<span xmlns="" id="ix-34"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-35"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>検索条件を、指定したコンテキストに対して消去します。（返り値なし）</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>contextName</td><td>コンテキスト名、すなわち定義ファイルのコンテキスト定義にあるnameキーの値</td></tr></table><div class="caption">表6-2-2　INTERMediator.clearConditionの引数</div></div><h4>INTERMediator.<span xmlns="" id="ix-36"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>addCondition(contextName, criteria)</h4><p>　コンテキストに対する<span xmlns="" id="ix-37"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-38"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>検索条件を追加します。（返り値なし）</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>contextName</td><td>コンテキスト名、すなわち定義ファイルのコンテキスト定義にあるnameキーの値</td></tr><tr><td>criteria</td><td>検索条件を示すオブジェクト。プロパティはfield、operator、valueで、それぞれ定義ファイルでのqueryキーの配列におけるキーと対応している</td></tr></table><div class="caption">表6-2-3　INTERMediator.addConditionの返り値</div></div><p>　addConditionやaddSortKeyメソッドを利用するときの注意点があります。これらのメソッドで登録した条件は、クライアントのブラウザーのセッションストレージに記録されます。その結果、以前にそのページで設定していた検索条件やソート対象フィールドを、改めてページ表示するときに自動的に適用されることになります。そのため、検索条件の設定時にはINTERMediator.clearCondition()メソッドで、条件をクリアをしないと、既存の条件に追加されてしまうことになります。clearConditionにコンテキスト名の引数をつければ、指定したコンテキストの検索条件をクリアします。また、引数を省略すると、追加の検索条件すなわちaddtionalConditonプロパティが何も設定されていない状態になります。</p><p>　なお、ページを閉じた後、検索条件がセッションストレージに保持され、そのページを再度開いた場合に復元されてしまうと思わぬ副作用ももたらします。あるコンテキスト定義が複数の箇所に流用されているような場合には要注意です。ページを開いた後、追加条件なしでコンテキストを利用し、その後、条件を追加してコンテキストを利用したとします。そして、改めてそのページを開くと、最初のコンテキスト利用では後の利用での条件が適用されてしまい、意図しない検索条件が付与されることになります。この場合、ページ移動間での検索条件の保持が不要なら、INTERMediatorOnPage.doBeforeConstructメソッドの最初に「INTERMediator.clearCondition();」を呼び出して、ページ開始時には常に検索条件がクリアされているようにすることで回避はできます。しかしながら、設計上はこうしたコンテキストの使い回しは行わないで、コンテキスト定義自体を分離して別々のコンテキスト定義を行いそれぞれを利用するのが適切です。</p><h3><span id="H3-ANC-13"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　コンテキストに対する検索条件は、定義ファイルのコンテキスト定義に追加できるだけでなく、『2-5　検索と並べ替えに関する設定』の『ユーザーインターフェースの定義だけで検索条件を付与する』では、宣言的な記述だけで検索処理をページに組み込む方法を説明しました。これらの方法に加えてJavaScriptでの追加も可能です。JavaScriptを利用すれば、プログラムでデータに対するさまざまな処理が可能です。検索で指定する文字列とデータベースのフィールドに入っているデータに直接関係がないような場合でも対処できます。例えば、日付データがひとつのフィールドに入っていて、そこへの検索において、年月日を別々にテキストフィールドやポップアップメニューで指定したいような場合が相当します。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-3"><span style="display:none">→</span></span><span class="sectionnumber">6-3</span>データベースへの書き込みを直接行う</h2><p class="lead-section">テキストフィールドなどは「バインド」という手法で、自動的にデータベースと結合されているので、読み書きのためのプログラムは一切追加しないでも、データベースとページ上の表示は同期されます。しかしながら、バインドとは別にデータベースとのやりとりをしたい場合があります。表示に関しては、計算プロパティ（『4-4　計算プロパティの設定』）を利用する方法などがありますが、逆に更新ではJavaScriptのプログラムを利用して、データベースへの直接の書き込みが可能です。</p><h3><span id="H3-ANC-14"><span style="display:none">→</span></span><span xmlns="" id="ix-39"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベース処理メソッドの利用</h3><p>　INTER-Mediatorのクライアント側のプログラムには、データベースの4つの基本操作であるCRUD（Create Read Update Delete）、そしてレコードのコピーに対応するメソッドがあり、フレームワークの処理に利用されています。他に、ファイルのアップロードや、パスワードの変更のメソッド等も利用できますが、アプリケーションで利用したいメソッドは、CRUDおよびコピーのメソッドと思われます。それぞれ、パラメーターをどのように指定するのかということで説明は終わってしまいますが、個別のメソッドの利用方法は演習の後にまとめておきます。まず、最初にそれぞれのデータベース操作に対して、2つのメソッドが実装されている理由を説明します。</p><p>　例えば、レコードを作成するメソッドは、リスト6-3-1に示すように、3通りの記述方法があります。いずれもレコードを作成しますが、動作の違いは認証が必要な場合と非同期もしくは同期通信を行うかどうかにあります。db_createRecordメソッドは非同期通信を行い、認証エラーがあると例外を発生します。db_createRecordWithAuthメソッドは非同期通信を行い、認証エラーがあると、ユーザー名とパスワードを入力するパネルを入力し、正しいユーザー名とパスワードを入力するか、もしくは既定の失敗回数の間は、常にパネルを表示します。すなわち、ページの表示段階等で、認証が済まされている場合には、db_createRecordメソッドを利用します。その場合、レコードを新たに作成する場合でも、すでに通っている認証の継続として処理されます。一方、ページの表示は認証なしでも行うが、レコードの新規作成には認証が必要な場合には、db_createRecordWithAuthメソッドで実装します。そうしておけば、レコード作成直前に認証を求めるパネルが表示されることになります。微妙な動作の違いがありますが、認証時の動作の要件に応じて使い分けることになります。さらに、db_createRecord_asyncメソッドは、認証がある場合でもない場合でも機能するようになっており、通信自体は非同期で行われます。なお、非同期の処理は、データベースからの読み出しについてはVer.5.4-dev現在まだ完全にはサポートしていません。</p><div class="code"><div class="caption">リスト6-3-1　レコードを作成するメソッド</div><pre><code>INTERMediator_DBAdapter.db_createRecord(args);
+INTERMediator_DBAdapter.db_createRecordWithAuth(args, completion);
+INTERMediator_DBAdapter.db_createRecord_async(args, successProc, failedProc)</code></pre></div><h3><span id="H3-ANC-15"><span style="display:none">→</span></span><span class="exsign">演習</span><span xmlns="" id="ix-40"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-41"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>フィールドを更新するボタンを設置する</h3><p>　承認ワークフローを実装するようなアプリケーションにおいて、「承認した」ということを記録するために、承認日時とログイン名を記録するのがひとつの方法としてあります。その時、日時や名前などを手入力はしたくはないと考えるところでしょう。そこで、「ボタンを押すと、指定のフィールドに現在の日時が入力される」というプログラムをボタンで呼び出せば、承認ボタンに対するもっとも重要な要求が満たされます。もちろん、ユーザーに応じて異なる認証権限を与えるアクセス権設定や、承認のキャンセルをどうすればいいかなど、ワークフローに関わるアプリケーションは状態の遷移に伴って多数の要件が絡みます。この演習では、その処理の一部だけを紹介するものとなります。</p><h4>定義ファイルにデータベースアクセスに必要な設定を行う</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def19.phpを編集する」をクリックし、定義ファイルエディターでdef19.phpファイルを編集します。（もし、他の用途で19番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">5</span>Contextsにあるname、table、viewの値を「testtable」とします。key、paging、repeat-control、records、maxrecordsについてはそのまま元から入っている情報をそのまま利用します。</div><div class="step-wo-number">Sortingの次の行にあるfieldの値を「id」にします。directionは「ASC」のままにします。</div><div class="picture"><img class="picture-small" src="figs/shot2339.png"/></div><div class="step"><span class="stepnumber">6</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_FX」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「192.168.56.1」、portに「80」、protocolに「http」、datatypeに「FMPro12」と入力します。</div><div class="step"><span class="stepnumber">7</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><h4>ページファイルの作成</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page19.htmlを編集する」をクリックし、ページファイルのpage19.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。なお、プログラムについては次の手順で示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def19.php"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript"&gt;
+    <strong>// 次のステップでここにプログラムを追加</strong>
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;案件番号&lt;/th&gt;&lt;th&gt;承認日時&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td data-im="testtable@id"&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;input type="text" data-im="testtable@dt2"/&gt;&lt;/td&gt;
+        &lt;td&gt;
+          &lt;button onclick="approval($)" 
+                  data-im="testtable@id@$onclick"&gt;承認&lt;/button&gt;
+        &lt;/td&gt;
+        &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></div><div class="step-wo-number">ページファイルのHTML部分はこれまでに説明してきたことから大きく違いはありません。testtableコンテキストは、testtableそのままの内容で、日付時刻型のdt2フィールドと、連番が自動的に設定されている数値型のidフィールドを表示しています。各行には、「承認」ボタンがあり、そのレコードのdt2フィールドに現在の日付時刻を入力する機能をもたせています。ここで、testtableのどのレコードなのかを特定するために、ボタンをクリックしたときに実行されるapproval関数の引数に、idフィールドの値を指定します。そのために、onclick属性では「approval($)」のように、フィールドのデータと置き換える箇所に$を記述します。そして、同じBUTTONタグのdata-im属性に指定したターゲット指定では、testtableのidフィールドに対して「$onclick」、つまり、idフィールドの値をonclick属性の$と置き換えるという動作を指定しています。例えば、idフィールドの値が23のレコードに対しては、onclick属性の値は「approval(23)」となり、approval関数の引数に、idフィールドの値が指定されます。</div><div class="step"><span class="stepnumber">2</span>ヘッダー部のSCRIPTタブの指定箇所に、以下のプログラムを記述します。MySQLとFileMakerを別々に記載しますが、違いは1行だけです。</div><div class="step-wo-number">[MySQL]の場合</div><div class="code"><pre><code>function approval(id)	{
+    var currentDT, args, context, cName;
+    cName = "testtable";
+    currentDT = INTERMediatorLib.dateTimeStringISO();
+    args = {
+        name: cName,
+	  conditions:[{field:"id", operator:"=", value:id}],
+	  dataset:[{field:"dt2", value:currentDT}]
+    }
+    INTERMediator_DBAdapter.db_update(args);
+    context = IMLibContextPool.contextFromName(cName);
+    INTERMediator.construct(context);
+}
+</code></pre></div><div class="step-wo-number">[FileMaker]の場合</div><div class="code"><pre><code>function approval(id)	{
+    var currentDT, args, context, cName;
+    cName = "testtable";
+    currentDT = INTERMediatorLib.dateTimeStringFileMaker();
+    args = {
+        name: cName,
+	  conditions: [{field:"id", operator:"=", value:id}],
+	  dataset: [{field:"dt2", value:currentDT}]
+    }
+    INTERMediator_DBAdapter.db_update(args);
+    context = IMLibContextPool.contextFromName(cName);
+    INTERMediator.construct(context);
+}
+</code></pre></div><div class="step-wo-number">INTERMediatorLib.dateTimeStringISOメソッドは、引数なしで実行すると、現在の日付に対するISO8601形式の日付の文字列を返します。また、INTERMediatorLib.dateTimeStringFileMakerは現在の日付のFileMaker形式（ロケールに関わらず、月/日/年）の文字列を返します。そして、変数argsにオブジェクトを設定して、INTERMediator_DBAdapter.db_updateメソッドを呼び出し、データベースの更新を行います。このメソッドの引数に指定するオブジェクトは、3つのプロパティを指定します。args変数への代入の箇所に戻って確認してください。nameプロパティはコンテキスト名、conditionsは更新するレコードを検索する条件、datasetは検索したレコードに対してどのフィールドにどんな値を入れるかを指定します。conditionsとdatasetは、オブジェクトの配列で指定するのが基本です。更新後は、コンテキストオブジェクトの参照を得て、コンテキストの部分の再描画を行っています。</div><h4>ページ上のプログラムを実行してみる</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り、「page19.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。testtableテーブルの内容が、1レコードずつ参照できます。最初のトライであるなら全くレコードが表示されていない状態かもしれません。ページネーションにある「レコード追加：testtable」の部分をクリックして、レコードを追加しておきます。</div><div class="picture"><img class="picture-small" src="figs/shot2340.png"/></div><div class="step"><span class="stepnumber">2</span>いずれかのレコードの「承認」ボタンをクリックします。画面が更新されて、対応する「承認日時」のテキストフィールドに、現在の日時が設定されました。</div><div class="picture"><img class="picture-small" src="figs/shot2341.png"/></div><div class="step"><span class="stepnumber">3</span>ページネーションにある「レコード追加：testtable」の部分をクリックして、レコードを追加し、「承認」ボタンをクリックします。やはり画面が更新されて、新しく作成された「承認日時」のテキストフィールドに、現在の日時が設定されました。</div><div class="picture"><img class="picture-small" src="figs/shot2342.png"/></div><h4>演習のまとめ</h4><ul><li>JavaScriptのプログラム内で、データベースに対するCRUDおよびコピーの処理が可能です。</li><li>特定のフィールドに直接値を設定することなどができますが、その後に対応するコンテキストを再描画することで、変更した結果がページに反映されます。</li></ul><h3><span id="H3-ANC-16"><span style="display:none">→</span></span>データベースへの直接的な処理に利用できるAPI</h3><p>　このセクションはデータベースの更新処理に使用できるAPIを利用しましたが、その他のデータベース処理メソッドもまとめておきます。WithAuthが末尾に追加されているメソッドとそうでないメソッドの違いは、このセクションの最初の方の説明を参照してください。WithAuthが末尾に追加されているメソッドには、通信終了後に呼び出される関数を記述するcompletion引数があります。この関数は引数をひとつ設定します。呼び出されたときに引数に設定される値については、関数ごとに違いますので、以下の記述の表の中を参照してください。総じて、WithAuthがないメソッドの返り値が、WithAuthがあるメソッドの場合はcompletion引数の関数呼び出すの時の引数に相当します。</p><p>　なお、asyncで終わるメソッドについては、返り値はありません。成功時と失敗時にクロージャーの呼び出しがあります。失敗時のクロージャーは引数はありませんが、成功時のクロージャーにはひとつだけ引数が設定され、その引数に与えられるオブジェクトは、リスト6-3-2のような形式になります。つまり、左側のキーを利用すれば、右側に記載した内容のデータが得られます。なお、キーに対する値は操作によってはあったりなかったりします。</p><div class="code"><div class="caption">リスト6-3-2　成功時に呼び出されるクロージャーへの引数</div><pre><code>{
+    dbresult: /* クエリー結果、レコードに対応するオブジェクトの配列 */,
+    resultCount: /* 検索して得られたレコード数 */,
+    totalCount: /* 条件に合致するレコード数 */,
+    newRecordKeyValue: /* 新規レコードの主キー値 */,
+    newPasswordResult: /* パスワード変更の結果 */,
+    registeredId: /* クライアント間連携で使うコード */,
+    nullAcceptable: /* null値を使うかどうか */
+}</code></pre></div><h4>INTERMediator_DBAdapter.<span xmlns="" id="ix-42"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_createRecord(args)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-43"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_createRecordWithAuth(args, completion)<br/>INTERMediator_DBAdapter.db_<span xmlns="" id="ix-44"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>createRecord_async(args, successProc, failedProc)</h4><p>　指定したコンテキストに新たな<span xmlns="" id="ix-45"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-46"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>レコードを作成します。既定値には引数で指定するものの他に、コンテキストに定義したdefault-valuesおよび、INTERMediator.additionalFieldValueOnNewRecordプロパティに設定した既定値についても追加されます。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>args</td><td>以下のname, datasetプロパティを持つオブジェクト</td></tr><tr><td>→name</td><td>処理対象のコンテキスト名を文字列で指定する</td></tr><tr><td>→dataset</td><td>{field:xx, value:xx}の形式のオブジェクトの配列。新しいレコードに対して指定フィールドに値を設定する</td></tr><tr><td>completion, successProc</td><td>データベース処理が成功した後に呼び出されるクロージャー</td></tr><tr><td>failedProc</td><td>データベース処理が失敗した後に呼び出されるクロージャー</td></tr><tr><td>[返り値]</td><td>作成したレコードのキーフィールドの値（引数completionの関数呼び出しの引数に設定される値も同様）</td></tr></table><div class="caption">表6-3-1　引数と返り値</div></div><h4>INTERMediator_DBAdapter.<span xmlns="" id="ix-47"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_query(args)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-48"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_queryWithAuth(args, completion)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-49"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_query_async(args, successProc, failedProc)</h4><p>　指定したコンテキストに対して検索を行います。検索条件およびソート条件として、引数だけでなく、コンテキスト定義のquery、sortキーによる指定、INTERMediator.additionalConditionおよびINTERMediator.additionalSortKeyプロパティの定義についても適用されます。さらに、ローカルコンテキストにあるターゲット指定が "_@condition:....", "_@valueofaddorder:....", "_@limitnumber:...." の指定についても反映されます。<span xmlns="" id="ix-50"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-51"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span></p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>args</td><td>以下のname〜primaryKeyOnlyプロパティを持つオブジェクト</td></tr><tr><td>→name</td><td>処理対象のコンテキスト名を文字列で指定する</td></tr><tr><td>→records</td><td>取り出すレコード数。省略するとコンテキスト定義の値。uselimitも参照</td></tr><tr><td>→fields</td><td>取り出すフィールド一覧（省略可能）。Ver.5.3現在この情報は未使用</td></tr><tr><td>→parentkeyvalue</td><td>関連レコードの検索時に利用（省略可能）</td></tr><tr><td>→conditions</td><td>追加の検索条件で、{field: xxx, operator: xxx, value: xxxx}形式のオブジェクトの配列（省略可能）</td></tr><tr><td>→useoffset</td><td>この引数がtrueでINTERMediator.startFromプロパティが設定されていれば、オフセットを指定する（省略可能）</td></tr><tr><td>→uselimit</td><td>取り出すレコード数としてtrueならINTERMediator.pagedSize、falseあるいは省略ならこのオブジェクトのrecordsプロパティが指定される</td></tr><tr><td>→primaryKeyOnly</td><td>trueなら検索条件は主キーフィールドのみを指定してデータベースアクセスする（省略可能）</td></tr><tr><td>completion, successProc</td><td>データベース処理が成功した後に呼び出されるクロージャー</td></tr><tr><td>failedProc</td><td>データベース処理が失敗した後に呼び出されるクロージャー</td></tr><tr><td>[返り値]</td><td>以下のプロパティを持ったオブジェクト（引数completionの関数呼び出しの引数に設定される値も同様）</td></tr><tr><td>→recordset</td><td>検索して得られたレコード。1レコードはフィールドをキーとしたオブジェクトで、その配列がこのプロパティの値</td></tr><tr><td>→totalCount</td><td>検索条件に合致したレコードの総数</td></tr><tr><td>→count</td><td>実際に取り出したレコード数</td></tr><tr><td>→registeredid</td><td>このコンテキストの登録ID値。マルチユーザー利用での同期のときに利用される</td></tr><tr><td>→nullAcceptable</td><td>データベースがnull値をサポートすればtrue。Ver.5.3現在、積極的な利用はされていない情報</td></tr></table><div class="caption">表6-3-2　引数と返り値</div></div><h4>INTERMediator_DBAdapter.<span xmlns="" id="ix-52"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_updateRecord(args)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-53"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_updateRecordWithAuth(args, completion)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-54"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_update_async(args, successProc, failedProc)</h4><p>　指定したコンテキストに対して既存の<span xmlns="" id="ix-55"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-56"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>レコードの更新を行います。検索条件として、引数だけでなく、コンテキスト定義のqueryキーによる指定、INTERMediator.additionalFieldValueOnUpdateプロパティの設定も適用されます。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>args</td><td>以下のname, conditions, datasetプロパティを持つオブジェクト</td></tr><tr><td>→name</td><td>処理対象のコンテキスト名を文字列で指定する</td></tr><tr><td>→conditions</td><td>検索条件で、{field: xx, operator: xx, value: xx}の形式のオブジェクトの配列。</td></tr><tr><td>→dataset</td><td>{field:xx, value:xx}の形式のオブジェクトの配列。指定フィールドに値を設定する</td></tr><tr><td>completion, successProc</td><td>データベース処理が成功した後に呼び出されるクロージャー</td></tr><tr><td>failedProc</td><td>データベース処理が失敗した後に呼び出されるクロージャー</td></tr><tr><td>[返り値]</td><td>更新したレコード。1レコードはフィールドをキーとしたオブジェクトで、その配列がこのプロパティの値（引数completionの関数呼び出しの引数に設定される値も同様）</td></tr></table><div class="caption">表6-3-3　引数と返り値</div></div><h4>INTERMediator_DBAdapter.<span xmlns="" id="ix-57"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_deleteRecord(args)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-58"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_deleteRecordWithAuth(args, completion)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-59"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_delete_async(args, successProc, failedProc)</h4><p>　指定したコンテキストの<span xmlns="" id="ix-60"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-61"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>レコードを削除します。検索条件として、引数だけでなく、コンテキスト定義のqueryキーによる指定、INTERMediator.additionalFieldValueOnDeleteプロパティの設定も適用されます。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>args</td><td>以下のname, conditionsプロパティを持つオブジェクト</td></tr><tr><td>→name</td><td>処理対象のコンテキスト名を文字列で指定する</td></tr><tr><td>→conditions</td><td>検索条件で、{field: xx, operator: xx, value: xx}の形式のオブジェクトの配列。</td></tr><tr><td>completion, successProc</td><td>データベース処理が成功した後に呼び出されるクロージャー</td></tr><tr><td>failedProc</td><td>データベース処理が失敗した後に呼び出されるクロージャー</td></tr><tr><td>[返り値]</td><td>オブジェクトが返るが、アプリケーションにとって有用な情報はない</td></tr></table><div class="caption">表6-3-4　引数と返り値</div></div><h4>INTERMediator_DBAdapter.<span xmlns="" id="ix-62"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_copyRecord(args)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-63"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_copyRecordWithAuth(args, completion)<br/>INTERMediator_DBAdapter.<span xmlns="" id="ix-64"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db_copy_async(args, successProc, failedProc)</h4><p>　指定したコンテキストに対して、検索結果のレコードに対する複製<span xmlns="" id="ix-65"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-66"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>レコードを作成します。検索条件として、引数だけでなく、コンテキスト定義のqueryキーによる指定も適用されます。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>args</td><td>以下のname, conditions, associatedプロパティを持つオブジェクト</td></tr><tr><td>→name</td><td>処理対象のコンテキスト名を文字列で指定する</td></tr><tr><td>→conditions</td><td>検索条件で、{field: xx, operator: xx, value: xx}の形式のオブジェクトの配列。</td></tr><tr><td>→associated</td><td>複製する関連レコードの指定で、{name: xx, field: xx, value: xx}の形式のオブジェクトの配列。nameはコンテキスト名、fieldは外部キーフィールド名、value外部キーフィールドの値を指定する</td></tr><tr><td>completion, successProc</td><td>データベース処理が成功した後に呼び出されるクロージャー</td></tr><tr><td>failedProc</td><td>データベース処理が失敗した後に呼び出されるクロージャー</td></tr><tr><td>[返り値]</td><td>{newKeyValue: xxx, recordset: xxx}形式のオブジェクトで、前者が新規に作成されたレコードの主キー値、後者は新規に作成されたレコードのオブジェクトで、フィールド名がプロパティ（引数completionの関数呼び出しの引数に設定される値も同様）</td></tr></table><div class="caption">表6-3-5　引数と返り値</div></div><h3><span id="H3-ANC-17"><span style="display:none">→</span></span><span xmlns="" id="ix-67"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-68"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>日付時刻の文字列生成のメソッド</h3><p>　JavaScriptの中ではDateオブジェクトで日付や時刻を扱います。しかしながら、データベースの日付や日付時刻型のフィールドに設定する値は、適切な書式の文字列である必要があります。以下のように、ISO8601形式の日付時刻、あるいはFileMaker Server向けの日付時刻の文字列を得るためのメソッドを用意しましたので、Dateオブジェクトからの変換ではこれらのメソッドを使えばOKです。なお、MySQL、PostgreSQL、SQLite、SQL Serverは、<span xmlns="" id="ix-69"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ISO8601形式で受け付けます。いずれのメソッドも、引数はDateオブジェクトで、返り値は文字列です。引数を省略すると、現在の日時の文字列を生成します。</p><h4>NTERMediatorLib.<span xmlns="" id="ix-70"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>dateTimeStringISO(dt)</h4><p>　引数のDateクラスの値を、ISO8601形式（2015-06-21 00:00:00）に変換します。引数を省略すると、現在の日付を返します。日時はブラウザーのローカル時刻に応じたものです。</p><h4>INTERMediatorLib.<span xmlns="" id="ix-71"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>dateTimeStringFileMaker(dt)</h4><p>　引数のDateクラスの値を、FileMaker Serverのタイムスタンプ型フィールドが受け付ける形式（06/21/2015 00:00:00）に変換します。引数を省略すると、現在の日付を返します。日時はブラウザーのローカル時刻に応じたものです。</p><h4>INTERMediatorLib.<span xmlns="" id="ix-72"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>dateStringISO(dt)</h4><p>　引数のDateクラスの値を、ISO8601形式（2015-06-21）に変換します。引数を省略すると、現在の日付を返します。日時はブラウザーのローカル時刻に応じたものです。</p><h4>INTERMediatorLib.<span xmlns="" id="ix-73"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>dateStringFileMaker(dt)</h4><p>　引数のDateクラスの値を、FileMaker Serverが受け付ける形式（06/21/2015）に変換します。引数を省略すると、現在の日付を返します。日時はブラウザーのローカル時刻に応じたものです。</p><h4>INTERMediatorLib.<span xmlns="" id="ix-74"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>timeString(dt)</h4><p>　引数のDateクラスの値を、時刻の形式（12:34:56）に変換します。引数を省略すると、現在の日付を返します。日時はブラウザーのローカル時刻に応じたものです。このメソッドは、FileMaker ServerおよびSQLデータベースのどちらにも共通で利用できます。</p><h3><span id="H3-ANC-18"><span style="display:none">→</span></span><span xmlns="" id="ix-75"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>まとめて更新する処理</h3><p>　『3-1　更新可能なテキストフィールド』『まとめて更新処理を行う』での説明の通り、IM_Entryの2つ目の引数の配列内に、キーが<span xmlns="" id="ix-76"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>transactionで値が「none」の要素を追加することで、テキストフィールドなどを更新するごとにデータベースに書き込みをするのではなく、後からまとめて更新することができました。ナビゲーションバーが表示されていれば「保存」ボタンで保存ができましたが、プログラムで保存処理を呼び出したい場合には、以下のメソッドを利用します。「IMLibPageNavigation」はINTER-Mediatorで定義されているオブジェクトを参照する変数で、プログラムではそのまま記述します。</p><h4><span xmlns="" id="ix-77"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibPageNavigation.<span xmlns="" id="ix-78"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>saveRecordFromNavi(dontUpdate)</h4><p>　更新処理が必要なフィールドを、まとめて更新します。引数にtrueを設定すると、更新処理を行った後にページ全体を「INTERMediator.constructMain(true)」で再度描画し直します。</p><h3><span id="H3-ANC-19"><span style="display:none">→</span></span>サーバーとの通信を直列化する</h3><p>　INTER-Mediatorは、Ver.5.7現在、ページ合成のためのサーバーからの読み出し処理は、非同期通信で行っているため、通信処理は<span xmlns="" id="ix-79"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>直列化されています。しかしながら、データ更新の処理は同期処理での通信を利用するため、直列化はされていません。状況によってはそれでも稼働しますが、認証を行う場合、チャレンジ取得とデータ処理の通信が対応している必要があるため、並列的に通信処理を行うと、認証が切れるなどの問題が発生します。そこで、キューを使って通信処理を直列化しています。<span xmlns="" id="ix-80"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>キューは、変数<span xmlns="" id="ix-81"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibQueueのオブジェクトとして用意されています。独自に作成するJavaScriptのプログラムでも、直列化しないと問題が発生する場合がありますが、その時には、以下のメソッドを使ってください。このメソッドは先入れ先出しの動作となります。</p><h4>IMLibQueue.<span xmlns="" id="ix-82"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setTask(func)</h4><p>　キューに引数のクロージャーを登録し、キューは順番にしたがって処理をし、クロージャーを実行する。クロージャーはひとつの引数を持つが、この引数のクロージャーを実行することで、次のキューに移行できる。</p><p>　実際に、更新処理を直列化するプログラム例を見てください。setTask関数の引数は、ローカル変数にdb_update_asyncへの引数をキャプチャしたクロージャーを返します。クロージャーは引数completeTaskがあり、クロージャー内での処理が終わると「completeTask();」の形式でキューの最後であることを示すようにします。そうしないと、次のキューに移行しません。キューの処理は非同期でも構いませんが、どこかで必ず引数の処理を実行します。</p><div class="code"><div class="caption">リスト6-3-3　キューに通信処理を組み入れるプログラムの例</div><pre><code>IMLibQueue.setTask((function() {
+    var arcsCapt = args;
+    return function(completeTask){
+        INTERMediator_DBAdapter.db_update_async(arcsCapt,
+            function(result){
+                //更新成功時の処理
+                completeTask();  // 引数の変数に()をつけてクロージャーを実行
+            },
+            function(){
+                //更新失敗時の処理
+                completeTask();  // 引数の変数に()をつけてクロージャーを実行
+            }
+        );
+    };
+})());</code></pre></div><p>　INTER-Mediator内部でも、以下のメソッドで同様にIMLibQueue.setTaskメソッドを利用しています。例えば、テキストフィールドの値を変更すると、IMLibUI.valueChangeメソッドが呼び出され、実際にデータベース更新が必要な処理はいきなり実行するのではなく、IMLibQueue.setTaskメソッドでキューに入れて、順次実行されるようになっています。これらのメソッドを利用する場合には、逆にsetTaskを使う必要はありません。<span xmlns="" id="ix-83"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-84"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span></p><ul><li>IMLibUI.valueChange</li><li>IMLibUI.copyButton</li><li>IMLibUI.deleteButton</li><li>IMLibUI.insertButton</li><li>IMLibContext.prototype.setDataAtLastRecord</li><li>IMLibContext.prototype.setDataWithKey</li><li>IMLibPageNavigation.copyRecordFromNavi</li><li>IMLibPageNavigation.deleteRecordFromNavi</li><li>IMLibPageNavigation.insertRecordFromNavi</li></ul><h3><span id="H3-ANC-20"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　データベースとバインドしたユーザーインターフェースだけでなく、ボタンなどによるアプリケーション特有の処理を組み込む場合、データベース処理のニーズが発生します。特に、データベースの更新処理の利用が一般的でしょう。その場合、JavaScriptで利用できるデータベースとの直接のやりとりが可能なAPIを利用することで、必要な機能を組み込むことができます。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-4"><span style="display:none">→</span></span><span class="sectionnumber">6-4</span>ページ合成に割り込む処理の追加</h2><p class="section-lead">INTER-Mediatorではページ合成を行い、ページのテンプレートとデータベースのデータが統合されます。その処理に割り込むことにより、合成処理途中に自分で作成したプログラムを実行させることができます。難易度は高くなりますが、高度な機能も組み込めます。演習では、小計を表示するといったことを行ってみます。</p><h3><span id="H3-ANC-21"><span style="display:none">→</span></span>ページ合成に割り込む処理</h3><p>　ページ合成の手法については、『4-2　ページを合成するときのルール』ですでに解説をしてありますが、本セクションは、合成の流れを理解していないと何を意味するのかまったく分からないと思います。もし、『4-2　ページを合成するときのルール』を読んでいないのであれば、先にそちらを読み進めてください。</p><p>　INTER-Mediatorはページ合成時に、エンクロージャーとリピーターのセットを発見すると、リピーター内部のターゲット指定の状況を見てコンテキストを決定して、データベースアクセスを行います。そして、1レコード分を取り置いてあるリピーターの複製にマージして、エンクロージャーの子要素として追加をします。まず、この追加直後に、指定したメソッドの実行ができます。このメソッドは、例えば、10レコード分が得られていれば、10回呼び出されることになります。そして、エンクロージャーに最後のリピーターが追加された後にも、別のメソッドを呼び出すことができます。こちらはレコード数に関係なく、ひとつのエンクロジャーとリピーターのセットの合成に対して1回呼び出されます。</p><p>　これらのメソッドは、定義ファイルのコンテキスト定義の中で指定します。リピーター追加ごとに呼び出されるメソッドはpost-repeater、エンクロージャーが完成したときに呼び出されるメソッドはpost-enclosureキーで、メソッド名を指定します。コンテキストに依存しないで、リピーター追加ごとあるいはエンクロージャー完成時に呼び出されるメソッドの定義もありますが、こちらは開発初期の時代のもので、現在はコンテキストごとに指定する方法を利用することで、ニーズは十分に満たせるでしょう。なお、これらのキーの値は、定義ファイルエディターでは、Show Allボタンをクリックして全項目を表示しないとページ上には見えてきません。</p><p>　post-repeaterで指定したメソッドはひとつの引数を持ち、その引数には追加したばかりのリピーターのノードに対する配列が設定されて呼び出されます。post-enclosureで指定したメソッドもひとつの引数を持ち、その引数には完成したエンクロジャーのノードへの参照が設定されています。つまり、そのノードより下位のノードとして、実際にデータベースのデータをマージした要素や、あるいはその他の要素が存在します。ターゲット指定がある要素については、INTERMediatorOnPage.getNodeIdsHavingTargetFromNodeメソッド（詳細は演習の後に記載）を利用して、指定したターゲット指定の要素のid属性あるいはそのノードへの参照を得ることで、後はDOMに関するさまざまなメソッドやプロパティを利用して、新たにデータを追加したり、スタイルシート設定を行うことなどが可能です。ターゲット指定でないものは、class属性を指定しておき、DOMのAPIであるgetElementsByClassNameメソッドを使うことで、そのノードへの参照を得ることができます。なお、getElementsByClassNameはInternet Explorerで使用できないメソッドとして有名ですが、Ver.9以降は利用できます。INTER-Mediator Ver.5.0でInternet Explorer Ver.8はサポート対象としなくなっているので、getElementsByClassNameを利用する上での互換性の問題は基本的にはありません。</p><h3><span id="H3-ANC-22"><span style="display:none">→</span></span><span class="exsign">演習</span><span xmlns="" id="ix-85"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>合計や<span xmlns="" id="ix-86"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>小計を表示する</h3><p>　ページ合成の途中に割り込むメソッドを利用して、リストの合計を表示したり、あるいはレコードのグループごとの小計を求める方法を説明します。合計に関しては、一覧部分の全体を含むようなコンテキストを定義して、そのコンテキスト側に計算プロパティを設定することでも実現しますが、小計についてはJavaScriptを組む方法でしか実現しません。なお、この演習は、INTER-Mediator Ver.5.3以降を利用して行ってください。http://192.168.56.101」に接続したページの最初に、VMにインストールされているINTER-Mediatorのバージョンが記載されているので、それを手掛かりにしてください。VMの更新方法は、『1-2　演習を行うための準備』にある『VM内のINTER-Mediatorのアップデート』を参照してください。</p><h4>定義ファイルにデータベースアクセスに必要な設定を行う</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def20.phpを編集する」をクリックし、定義ファイルエディターでdef20.phpファイルを編集します。（もし、他の用途で20番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれ背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">5</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">6</span>name、tableともに「item」、keyを「id」、recordsとmaxrecordsを「10000」、つまりitemテーブルのレコード数より多い数とします。</div><div class="step"><span class="stepnumber">7</span>[MySQL]の場合<br/>viewを「item_display」にします。</div><div class="step-wo-number">[FileMaker]の場合<br/>viewを「item」にします。</div><div class="step"><span class="stepnumber">8</span>Contextsのその他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/shot2343.png"/></div><div class="step"><span class="stepnumber">9</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_FX」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「192.168.56.1」、portに「80」、protocolに「http」、datatypeに「FMPro12」と入力します。</div><div class="step"><span class="stepnumber">10</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><h4>ページファイルの作成と初期データの確認</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page20.htmlを編集する」をクリックし、ページファイルのpage20.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def20.php"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;product_id&lt;/th&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;unitprice&lt;/th&gt;
+      &lt;th&gt;(master)&lt;/th&gt;&lt;th&gt;qty&lt;/th&gt;&lt;th&gt;amount&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-im="item@product_id"&gt;&lt;/td&gt;
+      &lt;td data-im="item@name"&gt;&lt;/td&gt;
+      &lt;td data-im="item@unitprice"&gt;&lt;/td&gt;
+      &lt;td data-im="item@unitprice_master"&gt;&lt;/td&gt;
+      &lt;td data-im="item@qty"&gt;&lt;/td&gt;
+      &lt;td data-im="item@amount"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step"><span class="stepnumber">2</span>「http://192.168.56.101」で開いたページに戻り、「page20.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。itemテーブルの内容が、1レコードずつ参照できます。itemテーブルは、『4-4　計算プロパティの設定』でも利用したものですが、サンプルにある「Sample_invoice」フォルダーで伝票形式のページ作成での明細で利用しているテーブルです。ここでは、product_idフィールドの値が同一のレコードが少なくとも2つ以上はある状態（以下の図ではproduct_id=3のレコードが2つあります）にしてください。ない場合には、『4-4　計算プロパティの設定』の演習結果のページで、同一product_idに対して複数の明細レコードができるように、レコードを追加してください。</div><div class="picture"><img class="picture-small" src="figs/shot2344.png"/></div><h4>合計金額を表示できるようにする</h4><div class="step"><span class="stepnumber">1</span>「def20.phpを編集する」をクリックして表示された定義ファイルエディターのウインドウあるいはタブを選択して、def20.phpを定義ファイルエディターで表示します。もし、閉じてしまっていれば「http://192.168.56.101」で開いたページに戻り、「def20.phpを編集する」をクリックして表示します。（別の番号のファイルで作業している場合には、その番号に応じた定義ファイルを開いてください。）</div><div class="step"><span class="stepnumber">2</span>ページ上部の「Show All」をクリックして、すべての設定項目を表示します。</div><div class="step"><span class="stepnumber">3</span>itemコンテキストのpost-enclosureに「afterItemList」と入力します。Tabキーを押して次のフィールドに移動し、入力結果を確定しておきます。</div><div class="picture"><img class="picture-small" src="figs/shot2345.png"/></div><div class="step"><span class="stepnumber">4</span>「page20.htmlを編集する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択して、page20.htmlをページファイルエディターで表示します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page20.htmlを編集する」をクリックします。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。ヘッダー部分にJavaScriptのプログラムを表示します。また、テーブルにはTFOOTタグを追加して、フッターを追加します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def20.php"&gt;&lt;/script&gt;
+<strong>次のステップで、プログラムをここに追加</strong>
+&lt;/head&gt;
+&lt;body&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;product_id&lt;/th&gt;&lt;th&gt;name&lt;/th&gt;&lt;th&gt;unitprice&lt;/th&gt;
+      &lt;th&gt;(master)&lt;/th&gt;&lt;th&gt;qty&lt;/th&gt;&lt;th&gt;amount&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-im="item@product_id"&gt;&lt;/td&gt;
+      &lt;td data-im="item@name"&gt;&lt;/td&gt;
+      &lt;td data-im="item@unitprice"&gt;&lt;/td&gt;
+      &lt;td data-im="item@unitprice_master"&gt;&lt;/td&gt;
+      &lt;td data-im="item@qty"&gt;&lt;/td&gt;
+      &lt;td data-im="item@amount"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+<strong>  &lt;tfoot&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td id="total"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tfoot&gt;</strong>
+  &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">合計をテーブルのフッター部に表示することにします。単にセルをひとつだけ追加するだけでは、レコードの部分の列の並びとずれてしまいます。そこで、TFOOTタグ内には、TBODYタグ内と同じ数だけセルを表示し、一番最後のセルに対して、id属性として「total」を設定しておきます。ここでは特にスタイルは変更していませんが、例えば罫線を消すなど必要に応じてスタイル指定をすれば、より見やすくなるでしょう。</div><div class="step"><span class="stepnumber">5</span>前のステップのヘッダー部に示した箇所に、以下のプログラムを追加します。</div><div class="code"><pre><code>&lt;script type="text/javascript"&gt;
+    INTERMediatorOnPage.afterItemList = function(target) {
+      var context, keys, i, s = 0, value, fmtValue, node, tNode;
+      context = IMLibContextPool.contextFromName("item");
+      keys = Object.keys(context.store);
+      for (i = 0 ; i &lt; keys.length ; i++ ) {
+        value = context.store[keys[i]]["amount"];
+        s += INTERMediatorLib.toNumber(value);
+      }
+      fmtValue = INTERMediatorLib.numberFormat(s, 0);
+      node = document.getElementById("total");
+      tNode = document.createTextNode(fmtValue);
+      node.appendChild(tNode);
+    }
+&lt;/script&gt;</code></pre></div><div class="step-wo-number">テーブルに利用しているitemコンテキストのpost-enclosureで指定した名前は、INTERMediatorOnPageオブジェクトに定義するメソッドの名前と同一にしておきます。また、このメソッドは引数をひとつだけ持つことができ、引数にはエンクロージャーへの参照が得られます。このafterItemListは、itemコンテキストをページ上に展開し、すべてのレコードに対するリピーターがエンクロージャーに追加された後に呼び出されます。特定のコンテキストについてデータベースとHTMLの合成処理が終わった後に呼び出されます。プログラムの前半は、コンテキストオブジェクトを参照して、その内容、すなわちデータベースから取り出したデータを取り出して、すべてのレコードについて、amountフィールドの値を取り出しています。コンテキストオブジェクトを参照する変数contextに対してstoreプロパティを利用すると、データベースから取り出したデータのうち、ページ上に展開したものがすべてそこに入っています。通常は3階層のオブジェクトになっており、storeの直下はレコードを指定するプロパティ（「主キーフィールド名=主キーフィールド値」の形式の文字列）です。さらにそこから参照されるオブジェクトは、キーがフィールド名、値が対象レコードのフィールドの値となっています。構造は複雑ですが、表構造であるリレーションを、階層構造として記録したのがstoreプロパティです。変数sに対して、amountフィールドの内容を累積して合計を求めています。なお、フィールドの値は文字列として扱うので、数値への変換メソッドとしてINTERMediatorLib.toNumberをサポートしています。INTERMediatorLib.numberFormatはカンマ付きの数値にするメソッドで、フッターにあるid=totalのセルを参照して、そこに書式化した合計値をテキストとして追加し、セル上に計算結果を見えるようにしています。</div><div class="step"><span class="stepnumber">6</span>「page20.htmlを表示する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択してpage20.htmlを表示し、ブラウザーの更新ボタンをクリックして画面を更新します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page20.htmlを表示する」をクリックします。一連のレコードの最後に行が追加されており、amountフィールドの合計が表示されています。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="picture"><img class="picture-small" src="figs/shot2346.png"/></div><h4>金額の小計を表示できるようにする</h4><div class="step"><span class="stepnumber">1</span>「def20.phpを編集する」をクリックして表示された定義ファイルエディターのウインドウあるいはタブを選択して、def20.phpを定義ファイルエディターで表示します。もし、閉じてしまっていれば「http://192.168.56.101」で開いたページに戻り、「def20.phpを編集する」をクリックして表示します。（別の番号のファイルで作業している場合には、その番号に応じた定義ファイルを開いてください。）</div><div class="step"><span class="stepnumber">2</span>itemコンテキストのSortingの下にある「追加」ボタンをクリックします。本当にレコードを作成して良いかをたずねられるので、OKボタンをクリックして項目を1行追加します。</div><div class="step"><span class="stepnumber">3</span>fieldに「prodcut_id」、directionに「ASC」を指定します。小計を求めるためには、どのフィールドの値を記述にしてグループ化するかを決める必要がありますが、ここではproduct_idが同一のレコードについて小計を取ることとします。そのためには同一のグループが連続している必要があるので、ソート条件として該当するフィールドを指定します。</div><div class="picture"><img class="picture-small" src="figs/shot2347.png"/></div><div class="step"><span class="stepnumber">4</span>ページ上部の「Show All」をクリックして、すべての設定項目を表示します。</div><div class="step"><span class="stepnumber">5</span>itemコンテキストのpost-repeaterに「afterItemRecord」と入力します。Tabキーを押して次のフィールドに移動し、入力結果を確定しておきます。</div><div class="picture"><img class="picture-small" src="figs/shot2349.png"/></div><div class="step"><span class="stepnumber">6</span>「page20.htmlを編集する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択して、page20.htmlをページファイルエディターで表示します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page20.htmlを編集する」をクリックします。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。ヘッダー部分にあるJavaScriptのプログラムを修正します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def20.php"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript"&gt;
+    INTERMediatorOnPage.afterItemList = function(target) {
+      var context, keys, i, s = 0, value, fmtValue, node, tNode;
+      
+      <strong>addSubTotalLine(null, false);</strong>
+
+      context = IMLibContextPool.contextFromName("item");
+      keys = Object.keys(context.store);
+      for (i = 0 ; i &lt; keys.length ; i++ ) {
+        value = context.store[keys[i]]["amount"];
+        s += INTERMediatorLib.toNumber(value);
+      }
+      fmtValue = INTERMediatorLib.numberFormat(s, 0);
+      node = document.getElementById("total");
+      tNode = document.createTextNode(fmtValue);
+      node.appendChild(tNode);
+    }
+    
+<strong>    INTERMediatorOnPage.afterItemRecord = function(target) {
+      var nodes, node, groupId, context, insertRepeater, 
+          tNode, fmtValue, value;
+      nodes = INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(
+                target, "item@product_id");
+      if (nodes.length &gt; 0)	{
+        node = document.getElementById(nodes[0]);
+        groupId = INTERMediatorLib.toNumber(node.innerHTML);
+        nodes = INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(
+                  target, "item@amount");
+        if (nodes.length &gt; 0) {
+          node = document.getElementById(nodes[0]);
+          value = INTERMediatorLib.toNumber(node.innerHTML);
+          if (prevId != groupId &amp;&amp; prevId != -1) {
+            addSubTotalLine(target, true);
+            subtotal = 0;
+          }
+          subtotal += value;
+        }
+        prevId = groupId;
+      }
+    }
+    
+    function addSubTotalLine(target, isBefore) {
+      var context, insertRepeater, nodes, fmtValue, tNode;
+      
+      context = IMLibContextPool.contextFromName("item");
+      insertRepeater = context.repeaterNodes[0].cloneNode(true);
+      nodes = INTERMediatorOnPage.getNodeIdsHavingTargetFromNode(
+                       insertRepeater, "item@amount");
+      if (nodes.length &gt; 0) {
+        if (isBefore)	{
+      		context.enclosureNode.insertBefore(insertRepeater, target[0]);
+        } else {
+      		context.enclosureNode.appendChild(insertRepeater);
+        }
+        fmtValue = INTERMediatorLib.numberFormat(subtotal, 0);
+        tNode = document.createTextNode(fmtValue);
+        nodes[0].style.backgroundColor = "white";
+        nodes[0].appendChild(tNode);
+      }
+    }
+    
+    var prevId = -1, subtotal = 0;</strong>
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+		:
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">2つのfunctionによりメソッドが追加されています。まず、コンテキストのpost-repeaterに指定した名前と同じ名前のafterItemRecordメソッドを、INTERMediatorOnPageオブジェクトに定義します。このメソッドが定義されると、itemコンテキストのひとつのリピーターがエンクロージャーに追加された後に呼び出されます。引数には、直前に追加されたリピーターの配列が表示されます。INTERMediatorOnPage.afterItemRecordメソッドでは、INTERMediatorOnPage.getNodeIdsHavingTargetFromNodeメソッドを使用して引数に渡されたリピーターのノードより下位に存在する、ターゲット指定が「item@product_id」のノードを探しています。つまり、ページ上のproducut_idが表示されたセルのid属性を得ています。このメソッドの返り値は配列ですが、該当するノードはひとつに限るので、添え字が0の要素があれば、product_idが表示されたセルのid属性が分かります。そして実際にそのノードにある文字列をinnerHTMLプロパティで取り出しています。さらに同様に、追加されたばかりのリピーターからamountフィールドの値を取り出しています。</div><div class="step-wo-number">プログラムの最後の方に、グローバル変数のprevIdとsubtotalが定義されています。INTERMediatorOnPage.afterItemRecordメソッドは、レコードの数だけ呼び出されるのですが、1回の呼び出しで合計を求めるより、グローバル値に累積させた方がプログラムがシンプルになるので、amoutフィールドの値の小計を累積するための変数としてsubtotalを使います。そして、prevIdは前のレコードのproduct_idフィールドの値です。このフィールドの値が、直前のレコードから変化していれば、そこに小計のテーブル行を追加します。追加する処理は、addSubTotalLine関数で行います。ここで若干ややこしくなるのは、product_idの値が変わってしまった状態のレコードがすでにエンクロージャーに追加されてしまっていることです。したがって、小計自体の行は、現在のリピーターの前に追加しなければなりません。1行目よりも前に表示されないようにするために初期値を-1にして、それも交えて判定を行い、行の追加を行います。なお、addSubTotalLineのisBefore引数は、通常はリピーターの前に小計を入れますが、すべてのレコードの処理を終えた後には無条件に小計の行を追加しなければならないので、前か後かを指定できる関数にしました。</div><div class="step-wo-number">addSubTotalLineメソッドは、リピーターのノードの配列と、小計行をリピーターの前に入れるかどうかのフラグをそれぞれ引数として持ちます。実際に小計の行を作るには、コンテキストオブジェクトのrepeaterNodesプロパティから、取り置いてあるリピーターを参照し、その複製をcloneメソッドで作成して得ています。このプログラムは、リピーターのルートはひとつのTRタグ要素なので、repeateNodesの最初の要素だけを複製するだけでリピーターの複製が得られます。そして、複製したリピーターの中にあるamountフィールドを表示するセルをINTERMediatorOnPage.getNodeIdsHavingTargetFromNodeメソッドで取得しています。引数に応じて、複製したリピーターを、現在挿入されたレコードのデータを合成したリピーターの前か後かに追加をします。その後、subtotal変数の値を、amountフィールドのセルに設定していますが、小計で追加された行であることが分かるように、セルの背景を白にしておきました。</div><div class="step"><span class="stepnumber">7</span>「page20.htmlを表示する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択してpage20.htmlを表示し、ブラウザーの更新ボタンをクリックして画面を更新します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page20.htmlを表示する」をクリックします。product_idフィールドの値の変わり目に行が追加されており、amountフィールドの小計が表示されています。また、合計は合計で表示されています。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="picture"><img class="picture-small" src="figs/shot2350.png"/></div><h4>この演習のまとめ</h4><ul><li>ひとつのリピーターの処理後、あるいはひとつのエンクロージャーの処理後に呼び出されるメソッドを定義できます。</li><li>その中では、特定のターゲット指定を持つノードを検索し、そのidフィールド値を返すメソッドを利用して、処理対象のノードを探すこことができます。</li><li>データベースから得られたデータは、コンテキストオブジェクトのstoreプロパティに残っており、そこから表示された値を得ることができます。</li></ul><h3><span id="H3-ANC-23"><span style="display:none">→</span></span><span xmlns="" id="ix-87"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-88"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ページ合成処理に割り込むメソッド</h3><p>　ページ合成に割り込むメソッドを、アプリケーション側で定義することができます。詳細はこのセクションの最初の部分でも解説しています。<span xmlns="" id="ix-89"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>post-repeaterキーの値をメソッド名にした場合、メソッドを呼び出すときの引数は、追加したリピーターを参照しています。<span xmlns="" id="ix-90"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>post-enclosureキーの値のメソッドの場合は、引数はエンクロージャーのノードです。いずれのメソッドも、返り値は不要です。</p><h4>INTERMediatorOnPage.《post-repeaterキーの値》 = function(target) {...}</h4><h4>INTERMediatorOnPage.《post-enclosureキーの値》 = function(target) {...}</h4><h3><span id="H3-ANC-24"><span style="display:none">→</span></span><span xmlns="" id="ix-91"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ノード検索のためのメソッド</h3><p>　あるノードから、引数に指定したターゲット指定を持つノードを返すメソッドがいくつかあります。演習で使用したものは、最初のひとつだけですが、いくつか異なるバリエーションのメソッドを用意してあります。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-92"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getNodeIdsHavingTargetFromNode(nodes, targetDef)</h4><p>　指定したノードの配列の子要素の中で、引数に指定したターゲット指定を持つノードのid属性値、あるいはそのノードへの参照を配列で返します。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>nodes</td><td>ルートとなるノードあるいはノードの配列</td></tr><tr><td>targetDef</td><td>検索するターゲット指定</td></tr><tr><td>[返り値]</td><td>該当するノードがid属性があればそのid値、id属性がなければそのノードへの参照を返す。指定したターゲット指定のノードが複数あることもあるので、返り値は文字列ないしはノードへの参照の配列になる。</td></tr></table><div class="caption">表6-4-1　引数と返り値</div></div><h4>INTERMediatorOnPage.<span xmlns="" id="ix-93"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getNodeIdsHavingTargetFromRepeater(fromNode, targetDef)</h4><h4>INTERMediatorOnPage.<span xmlns="" id="ix-94"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getNodeIdsHavingTargetFromEnclosure(fromNode, targetDef)</h4><p>　指定したノードより上位階層にさかのぼり、最初に見つけたリピーターあるいはエンクロージャーに含まれる子要素で、引数に指定したターゲット指定を持つノードのid属性値、あるいはそのノードへの参照を配列で返します。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>fromNode</td><td>基準となるノード</td></tr><tr><td>targetDef</td><td>検索するターゲット指定</td></tr><tr><td>[返り値]</td><td>該当するノードがid属性があればそのid値、id属性がなければそのノードへの参照を返す。指定したターゲット指定のノードが複数あることもあるので、返り値は文字列ないしはノードへの参照の配列になる。</td></tr></table><div class="caption">表6-4-2　引数と返り値</div></div><h3><span id="H3-ANC-25"><span style="display:none">→</span></span><span xmlns="" id="ix-95"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>書式設定のためのメソッド</h3><p>　書式設定や数値化のためのメソッドとして以下のようなものが用意されています。もちろん、自分で作ったり、他のライブラリを利用して書式を整えてもかまいません。</p><h4>INTERMediatorLib.<span xmlns="" id="ix-96"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>numberFormat(value, digits)</h4><p>　数値を<span xmlns="" id="ix-97"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>3桁ごとのカンマ付きおよび小数点以下の桁数指定をして書式化した文字列を返す。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>value</td><td>書式化の対象となる値</td></tr><tr><td>digits</td><td>少数以下の桁数</td></tr><tr><td>[返り値]</td><td>書式化した文字列</td></tr></table><div class="caption">表6-4-3　引数と返り値</div></div><h4>INTERMediatorLib.<span xmlns="" id="ix-98"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>toNumber(value)</h4><p>　文字列で得られる数字をもとに、<span xmlns="" id="ix-99"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-100"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>数値に変換します。コンテキストオブジェクトに保存されたデータは、フィールドが数値型でも、値は文字列になっているので、そのまま加算ができない点に注意をしてください。。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>value</td><td>数値に変換する文字列</td></tr><tr><td>[返り値]</td><td>変換した数値</td></tr></table><div class="caption">表6-4-4　引数と返り値</div></div><h3><span id="H3-ANC-26"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　ページ合成の処理に割り込むメソッドを利用することで、ページ合成の結果をダイナミックに変化させることができます。DOM関連のプログラムはコンテキストオブジェクトの使いこなしなどが必要になりますが、複雑な要求に応えるにはここまでの処理が必要になるかもしれません。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-5"><span style="display:none">→</span></span><span class="sectionnumber">6-5</span>コンテキストオブジェクト</h2><p class="section-lead">データベースから取り出したデータは単にノードに合成するだけでなく、データそのものも残してあります。さらに、単に残すだけでなく、ページ上に展開したデータや要素などの情報を保持して、同一フィールドの要素の情報を連動させるなど、クライアントサイドの「モデル」としての機能が組み込まれています。このような、コンテキスト定義を現実のデータや要素と連動できるようにするオブジェクトを「コンテキストオブジェクト」と呼びます。エンクロージャーがひとつあれば、コンテキストオブジェクトもひとつが作られます。</p><h3><span id="H3-ANC-27"><span style="display:none">→</span></span><span xmlns="" id="ix-101"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストオブジェクト</h3><p>　INTER-Mediator上でプログラムを作る場合、コンテキストオブジェクトの存在を知っておくことで、ページ上のデータのやりとりが非常に効率的になります。定義ファイルに定義する「コンテキスト」については、「コンテキスト定義」と呼ぶことにします。</p><p>　コンテキストオブジェクトは、コンテキスト定義をもとにして、データベースから取り出されたデータなどを保持しているオブジェクトであり、INTER-Mediatorは自動的に作成されます（図6-5-1）。基本的には、エンクロージャーの数だけ、コンテキストオブジェクトの実体が作られます。したがって、ひとつのコンテキスト定義から、ひとつのコンテキストオブジェクトの場合もあれば、複数存在することもあります。APIを利用すれば、コンテキスト名からコンテキストオブジェクトを参照できます。また、nav-controlでのマスターおよびディテールのコンテキストオブジェクトを直接取り出すメソッドもあります。</p><div class="picture"><img class="picture-small" src="figs/fig10.png" altsrc="figs/fig10.pdf"/><div class="caption">図6-5-1　コンテキストオブジェクトの立ち位置</div></div><h3><span id="H3-ANC-28"><span style="display:none">→</span></span><span xmlns="" id="ix-102"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストオブジェクトとそのプロパティ</h3><p>　<span xmlns="" id="ix-103"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IMLibContext変数が参照するオブジェクトをクラスとして生成するコンテキストオブジェクトには、データベースから取り出し、ページ上のいずれかのノードに展開したデータが保持されています。ページ展開で得られたデータを取り出すには、このコンテキストオブジェクトに保持された値を利用するのがひとつの方法です。表6-5-1には、コンテキストオブジェクトで利用することがありそうなプロパティをまとめておきました。</p><div class="table"><table><tr><th>プロパティ</th><th>内容</th></tr><tr><td><span xmlns="" id="ix-104"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>contextName</td><td><span xmlns="" id="ix-105"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキスト名</td></tr><tr><td><span xmlns="" id="ix-106"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>enclosureNode</td><td><span xmlns="" id="ix-107"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>エンクロージャーのノードへの参照</td></tr><tr><td><span xmlns="" id="ix-108"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>repeaterNodes</td><td>展開前に初期状態として保持した<span xmlns="" id="ix-109"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>リピーターで、ノードへの参照の配列</td></tr><tr><td><span xmlns="" id="ix-110"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>store</td><td>データベースから取得し、ページに展開したデータ</td></tr></table><div class="caption">表6-5-1　使用する機会のあるコンテキストオブジェクトのプロパティ</div></div><p>　表6-5-1で、<span xmlns="" id="ix-111"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-112"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ページに展開したデータは、storeプロパティに保持されています。storeプロパティは若干複雑なオブジェクト構成になっています。レコードを示すキー値として、「主キーフィールド名=フィールドの値」の形式を持ちます。主キーフィールド名は、コンテキスト定義のkeyキーに対する値です。keyキーの値が「id」だった場合、例えば、「id=3」などがレコードを示すキーになります。そしてひとつのレコードは、フィールド名がプロパティになり、その値がデータベースから得られた値になります。例えば、表6-5-2のようなリレーションが得られた場合、3つのフィールドがいずれもページ上に展開されれば、storeプロパティの値はリスト6-5-1のような形式になります。</p><div class="table"><table><tr><th>id</th><th>text1</th><th>num1</th></tr><tr><td>1</td><td>suger</td><td>4314</td></tr><tr><td>2</td><td>salt</td><td>2983</td></tr><tr><td>3</td><td>saurce</td><td>9223</td></tr></table><div class="caption">表6-5-2　コンテキストで得られたリレーションの例</div></div><div class="code"><div class="caption">リスト6-5-1　表6-5-2から構成されるコンテキストオブジェクトのstoreプロパティ</div><pre><code>{
+    "id=1": {
+        "id": "1",
+        "text1": "suger",
+        "num1": "4314"
+    },
+    "id=2": {
+        "id": "2",
+        "text1": "salt", 
+        "num1": "2983"
+    },
+    "id=3": {
+        "id": "3",
+        "text1": "saurce",
+        "num1": "9223"
+    }
+}</code></pre></div><p>　storeプロパティを利用すれば、例えば、ページに展開したデータについて、複数のレコードの同一のフィールドの値を串刺しで取り出したり、同じレコードの特定のフィールドのデータを取り出すことができます。データはページ上に見えていますが、その値を取り出すにはDOMモデルに従って複雑なプログラムを書かざるを得ません。しかしながら、コンテキストオブジェクトであれば、データをページ上の要素とは独立して取り出すことができます。なお、ページ上に展開していないとstoreプロパティには保持されないので、表示は不要だがコンテキストオブジェクトに必要なフィールドは、type属性がhiddenのINPUTタグ等で、ページ内への展開を記述しておく必要があります。</p><h3><span id="H3-ANC-29"><span style="display:none">→</span></span>コンテキストオブジェクトへのデータの設定と取り出し</h3><p>　IMLibContext変数によって作られるオブジェクトでは、以下のメソッドも利用できます。<span class="object">IMLibContext</span>の部分は、例えば、IMLibContextPool.contextFromName("...")を使い引数に指定したコンテキスト名より得られたコンテキストオブジェクトの変数を指定します。いくつかのプログラム例を、メソッドの説明の後に示します。</p><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-113"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setValue(recKey, key, value, nodeId, target)</h4><p>　コンテキスト内の指定したレコードの指定したフィールドに<span xmlns="" id="ix-114"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-115"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>値を設定する。ページ合成時に、INTER-Mediatorは自動的にこのメソッドを呼び出して、コンテキストとページ内の要素との対応情報を保持する。ページ合成後に、nodeIdとtargetを省略してこのメソッドを呼び出すと、値を保存すると同時に、他のコンテキストの同じテーブルの同じレコードの同じフィールドと<span xmlns="" id="ix-116"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>バインディングしている値も更新するので、結果として各要素に表示する値も更新される。ただし、データベース処理は行わず、ローカルのコンテキストの値を更新するのみである。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>recKey</td><td>storeプロパティのオブジェクトのプロパティ（id=1などのキー）を指定する</td></tr><tr><td>key</td><td>フィールド名</td></tr><tr><td>value</td><td>値</td></tr><tr><td>nodeId</td><td>[省略可能]コンテキストのこの値とバインディングした要素のid属性値</td></tr><tr><td>target</td><td>[省略可能]バインディングした要素のターゲット。ターゲットなしは "" を指定</td></tr><tr><td>[返り値]</td><td>更新された要素のid属性値の配列</td></tr></table><div class="caption">表6-5-3　setValueの引数と返り値</div></div><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-117"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDataWithKey(pkValue, key, value)</h4><p>　コンテキスト内の指定したレコードの指定したフィールドに値を設定し、バインディングされている他の要素への更新を行うとともに、<span xmlns="" id="ix-118"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-119"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>データベースへの更新を行う。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>pkValue</td><td>主キー（コンテキスト定義のkeyキーで指定したフィールド）の値のみで対象レコードを指定</td></tr><tr><td>key</td><td>フィールド名</td></tr><tr><td>value</td><td>値</td></tr><tr><td>[返り値]</td><td>更新された要素のid属性値の配列</td></tr></table><div class="caption">表6-5-4　setDataWithKeyの引数と返り値</div></div><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-120"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setDataAtLastRecord(key, value)</h4><p>　コンテキストの最後のレコードにある指定したフィールドに値を設定し、バインディングされている他の要素への更新を行うとともに、データベースへの更新を行う。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>key</td><td>フィールド名</td></tr><tr><td>value</td><td>値</td></tr><tr><td>[返り値]</td><td>（なし）</td></tr></table><div class="caption">表6-5-5　setDataAtLastRecordの引数と返り値</div></div><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-121"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getValue(recKey, key)</h4><p>　コンテキスト内の指定したレコードの指定したフィールドの<span xmlns="" id="ix-122"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-123"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>値を得る。なお、マスター/ディテール形式のユーザーインターフェースにおいて、keyに "_im_button_master_id" を指定すると、<span xmlns="" id="ix-124"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>「詳細」ボタンの要素に設定されているid属性値を得られるので、プログラムでクリック操作をしたい時には利用できる。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>recKey</td><td>storeプロパティのオブジェクトのプロパティ（id=1などのキー）を指定する</td></tr><tr><td>key</td><td>フィールド名</td></tr><tr><td>[返り値]</td><td>（なし）</td></tr></table><div class="caption">表6-5-6　getValueの引数と返り値</div></div><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-125"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getDataAtLastRecord(key)</h4><p>　コンテキストの<span xmlns="" id="ix-126"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-127"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>最後のレコードにある指定したフィールドの値を得る。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>key</td><td>フィールド名</td></tr><tr><td>[返り値]</td><td>最後のレコードの指定したフィールドの値</td></tr></table><div class="caption">表6-5-7　getDataAtLastRecordの引数と返り値</div></div><h3><span id="H3-ANC-30"><span style="display:none">→</span></span>コンテキストの情報取得</h3><p>　コンテキストオブジェクトからコンテキスト定義を得るなどの情報取得のためのメソッドとして以下のようなものが利用できます。</p><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-128"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getContextDef()</h4><p>　定義ファイルに記述したコンテキスト定義を得る。返り値はひとつのコンテキスト定義を示すオブジェクト。</p><h4>IMLibContextPool.<span xmlns="" id="ix-129"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>contextFromName(contextName)</h4><p>　引数に指定したコンテキスト名に対する<span xmlns="" id="ix-130"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストオブジェクトをひとつだけ返します。定義ファイルのコンテキスト定義よりひとつのコンテキストしか生成していない場合に利用します。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>contextName</td><td>コンテキスト名、すなわち定義ファイルのコンテキスト定義にあるnameキーの値</td></tr><tr><td>[返り値]</td><td>コンテキストオブジェクトへの参照</td></tr></table><div class="caption">表6-5-8　IMLibContextPool.contextFromNameの引数と返り値</div></div><h4> IMLibContextPool.<span xmlns="" id="ix-131"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getContextFromName(contextName)</h4><p>　引数に指定したコンテキスト名に対する<span xmlns="" id="ix-132"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストオブジェクトの配列を返します。定義ファイルのコンテキスト定義から複数のコンテキストを生成している場合に利用します。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>contextName</td><td>コンテキスト名、すなわち定義ファイルのコンテキスト定義にあるnameキーの値</td></tr><tr><td>[返り値]</td><td>コンテキストオブジェクトへの参照の配列</td></tr></table><div class="caption">表6-5-9　IMLibContextPool.getContextFromNameの引数と返り値</div></div><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-133"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getContextInfo(nodeId, target)</h4><p>　要素のid属性値とターゲットから、<span xmlns="" id="ix-134"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキスト情報を得る。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>nodeId</td><td>要素のid属性値</td></tr><tr><td>target</td><td>要素のターゲット。ターゲットなしは "" を指定</td></tr><tr><td>[返り値]</td><td>要素とバインディングしているコンテキスト情報（{context: this, record: recKey, field: key}形式のオブジェクト）</td></tr></table><div class="caption">表6-5-10　getContextInfoの引数と返り値</div></div><h4><span class="object">IMLibContext</span>.<span xmlns="" id="ix-135"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getContextValue(nodeId, target)</h4><p>　要素のid属性値とターゲットから、コンテキストの値を得る。</p><div class="table"><table><tr><th>引数</th><th>指定内容</th></tr><tr><td>nodeId</td><td>要素のid属性値</td></tr><tr><td>target</td><td>要素のターゲット。ターゲットなしは "" を指定</td></tr><tr><td>[返り値]</td><td>引数で指定した要素とターゲットにバインディングしている値</td></tr></table><div class="caption">表6-5-11　getContextValueの引数と返り値</div></div><h3><span id="H3-ANC-31"><span style="display:none">→</span></span>コンテキストを利用したサンプルプログラム</h3><p>　プログラムの簡単なサンプルを示します（リスト6-5-2）。INTER-Mediatorで作成したアプリケーションでは、ひとつのコンテキスト定義をもとにしたページ上の<span xmlns="" id="ix-136"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>コンテキストはひとつだけという場合がよくあります。その時、コンテキストオブジェクトを参照するには、IMLibContextPool.contextFromName(...)を利用できます。引数はコンテキストの "name" キーの値、つまりコンテキスト名を指定します。もし、コンテキストが複数ある場合には、IMLibContextPool.getContextFromName(...) を使用して、該当するコンテキストを返された配列から取り出さなければなければなりません。</p><p>　ひとつのコンテキストに<span xmlns="" id="ix-137"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>レコードがひとつだけという場合はよくあります。つまり、コンテキスト定義の "records" キーの値を1にしているような場合です。コンテキストのメソッドの中に「最後のレコード」に対応するものが用意されていますが、もちろん複数のレコードの最後のレコードに適用できると同時に、1レコードしかない場合には、確実にその1レコードに対して処理をするメソッドとしても利用できます。getDataAtLastRecordメソッドで引数にフィールド名を指定すれば、データベースの値を取得できます。また、setDataAtLastRecordメソッドを利用すれば、コンテキストの値を更新してバインディングしている他の要素の値も更新するとともに、データベースの該当フィールドを更新します。</p><div class="code"><div class="caption">リスト6-5-2　コンテキストを利用したプログラムの例</div><pre><code>var context = IMLibContextPool.<span xmlns="" id="ix-138"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>contextFromName("contextName");
+var idValue = context.getDataAtLastRecord("id");
+context.setDataAtLastRecord("price", 350);</code></pre></div><p>　もし、複数レコードがあるようなコンテキストを変数contextで参照していたとしたら、<span xmlns="" id="ix-139"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Object.keys(context.store)で、レコードを指定するキーが配列で得られます。必要であれば、そのキーをもとに順番に処理をしたり、あるは<span xmlns="" id="ix-140"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>for..inを利用するなどして、コンテキストの各レコードに対して処理を行うことができます（リスト6-5-3）。</p><div class="code"><div class="caption">リスト6-5-3　複数レコードのコンテキストに対するプログラムの例</div><pre><code>var context = IMLibContextPool.contextFromName("productList");
+for (var recKey in context.store) {
+    var unitPrice = context.getValue(recKey, "unitprice");
+    if (unitPrice &gt; 1000)  {
+        context.setDataWithKey(recKey, "unitprice", unitPrice * 1.05);
+    }
+}</code></pre></div><p>　このように、クライアントサイドの<span xmlns="" id="ix-141"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-142"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>プログラムによる値の変更は、コンテキストを中心に考えれば、プログラムはシンプルに作成できます。</p><p>　内部では、コンテキストオブジェクトを使ってさまざまな作業を行います。例えば、同一のフィールドを2つのテキストフィールドにバインドしたとき、一方のデータを変更してデータベースへの更新を行うとともに、もう一方に表示するテキストも更新されます。こうした動作の基礎になっているのがコンテキストオブジェクトです。</p><p>　JavaScriptのプログラムを作る上で一番便利なのは、ページ上の要素にバインドした値が保持されていることです。もちろん、要素から値を取り出すAPIもありますが、要素の種類に応じてプログラムをつくり分ける必要があります。コンテキストオブジェクトは単に値だけがあるので、要素の種類を気にかける必要はありません。また、特定のコンテキストだけを再合成する仕組みもあります。実際の使用方法は、この章で紹介するプログラムとともに示します。</p><h3><span id="H3-ANC-32"><span style="display:none">→</span></span><span xmlns="" id="ix-143"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ローカルコンテキスト</h3><p>　ブラウザーでページ合成を行えば、ローカルコンテキストというオブジェクトがひとつ生成されます。このコンテキストは、データベースとは連動しておらず、クライアントで独立して利用できます。その値はローカルストレージあるいはクッキーに値を保持することで、一度コンテキスト内に作った値を、ページを閉じて開いた後にも復帰させることができます。</p><p>　ローカルコンテキストは、レコードという構造は持たないキー/バリュー形式のストレージです。ページファイル内の要素とバインドでき、要素のdata-im属性に例えば、リスト6-5-4のように記述します。</p><div class="code"><div class="caption">リスト6-5-4　ローカルコンテキストにバインドしたテキストフィールド</div><pre><code>&lt;input id="myVal1" data-im="_@myvalue1" /&gt;</code></pre></div><p>　data-im属性において、コンテキスト名に「<span xmlns="" id="ix-144"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>_」（半角のアンダーライン）を指定します。その後に、任意のフィールド名を与えます。これにより、ローカルコンテキストのmyvalue1フィールドとテキストフィールドがバインドされます。テキストフィールド内の値を変更すると、ローカルコンテキストのmyvalue1フィールドが更新されます。そして、ページを閉じてもローカルストレージ等にmyvalue1フィールドの値を残し、再度ページを開くと、ローカルコンテキストのmyvalue1フィールドは以前の値になります。そして、バインドしているテキストフィールドにも、以前の値が見えるようになります。ローカルコンテキストのAPIを利用すれば、値の取得や設定が可能です。</p><p>　なお、『2-5　検索と並べ替えに関する設定』の『ユーザーインターフェースの定義だけで検索条件を付与する』で説明した、検索ページを宣言的な記述だけで作成する手法は、ローカルコンテキストを応用したものです。</p><p>　ローカルコンテキストの値の設定や取り出しをJavaScriptのプログラムで行う場合、以下のメソッドを利用できます。ローカルコンテキストは、変数名IMLibLocalContextで参照できるオブジェクトです。</p><h4>IMLibLocalContext.<span xmlns="" id="ix-145"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>getValue(key)</h4><p>　ローカルコンテキスト内の引数keyに指定したキーに対する<span xmlns="" id="ix-146"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-147"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>値を返す。</p><h4>IMLibLocalContext.<span xmlns="" id="ix-148"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>setValue(key, value)</h4><p>　引数keyに指定したキーに対する値valueを<span xmlns="" id="ix-149"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-150"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ローカルコンテキストに設定する。</p><h3><span id="H3-ANC-33"><span style="display:none">→</span></span><span xmlns="" id="ix-151"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-152"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>ローカルコンテキストの初期値</h3><p>　ローカルコンテキストの値は、例えばテキストフィールドにバインドしているのであれば、テキストフィールドに値を入力したときに設定されます。加えて、Ver.5.4-devより、定義ファイルへの設定を行えば、ローカルコンテキストの値の初期値を設定することができます。リスト6-5-5のように、IM_Entry関数の2つ目の引数（オプション指定）に、<span xmlns="" id="ix-153"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>local-contextキーで配列を指定します。リストでは、ターゲット指定で、「_@pageTitle」で参照されるコンテキストに対して、初期値として、「IM Samples」という文字列を設定しています。複数のキーに値を与えるには、<span xmlns="" id="ix-154"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>keyキーと<span xmlns="" id="ix-155"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>valueキーを持つ連想配列を書き並べます。</p><div class="code"><div class="caption">リスト6-5-5　ローカルコンテキストの初期値を設定した定義ファイルの例</div><pre><code>IM_Entry(
+    array( /* コンテキスト */ ),
+    array(
+        "local-context" =&gt; array(
+            array("key" =&gt; "pageTitle", "value" =&gt; "IM Samples"),
+        ),
+    ),
+    array( /* DB接続定義 */ ),
+    false
+);</code></pre></div><p>　この定義ファイルを読み込んでいるページファイルにおいて、例えば、ヘッダー部のTITLEタグで、リスト6-5-6のようにローカルコンテキスト参照をしたとします。すると、ページのタイトルには「IM Samples」という文字列が設定されます。データベースからのデータを手軽にバインドできる一方、なんでもデータベースに記録しなければならないのなら、データベースに多様なデータが保存されることになります。ビジネスに直結したデータは当然ながらデータベースに保存するとしても、ちょっとした見栄えを良くするためだけに使う付随的なデータもビジネスロジックを交えて管理するのはかえって大変です。ここではページタイトルを例に出しますが、例えばページタイトルはカスタマイズしたいけれども、全部のページは同じということであれば、このようにコンテキストで与えておくか、あるいは『8-1　定義ファイルの設定内容と外部での設定』で説明するようにparams.phpファイルに記述しておくことでも対処ができます。</p><div class="code"><div class="caption">リスト6-5-6　</div><pre><code>&lt;html&gt;
+&lt;head&gt;
+     &lt;title data-im="_@pageTitle"&gt;&lt;/title&gt;
+     &lt;script type="text/javascript" src="context_of_above.php"&gt;&lt;/script&gt;
+&lt;/head&gt;
+:</code></pre></div><h3><span id="H3-ANC-34"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　コンテキストオブジェクトは、INTER-Mediatorの稼働においては重要な位置を占めますが、プログラミングを行う段階にならないと、その存在は意識することはまずないでしょう。データ処理を絡めたプログラムの作成が必要になる場合には、コンテキストオブジェクトの存在を忘れないようにしましょう。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-6"><span style="display:none">→</span></span><span class="sectionnumber">6-6</span>Post Onlyモードと連動した処理</h2><p class="section-lead">データベースへの新規レコードを作成する<span xmlns="" id="ix-156"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Post Onlyモードは、アンケート入力などを簡単に作成できるのですが、新規入力に連動する処理が必要なアプリケーションもあります。そのため、レコード作成の前後にプログラムを追加できるようになっています。このセクションには演習が2つあり、異なるテーマでのWebページ作成を行います。</p><h3><span id="H3-ANC-35"><span style="display:none">→</span></span>Post Onlyモードの動作とカスタマイズ</h3><p>　Post Onlyモードのページのカスタマイズ可能な箇所は、data-im-control属性が「post」のボタンをクリックしたときの処理です。ボタンを押した後、実際にデータベースにレコードを作成し、テキストフィールドに入力した文字列などをフィールドの初期値とします。このデータベースを処理する前と後に、定義したメソッドを実行できます。データベース処理前のメソッドは、例えば、入力したデータに不正がないかを調べたりもできます。ただし、この処理はバリデーションで実施してもいいのですが、複数のフィールドにまたがるような判断、例えばパスワードのフィールドが2つあって同じものかどうかを判定したいような場合には、データベースの処理の前に判断する方がページ自体は作りやすいでしょう。データベースの処理前のメソッドは論理値を返す必要があり、falseを返せばデータベース処理はキャンセルされて、ページはそのままの状態で止まります。もちろん、データに何か問題が見つかればfalseを返し、問題なければtrueを返せばよいのです。なお、この後の演習では、もう少し複雑な状況での例を出します。演習は、「状況に応じて、フィールドの初期値をプログラムで定義する」といったテーマになります。</p><p>　一方、データベース処理の後に呼び出されるメソッドは、データベース処理が成功したときにだけ呼び出され、作成されたレコードそのものや、あるいはレコードの主キー値を得ることができます。つまり、新規に作成されたレコードの情報を得た上で、別の処理に引き継ぐことができます。こちらの処理は、ページを遷移したりすることが前提になります。このメソッドがなくても、コンテキスト定義により別のページに移動しますが、メソッド側でページを移動すると、それ以降はPost Onlyモードのページ側の処理はすべてキャンセルされます。</p><p>　以上はデータベースを書き込むという意味では、Post Onlyモードのページの最終段階で利用できる機能です。Post Onlyモードのページでも、通常のINTER-Mediatorベースのページと同様に、ページ構築時の機能は使用できます。しかしながら、通常の検索結果を表示するページと異なり、Post Onlyモードの場合は、id属性は元のページファイルの状態をキープします。また、ローカルコンテキストは構成しません。したがって、HTMLの段階で後から処理をしたいテキストフィールドに自由にid属性を設定しておき、そのid値を利用してオブジェクトへのアクセスができます。</p><p>　Post Onlyモードでも、INTERMediator.construct()メソッドを呼び出して、ページ合成の処理は必要です。その前にプログラムを追加したり、INTERMediatorOnPage.doAfterConstructメソッド（『6-1　ブラウザーを判断するページ』を参照）を定義して、ページ合成直後に行う処理を記述することもできます。これらの仕組み利用して、Post Onlyモードのページでの拡張を行うことができます。</p><h3><span id="H3-ANC-36"><span style="display:none">→</span></span><span class="exsign">演習</span>Post Onlyモードを利用して<span xmlns="" id="ix-157"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-158"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>関連レコードを追加する</h3><p>　Post Onlyモードで単一のレコードの作成は簡単にできるのですが、伝票における明細のレコードをPost Onlyモードで作成しようとした場合、単に明細側のコンテキストに対するHTMLを記述すればいいだけではありません。この場合、外部キーに相当するフィールドに、適切な値を入れて、リレーションシップに基づく関連付けをしなければいけません。このような場合は追加で自動的に特定のフィールドに値を与えることが必要になります。このことをPostOnlyモードで実現する方法を紹介します。なお、この演習では、『4-4　計算プロパティの設定』で作成したものの計算式を設定していないものを作成します。ページファイルの記述の一部は、コピー&amp;ペーストで入力してもいいでしょう。</p><h4>定義ファイルにデータベースアクセスに必要な設定を行う</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step"><span class="stepnumber">2</span>「def21phpを編集する」をクリックし、定義ファイルエディターでdef21.phpファイルを編集します。（もし、他の用途で21番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれ背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">5</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">6</span>Contextsでは、name、table、viewに「product」、keyに「id」、pagingに「true」、repeat-controlに「confirm-insert confirm-delete」、recordsに「1」、maxrecordsに「1」を指定します。その他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/shot2369.png"/></div><div class="step"><span class="stepnumber">7</span>Contextsの見出しの下にある「追加」ボタンをクリックします。追加するかどうかをダイアログボックスで確認するので、OKボタンをクリックして、コンテキストの定義をひとつ追加します。</div><div class="step"><span class="stepnumber">8</span>新しく追加されたコンテキストでは、name、table、viewに「item」、keyに「id」、epeat-controlに「confirm-insert confirm-delete」を指定します。その他のテキストフィールドは空白にします。</div><div class="step"><span class="stepnumber">9</span>後から作ったitemコンテキストの中のRelationshipの見出しを見つけます。その下にある「追加」ボタンをクリックします。追加するかどうかをダイアログボックスで確認するので、OKボタンをクリックして、設定を1項目分追加します。</div><div class="step"><span class="stepnumber">10</span>Relationshipの新しい行では、foreign-keyに「product_id」、join-fieldに「id」、operatorに「=」を指定します。Tabキーを押して次のフィールドに進み、入力結果を確定させておきます。</div><div class="picture"><img class="picture-small" src="figs/shot2363.png"/></div><div class="step"><span class="stepnumber">11</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_FX」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「192.168.56.1」、portに「80」、protocolに「http」、datatypeに「FMPro12」と入力します。</div><div class="step"><span class="stepnumber">12</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したいので「2」のままにして、この後の作業を行ってください。</div><h4>ページファイルの作成と初期状態の確認</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page21.htmlを編集する」をクリックし、ページファイルのpage21.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。なお、このページは、『4-4　計算プロパティの設定』の演習で作成したページとおおむね同一です。そちらのページファイルの内容をコピーして編集してもかまいませんが、いくつか削除が必要な箇所もありますので、以下のような結果になるように変更をしてください。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def21.php"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+<strong>  &lt;div id="IM_NAVIGATOR"&gt;&lt;/div&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;id&lt;/th&gt;&lt;td data-im="product@id"&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;acknowledgement&lt;/th&gt;
+      &lt;td data-im="product@acknowledgement"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;name&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="product@name"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;unitprice&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="product@unitprice"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;td colspan="2"&gt;
+      &lt;table&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;&lt;th&gt;invoice_id&lt;/th&gt;&lt;th&gt;qty&lt;/th&gt;
+          &lt;th&gt;unitprice&lt;/th&gt;&lt;th&gt;price&lt;/th&gt;&lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;
+            &lt;td data-im="item@invoice_id"&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;input type="text" data-im="item@qty"/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;input type="text" data-im="item@unitprice"/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+  
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;qty&lt;/th&gt;&lt;th&gt;unitprice&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody data-im-control="post"&gt;
+         &lt;tr&gt;
+            &lt;td&gt;&lt;input type="text" data-im="item@qty"/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;input type="text" data-im="item@unitprice"/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;button data-im-control="post"&gt;追加&lt;/button&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+  &lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">ページファイルでは、2つのテーブルがあり、最初のテーブルの中にはさらにテーブルがあります。最初のテーブルはproductコンテキストを使用し、その中にあるテーブルはitemコンテキストを利用しています。productテーブルのある商品とその売り上げに対する1対多の関係にあるitemテーブルのレコードが、内部のテーブルでいくつか表示されます。ページの最後の方にあるテーブルは、Post Onlyモードでitemコンテキストに新しいレコードを作るためのものです。ここまでは、『3-4　入力専用のPost Onlyモード』や『4-3　複数のコンテキストとリレーションシップ』で説明した内容と大きくは違いません。</div><div class="step"><span class="stepnumber">2</span>「http://192.168.56.101」で開いたページに戻り、「page21.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。productテーブルの内容が、1レコードずつ参照でき、それぞれのページではproductテーブルのidフィールドと同じ値のproduct_idフィールドの値を持つitemフィールドの値が表示されています。また、ページの下の方には、Post Onlyモードのテーブルが表示されています。</div><div class="step"><span class="stepnumber">3</span>Post Onlyモードのテーブルのqtyとunitpriceに適当な数値を入力して、「追加」ボタンをクリックします。itemテーブルを展開している部分に変化はありません。デバッグメッセージの中で、MySQLではINSERTステートメント、FileMakerでは-newパラメーターでXML共有へのアクセスを記録している部分を参照すると、qtyとunitpriceの2つのフィールドにしか値は設定されていません。itemテーブルのproduct_idフィールドはnullになっているので、リレーションシップ上ではproductテーブルのレコードとの関連はないレコードが作成されてしまいました。</div><div class="step-wo-number">[MySQLの場合]<br/>
+INSERT INTO item (qty,unitprice) VALUES ('555','666)<br/>
+[FileMakerの場合]<br/>
+http://192.168.56.1:80/fmi/xml/FMPXMLRESULT.xml?-db=TestDB&amp;-lay=item&amp;-max=1&amp;qty=555&amp;unitprice=666&amp;-new</div><div class="picture"><img class="picture-small" src="figs/shot2366.png"/></div><h4><span xmlns="" id="ix-159"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>外部キーのフィールドにも適切な値を入力する</h4><div class="step"><span class="stepnumber">1</span>「page21.htmlを編集する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択して、page21.htmlをページファイルエディターで表示します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page21.htmlを編集する」をクリックします。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。ヘッダー部分にJavaScriptのプログラムを追加します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def21.php"&gt;&lt;/script&gt;
+<strong>  &lt;script style="text/javascript"&gt;
+    INTERMediatorOnPage.processingBeforePostOnlyContext 
+      = function(targetNode) {
+        var context, keys, pid;
+        context = IMLibContextPool.contextFromName("product");
+        keys = Object.keys(context.store);
+        pid = context.store[keys[0]]["id"];
+        INTERMediator.additionalFieldValueOnNewRecord["item"]
+          = {field:"product_id", value:pid};
+        return true;
+      }
+  &lt;/script&gt;</strong>
+&lt;/head&gt;</code></pre></div><div class="step-wo-number">INTERMediatorOnPage.processingBeforePostOnlyContextメソッドは、Post Onlyモードでの「追加」ボタンを押した直後に呼び出されます。まだ、データベース処理に移行する前であり、ここで値のチェック等も行えます。ここでは、一番外側のテーブルで利用しているproductコンテキストのコンテキストオブジェクトを参照し、最初のレコードのidフィールドの値を変数pidに取得しています。productコンテキストは1レコードのみなので、一番最初のキーのものしか存在しません。そして、INTERMediator.additionalFieldValueOnNewRecordを利用すると、指定したコンテキストに対して新たなレコードを作成するとき、フィールドの初期値を指定できます。ここではitemコンテキストに対してproduct_idの値が、productコンテキストのidフィールドの値になるような定義が追加されることになります。INTERMediatorOnPage.processingBeforePostOnlyContextメソッドは明示的にtrueを返さないと、レコード作成の処理が中断して、データベース処理に入りません。</div><div class="step"><span class="stepnumber">2</span>「page21.htmlを表示する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択してpage21.htmlを表示し、ブラウザーの更新ボタンをクリックして画面を更新します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page21.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">3</span>Post Onlyモードのテーブルのqtyとunitpriceに適当な数値を入力して、「追加」ボタンをクリックします。itemテーブルを展開している部分に変化はありませんが、デバッグメッセージの中のINSERTステートメントの部分（図では選択している部分）を参照すると、qtyとunitpriceに加えて、外部キーとなるproduct_idフィールドの3つのフィールドに値が設定されています。product_idフィールドへの追加は、プログラムで追加した部分により実現されています。</div><div class="step-wo-number">[MySQLの場合]<br/>
+INSERT INTO item (product_id,qty,unitprice) VALUES ('1','44','789)<br/>
+[FileMakerの場合]<br/>
+http://192.168.56.1:80/fmi/xml/FMPXMLRESULT.xml?-db=TestDB&amp;-lay=item&amp;-max=1&amp;product_id=1&amp;qty=44&amp;unitprice=789&amp;-new</div><div class="picture"><img class="picture-small" src="figs/shot2367.png"/></div><h4>入力後にコンテキストを更新する</h4><div class="step"><span class="stepnumber">1</span>「page21.htmlを編集する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択して、page21.htmlをページファイルエディターで表示します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page21.htmlを編集する」をクリックします。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。ヘッダー部分にJavaScriptのプログラムを追加します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;script style="text/javascript"&gt;
+    INTERMediatorOnPage.processingBeforePostOnlyContext 
+      = function(targetNode) {
+        var context, keys, pid;
+        context = IMLibContextPool.contextFromName("product");
+        keys = Object.keys(context.store);
+        pid = context.store[keys[0]]["id"];
+        INTERMediator.additionalFieldValueOnNewRecord["item"]
+          = {field:"product_id", value:pid};
+        return true;
+      }
+<strong>    INTERMediatorOnPage.processingAfterPostOnlyContext 
+      = function(targetNode, returnValue) {
+        var context;
+        context = IMLibContextPool.contextFromName("item");
+	  INTERMediator.construct(context);
+    }</strong>
+&lt;/script&gt;</code></pre></div><div class="step-wo-number">INTERMediatorOnPage.processingAfterPostOnlyContextメソッドは、Post Onlyモードでの処理において、データベース処理が成功すると呼び出されます。引数には、エンクロージャーのノードと、新たに作成されたレコードの主キー値が設定されて、定義したメソッドの呼び出しが行われます。ここでは、単にitemコンテキストの再描画を行っているだけです。これにより、itemテーブルに関連レコードが作成され、再度itemコンテキストの展開が行われ、増えたレコードが追加されて表示されます。</div><div class="step"><span class="stepnumber">2</span>「page21.htmlを表示する」をクリックして表示されたページファイルエディターのウインドウあるいはタブを選択してpage21.htmlを表示し、ブラウザーの更新ボタンをクリックして画面を更新します。もし、閉じてしまっていれば、「http://192.168.56.101」で開いたページに戻り「page21.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">3</span>Post Onlyモードのテーブルのqtyとunitpriceに適当な数値を入力して、「追加」ボタンをクリックします。itemテーブルを展開している部分に追加されました。データベースへの入力とともに、コンテキストの更新をその後に行うことで、追加後に即座に表示されるようになりました。</div><div class="picture"><img class="picture-small" src="figs/shot2368.png"/></div><h4>演習のまとめ</h4><ul><li>Post Onlyモードにおいて、テキストフィールド等に指定されていないフィールドに新たな値を追加するには、INTERMediator.additionalFieldValueOnNewRecordプロパティを利用することができます。</li><li>上記のプロパティに値を設定するタイミングとして、「追加」のボタン（data-im-control属性が「post」のボタン）を押した直後に呼び出されるメソッド内を利用できます。</li><li>Post Onlyモードによる新規レコードを作成直後に画面更新をするには、データベースに新規レコードを作成した直後に呼び出されるメソッドを定義して、そこに画面更新のプログラムを記述します。</li></ul><h3><span id="H3-ANC-37"><span style="display:none">→</span></span><span class="exsign">演習</span>Post Onlyモードのページに引き続いてページを表示する</h3><p>　『3-4　入力専用のPost Onlyモード』で、Post Onlyモードのページに確認のページが不要な点を説明しましたが、一方で、入力後に処理をした結果を確認するという構成も欲しくなります。この場合、入力と確認のページを同一ページに作り、表示と非表示をうまく行う方法を、『3-4　入力専用のPost Onlyモード』で説明しました。一方、入力ページはPost Onlyモードで作成し、確認のためのページを別途作り、そちらは新たに作られたレコードの内容を表示するようにするという方法もあります。こうすれば、サーバー側あるいはデータベース上で複雑な処理を記述できます。こうしたページの作成は、例えばシンプルな通販サイトなどで見られ、合計金額や地域に応じた送料の適用などの応用例が考えらます。その一方で、さまざまなビジネスロジックを組み込むと複雑なシステムになります。そこで、この演習では、ビジネスロジックが極端に簡単な通販サイトを想定することにします。Post Onlyモードのページと、確認のページをどのように「つなぐ」ということを行うのかということを示すためのサンプルであり、通販に必要なロジックをすべて実装したものではありません。</p><p>　演習を行う前に、どのような動作を行うのかをまず確認しておきます。図6-6-1は、最初に表示されるPost Onlyモードのページです。購入者名と、購入品目をチェックボックスで用意します。金額は意図的にページ上に書いていませんが、これは次のページで計算する合計金額がPost Onlyモードページ内にある金額値を取り込んで計算しているかのような誤解がないようにするためのものです。使い勝手としては悪くなりますが、組み込む機能をより明確にしたいので、あえて表示しないでおきます。金額は、引き続くページのコンテキストに定義した計算式に織り込むようにしました。そして、「購入」ボタンを押すと、図6-6-2のページにジャンプします。ここで購入品目と、それに合わせた合計金額が表示されています。ロジック的なものは、このページのコンテキストに定義した計算式により、選択した品目に応じた合計金額が表示されるということです。この状態からの発展については、ページを作成する作業の後に説明します。</p><div class="picture"><img class="picture-small" src="figs/shot2356.png"/><div class="caption">図6-6-1　名前と購入品目を指定するページ</div></div><div class="picture"><img class="picture-small" src="figs/shot2357.png"/><div class="caption">図6-6-2　前のページに応じて、合計金額表示される</div></div><h4>最初のページ用の定義ファイルに必要な設定を行う</h4><div class="step"><span class="stepnumber">1</span>ここからの作業は、Webブラウザー上で行います。まず、INTER-MediatorがインストールされたVMを、VirtualBoxを使用して起動します（『1-2　演習を行うための準備』を参照）。続いて、ブラウザーで、「http://192.168.56.101」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div><div class="step-wo-number">この演習では、2つのページを作成します。以下の流れでは、page22.html/def22.phpとpage23.html/def23.phpを利用します。もし、それらの番号を他の用途に使ってしまっていれば、別の2組のセットを利用してください。連続していなくてもかまいませんが、連続している方が解りやすいでしょう。異なる番号のセットを利用した場合、ソースコードの記述が変わる部分がありますが、可能な限り注記します。</div><div class="step"><span class="stepnumber">2</span>「def22.phpを編集する」をクリックし、定義ファイルエディターでdef22.phpファイルを編集します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">3</span>Contextsの中のQueryと書かれ背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">4</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">5</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">6</span>Contextsでは、name、table、viewに「testtable」、keyに「id」と指定します。Contextsにあるその他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/shot2358.png"/></div><div class="step"><span class="stepnumber">7</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_FX」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「192.168.56.1」、portに「80」、protocolに「http」、datatypeに「FMPro12」と入力します。</div><div class="step"><span class="stepnumber">8</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><h4>最初のページのページファイルの作成</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page22.htmlを編集する」をクリックし、ページファイルのpage22.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。番号にかかる部分は、SCRIPTタグのプログラムの内部にもあります。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def22.php"&gt;&lt;/script&gt;
+<strong>  &lt;script type="text/javascript"&gt;
+    INTERMediatorOnPage.processingAfterPostOnlyContext
+      = function(targetNode, returnValue){
+        location.href = "page23.html?id=" 
+                            + encodeURIComponent(returnValue);
+      }
+  &lt;/script&gt;</strong>
+&lt;/head&gt;
+&lt;body&gt;
+<strong>&lt;table&gt;
+  &lt;tbody data-im-control="post"&gt;
+    &lt;tr&gt;
+      &lt;th&gt;お名前&lt;/th&gt;
+      &lt;td&gt;&lt;input type="text" data-im="testtable@text1"/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;購入品目&lt;/th&gt;
+      &lt;td&gt;
+        &lt;input type="checkbox" value="1" data-im="testtable@num1"/&gt;なべ
+        &lt;input type="checkbox" value="1" data-im="testtable@num2"/&gt;やかん
+        &lt;input type="checkbox" value="1" data-im="testtable@num3"/&gt;フライパン
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;button data-im-control="post"&gt;購入&lt;/button&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">Post Onlyモードのページ部分はすでに説明した通りで、testtableコンテキストにあるtext1、num1、num2、num3の4つのフィールドにページ上で指定した値が設定されるようになっています。SCRIPTタグのプログラムを見てください。INTERMediatorOnPage.processingAfterPostOnlyContextは、Post Onlyモードでのデータベース処理が終わった後に呼び出されるメソッドです。引数は新たにtesttableテーブルに作成したレコードの主キーフィールド値が設定されます。つまり、testtableテーブルのidフィールドであり、コンテキスト定義のkeyキーに対する値が主キーフィールド名になります。その値が120であれば、変数returnValueが120になり、結果として「location.href = "page23.html?id=120;」というJavaScriptのプログラムが実行されます。結果的にページに表示される内容は、page22.htmlからpage23.htmlに移行しますが、id値をパラメーターに伴って別のページが呼び出されることになります。</div><h4>2番目のページの定義ファイルを設定する</h4><div class="step"><span class="stepnumber">1</span>「def23.phpを編集する」をクリックし、定義ファイルエディターでdef23.phpファイルを編集します。（もし、他の用途で23番目を利用しているのなら、例えば、def31.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div><div class="step"><span class="stepnumber">2</span>Contextsの中のQueryと書かれ背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div><div class="step"><span class="stepnumber">3</span>「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div><div class="step"><span class="stepnumber">4</span>同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div><div class="step"><span class="stepnumber">5</span>Contextsでは、name、table、viewに「testtable」、keyに「id」、recordsに「1」と指定します。Contextsにあるその他のテキストフィールドは空白にします。</div><div class="picture"><img class="picture-small" src="figs/shot2359.png"/></div><div class="step"><span class="stepnumber">6</span>ページの最初にある「Show All」ボタンをクリックして、すべての設定項目を表示します。</div><div class="step"><span class="stepnumber">7</span>Calculationsの下にある「追加」ボタンをクリックし、確認のダイアログボックスでOKをクリックして、項目を作成します。全部で4つの項目を作成し、それぞれ、fieldとexpressionに次のようにフィールド名と式を設定します。</div><div class="step-wo-number">field = total, expression = num1 * 2000 + num2 * 3500 + num3 * 3333<br/>
+field : item1, expression : if ( num1 == 1, 'inline', 'none' )<br/>
+field : item2, expression : if ( num2 == 1, 'inline', 'none' )<br/>
+field : item3, expression : if ( num3 == 1, 'inline', 'none' )</div><div class="picture"><img class="picture-small" src="figs/shot2360.png"/></div><div class="step-wo-number">合計金額はtotalという計算プロパティで計算されます。現状は個数を指定しているのではなく、num1〜num3については買うなら1、買わないのならnullになります。計算においてはnullは0になるので、チェックのついた項目に対する金額、2000円、3500円、3333円のいずれかの合計がtotalに求められます。item1〜item3については、num1〜num3の値が1なら、「inline」となり、displayスタイル属性に指定することで、SPANタグ内の文字列を表示します。値が1でなければ「none」をdisplayスタイル属性に設定して非表示にします。この次のページファイルで、totalやitem1〜item3がどのような使われ方をしているのかを確認してください。</div><div class="step"><span class="stepnumber">8</span>Database Settingsに設定を行います。</div><div class="step-wo-number">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=localhost;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div><div class="step-wo-number">[FileMaker]の場合<br/>db-classを「FileMaker_FX」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「192.168.56.1」、portに「80」、protocolに「http」、datatypeに「FMPro12」と入力します。</div><div class="step"><span class="stepnumber">9</span>Debugについては、「false」にすると、デバッグ情報が出なくなります。なお、デバッグ情報をみながら動作を確認したい方は、「2」のままにしてこの後の作業を行ってください。</div><h4>2番目のページのページファイルの作成</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page23.htmlを編集する」をクリックし、ページファイルのpage23.htmlを編集するページファイルエディターを開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="code"><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;script type="text/javascript" src="def23.php"&gt;&lt;/script&gt;
+<strong>  &lt;script type="text/javascript"&gt;
+    INTERMediatorOnPage.doBeforeConstruct = function () {
+      var params;
+      
+      params = INTERMediatorOnPage.getURLParametersAsArray();
+      if (params["id"])	{
+        INTERMediator.clearCondition("testtable");
+
+        INTERMediator.addCondition("testtable", {
+        	field: "id",
+          operator: "=",
+          value: params["id"]
+        });
+      }
+    }
+  &lt;/script&gt;</strong>
+&lt;/head&gt;
+<strong>&lt;body&gt;
+  &lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;お名前&lt;/th&gt;
+      &lt;td data-im="testtable@text1"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;購入品目&lt;/th&gt;
+      &lt;td&gt;
+        &lt;span data-im="testtable@item1@style.display"&gt;なべ&amp;nbsp;&lt;/span&gt;
+        &lt;span data-im="testtable@item2@style.display"&gt;やかん&amp;nbsp;&lt;/span&gt;
+        &lt;span data-im="testtable@item3@style.display"&gt;フライパン&lt;/span&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;合計金額&lt;/th&gt;
+      &lt;td data-im="testtable@total"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;button onclick=""&gt;決定&lt;/button&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;/table&gt;</strong>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><div class="step-wo-number">このページのTABLEではtesttableコンテキストを利用していますが、ヘッダー部分のプログラムにあるように、URLのパラメーターから取り出した値を、INTERMediator.addConditionメソッドを使ってtesttableコンテキストに検索条件として加えています。このプログラムについては、『6-2　再合成を利用した検索ページ』での演習とほぼ同様ですが、ここではid=のパラメーターが設定されていない場合はページ合成も行いません。通常、レコードとして存在する値をid=の後に与えて検索条件としてその値が指定されれば、主キーなので必ず1レコードが返ります。しかしながら、念のためにコンテキスト定義のrecordsも「1」にしています。なお、「決定」ボタンを押しても何も起こりません。プログラムを実装していないということです。</div><h4>実際にページの移動を確認する</h4><div class="step"><span class="stepnumber">1</span>「http://192.168.56.101」で開いたページに戻り「page22.htmlを表示する」をクリックします。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）</div><div class="step"><span class="stepnumber">2</span>名前やチェックボックスを適当に設定して、「購入」ボタンをクリックします。</div><div class="step"><span class="stepnumber">3</span>名前と、購入品目、総合計を確認するページに移動しました。URLがpage23になっており、id=の後に整数が設定されていることを確認します。</div><h4>演習のまとめ</h4><ul><li>Post Onlyページでのレコード作成後に呼び出されるメソッドを利用すれば、新規に作成されたレコードの主キー値が得られます。</li><li>主キー値を元に別のページで、今作成したばかりのレコードを表示することができるので、データベースやあるいはコンテキストなどにロジックを組み込むことで入力データを元にしたデータ処理は可能です。</li><li>なお、実用的なサイトにするには考慮すべきことは多々あります。それについては、この演習の後に解説します。</li></ul><h3><span id="H3-ANC-38"><span style="display:none">→</span></span>入力と確認をより確実に行わせるために</h3><p>　直前まで行っていた『Post Onlyモードのページに引き続いてページを表示する』については、もっとも根幹的な部分だけの作成になりました。現実のアプリケーションではここからさまざまな仕組みの実装が必要になります。それらのヒントをここではまとめておきます。</p><h4>セキュリティ面での考慮</h4><p>　このままでは、他人の注文ページを参照できてしまうことは明白です。page23.html?id=1などとアドレスバーに入れて、1から順番に見ていけばいいのです。これを排除する方法のひとつは、すべて認証した状態で注文をするようにすることです。加えて、レコード単位のアクセス権の設定を行い、Post Onlyモードで作成したレコードは、作成者しか見えないようなコンテキスト定義をdef23.phpで行うというのがもっとも確実な方法です。認証とアクセス権については、『Chapter 7　セキュリティと認証・アクセス権』で説明します。</p><p>　もし、これを認証なしに行いたい場合、他人に見られる確率は0ではありませんが、限りなく0に近くできる手法はあります。Post Onlyモードでレコード作成をしたとき、レコード作成日時を適当な日付時刻型フィールドに保存しておきます。データベースエンジンで設定する方法、あるいは、INTERMediator.additionalFieldValueOnNewRecordプロパティを使う方法などがあります。そして、ここでのpage23.htmlにおいて、主キー値だけでなく、レコード作成日時と現在の日時の時間を見て、一定範囲内であれば表示するようにします。もちろん、数秒としたいところですが、ネットワークが遅いことを考えれば、30秒程度の範囲くらいが妥当なところと思われます。なお、page23.htmlは「更新」ができなくはなりますが、それは「セキュリティ上の理由」で納得してもらえるのではないかと思います。</p><p>　しかし、それでも、主キー値が連番なら、自分のときが245だったら、そのうち300番が来るのは明白なので、10秒ごとにアクセスしてみるというアタックも可能かもしれません。それを防ぐには、主キー値（あるいは主キーフィールドとは別にフィールドを設ける）をランダムかつ長い値にします。数値10桁くらいにしておくと、予測はほとんどつきません。もちろん、偶然当たることもあるかもしれませんが、この完全に0ではないものの極めて低い確率をどのように評価するかは、隠匿したい情報の内容や、発注者の要求レベル、あるいは公開されてもリスクが発生しない業務形態など、個々の案件に依存すると思われます。認証をさせるのが手堅いのですが、認証をしないのは単にリスクをある意味意図的に増やしているということでもあります。コンピューターはなんでもできる万能機械ではないことを理解していただき、落とし所を探りましょう。</p><h4>発注状況の記録</h4><p>　もうひとつ大きな問題があります。こうして蓄積されたレコードは、全部が「発注した」ものかというと、そうではありません。ここでは、「決定」ボタンをクリックしたら発注が確定したということにしたいわけです。このようなステータス管理を行うには、一般にはステータスを記録するフィールドをひとつ用意して、1なら確定、空白なら未確定、9ならキャンセルといったような値を割り当てておく方法がひとつあります。別の方法としては、特定の状態へ移行した日時を記録する方法があります。これら、どちらがいいというわけではなく、他の用途と密接に関連します。例えば、会計と出荷の処理のように、事象確定のタイミングが異なるような場合であれば、さらにテーブルを分けるべきかもしれません。</p><p>　いずれもして、一番手軽な方法は、「決定」ボタンをクリックすることにより、あるフィールドに現在の日時を設定する方法です。その日時フィールドが空欄なら確定していない発注であり、空欄でなければ確定した発注です。「発注一覧」の検索条件にそのフィールドがnullでないことを追加すればおおむね大丈夫です。</p><h4>明細を別テーブルに分けたい</h4><p>　このための手法として、Post Onlyモードを1対多での運用はできません。そこで、Post Onlyモードで使用するテーブルには、明細行のためのフィールドを、10個あるいは15個くらい用意しておきます。つまり、product_idN、qtyN（N=1〜10）のようなフィールドを用意しておきます。場合によってフィールドの種類も増えるでしょう。第一正規形が崩れますがこれは一時的なものとして許容します。そして、どこかで、product_idNとqtyNを別のテーブルに新規レコードおよび転記を行って、1対多の関係に展開します。</p><p>　どこでやればいいのかという点についてはいろいろな場面が考えられますが、Post Onlyモードによる新規レコード作成の直後がベストではないかと思います。そうすれば、次のページの処理では、1対多に展開した状態で、さまざまなロジックを組み込むことができるからです。JavaScriptではINTERMediatorOnPage.processingAfterPostOnlyContextメソッドに、多のテーブル側への追加のプログラムを書くことができるでしょう。あるいは『Chapter 8　サーバーサイドでのプログラミング』で説明する方法を使えばサーバーサイドで別テーブルへの追加部分を記述してもいいかもしれません。また、FileMakerを使っている場合には、コンテキストのscriptキーを使って、データベース上に定義したスクリプトを利用して、明細のレコードを作るということもできるでしょう。</p><h3><span id="H3-ANC-39"><span style="display:none">→</span></span>Post Onlyモードで利用できるAPI</h3><p>　Post Onlyモードだけで利用できるAPIを紹介します。以下のメソッドは定義すれば、ページ内のすべてのコンテキストで呼ばれます。しかしながら、通常Post Onlyモードのコンテキストが複数あるようなページはあまり作られないと思われます。どうしてもコンテキストが複数あってそれらを区別したい場合は、引数で参照したエンクロージャーにid属性あるいはclass属性を指定しておき、その値で区別する方法があるでしょう。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-160"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>processingBeforePostOnlyContext = function(targetNode) {...}</h4><p>　メソッドを定義すれば、<span xmlns="" id="ix-161"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>バリデーションが完了した後で、データベースへの書き込み前に呼び出されます。このメソッドがfalseを返すとデータベースの書き込み処理はキャンセルされます。引数targetにはPost Onlyモードのエンクロージャーへの参照が設定されます。</p><h4>INTERMediatorOnPage.<span xmlns="" id="ix-162"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>processingAfterPostOnlyContext = function(targetNode, idValue) {...}</h4><p>　メソッドを定義すれば、新規レコードを作成した直後に呼び出されます。引数targetにはPost Onlyモードのエンクロージャーへの参照が設定されます。引数idValueは新たに作成されたレコードの主キー値が設定されます。引数に値が設定されていない場合は、レコード作成ができなかったことをしますがデータベースにエラーがある場合にはこのメソッドの呼び出しは行われません。</p><h3><span id="H3-ANC-40"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　Post Onlyモードは、データベースへのレコード作成の前後に、プログラムを追加することができます。演習で示したように、関連レコードのコンテキストにレコードを追加することが可能なPost Onlyモードのコンテキストとページ要素を定義したり、あるいは、新規レコードを作成後にそのレコードを引き継いで新たなページを表示するなどにこの仕組みは応用できます。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-7"><span style="display:none">→</span></span><span class="sectionnumber">6-7</span>JavaScriptコンポーネント用のアダプターの開発方法</h2><p class="section-lead"><span xmlns="" id="ix-163"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-164"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>すでに存在するJavaScriptコンポーネントをバインド可能にするためには、アダプターが必要です。アダプターの開発方法を説明しますが、コンポーネントごとに動作が違うため、最終的には使用するコンポーネントの特性に合わせて調整が必要になります。まだ公開されていないコンポーネントのアダプターを開発したら、是非ともコミットしてください。</p><h3><span id="H3-ANC-41"><span style="display:none">→</span></span>コンポーネントの定義と一例</h3><p>　リスト6-7-1は、jQueryUIに含まれているDatePickerを利用するためのアダプターの例です。DatePickerはカレンダー形式のユーザーインターフェースで日付の選択入力が可能なものです。テキストフィールドに対して、クリックすればDatePickerのカレンダー画面がポップアップするといった動作を行います。</p><p>　このコンポーネントを使用できるようにするドライバーがリスト6-7-1です。IMParts_Catalogというグローバル変数に、「jquery_datepicker」というプロパティを用意し、そのプロパティにドライバーのオブジェクトを設定しておきます。この「jquery_datepicker」は、data-im-widget属性に記述する値です。</p><div class="code"><div class="caption">リスト6-7-1　jquery_datepicker_im.js</div><pre><code>IMParts_Catalog["jquery_datepicker"] = {
+    instanciate: function (targetNode) {
+        var nodeId = targetNode.getAttribute('id');
+        this.ids.push(nodeId);
+
+        targetNode._im_getComponentId = function () {
+            var theId = nodeId;
+            return theId;
+        };
+        targetNode._im_setValue = function (str) {
+            var aNode = targetNode;
+            aNode.value = str;
+        };
+        targetNode._im_getValue = function () {
+            var aNode = targetNode;
+            return aNode.value;
+        };
+    },
+
+    ids: [ ],
+
+    finish: function () {
+        for (var i = 0; i &lt; this.ids.length; i++) {
+            var targetId = this.ids[i];
+            var targetNode = $('#'+targetId);
+            if (targetNode) {
+                targetNode.datepicker({
+                    onSelect: function(dateText) {
+                        this.value = dateText;
+                        IMLibUI.valueChange(this.id);
+                    }
+                });
+             }
+        }
+        this.ids = [ ];
+    }
+};</code></pre></div>
+
+INTER-Mediatorのレポジトリには、Samples/Sample_webpageフォルダーに、リスト6-7-2に加えて、TinyMCEやCodeMirrorのドライバーがあります。同じフォルダーに、それらのドライバーの利用例のページファイルもあります。詳細は、『5-4　JavaScriptコンポーネントの利用』を参照してください。
+
+<h3><span id="H3-ANC-42"><span style="display:none">→</span></span>ドライバーオブジェクトの構成</h3>
+<p>　ドライバーのオブジェクトに必要なメソッドは、引数をひとつ取る<span xmlns="" id="ix-165"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>instanciateと、引数のないの2つのメソッドです。加えて、これらのメソッド間でコンポーネントを適用したオブジェクトを後から参照するためにid属性を記録しておくidsプロパティを定義して、初期値は要素のない配列にしておきます。</p>
+<p>　INTER-Mediatorは、data-im-widget属性がある要素の場合、その値からドライバーのオブジェクトを参照します。そして、そのオブジェクトのinstanciateメソッドを呼び出します。その要素には通常はターゲット指定を行っているはずですが、id属性を設定した後にドライバーのinstanciateメソッドが呼び出されます。そして、instanciateメソッドの引数は、data-im-widget属性がある要素を参照した状態で呼び出されます。</p>
+<p>　コンポーネントによってその後の構成は異なりますが、jQueryUIのDatePickerは比較的シンプルな方です。引数に与えられた要素への参照からid属性値を得て、idsプロパティへ要素として追加しています。HTMLエディターのTinyMCEでは、要素の子要素にTEXTARERタグの要素を追加し、その要素をTinyMCEに渡してエディターを構築するようにしています。これら、実装はコンポーネントの初期化の動作に依存します。</p>
+<p>　instanciateメソッドは、リピーターにデータベースのデータを合成しているときに逐一呼び出されます。したがって、レコード数×data-im-widget属性がある要素の数だけ呼び出されることになります。一方、finishメソッドは、エンクロージャーの中にすべての複製されたリピーターが挿入された最後に呼び出されます。つまり、ページのDOMの中に、データベースのデータを合成したものがすべて含まれる状態で呼び出されます。通常はコンテキストにつき1回だけ呼び出されます。</p>
+<p>　このように、instanciateとfinishがあるのは、instanciateを実行する段階では、ページのDOMの中に要素はなく、リピーターの複製をエンクロージャーに追加する前に呼び出されるからです。このような状態では初期化がうまくいかないコンポーネントがあるため、個別の呼び出しとページに組み込まれてから呼び出される2つのメソッドを用意しました。</p>
+
+<h3><span id="H3-ANC-43"><span style="display:none">→</span></span>ドライバーオブジェクト内で行うこと</h3>
+<p>　ドライバーオブジェクトのinstanciateおよびfinishメソッド内では、各data-im-widget属性が指定された要素に対して、表6-7-1のメソッドを定義することです。メソッドの設定はinstanciate側では、_im_getComponentIdは必ず行えるとして、_im_setValueメソッドもそこで指定します。そうしないと、データベースのデータの合成で値の設定が正しく行われません。_im_getValueについてはinstanciateあるいはfinishのどちらでもいいのですが、通常はinstanciateで設定してみてうまくいかないときにはfinishメソッド内で、idsプロパティに保存されているid属性値ひとつひとつについて処理をするといった思考錯誤が必要です。これらのメソッド内では、コンポーネント特有の事情を考慮して、値を設定したりあるいは取り出したりということを行います。jQueryUIのDatePickerの場合は、比較的シンプルですが、別のコンポーネントではコンポーネントに特有のAPIを利用する必要がある場合もあります。</p>
+
+<div class="table"><table><tr><th>メソッド名</th><th>引数</th><th>動作（返り値）</th></tr><tr><td><span xmlns="" id="ix-166"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>_im_getComponentId</td><td>なし</td><td>要素のid属性値を返す</td></tr><tr><td><span xmlns="" id="ix-167"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>_im_setValue</td><td>ひとつ</td><td>要素に引数の値を設定する。返り値なし</td></tr><tr><td><span xmlns="" id="ix-168"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>_im_getValue</td><td>なし</td><td>要素の値を取り出して返す</td></tr></table><div class="caption">表6-7-1　data-im-widget属性のある要素に付加するメソッド</div></div>
+
+<p>　なお、jQueryの場合は、ページ上にあるテキストフィールドを参照してオブジェクトが増やされますが、そのテキストフィールドは追加されたオブジェクトから独立しています。通常のテキストフィールドだと、テキストを修正して別のフィールドに移動するときにchangeイベントが発生しますが、DatePickerはテキストフィールドとしてのイベントは発生されません。そこで、datepickerメソッドで各要素でDatePickerを有効にしたときに、onSelectメソッドを実装して、選択時の処理を記述しています。IMLibUI.valueChangeは、テキストフィールドのchangeイベントが呼び出されたときに使用するもので、id属性を与えれば、データベースの更新や別の要素で表示しているフィールドの表示、さらには再計算など必要な更新処理をすべて行うメソッドを呼び出しています。結果的に、_im_setValueは使われることなく、コンポーネントのイベントを得て更新処理を実施しています。</p>
+
+<h3><span id="H3-ANC-44"><span style="display:none">→</span></span>ドライバーのサンプルで利用したAPI</h3>
+<p>　DatePickerのドライバーは以下のメソッドを利用していますが、ドライバーに特有なAPIではなく、他の場面でも利用できるものです。</p>
+
+<h4>IMLibUI.<span xmlns="" id="ix-169"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>valueChange(idValue)</h4>
+<p>　引数に指定したid属性値を持つ要素に見えている値を用いて、データベースの更新やバインドされている他のフィールドへの反映、再計算などを行います。通常、テキストフィールドは、changeイベントが発生したときにこのメソッドが呼び出されるようになっています。</p>
+
+<h3><span id="H3-ANC-45"><span style="display:none">→</span></span>このセクションのまとめ</h3>
+<p>　JavaScriptで作られたコンポーネントをバインドできるようにするためにはドライバーが必要です。ドライバーはグローバル変数IMParts_Catalogのdata-im-widget属性に指定する値と同一の名称のプロパティにオブジェクトとして定義します。オブジェクトでは、instanciateとfinishのメソッド定義し、_im_getComponentId、_im_setValue、_im_getValueの3つのメソッドを、data-im-widget属性が設定されている要素に追加する必要があります。それ以上の実装に関することは、コンポーネントの事情に応じて対処する必要があります。</p>
+
+</div></body></html>
