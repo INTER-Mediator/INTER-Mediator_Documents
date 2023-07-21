@@ -535,32 +535,112 @@ data-im="context@id@$src context@imagefile@#src" /&gt;</code></pre></div>
 
 
 <!-- ============ SECTION START ============ -->
+<h2><span id="H2-ANC-6"><span style="display:none">→</span></span><span class="sectionnumber">7-6</span>SAML認証</h2>
+<p>　INTER-Mediatorでは内蔵の認証システム以外に、SAMLに対応した外部の認証システムを利用した認証にも対応しています。ここではINTER-MediatorでSPを運用して、認証に利用する方法を説明します。なお、演習はありません。</p>
+
+<h3><span id="H3-ANC-37"><span style="display:none">→</span></span>SAMLについて</h3>
+<p>　<span xmlns="" id="ix-150"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SAML（Security Assertion Markup Language）は、異なるドメイン間での認証を実現するXMLベースの規格ですが、現在はアプリケーションサーバーとは異なる認証サーバーで認証してアプリケーションを利用できる仕組みの基礎となる規格として利用されています。SAML Ver.2が2005年に制定され、現在もそのバージョンで利用されています。認証に利用できるサーバにはさまざまな種類がありますが、その認証サーバをシンプルに使うとなると、認証サーバの種類や方式ごとにアプリケーションサーバー側での対応が必要になります。一方、SAMLを利用することで、認証サーバによらない統一的な方法でアプリケーションに認証機能を組み込めるという点で非常に便利です。</p>
+<p>　INTER-Mediatorでは内蔵の認証システムを持っており、単一の、あるいは同じデータベース上で稼働するアプリケーション上での認証機能はこれまでに説明したとおり実現できています。しかしながら、<span xmlns="" id="ix-151"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Active Directoryや<span xmlns="" id="ix-152"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>LDAPサーバに認証情報がすでにあるという組織の場合、それら認証サーバにあるアカウントを利用したいと考えます。INTER-MediatorはVer.6までの間に、LDAP、GoogleのOAuthに対応したクラスを用意してきましたが、認証方式ごとに対応するのは効率的ではないと考え、SAML2での認証に一本化をする前提で進めています。INTER-MediatorはVer.8でSAMLに対応しました。</p>
+<p>　SAMLでは、認証の処理を実際に行う<span xmlns="" id="ix-153"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IdP（<span xmlns="" id="ix-154"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Identity Provider）と、認証要求を行う<span xmlns="" id="ix-155"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SP（<span xmlns="" id="ix-156"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Service Provider）が存在します。一般には、IdPは独立したドメインで運用し、SPはWebアプリケーションの内部に組み込んであるという状況が多いと思われます。IdP自身が認証処理を行う場合もありますが、別の認証サーバーと連携することもよく利用される形式です。例えば、IdPを立てると同時にIdPとLDAPサーバが通信して、実際のユーザ認証はLDAPサーバ側で行うという仕組みが構築できます。</p>
+<p>　一方、SPは、Webアプリケーションと直接やりとりを行う部分です。SPとIdPはお互いに相互に<span xmlns="" id="ix-157"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>メタデータ交換を行なっています。具体的には、SPのメタデータをIdPに登録すると同時に、IdPのメタデータをSPに登録します。メタデータにはそれぞれのホストのSAMLをやり取りするURLの情報などが入っています。加えて、それぞれのホストの公開鍵が入っており、この公開鍵を利用して、双方の通信を暗号化しています。交換されたということで、双方は信頼できると判断できますが、信頼性の検証は結果的に人間が行うことになります。</p>
+<p>　Webアプリケーションで認証が必要になり、SPを利用すると、最初はまずクライアントが、IdPの認証のためのURLにリダイレクトされて、ユーザは認証パネルでユーザ名とパスワードを入れることになります。認証が成功すると、Webアプリケーション側のURLにさらにリダイレクトされます。そして、WebアプリケーションがSPを利用すると、今度はIdPとのやりとりを含めて認証が成立しているので、Webアプリケーションはその結果をもとに認証が通った状態の処理を続けることになります。大まかには以上の流れで認証が進められます。</p>
+
+<h3><span id="H3-ANC-38"><span style="display:none">→</span></span>PHPでSAMLを実現するSimpleSAMLphp</h3>
+<p>　PHPでは<span xmlns="" id="ix-158"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SimpleSAMLphpという名前のライブラリがよく利用されており、INTER-MediatorでもこのライブラリをSPとして利用します。SimpleSAMLphpはSPとしての機能だけでなく、IdPにもなります。なお、SimpleSAMLphpは2023年まではVer.1系列が開発されてきましたが、2023年よりVer.2系列に入ったものの、さらにVer.3のアルファ版も見えるなど、どのバージョンを使うのか迷う状況でもあります。Ver.1系列は、Ver.1.19.4まであり、これを利用するという方法もありますが、Ver.2についてはVer.2.0.4までがリリースされています。これらはユーザインターフェースが結構違っており、Ver.2の方が洗練したデザインなのではありますが、状況によってはVer.1を使うことになるかもしれません。なお、SimpleSAMLphpのバージョン1も2も、SAMLのバージョンはVer.2ですので混同しないようにしましょう。</p>
+<p>　すでにIdPとなるものが存在していれば、Webアプリケーション側はSPの用意だけで済みます。例えば、<span xmlns="" id="ix-159"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>Shibboleth 1.3の認証サーバがある場合は、SPをセットアップすればOKです。なお、SimpleSAMLphpのVer.2ではShibbolethの機能は落とされているので、認証サーバがShibbolethの場合はVer.1系列で運用することも検討が必要です。</p>
+<p>　一方で、IdPになるものがない場合、独自にIdPを立てる必要があります。もちろん、SimpleSAMLphpを使えば良いのですが、やはりサーバをひとつ起動して色々セットアップも難しいだけに、そこそこの手間はかかります。例えば、LDAPサーバーを利用したい場合、LDAPサーバーとIdPが連携するように、IdP側に設定を行います。SPはそのIdPを利用するというのが基本的な設置方法になります。</p>
+<p>　ここからは、どこかにIdPが稼働しているという前提で話を進めます。IdP自体のセットアップも作業として発生する場合もあると思われますが、SimpleSAMLphpを使ったIdPの設置手順は筆者のBlog記事（<a href="https://blog.msyk.net/?p=1566" target="_blank">SimpleSAMLphp Ver.2を使ってみる(1)</a>、<a href="https://blog.msyk.net/?p=1580" target="_blank">SimpleSAMLphp Ver.2を使ってみる(2)</a>）で紹介しているので参考にしてください。</p>
+
+<h3><span id="H3-ANC-39"><span style="display:none">→</span></span>INTER-MediatorをSAMLのSPにする</h3>
+<p>　SimpleSAMLphpは、INTER-Mediatorのレポジトリのルートにある<span xmlns="" id="ix-160"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>composer.jsonファイルに記述があるので、composerを動かしたときにセットアップされます。もし、INTER-Mediatorディレクトリのルートをカレントディレクトリにしてcompose update等でインストールした場合、「INTER-Mediator/vendor/simplesamlphp/simplesamlphp」にSimpleSAMLphpがインストールされることになります。アプリケーションのテンプレートなどをINTER-Mediator自体もcomposerのインストール対象になっている場合は、「アプリケーションのルート/vendor/simplesamlphp/simplesamlphpにSimpleSAMLphp」にインストールされます。</p>
+<p>　まず、そのSimpleSAMLphpのルートにある<span class="referring">publicディレクトリ</span>が、Web公開されている必要があります。この部分へWebブラウザからアクセスすることにより、SPの管理ページを開くことができるのです。通常、INTER-Mediatorのディレクトリは公開しているので、publicディレクトリも公開されているのですが、さらに、「https://ホスト名<span xmlns="" id="ix-161"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>/simplesaml」のURLで、そのpublicディレクトリを参照できるように設定を行います。管理ツールを使う場合など、simplesaml以下に自動的にパスが設定されるので、ドキュメントルートからsimplesamlで、SimpleSAMLphpのpublicに接続できるようにしておく必要があります。例えば、Apache2の場合だとリスト7-6-1のような<span class="referring">Alias</span>ディレクティブを記述するなどします。</p>
+
+<div class="code"><div class="caption">リスト7-6-1　/simplesamlで公開すべきpublicディレクトをアクセスできるようにする</div><pre><code>Alias /simplesaml "/var/www/demo_im_com/saml-trial/lib/src/INTER-Mediator/vendor/simplesamlphp/simplesamlphp/public"
+# INTER-Mediatorは、/var/www/demo_im_com/saml-trial/lib/src/INTER-Mediator
+# INTER-Mediator/vendor内にSimpleSAMLphpが存在する</code></pre></div>
+
+<h3><span id="H3-ANC-40"><span style="display:none">→</span></span>SPの設定ファイルを用意する</h3>
+<p>　composerでインストールしたSimpleSAMLphpをSPとして利用するには、これらのディレクトリ内に設定ファイルを記述しなければなりません。設定ファイルをディレクトリ内部に直接記述してもいいのですが、composerの操作によってはそれらは消されてしまうので、どこか別のディレクトリに設定ファイルを作っておき、その設定ファイルを該当する場所にコピーして運用することにします。設定をサポートするスクリプトが「INTER-Mediatorのルート/samples/<span xmlns="" id="ix-162"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>saml-config」にあります。このsaml-configフォルダをどこかにコピーします。例えば、アプリケーションのルート以下、libディレクトリあたりにコピーをしておき、必要ならアプリケーション自体のレポジトリに設定ファイルを記録しておくと良いでしょう。以下、「コピーしたsaml-configフォルダ」として、コピー先のフォルダを参照します。</p>
+<p>　コピーしたsaml-configフォルダには、<span xmlns="" id="ix-163"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>gettemplates.shというスクリプトがあります。このスクリプトは、libあるいはlib/src、さらにはアプリケーションのルートにあるvendorディレクト以下のINTER-Mediatorを探して、そこから設定ファイルのテンプレートをコピーします。いずれにしても、このgettemplates.shをシェルスクリプトとして稼働すると、ディレクトリを探して、config.php、authsources.php、acl.php、saml20-idp-remote.php、saml20-idp-hosted.php、saml20-sp-remote.phpのコピーを作ります。ファイルが作られない場合には想定したフォルダにINTER-MediatorやSimpleSAMLphpが存在しないことになり、その場合はスクリプトを修正して、設定ファイルのテンプレートが存在するディレクトリに変更してください。これらのファイルのうち、通常はconfig.php、authsources.php、saml20-idp-remote.phpのファイルを変更します。</p>
+
+<h3><span id="H3-ANC-41"><span style="display:none">→</span></span>証明書の用意</h3>
+<p>　SAMLではSP、IdPともに<span xmlns="" id="ix-164"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>証明書を作ります。証明書というよりも、<span xmlns="" id="ix-165"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>秘密鍵と公開鍵を作り、メタデータ交換により公開鍵を相手（SPならIdP）に渡しておくことで、自分自身への暗号化通信を実現しています。ただ、秘密鍵と公開鍵よりも、証明書として鍵を作った方が何かと便利なので、証明書を用意します。これは、WebサイトのTLSのために用意したものでも構いませんが、SimpleSAMLphpのインストールの説明では、<span class="referring">自己署名証明書</span>で期限が10年と言った証明書を作っており、確かに一定の条件を満たせば、それでも問題はないとも言えるでしょう。以下のコマンドは、saml-configディレクトリを利用するという前提なので、saml-configをカレントディレクトリにしてコマンド入力します。そして、生成する秘密鍵のファイルと証明書のそれぞれは、ファイル名をsp.pem、sp.crtというきめうちのファイル名にします。</p>
+
+<div class="code"><div class="caption">リスト7-6-2　自己署名証明書を生成するコマンドの例</div><pre><code><span xmlns="" id="ix-166"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>openssl req -newkey rsa:3072 -new -x509 -days 3652 -nodes -out sp.crt -keyout sp.pem</code></pre></div>
+
+<p>　このコマンド入力後、証明書の内容についての問い合わせが行われます。これらは適当に入力すればいいでしょう。ただし、Common NameではSPを稼働するホスト名を正しく入れておくのが良いと思われます。</p>
+
+<h3><span id="H3-ANC-42"><span style="display:none">→</span></span>設定ファイルの修正</h3>
+<p>　続いて、コピーしてきた設定ファイルを修正します。まず、<span xmlns="" id="ix-167"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>config.phpについては、以下のキーの値を修正します。これらのキーはファイル内で連続した場所にないので、ひとつずつ探して修正をしていきましょう。なお、baseurlpathは、publicディレクトリがある場所への絶対パスを記述します。technicalcontact_emailは自分のメールアドレスを指定します。secretsaltについては乱数から生成しますが、ファイルのコメントで生成のためのコマンドが紹介されているので、そのコマンドで生成します。auth.adminpasswordはSPの管理ページで利用できるパスワードを指定します。</p>
+
+<div class="code"><div class="caption">リスト7-6-3　config.phpファイルの修正ポイント</div><pre><code>'baseurlpath' =&gt; 'saml-trial/lib/src/INTER-Mediator/vendor/simplesamlphp/simplesamlphp/public/',
+'technicalcontact_email' =&gt; 'your_email',
+'secretsalt' =&gt; 'your_salt',
+'auth.adminpassword' =&gt; 'your_admin_pass',</code></pre></div>
+
+<p>　続いて<span xmlns="" id="ix-168"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>authsources.phpを修正します。default-spキーの配列の要素に、certificateとprivatekeyのエントリーを用意して、ここで作成したキーファイルと証明書ファイルを指定します。そして、entityIDをサイトのドメインに設定しておきます。</p>
+
+<div class="code"><div class="caption">リスト7-6-4　authsources.phpファイルの修正ポイント</div><pre><code>'default-sp' =&gt; [
+  'saml:SP',
+  'certificate' =&gt; 'sp.crt',
+  'privatekey' =&gt; 'sp.pem',
+
+   // The entity ID of this SP.
+   'entityID' =&gt; 'https://demo.inter-mediator.com/',
+   :</code></pre></div>
+
+<p>　さらに、<span xmlns="" id="ix-169"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>saml20-idp-remote.phpを修正します。このファイルの最後（とはいえ、中身は短いコメントがあるのみ）に、IdPの管理ページからコピーした<span xmlns="" id="ix-170"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-171"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>IdPのメタデータを示す配列をコピーしておきます。</p>
+
+<div class="picture"><img class="picture-small" src="figs/ng-shot-370.png"/><div class="caption">図7-6-1　saml20-idp-remote.phpにIdPのメタデータを追加する</div></div>
+
+<h3><span id="H3-ANC-43"><span style="display:none">→</span></span>書き直した設定ファイルなどを展開する</h3>
+<p>　証明書を用意し、設定ファイルを書き直すと、<span xmlns="" id="ix-172"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>saml-configディレクトリに入っている<span xmlns="" id="ix-173"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>copyconfig.shというスクリプトファイルを実行します。これも、最初に稼働させたgettemplates.shと同様に、SimpleSAMLphpをいくつかの典型的な場所から探してその内部のいくつかのフォルダにファイルをコピーします。スクリプトを実行して、エラーが出なければ、おそらくはファイルの元をコピーしたSimpleSAMLphpのフォルダへ、設定ファイルを書き出していると思われます。もし、うまくいかない場合はスクリプトを修正するなどしてください。なお、このスクリプトで実行しているのは、sp.pem、sp.crtをSimleSAMLphpのルート以下certディレクトリへ、config.php、authsources.phpをconfigディレクトリへ、saml20-idp-remote.phpをmetadataディレクトリへコピーしています。</p>
+<p>　なお、設定変更するときには、saml-configディレクトリにあるファイルを変更して、その都度、copyconfig.shスクリプトを実行すれば良いでしょう。</p>
+
+<h3><span id="H3-ANC-44"><span style="display:none">→</span></span><span xmlns="" id="ix-174"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-175"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SPのメタデータを取り出す</h3>
+<p>　以上で、SPとして稼働するはずです。ここで、SPの管理ページにログインをして、SPのメタデータを取り出します。そのためには、ブラウザより「https://ホスト名<span xmlns="" id="ix-176"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>/simplesaml/admin」に接続します。図7-6-2のようなログインパネルが表示されるので、ユーザ名はadmin、パスワードはconfig.phpのauth.adminpasswordキーに指定したパスワードを指定して認証します。ログインできるはずです。</p>
+
+<div class="picture"><img class="picture-small" src="figs/ng-shot-371.png"/><div class="caption">図7-6-2　SPの管理ページにログインする</div></div>
+
+<p>　管理ページにはさまざまな機能がありますが、上部で「連携」をクリックして、Hosted entitiesを表示し、そこにあるdefault-spの「V」の部分をクリックして、メタデータを表示します。このメタデータを、IdPの管理者に渡してこのデータをIdP側に登録すると、SAML認証ができるようになります。なお、通常はメタデータはXMLですが、IdPがSimpleSAMLphpなら、PHPのコードの方が作業が一手間少なくて済みます。</p>
+
+<div class="picture"><img class="picture-small" src="figs/ng-shot-372.png"/><div class="caption">図7-6-3　SPのメタデータを取得する</div></div>
+
+<h3><span id="H3-ANC-45"><span style="display:none">→</span></span><span xmlns="" id="ix-177"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-178"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SAML認証の設定と動作</h3>
+<p>　SAML認証に関わる設定は、params.phpで行います。リスト7-6-5に使用できる変数を示しました。</p>
+
+<div class="code"><div class="caption">リスト7-6-5　params.phpファイルでのSAML関連の設定</div><pre><code>$isSAML = true; # The default value of isSAML is false.
+$samlAuthSource = 'default-sp';
+$samlExpiringSeconds = 1800;
+$samlWithBuiltInAuth = true;
+$samlAttrRules = ['username' =&gt; 'uid|0', 'realname' =&gt; 'eduPersonAffiliation|0'];
+$samlAdditionalRules = ['username' =&gt; '(user02|user03)'];</code></pre></div>
+
+<p>　まず、SAML認証の機能を有効にするかどうかは、<span xmlns="" id="ix-179"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>$isSAML変数で指定をします。通常はfalseになっているので、ここで明示的にtrueを代入しなければなりません。あるいは、IM_Entry関数の第2引数（オプション設定）で、authenticationキーの配列で<span xmlns="" id="ix-180"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>is-samlキーでtrue値を指定しても設定可能です。この設定と同時に、$samlAutuSource変数で、<span xmlns="" id="ix-181"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-182"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SPのソース名を設定します。これまでの手順通りなら、設定名は「default-sp」になっているはずです。</p>
+<p>　$isSAMLをtrueにすると、認証が必要なページでは、IdPのログインページにリダイレクトし、認証後はアプリケーションのページに戻るという動作になります。このとき、INTER-Mediatorは、内部的には組み込みのユーザを作り、通常の認証はそちらで行います。これは、認証サーバに都度都度認証処理をさせるとスピードが遅くなることを懸念してのことで、IdPでの認証が成功すると、特別な組み込みユーザを作り、乱数でパスワードを自動生成して認証の継続を行うようにします。ただし、直前の処理から<span xmlns="" id="ix-183"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>$samlExpiringSecondsで指定した秒数経過していると、改めてIdPに認証を求めます。通常はIdP/SPの連携によって認証状態が継続されますが、例えば何日も経過していると、IdPの認証パネルが出てくるようになっているのが一般的な動作でしょう。</p>
+<p>　なお、SAML認証では、組み込みの認証の機能も使うので、$passwordHash = '2'; の定義も行うようにしてください。</p>
+<p>　<span xmlns="" id="ix-184"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>$samlWithBuiltInAuthをtrueにすると、組み込みのユーザでのログインが可能になります。これを未定義のままにすると、この変数値はfalseになり、SAMLつまりはIdPが管理するユーザで以外はログインできません。一方trueにすると、IdPのユーザと、authuserテーブルで定義したユーザの両方でのログインが可能になります。このとき、アプリケーションでは、INTER-Mediatorのログインパネルを表示しますが、ログインパネルに<span xmlns="" id="ix-185"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>「SAML認証」ボタンが追加されています。authuserに設定してあるユーザは通常通りログインパネルでユーザーとパスワードを入力してログインしますが、IdPのユーザでログインするには「SAML認証」ボタンをクリックして、IdPのログインページに移動して、ログインをする必要があります。</p>
+<p>　<span xmlns="" id="ix-186"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>$samlAttrRules変数は、認証時に得られる情報からauthuserテーブルにユーザを作るときにどのデータを取り出してどのフィールドに入力するかを示しています。変数に値を設定しなければ、uidの最初のデータをauthuserテーブルのusernameフィールドに設定するだけになります。この変数は連想配列で指定しますが、キーはauthuserテーブルのフィールド名、値はSAML認証で得られる認証ユーザーの情報からどのキーの何番目の配列の値を取り出すかを指定します。'realname' =&gt; 'eduPersonAffiliation|0'であれば、認証結果から得れたeduPersonAffiliationというキーの配列の最初の要素を、realnameフィールドにセットするということです。|の前にエントリー名、|に続いて配列の何番目の要素かを指定します。SAMLで得られるデータが複雑な場合は、この変数の要素として、'email' =&gt; 'urn:oid:0.9.2342.19200300.100.1.3|0' と言ったような記述を行うことにもなります。値の|までの部分はurn表記でのフィールド名となります。この設定は、次に説明する$samlAdditionalRulesに関連が深いとも言えます。</p>
+<p>　変数の<span xmlns="" id="ix-187"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>$samlAdditionalRulesは連想配列を指定し、authuserテーブルのフィールド名とそれに対する値を指定します。これは、認証したユーザーの情報に対して、特定のフィールドが想定された値であるかどうかをチェックすることを意味し、連想配列の定義、つまりあるフィールドの値が決められたものでなければ、認証を失敗したものとみなすという処理になります。言い換えれば、ユーザ属性に応じて認証を失敗させる設定が可能です。この配列の値は、正規表現での指定が可能です。'username' =&gt; '(user02|user03)'であれば、username、つまりSAML認証で得られたuid[0]の値がuser02かuser03のユーザでないと認証は成立しないようになります。</p>
+<p>　$samlAttrRulesと$samlAdditionalRulesの定義に関しては、一般的な説明が難しいですので、詳細な設定が必要な場合には、INTER-Mediatorのソースをチェックされることをお勧めします。設定に必要な情報はデバッグ情報として見えるようにはなっていますが、ソースと対照しないと分かりづらいと思われます。</p>
+
+<h3><span id="H3-ANC-46"><span style="display:none">→</span></span>SAML動作に関するJavaScript</h3>
+<p>　通常は、JavaScriptでのプログラミングは、SAML認証に関しては不要です。ただし、<span xmlns="" id="ix-188"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span><span xmlns="" id="ix-189"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>SAMLのログアウトを行うためのURLについては、<span xmlns="" id="ix-190"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>INTERMediatorOnPage.logoutURLにセットされています。このURLにジャンプすると、SAML認証が解消されるので、自分でログアウトボタンを作る場合にはこれを利用すると良いでしょう。なお、INTERMediatorOnPage.logout()も同時に呼び出すようにしてください。ページネーションの「ログアウト」ボタンは、これらのメソッドやURLジャンプのいずれも組み込まれています。</p>
+<p>　$samlWithBuiltInAuthをtrueにしたときにログインパネルに表示される「SAML認証」ボタンにより、IdPのログインページに自動的に移動します。その移動さきのURLは、<span xmlns="" id="ix-191"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>INTERMediatorOnPage.loginURLより得られます。これについても、何かしら特定のUIを自分で組むようなときには必要な情報かもしれません。</p>
+<p>　なお、logoutURL、loginURLのいずれのプロパティも、最初にログインした直後や、あるいは設定を変えて使い始めた直後などはnullになっている場合もあります。念の為nullかどうかをチェックしてから利用するようにしてください。これらのプロパティは、SAML認証以外の場合ではnullになっています。</p>
+
+
 <!--
-<h2>SAML認証</h2>
 <p></p>
+
+
+
 
 <h3></h3>
 <p></p>
 <p></p>
 <p></p>
 <p></p>
-<p></p>
-<p></p>
-<h3></h3>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<h3></h3>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<h3></h3>
 <p></p>
 <p></p>
 <p></p>
@@ -568,7 +648,6 @@ data-im="context@id@$src context@imagefile@#src" /&gt;</code></pre></div>
 <p></p>
 <p></p>
 -->
-
 
 
 <!--以下、画像として ng-shot-352〜ng-shot-369を準備してある-->
