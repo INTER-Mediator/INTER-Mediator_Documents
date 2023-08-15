@@ -64,6 +64,12 @@
                 <p class="lead">INTER-Mediatorもバージョンを重ねてきており、以前の動作を引き継がなくなってしまった箇所が出てきています。Ver.3 (2012/12/10) 以降の大きな変更点、つまりアプリケーション側を書き換えないといけないような変更をここにまとめておきます。</p>
             </section>
             <section>
+                <h1>Ver.12での変更</h1>
+                <p>PHPのサポートバージョンは、Ver.7.4以降とします。</p>
+                <p>FileMaker Serverに関しては、ベストエフォートサポートとします。<a href="https://github.com/INTER-Mediator/INTER-Mediator/wiki/INTER%E2%80%90Mediator%E3%81%AEFileMaker%E5%AF%BE%E5%BF%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6" target="_blank">こちらの文書</a>をご覧ください。</p>
+                <p>PDOなどのデータベースクラスでは、setUpdatedRecordメソッドに3つの引数を持たせて、結果の配列の一部だけを変更する機能をサポートしていましたが、Ver.9でsetDataToUpdatedRecordメソッドを定義して、結果の一部だけを変更する機能はそちらを利用するようにしました。setUpdatedRecordメソッドは、配列を1つだけ引数に取り、結果の配列全体を設定するメソッドとしました。しかしながら、Ver.9の段階で、setUpdatedRecordメソッドを3つの引数で呼び出す場合はsetDataToUpdatedRecordメソッドをさらに呼び出して互換性を確保していましたが、その互換性はこのバージョンでなくしました。なお、データベース処理結果の配列を設定するにはsetUpdatedRecordメソッドを使ってもいいのですが、もっと手軽な方法は、doAfterReadFromDBメソッドの返り値として結果の配列を与える方法です。現状を鑑みてメソッドを整理し、余計な仕組みは取り除きました。</p>
+             </section>
+            <section>
                 <h1>Ver.10での変更</h1>
                 <p>params.phpで定義される変数$sendMailCompatibilityModeの初期値をfalseにしました。元はtrueだったので、何も変数定義をしないと、<a href="sendmail.html" target="_blank">古いアーキテクチャーでのメール送信</a>になっていました。デフォルトを変えたので、この変数をtrueにしない限りは<a href="sendmail10.html" target="_blank">新しいアーキテクチャーのメール送信機能</a>が利用されます。以前のアプリケーションを移行する場合には気をつけてください。</p>
                 <p>package.jsonから、flatpickrの定義をなくしたので、node_modules内にはflatpickrは存在しません。CDNからダウンロードするのが良いかと思われます（samples/Sample_webpage/flatpickr_MySQL.htmlを参照）。</p>
