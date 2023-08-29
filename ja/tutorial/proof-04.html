@@ -474,73 +474,7 @@ IM_Entry(
     'db-class' =&gt; 'PDO', .....
   ),
   false
-);</code></pre></div><div class="picture"><img class="picture-small" src="figs/ng-shot-171.png"/><div class="caption">図4-6-1　定義ファイルエディターで指定したコンバータークラスの例</div></div><!--
-<h3>データコンバータークラスの使い道と他の機能</h3>
-<p>データコンバータークラスは、INTER-Mediator開発の比較的早い時期から実装していたのですが、その後にさまざまな機能で代替が行われてきました。例えば、DataConverter_AppendPrefixクラスと同じことが、ターゲット指定で#を追加することでもできます。また、書式化して表示するのは、計算プロパティで書式化した文字列を用意する方が自由度は高くなります。また、書式設定をタグの属性に指定する仕組みが実装され、データコンバータークラスが必ずしも必要ではなくなってきています。</p>
-
-<h3><span class="exsign">演習</span>日付フィールドにデータコンバーターを適用する</h3>
-<p>日付フィールドにコンバーターを適用する場合としない場合で、どのように表示に違いがあるかを確認します。</p>
-
-<h4>定義ファイルの準備</h4>
-<div class="stepauto">演習環境を起動します（<span class="referencing" refsign="preparation">[別の場所]</span>を参照）。続いて、ブラウザーで、「http://localhost:9080」に接続します。「トライアル用のページファイルと定義ファイル」というタイトルの部分を特定します。</div>
-<div class="stepauto">「def10.phpを編集する」をクリックし、定義ファイルエディターでdef10.phpファイルを編集します。（もし、他の用途で10番目を利用しているのなら、例えば、def21.phpを利用するなど、別の番号のセットを使用してください。その場合ソースコードの記述が変わる部分がありますが、可能な限り注記します。）</div>
-<div class="stepauto">Contextsの中のQueryと書かれた背景がグレーの部分を特定します。そして、その次の行の右の方にある「削除」をクリックして、Queryの設定がある行を削除します。</div>
-<div class="stepauto">「レコードを本当に削除していいですか？」とたずねられるので、OKボタンをクリックします。</div>
-<div class="stepauto">同様に、Sortingの次の行にある「削除」ボタンを押し、確認にOKボタンをクリックして、こちらの設定も削除しておきます。</div>
-<div class="stepauto">nameに「history」、keyを「id」、repeat-controlを「insert delete」とします。</div>
-<div class="stepexp">[MySQL]の場合<br/>viewとtableは「history」とします。</div>
-<div class="stepexp">[FileMaker]の場合<br/>viewとtableは「history_to」とします。</div>
-<div class="stepexp">Contextsのその他のテキストフィールドは空白にします。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2082.png" /></div>
-<div class="stepauto">Database Settingsに設定を行います。</div>
-<div class="stepexp">[MySQL]の場合<br/>db-classは「PDO」のままでかまいません。dsnに「mysql:host=db;dbname=test_db;charset=utf8mb4」と入力します。そして、userに「web」、passwordに「password」と入力します。</div>
-<div class="stepexp">[FileMaker]の場合<br/>db-classを「FileMaker_DataAPI」に書き換えます。databaseは「TestDB」、userに「web」、passwordに「password」、serverに「gateway.docker.internal」、portに「443」、protocolに「https」、cert-vefifyingに「false」と入力します。</div>
-<div class="stepauto">Debugについては、「2」のままにしてこの後の作業を行ってください。</div>
-
-<h4>データコンバータークラスの指定</h4>
-<div class="stepauto">引き続き定義ファイルエディターで、def10.phpの編集を続けます。Optionsの見出しに、Formattersという小見出しがあることを確認します。</div>
-<div class="stepauto">「追加」ボタンをクリックすると、確認パネルが出てきますので、OKボタンをクリックします。設定枠が表示されます。</div>
-<div class="stepauto">[MySQL]の場合<br/>fieldにはMySQLの場合「history@startdate」、converter-classには「MySQLDateTime」、parameterには「%y/%m/%d」と入力します。Tabキーを押して設定を確定させます。</div>
-<div class="stepexp">[FileMaker]の場合<br/>fieldには「history_to@startdate」、converter-classには「FMDateTime」、parameterには「%m/%d/%y」と入力します。Tabキーを押して設定を確定させます。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2079.png" /></div>
-<div class="stepexp">parameterに指定する文字列は、PHPのstrftime関数で使用できる書式指定文字列です。時間も含める場合は「%Y/%m/%d %H:%M:%S」などと指定します。</div>
-
-<h4>ページファイルの作成と表示</h4>
-<div class="stepauto">「http://localhost:9080」で開いたページに戻り「page10.htmlを編集する」をクリックし、ページファイルのpage10.htmlを編集するページファイルエディターが開きます。HTMLでの記述内容を以下のように変更します。太字が追加する箇所を示します。（別の番号のセットで作業している場合には、該当する番号のリンクをクリックしてください。）なお、[FileMaker]の場合は、ターゲット指定のコンテキスト名を「history」ではなく、「history_to」にしてください。</div>
-<div class="code">
-<pre><code>&lt;html lang="ja"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
-    &lt;title&gt;&lt;/title&gt;
-    &lt;script type="text/javascript" src="def10.php"&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-<strong>&lt;table border="1"&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;   //[FileMaker]の場合は以下のhistoryをhistory_toにしてください
-      &lt;td data-im="history@id"&gt;&lt;/td&gt;
-      &lt;td data-im="history@startdate"&gt;&lt;/td&gt;
-      &lt;td data-im="history@enddate"&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;</strong>
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-<div class="stepauto">「http://localhost:9080」で開いたページに戻り、「page10.htmlを表示する」をクリックして表示したタブあるいはウインドウを表示します。historyテーブルの内容が、1レコードずつ参照できます。最初にグレーの背景でデバッグ情報が表示されますが、ページ冒頭のclearボタンでデバッグ情報は消えます。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2084.png" /></div>
-<div class="stepexp">ここで、2列目と3列目を比較してください。2列目のstartdateフィールドへは、コンバータークラスが設定されており、年月日がスラッシュで区切られた形式になっています。しかしながら、3列目のenddateフィールドについては、データベースから得られた結果そのままが見えています。MySQLでは年月日がハイフンで区切られた形式ですし、FileMakerの場合は月日年がスラッシュで区切られた結果になっています。いずれにしても、データコンバーターにより、指定した形式での日付が出力されています。</div>
-<div class="stepauto">データコンバータークラスが設定されている2列目のテキストフィールドで、日付を変更し、Tabキーを押して変更を確定させます。デバッグ出力が有効なので、グレーの背景のデバッグ出力が見えていますが、そこでは、データベースサーバーとのやりとりも記録されています。入力した日付は年月日ですが、MySQLだとハイフンで区切られた年月日、FileMakerだと月日年の順序のテキストに置き換わっているのが分かります。</div>
-<div class="picture"><img class="picture-small" src="figs/shot2083.png" /></div>
-
-<h4>演習のまとめ</h4>
-<ul>
-	<li>データコンバータークラスにより、フィールドのデータを双方向で変換することができます。データベース上の表示とページ上の表示を異なるものにできます。</li>
-	<li>日付や数値など、代表的なデータコンバータークラスはINTER-Mediatorに付属しています。</li>
-	<li>定義ファイルのオプションとしてデータコンバータークラスの使用を定義します。このとき、コンテキスト名ではなく、テーブル名やビュー名（FileMakerではレイアウト名）で指定します。</li>
-</ul>
---><h3><span id="H3-ANC-29"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　データコンバータークラスにより、フィールド単位でのデータの変換をサポートします。データベースからの取り出し時はもちろん、データベースに書き込むときにも適切な変換ができる仕組みを持っています。日付や数値を中心として、汎用的なクラスはINTER-Mediatorに付属します。なお、本機能は初期の頃からあるものの、さまざまな代替機能が実装されており、他の方法で実現したほうがより手軽な場合もあります。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-7"><span style="display:none">→</span></span><span class="sectionnumber">4-7</span>データベースの機能の利用</h2><p class="section-lead">このセクションでは、定義ファイルに指定する項目のうち、データベース側の仕組みを利用する機能についてまとめておきます。このセクションは演習はありません。</p><h3><span id="H3-ANC-30"><span style="display:none">→</span></span>処理実行前後の<span xmlns="" id="ix-112"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>スクリプトの処理</h3><p>　コンテキスト定義にscriptキーで記述する内容は、FileMakerとそれ以外のSQLデータベースで大きく動作が異なります。FileMaker以外のデータベースでは、値として記述するのはSQLステートメントです。一方、FileMakerで値として記述するのは、データベース内にあるスクリプト名です。この指定により、例えば、データベースに新規レコードを作成したときに、作成直後にあるSQLステートメントを実行したり、FileMakerの場合はスクリプトを実行させるということができます。どちらかといえば、FileMakerでは複雑なロジックを組み込みたいような場合によく利用されます。一方、SQLデータベースの場合には原則として一定の文字列のステートメントになるため、あまり複雑な処理は作りにくい、というのが実情です。</p><p>　<span xmlns="" id="ix-113"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>scriptキーは配列を値としてもちます。その配列の各要素は、表4-7-1のキーを持つ連想配列です。</p><div class="table"><table><tr><th>キー</th><th>取りうる値</th><th>意味</th></tr><tr><td rowspan="4"><span xmlns="" id="ix-114"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db-operation</td><td><span xmlns="" id="ix-115"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>load</td><td>データを読み出すときにスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-116"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>update</td><td>レコードを更新するときにスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-117"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>create</td><td>新規レコードを作成するときにスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-118"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>delete</td><td>レコードを削除ときにスクリプトを実行</td></tr><tr><td rowspan="3"><span xmlns="" id="ix-119"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>situation</td><td><span xmlns="" id="ix-120"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>pre</td><td>データベース処理の前にスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-121"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>presort</td><td>データベース処理の前でソート後にスクリプトを実行（FileMakerのみ）</td></tr><tr><td><span xmlns="" id="ix-122"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>post</td><td>データベース処理の後にスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-123"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>definition</td><td colspan="2">SQLスクリプト、あるいはFileMakerのスクリプト名</td></tr></table><div class="caption">表4-7-1　scriptキーの値で利用する連想配列のキー</div></div><p>　リスト4-7-1は、定義ファイルへの記述で、scriptキーを指定した例です。もちろん、定義ファイルエディターでも指定できます。</p><p>　ここでは、2つの配列がscriptキーの値に含まれています。最初の配列は、このテーブルmessageに対して新たなレコードを作成したとき、作成後に「INSERT log SET msg='new record'」というSQLコマンドを発行します。イメージ的にはデータベース操作のログをどこかのテーブルに書き込んでいるような感じで動くと考えてください。さらに2つ目の配列は、messageテーブルに対するクエリー処理の前に、「set names 'utf8'」というコマンドを実施します。</p><p>　通常、この種のコマンドはMySQLを正しくセットアップすると不要というのが現在の状況と思われます。しかし、レンタルサーバーなどのように自分で設定ファイルを書き換えられないような場合で文字化けするときに、この設定を行って回避できた場合もあります。もちろん、その場合はクエリー時だけでなく、必要なデータベース処理すべてに対して、この記述がコンテキストごとに必要となります。</p><div class="code"><div class="caption">リスト4-7-1　MySQLデータベースでのscriptキーの指定例</div><pre><code>array(
+);</code></pre></div><div class="picture"><img class="picture-small" src="figs/ng-shot-171.png"/><div class="caption">図4-6-1　定義ファイルエディターで指定したコンバータークラスの例</div></div><h3><span id="H3-ANC-29"><span style="display:none">→</span></span>このセクションのまとめ</h3><p>　データコンバータークラスにより、フィールド単位でのデータの変換をサポートします。データベースからの取り出し時はもちろん、データベースに書き込むときにも適切な変換ができる仕組みを持っています。日付や数値を中心として、汎用的なクラスはINTER-Mediatorに付属します。なお、本機能は初期の頃からあるものの、さまざまな代替機能が実装されており、他の方法で実現したほうがより手軽な場合もあります。</p><!-- ============ SECTION START ============ --><h2><span id="H2-ANC-7"><span style="display:none">→</span></span><span class="sectionnumber">4-7</span>データベースの機能の利用</h2><p class="section-lead">このセクションでは、定義ファイルに指定する項目のうち、データベース側の仕組みを利用する機能についてまとめておきます。このセクションは演習はありません。</p><h3><span id="H3-ANC-30"><span style="display:none">→</span></span>処理実行前後の<span xmlns="" id="ix-112"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>スクリプトの処理</h3><p>　コンテキスト定義にscriptキーで記述する内容は、FileMakerとそれ以外のSQLデータベースで大きく動作が異なります。FileMaker以外のデータベースでは、値として記述するのはSQLステートメントです。一方、FileMakerで値として記述するのは、データベース内にあるスクリプト名です。この指定により、例えば、データベースに新規レコードを作成したときに、作成直後にあるSQLステートメントを実行したり、FileMakerの場合はスクリプトを実行させるということができます。どちらかといえば、FileMakerでは複雑なロジックを組み込みたいような場合によく利用されます。一方、SQLデータベースの場合には原則として一定の文字列のステートメントになるため、あまり複雑な処理は作りにくい、というのが実情です。</p><p>　<span xmlns="" id="ix-113"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>scriptキーは配列を値としてもちます。その配列の各要素は、表4-7-1のキーを持つ連想配列です。</p><div class="table"><table><tr><th>キー</th><th>取りうる値</th><th>意味</th></tr><tr><td rowspan="4"><span xmlns="" id="ix-114"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>db-operation</td><td><span xmlns="" id="ix-115"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>load</td><td>データを読み出すときにスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-116"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>update</td><td>レコードを更新するときにスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-117"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>create</td><td>新規レコードを作成するときにスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-118"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>delete</td><td>レコードを削除ときにスクリプトを実行</td></tr><tr><td rowspan="3"><span xmlns="" id="ix-119"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>situation</td><td><span xmlns="" id="ix-120"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>pre</td><td>データベース処理の前にスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-121"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>presort</td><td>データベース処理の前でソート後にスクリプトを実行（FileMakerのみ）</td></tr><tr><td><span xmlns="" id="ix-122"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>post</td><td>データベース処理の後にスクリプトを実行</td></tr><tr><td><span xmlns="" id="ix-123"><xhtml:span xmlns:xhtml="http://www.w3.org/1999/xhtml" style="display:none;">→</xhtml:span></span>definition</td><td colspan="2">SQLスクリプト、あるいはFileMakerのスクリプト名</td></tr></table><div class="caption">表4-7-1　scriptキーの値で利用する連想配列のキー</div></div><p>　リスト4-7-1は、定義ファイルへの記述で、scriptキーを指定した例です。もちろん、定義ファイルエディターでも指定できます。</p><p>　ここでは、2つの配列がscriptキーの値に含まれています。最初の配列は、このテーブルmessageに対して新たなレコードを作成したとき、作成後に「INSERT log SET msg='new record'」というSQLコマンドを発行します。イメージ的にはデータベース操作のログをどこかのテーブルに書き込んでいるような感じで動くと考えてください。さらに2つ目の配列は、messageテーブルに対するクエリー処理の前に、「set names 'utf8'」というコマンドを実施します。</p><p>　通常、この種のコマンドはMySQLを正しくセットアップすると不要というのが現在の状況と思われます。しかし、レンタルサーバーなどのように自分で設定ファイルを書き換えられないような場合で文字化けするときに、この設定を行って回避できた場合もあります。もちろん、その場合はクエリー時だけでなく、必要なデータベース処理すべてに対して、この記述がコンテキストごとに必要となります。</p><div class="code"><div class="caption">リスト4-7-1　MySQLデータベースでのscriptキーの指定例</div><pre><code>array(
     'name' =&gt; 'message',
     'key' =&gt; 'message_id',
     'script' =&gt; array(
