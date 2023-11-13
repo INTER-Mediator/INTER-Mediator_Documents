@@ -339,6 +339,14 @@
         <p>マスター/ディーテイル、あるいはステップ動作する場合、モバイルデバイス、あるいはfullnaviを付けたコンテキストにおいて、ホバーのフィードバックのための背景色。既定値は「#BBBBBB」。</p>
       </section>
       <section>
+        <h1>独自にマスター/ディテール形式のユーザーインタフェースを作る場合</h1>
+		<p>マスター/ディテール形式のユーザインタフェースを、navi-controlキーの指定で作るのではなく、それぞれ2つのページを用意して行き来をするよに作成することもできます。この時、一覧側の詳細ボタンをクリックするとINTERMediator.moveAnotherURL(ディテールページのURL?id=xxxx)を実行して、詳細ページに移動し、詳細ページ側ではURLからどのレコードかを求めて検索してレコードの内容を表示するということを行います。この時、INTERMediator.moveAnotherURLを実行する直前に、INTERMediator.prepareToScrollBackを実行します。また、一覧ページのINTERMediatorOnPage.doAfterConstructの関数内でINTERMediator.scrollBackを実行します。すると、詳細から一覧に戻ってきた時に、詳細でみていたレコードが表示され、その行はフラッシュするようになります。</p>
+        <h4>INTERMediator.prepareToScrollBack: (contextName, id)</h4>
+        <p>引数には一覧表示のコンテキスト名と、クリックした行に対するキーの値を指定する。</p>
+        <h4>INTERMediator.scrollBack: (bias = 0, dontScroll = false)</h4>
+        <p>biasの指定が必要なのは、表のヘッダ等をsticky表示にした場合、画面に残る見出し部分等の高さを負数で指定するような時で、スクロール結果がbias分調整される。dontScrollをtrueにするとスクロールはせず、行のフラッシュだけが行われる。</p>
+      </section>
+      <section>
         <h1>ステップ動作</h1>
         <h4>INTERMediatorOnPage.《コンテキストで指定した名前》()</h4>
         <p>コンテキスト定義において、before-move-nextstepキーで指定した名前のメソッドをINTERMediatorOnPageオブジェクトに用意すると、ステップ移動時に呼び出される。このメソッドがない場合や、メソッドの返り値がnullの場合、コンテキスト定義の順序で次のステップに画面遷移する。次のステップが無い場合は、画面の遷移は行わない。このメソッドがfalseを返すと、前の画面に遷移する。コンテキスト名の文字列を返すと、そのコンテキストの画面を表示し、現在のコンテキストは表示しなくなる。</p>
