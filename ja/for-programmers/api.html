@@ -341,10 +341,10 @@
       <section>
         <h1>独自にマスター/ディテール形式のユーザーインタフェースを作る場合</h1>
 		<p>マスター/ディテール形式のユーザインタフェースを、navi-controlキーの指定で作るのではなく、それぞれ2つのページを用意して行き来をするよに作成することもできます。この時、一覧側の詳細ボタンをクリックするとINTERMediator.moveAnotherURL(ディテールページのURL?id=xxxx)を実行して、詳細ページに移動し、詳細ページ側ではURLからどのレコードかを求めて検索してレコードの内容を表示するということを行います。この時、INTERMediator.moveAnotherURLを実行する直前に、INTERMediator.prepareToScrollBackを実行します。また、一覧ページのINTERMediatorOnPage.doAfterConstructの関数内でINTERMediator.scrollBackを実行します。すると、詳細から一覧に戻ってきた時に、詳細でみていたレコードが表示され、その行はフラッシュするようになります。</p>
-        <h4>INTERMediator.prepareToScrollBack: (contextName, id)</h4>
+        <h4>INTERMediator.prepareToScrollBack(contextName, id)</h4>
         <p>引数には一覧表示のコンテキスト名と、クリックした行に対するキーの値を指定する。</p>
-        <h4>INTERMediator.scrollBack: (bias = 0, dontScroll = false)</h4>
-        <p>biasの指定が必要なのは、表のヘッダ等をsticky表示にした場合、画面に残る見出し部分等の高さを負数で指定するような時で、スクロール結果がbias分調整される。dontScrollをtrueにするとスクロールはせず、行のフラッシュだけが行われる。</p>
+        <h4>INTERMediator.scrollBack(bias, scrollTarget)</h4>
+        <p>biasの指定が必要なのは、表のヘッダ等をsticky表示にした場合、画面に残る見出し部分等の高さを負数で指定するような時で、スクロール結果がbias分調整される。scrollTargetはスクロール対象で、省略するとwindowとする。ページ内でoverflow: auto;とCSSを設定した要素をスクロールする場合は、その要素への参照を指定する。scrollTargetをfalseにするとスクロールはせず、行のフラッシュだけが行われる。</p>
       </section>
       <section>
         <h1>ステップ動作</h1>
