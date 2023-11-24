@@ -66,6 +66,11 @@ Search.appendIndex(
             "summary": "The\u0020error\u0020number\u0020of\u0020curl,\u0020i.e.\u0020kind\u0020of\u0020communication\u0020error\u0020code.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_curlErrorCode"
         },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AcurlErrorMessage\u0028\u0029",
+            "name": "curlErrorMessage",
+            "summary": "The\u0020error\u0020message\u0020of\u0020curl,\u0020text\u0020representation\u0020of\u0020code.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_curlErrorMessage"
+        },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AhttpStatus\u0028\u0029",
             "name": "httpStatus",
             "summary": "The\u0020HTTP\u0020status\u0020code\u0020of\u0020the\u0020latest\u0020response\u0020from\u0020the\u0020REST\u0020API.",
