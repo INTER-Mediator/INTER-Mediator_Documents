@@ -65,7 +65,7 @@
             </section>
             <section>
                 <h1>Ver.12での変更</h1>
-                <p>PHPのサポートバージョンは、Ver.7.4以降とします。</p>
+                <p>PHPのサポートバージョンは、Ver.7.4以降とします。PHPのコード上で、型の記述を行いました。そのため、アドバイザクラスなどのINTER-Mediatorにあるクラスを拡張して定義したクラスについては、引数や返り値の型の追加が必要になります。既存のアプリケーションについてはPHPコードの書き換えが必要になります。</p>
                 <p>FileMaker Serverに関しては、ベストエフォートサポートとします。<a href="https://github.com/INTER-Mediator/INTER-Mediator/wiki/INTER%E2%80%90Mediator%E3%81%AEFileMaker%E5%AF%BE%E5%BF%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6" target="_blank">こちらの文書</a>をご覧ください。</p>
                 <p>PDOなどのデータベースクラスでは、setUpdatedRecordメソッドに3つの引数を持たせて、結果の配列の一部だけを変更する機能をサポートしていましたが、Ver.9でsetDataToUpdatedRecordメソッドを定義して、結果の一部だけを変更する機能はそちらを利用するようにしました。setUpdatedRecordメソッドは、配列を1つだけ引数に取り、結果の配列全体を設定するメソッドとしました。しかしながら、Ver.9の段階で、setUpdatedRecordメソッドを3つの引数で呼び出す場合はsetDataToUpdatedRecordメソッドをさらに呼び出して互換性を確保していましたが、その互換性はこのバージョンでなくしました。なお、データベース処理結果の配列を設定するにはsetUpdatedRecordメソッドを使ってもいいのですが、もっと手軽な方法は、doAfterReadFromDBメソッドの返り値として結果の配列を与える方法です。現状を鑑みてメソッドを整理し、余計な仕組みは取り除きました。</p>
              </section>
