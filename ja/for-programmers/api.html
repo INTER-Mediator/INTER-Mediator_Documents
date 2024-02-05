@@ -91,7 +91,7 @@
         <h4>INTERMediator.addCondition(contextName, {field:xxx,operator:xxx,value:xxxx})</h4>
         <p>コンテキストに従ってデータベースのクエリを行うとき、ここで指定した検索条件が、他の条件に対してAND条件で追加される。引数contextNameにはコンテキスト名を指定する。第2引数は条件を示すオブジェクトを指定する。このオブジェクトではfield、operator、valueのプロパティを指定し、それぞれフィールド名、演算子、値を指定する。複数の条件を追加する場合には、このメソッドを繰り返し呼べば良い。additionalConditionプロパティはセッター／ゲッターで実装しているため、内部のオブジェクトへの追加はこのAPIを使うようにする。</p>
         <h4>INTERMediator.clearCondition(contextName)</h4>
-        <p>検索条件に追加される設定を、引数に指定したコンテキスト名のものついて初期化して、指定なしにする。</p>
+        <p>検索条件に追加される設定を、引数に指定したコンテキスト名のものついて初期化して、指定なしにする。そのコンテキストがページネーションを持っている場合はページ番号は1にリセットされる。引数なしで呼び出し場合、全ての追加条件をクリアし、ページ番号を1にする。</p>
         <h4>INTERMediator.additionalCondition = {};</h4>
         <p>すべての検索条件に追加される設定を消す。</p>
         <h4>INTERMediator.addSortKey(contextName, {field:xxx,direction:xxxx})</h4>
