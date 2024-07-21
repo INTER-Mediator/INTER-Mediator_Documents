@@ -368,8 +368,8 @@
         <p>認証を行うとき、失敗を許す回数。既定値は4。</p>
         <h4>INTERMediatorOnPage.authCount</h4>
         <p>認証を行うときに、ここまでに失敗した回数。</p>
-        <h4>INTERMediatorOnPage.authUser</h4>
-        <p>認証に使用されているユーザー名。</p>
+        <h4>INTERMediatorOnPage.authUser()</h4>
+        <p>認証に使用されているユーザー名。プロパティとして定義しているが、取り出しはメソッドを使う。</p>
         <h4>INTERMediatorOnPage.requireAuthentication</h4>
         <p>通信処理後、ユーザー認証が必要な場合にtrueが設定されている。</p>
         <h4>INTERMediatorOnPage.authStoring</h4>
@@ -388,14 +388,16 @@
         <p>認証パネルのタイトルを文字列で指定する。既定値のnullの場合、タイトルには、realmの文字列が設定される。</p>
         <h4>INTERMediatorOnPage.isOAuthAvailable</h4>
         <p>OAuthによる認証を行なっている場合にはtrueになる。既定値はfalse。</p>
-        <h4>INTERMediatorOnPage.isLDAP</h4>
-        <p>LDAP認証が設定されている場合にtrueになる。既定値はnull。</p>
+<!--         <h4>INTERMediatorOnPage.isLDAP</h4> -->
+<!--         <p>LDAP認証が設定されている場合にtrueになる。既定値はnull。</p> -->
         <h4>INTERMediatorOnPage.passwordPolicy</h4>
         <p>サーバー側の設定で定めたパスワードポリシーの定義文字列。</p>
         <h4>INTERMediatorOnPage.isEmailAsUsername</h4>
         <p>認証時のユーザー名にメールアドレスが使えるかどうかを示す論理値。</p>
         <h4>INTERMediatorOnPage.doAfterLoginPanel</h4>
-        <p>ログインパネル表示直後に呼び出される関数をsetteidekiru.</p>
+        <p>ログインパネル表示直後に呼び出される関数を設定できる。</p>
+        <h4>INTERMediatorOnPage.logout(url, notMove)</h4>
+        <p>ログイン状態からログアウト状態にする。ログアウトの処理では、クッキーあるいはセッションストレージにある認証情報を消す。引数は省略でき、両方を省略すると、ログアウト処理を行った後、現在のページをリロードし、結果的にログインパネルを表示する。SAMLに対応したページの場合はログアウトURLに移行後このページに戻る。引数のurlを指定すると、ログアウト処理ののち、このURLに移動する。引数notMoveにtrueを指定するとログアウト処理のみ行い、リロードや移動は行わない。</p>
       </section>
       <section>
         <h1>エラーメッセージ、デバッグメッセージ</h1>
