@@ -194,6 +194,26 @@
                 </div>
             </section>
             <section>
+                <h1>一覧と詳細ページが別々の場合、詳細ページで新規レコードを作成する</h1>
+                <p>一覧と詳細ページを別々のページで組んでいる場合、通常は一覧側に新規レコードを作成するボタンを表示するので、一覧に戻ればレコードは作成できます。しかしながら、詳細ページが表示されている状態でも新規レコードを作りたい場合もあります。その場合は、適当にBUTTONタグでボタンを設置し、次のようなスクリプトを実行すれば良いでしょう。</p>
+                <div class="code"><pre><code>function createNewItem() {
+  IMLibQueue.setTask((complete) => {
+    const contextName = 'account_detail' // レコードを新規に作成するコンテキストの名前
+    const data = [] // For defalut values
+    INTERMediator_DBAdapter.db_createRecord_async({name: contextName, dataset: data},
+      (result) => {
+        const id = result.newRecordKeyValue
+        INTERMediatorLog.flushMessage()
+        complete()
+        INTERMediator.moveAnotherURL(`${location.pathname}?id=${id}`)
+      }, () => {
+        INTERMediatorLog.flushMessage()
+        complete()
+      })
+  })
+}</code></pre></div>
+            </section>
+            <section>
                 <h1>disabled属性を条件に応じて設定する</h1>
                 <p>HTMLの属性にフィールドの値を設定する場合、data-im属性に指定するターゲット指定に「コンテキスト名@フィールド名@属性名」と記述することで可能です。しかしながら、disabled属性は、そこに設定する値でのグレーにするコントロールはできず、この属性が存在するかどうかで動作が決まり、他の属性と動作が異なります。こうした違いを本来はフレームワークで吸収したいところではありますが、Ver.9現在それは実現していません。ここで、フィールド、is_activeの値に応じて（""やnull、0の場合はグレーにする）ボタンをグレーにするということを実現するための方法を示します。まず、コンテキストに、post-repeater属性を記述します。</p>
                 <div class="code"><pre><code>IM_Entry(
