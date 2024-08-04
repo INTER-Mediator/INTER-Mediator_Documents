@@ -538,8 +538,12 @@
                         <td>ページ合成時に1つのエンクロージャーの処理が終わった後に呼び出される関数名を記述する。その関数自体は、INTERMediatorOnPageオブジェクトのメソッドとして定義する。なお、INTERMediatorOnPage.postEnclosure_[コンテキスト名]でメソッドを定義すれば、コンテキスト定義にこのエントリーは不要。</td>
                     </tr>
                     <tr>
+                        <td class="keyword">'post-query-stored'</td>
+                        <td>エンクロージャーへの処理の最初の段階で、データベースにアクセスしてデータを取り出し、IMLibContextオブジェクトを生成する。その直後に、ここに指定した名前のメソッドが呼び出される。メソッドは、INTERMediatorOnPage.名前=function(context){...} のように定義する。引数contextは生成したコンテキストオブジェクトへの参照が設定される。</td>
+                    </tr>
+                    <tr>
                         <td class="keyword">'extending-class'</td>
-                        <td>データアクセス時にサーバー側で処理プログラムを追加するクラスのクラス名を指定する</td>
+                        <td>データアクセス時にサーバー側で処理プログラムを追加するクラスのクラス名を指定する。</td>
                     </tr>
                     </tbody>
                 </table>
