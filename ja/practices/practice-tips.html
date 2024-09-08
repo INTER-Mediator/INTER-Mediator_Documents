@@ -257,6 +257,27 @@
 }</code></pre></div>
            </section>
             <section>
+                <h1>「勝手にログインパネルが表示される」と思った場合</h1>
+                <p>認証を設定しているとログインパネルが表示されますが、基本的にはその後、認証状態が継続してログインパネルは表示されません。時間が経過すれば、設定に応じて再度認証が必要になりログインパネルが表示されます。しかしながら、何かの作業を行った結果、ログインパネルが意図せず表示されてしまう場合があります。例えば、Postオンリーのコンテキストでファイルのアップロードを行い、その後にまた別の処理をするためにINTERMediatorOnPage.processingAfterPostOnlyContextに関数を設定していて、さらにその関数の中でサーバーとの通信を行った場合、まさにタイトルような状況に遭遇しました。これは、追加した通信処理とINTER-Mediatorのその後の処理が並行して実行してしまうためにそうなってしまいます。通信が直列的に実行されるために、追加の通信処理は例えば次のように記述してください。ポイントは優先順位の低いキューを投入して、通信処理を直列化するということです。</p>
+                 <div class="code"><pre><code>INTERMediatorOnPage.processingAfterPostOnlyContext = function (targetNode, idValue) {
+    IMLibQueue.setTask(function (completeTask) {
+      INTERMediator_DBAdapter.db_query_async({
+          name: 'any-context',
+          records: 100000,
+          useoffset: false
+        },
+        (result) => {
+          INTERMediatorLog.flushMessage()
+          completeTask()
+          //location.reload()
+        }, () => {
+          INTERMediatorLog.flushMessage()
+          completeTask()
+        })
+    }, false, true)
+}</code></pre></div>
+           </section>
+            <section>
                 <h1></h1>
                 <p></p>
             </section>
