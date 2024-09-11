@@ -54,7 +54,7 @@
     Menu
 </label>
 <aside class="phpdocumentor-column -three phpdocumentor-sidebar">
-                    <section class="phpdocumentor-sidebar__category">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="namespaces/intermediator.html" class="">INTERMediator</a>
@@ -67,7 +67,7 @@
             </ul>
 
                         </section>
-                <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="packages/Application.html" class="">Application</a>
@@ -85,14 +85,14 @@
 
                         </section>
             
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
@@ -133,11 +133,12 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">14</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
             <p class="phpdocumentor-summary">Class CommunicationProvider is for internal use to communicate with FileMaker Server.</p>
+
 
 
 
@@ -159,7 +160,7 @@
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">30</span>
+                                            <span class="phpdocumentor-tag-link">31</span>
                                                                                 
                                              
                                     </dd>
@@ -177,11 +178,13 @@
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>2017-2023 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
+                                                 <section class="phpdocumentor-description"><p>2017-2024 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
 </section>
 
                                     </dd>
                                             </dl>
+
+
 
 
 
@@ -207,19 +210,25 @@
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getOAuthIdentifier">getOAuthIdentifier()</a>
+    <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method__createCurlHandle">_createCurlHandle()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: <abbr title="\CurlHandle">CurlHandle</abbr>    </span>
+</dt>
+<dd>To create and configure cURL at a single place, avoiding code redundancy.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getOAuthIdentifier">getOAuthIdentifier()</a>
+    <span>
+                                &nbsp;: string|array&lt;string|int, mixed&gt;|null    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getSupportingProviders">getSupportingProviders()</a>
+    <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getSupportingProviders">getSupportingProviders()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: null|array&lt;string|int, mixed&gt;    </span>
 </dt>
 
     </dl>
-
 
 
 
@@ -239,6 +248,70 @@
             -private
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method__createCurlHandle">
+        _createCurlHandle()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method__createCurlHandle" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">898</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">To create and configure cURL at a single place, avoiding code redundancy.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">_createCurlHandle</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$url</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$returnTransfer</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\CurlHandle">CurlHandle</abbr></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>If later we need some specific settings for some cases, then add new
+parameters to this function.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$url</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The URL you want to access.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$returnTransfer</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>By default, sets CURLOPT_RETURNTRANSFER to <code class="prettyprint">true</code>.
+But it can be set to false if needed.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\CurlHandle">CurlHandle</abbr></span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getOAuthIdentifier">
         getOAuthIdentifier()
         <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getOAuthIdentifier" class="headerlink"><i class="fas fa-link"></i></a>
@@ -247,17 +320,18 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">546</span>
+    <span class="phpdocumentor-element-found-in__line">562</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">getOAuthIdentifier</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">getOAuthIdentifier</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$provider</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|array&lt;string|int, mixed&gt;|null</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -273,6 +347,12 @@
     
 
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string|array&lt;string|int, mixed&gt;|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -288,22 +368,29 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">532</span>
+    <span class="phpdocumentor-element-found-in__line">547</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">getSupportingProviders</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">getSupportingProviders</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">null|array&lt;string|int, mixed&gt;</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
     
     
     
+    
 
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">null|array&lt;string|int, mixed&gt;</span>
+            </section>
+
 </article>
             </section>
 
@@ -418,8 +505,9 @@
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getOAuthIdentifier">getOAuthIdentifier()</a></li>
-                                            <li><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getSupportingProviders">getSupportingProviders()</a></li>
+                                            <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method__createCurlHandle">_createCurlHandle()</a></li>
+                                            <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getOAuthIdentifier">getOAuthIdentifier()</a></li>
+                                            <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getSupportingProviders">getSupportingProviders()</a></li>
                                     </ul>
             </li>
                     </ul>

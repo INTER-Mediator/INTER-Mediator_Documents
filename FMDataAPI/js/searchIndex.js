@@ -43,7 +43,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetFieldHTMLEncoding\u0028\u0029",
             "name": "setFieldHTMLEncoding",
-            "summary": "Set\u0020to\u0020true\u0020if\u0020the\u0020return\u0020value\u0020of\u0020the\u0020field\u0028\u0029\u0020method\u0020uses\u0020htmlspecialchars\u0020function.",
+            "summary": "Set\u0020to\u0020true\u0020if\u0020the\u0020return\u0020value\u0020of\u0020the\u0020field\u0028\u0029\u0020method\u0020uses\u0020the\u0020htmlspecialchars\u0020function.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setFieldHTMLEncoding"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetFieldHTMLEncoding\u0028\u0029",
@@ -63,7 +63,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AcurlErrorCode\u0028\u0029",
             "name": "curlErrorCode",
-            "summary": "The\u0020error\u0020number\u0020of\u0020curl,\u0020i.e.\u0020kind\u0020of\u0020communication\u0020error\u0020code.",
+            "summary": "The\u0020error\u0020number\u0020of\u0020curl,\u0020i.e.,\u0020kind\u0020of\u0020communication\u0020error\u0020code.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_curlErrorCode"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AcurlErrorMessage\u0028\u0029",
@@ -88,7 +88,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetThrowException\u0028\u0029",
             "name": "setThrowException",
-            "summary": "Set\u0020to\u0020prevent\u0020to\u0020throw\u0020an\u0020exception\u0020in\u0020case\u0020of\u0020error.",
+            "summary": "Set\u0020to\u0020prevent\u0020throwing\u0020an\u0020exception\u0020in\u0020case\u0020of\u0020error.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setThrowException"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AstartCommunication\u0028\u0029",
@@ -118,7 +118,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetLayoutNames\u0028\u0029",
             "name": "getLayoutNames",
-            "summary": "Get\u0020the\u0020list\u0020of\u0020layout\u0020name\u0020in\u0020database.",
+            "summary": "Get\u0020the\u0020list\u0020of\u0020layout\u0020name\u0020in\u0020a\u0020database.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getLayoutNames"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetScriptNames\u0028\u0029",
@@ -128,27 +128,27 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetTargetTable\u0028\u0029",
             "name": "getTargetTable",
-            "summary": "Get\u0020the\u0020table\u0020occurrence\u0020name\u0020of\u0020just\u0020previous\u0020query.\u0020Usually\u0020this\u0020method\u0020returns\u0020the\u0020information\u0020of\nthe\u0020FileMakerRelation\u0020class.",
+            "summary": "Get\u0020the\u0020table\u0020occurrence\u0020name\u0020of\u0020just\u0020a\u0020previous\u0020query.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getTargetTable"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetTotalCount\u0028\u0029",
             "name": "getTotalCount",
-            "summary": "Get\u0020the\u0020total\u0020record\u0020count\u0020of\u0020just\u0020previous\u0020query.\u0020Usually\u0020this\u0020method\u0020returns\u0020the\u0020information\u0020of\nthe\u0020FileMakerRelation\u0020class.",
+            "summary": "Get\u0020the\u0020total\u0020record\u0020count\u0020of\u0020just\u0020a\u0020previous\u0020query.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getTotalCount"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetFoundCount\u0028\u0029",
             "name": "getFoundCount",
-            "summary": "Get\u0020the\u0020founded\u0020record\u0020count\u0020of\u0020just\u0020previous\u0020query.\u0020Usually\u0020this\u0020method\u0020returns\u0020the\u0020information\u0020of\nthe\u0020FileMakerRelation\u0020class.",
+            "summary": "Get\u0020the\u0020founded\u0020record\u0020count\u0020of\u0020just\u0020a\u0020previous\u0020query.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getFoundCount"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetReturnedCount\u0028\u0029",
             "name": "getReturnedCount",
-            "summary": "Get\u0020the\u0020returned\u0020record\u0020count\u0020of\u0020just\u0020previous\u0020query.\u0020Usually\u0020this\u0020method\u0020returns\u0020the\u0020information\u0020of\nthe\u0020FileMakerRelation\u0020class.",
+            "summary": "Get\u0020the\u0020returned\u0020record\u0020count\u0020of\u0020just\u0020a\u0020previous\u0020query.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getReturnedCount"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetContainerData\u0028\u0029",
             "name": "getContainerData",
-            "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020container\u0020field\u0020with\u0020with\u0020streaming\u0020url.",
+            "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020container\u0020field\u0020with\u0020streaming\u0020url.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getContainerData"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider",
@@ -165,6 +165,11 @@ Search.appendIndex(
             "name": "getOAuthIdentifier",
             "summary": "",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getOAuthIdentifier"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003A_createCurlHandle\u0028\u0029",
+            "name": "_createCurlHandle",
+            "summary": "To\u0020create\u0020and\u0020configure\u0020cURL\u0020at\u0020a\u0020single\u0020place,\u0020avoiding\u0020code\u0020redundancy.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method__createCurlHandle"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout",
             "name": "FileMakerLayout",
@@ -198,12 +203,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003Aduplicate\u0028\u0029",
             "name": "duplicate",
-            "summary": "Duplicate\u0020record.",
+            "summary": "Duplicate\u0020the\u0020record.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_duplicate"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003Adelete\u0028\u0029",
             "name": "delete",
-            "summary": "Delete\u0020on\u0020record.",
+            "summary": "Delete\u0020the\u0020record.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_delete"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003Aupdate\u0028\u0029",
@@ -273,22 +278,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetTargetTable\u0028\u0029",
             "name": "getTargetTable",
-            "summary": "Get\u0020the\u0020table\u0020occurrence\u0020name\u0020of\u0020query\u0020to\u0020get\u0020this\u0020relation.",
+            "summary": "Get\u0020the\u0020table\u0020occurrence\u0020name\u0020of\u0020a\u0020query\u0020to\u0020get\u0020this\u0020relation.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getTargetTable"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetTotalCount\u0028\u0029",
             "name": "getTotalCount",
-            "summary": "Get\u0020the\u0020total\u0020record\u0020count\u0020of\u0020query\u0020to\u0020get\u0020this\u0020relation.\u0020Portal\u0020relation\u0020doesn\u0027t\u0020have\u0020this\u0020information\u0020and\u0020returns\u0020NULL.",
+            "summary": "Get\u0020the\u0020total\u0020record\u0020count\u0020of\u0020a\u0020query\u0020to\u0020get\u0020this\u0020relation.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getTotalCount"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetFoundCount\u0028\u0029",
             "name": "getFoundCount",
-            "summary": "Get\u0020the\u0020founded\u0020record\u0020count\u0020of\u0020query\u0020to\u0020get\u0020this\u0020relation.\u0020If\u0020the\u0020relation\u0020comes\u0020from\u0020getRecord\u0028\u0029\u0020method,\nthis\u0020method\u0020returns\u00201.",
+            "summary": "Get\u0020the\u0020founded\u0020record\u0020count\u0020of\u0020a\u0020query\u0020to\u0020get\u0020this\u0020relation.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFoundCount"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetReturnedCount\u0028\u0029",
             "name": "getReturnedCount",
-            "summary": "Get\u0020the\u0020returned\u0020record\u0020count\u0020of\u0020query\u0020to\u0020get\u0020this\u0020relation.\u0020If\u0020the\u0020relation\u0020comes\u0020from\u0020getRecord\u0028\u0029\u0020method,\nthis\u0020method\u0020returns\u00201.",
+            "summary": "Get\u0020the\u0020returned\u0020record\u0020count\u0020of\u0020a\u0020query\u0020to\u0020get\u0020this\u0020relation.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getReturnedCount"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AsetPortalName\u0028\u0029",
@@ -298,17 +303,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Aprevious\u0028\u0029",
             "name": "previous",
-            "summary": "The\u0020record\u0020pointer\u0020goes\u0020back\u0020to\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
+            "summary": "The\u0020record\u0020pointer\u0020goes\u0020back\u0020to\u0020the\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_previous"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Anext\u0028\u0029",
             "name": "next",
-            "summary": "The\u0020record\u0020pointer\u0020goes\u0020forward\u0020to\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
+            "summary": "The\u0020record\u0020pointer\u0020goes\u0020forward\u0020to\u0020the\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_next"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Alast\u0028\u0029",
             "name": "last",
-            "summary": "The\u0020record\u0020pointer\u0020goes\u0020to\u0020first\u0020record.",
+            "summary": "The\u0020record\u0020pointer\u0020goes\u0020to\u0020the\u0020first\u0020record.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_last"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AmoveTo\u0028\u0029",
@@ -333,7 +338,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetFirstRecord\u0028\u0029",
             "name": "getFirstRecord",
-            "summary": "Returns\u0020the\u0020fiest\u0020record\u0020of\u0020the\u0020query\u0020result.",
+            "summary": "Returns\u0020the\u0020first\u0020record\u0020of\u0020the\u0020query\u0020result.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFirstRecord"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetLastRecord\u0028\u0029",
@@ -358,7 +363,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Afield\u0028\u0029",
             "name": "field",
-            "summary": "The\u0020field\u0020value\u0020of\u0020the\u0020first\u0020parameter.\u0020Or\u0020the\u0020FileMakerRelation\u0020object\u0020associated\u0020with\u0020the\u0020the\u0020first\u0020paramenter.",
+            "summary": "The\u0020field\u0020value\u0020of\u0020the\u0020first\u0020parameter.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_field"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetRecordId\u0028\u0029",
