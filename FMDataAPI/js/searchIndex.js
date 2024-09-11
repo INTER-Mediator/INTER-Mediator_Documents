@@ -156,16 +156,6 @@ Search.appendIndex(
             "summary": "Class\u0020CommunicationProvider\u0020is\u0020for\u0020internal\u0020use\u0020to\u0020communicate\u0020with\u0020FileMaker\u0020Server.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html"
         },                {
-            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003AgetSupportingProviders\u0028\u0029",
-            "name": "getSupportingProviders",
-            "summary": "",
-            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getSupportingProviders"
-        },                {
-            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003AgetOAuthIdentifier\u0028\u0029",
-            "name": "getOAuthIdentifier",
-            "summary": "",
-            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_getOAuthIdentifier"
-        },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003A_createCurlHandle\u0028\u0029",
             "name": "_createCurlHandle",
             "summary": "To\u0020create\u0020and\u0020configure\u0020cURL\u0020at\u0020a\u0020single\u0020place,\u0020avoiding\u0020code\u0020redundancy.",
@@ -330,11 +320,6 @@ Search.appendIndex(
             "name": "getFieldNames",
             "summary": "Return\u0020the\u0020array\u0020of\u0020field\u0020names.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getFieldNames"
-        },                {
-            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetNumberedRecord\u0028\u0029",
-            "name": "getNumberedRecord",
-            "summary": "",
-            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getNumberedRecord"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetFirstRecord\u0028\u0029",
             "name": "getFirstRecord",
