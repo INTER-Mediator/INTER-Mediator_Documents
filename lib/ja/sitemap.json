@@ -307,6 +307,13 @@
     "title": "ローカライズ",
     "breadcrumb": "データベース処理のログ記録"
 },
+  {
+    "id": 44,
+    "parent": "/ja/for-novices/",
+    "path": "/ja/for-novices/videos2025.html",
+    "title": "INTER-Mediator紹介ビデオ(2025)",
+    "breadcrumb": "紹介ビデオ(2025)"
+  },
 {
     "id": 1001,
     "parent": "/ja/tutorial/",
@@ -369,11 +376,4 @@
     "path": "/ja/tutorial/proof-09.html",
     "title": "INTER-Mediatorの実環境での展開",
     "breadcrumb": "chapter 9"
-  },
-  {
-    "id": 44,
-    "parent": "/ja/for-programmers/",
-    "path": "/ja/for-programmers/videos2025.html",
-    "title": "INTER-Mediator紹介ビデオ(2025)",
-    "breadcrumb": "紹介ビデオ(2025)"
   }]
