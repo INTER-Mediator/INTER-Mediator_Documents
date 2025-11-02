@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="../lib/css/nav.min.css" media="screen">
     <link rel="shortcut icon" href="../images/im-icon.png" type="image/png">
     <link rel="icon" href="../images/im-icon.png" type="image/png">
-    <script src="../lib/ja/sitemap.min.js"></script>
+    <script src="../lib/ja/sitemap.js"></script>
     <script src="../lib/js/lunr.min.js"></script>
     <script src="../lib/js/lunr.stemmer.support.min.js" charset="UTF-8"></script>
     <script src="../lib/js/tinyseg.js" charset="UTF-8"></script>
@@ -29,86 +29,116 @@
     <script src="../lib/js/pagebuilder-r2.js"></script>
     <script src="../lib/pagebuilder-r2.php"></script>
     <style>
-   .container ul li {margin:0;padding:0;line-height: 1.4;}
+        .container ul li {
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 
 <body data-page-title="top">
-    <div class="container">
-        <div class="page-title">
-            <h1 id="pageTitle"></h1>
-        </div>
-        <div id="searchInputBox" class="search-input-box">
-            <input id="searchInput" class="search-input" type="text" placeholder="キーワードを入力してください" autocapitalize="off" onfocus="this.select()">
-            <button id="search" class="btn btn-primary search-button">マニュアル検索</button>
-        </div>
-        <div id="searchResultBox" class="search-resulut-box">
-            <h3 id="searchResultHeader" class="search-result-header"><span id="searchInfo" class="search-info"></span></h3>
-            <ul id="searchResult" class="search-result">
-            </ul>
-        </div>
-        <div style="display:flex;justify-content: space-around;">
-           <div style="width: 30%">
-           <h3>トレーニングコース</h3>
-           <section class="clearfix">
-                <h4>チュートリアル<a href="tutorial/index.html">HTML版目次</a>|<a href="tutorial/im-textbook-newgen_v1.epub">EPub版</a></h4>
-                <p>INTER-Mediatorの基礎から応用までをチュートリアル形式で学習できるコンテンツです。前半は最新版に合わせて改訂済みで、後半はVer.5の内容になっています。</p>
-                <p><ul>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-01.html" target="_blank">Chapter 1　INTER-Mediatorの概要と演習の準備</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-02.html" target="_blank">Chapter 2　データベースへのクエリーと一覧表示</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-03.html" target="_blank">Chapter 3　データベースの更新を行うページ</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-04.html" target="_blank">Chapter 4　コンテキストに対する理解を深める</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-05.html" target="_blank">Chapter 5　さまざまなユーザーインターフェース構築</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-06.html" target="_blank">Chapter 6　JavaScriptでのプログラミング</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-07.html" target="_blank">Chapter 7　セキュリティと認証・アクセス権</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-08.html" target="_blank">Chapter 8　サーバーサイドでのプログラミング</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/proof-09.html" target="_blank">Chapter 9　INTER-Mediatorの実環境での展開</a></li>
-                <li><a href="https://inter-mediator.info/ja/tutorial/idx.html" target="_blank">索引</a></li>
-                </ul></p>
+<div class="container">
+    <div class="page-title">
+        <h1 id="pageTitle"></h1>
+    </div>
+    <div id="searchInputBox" class="search-input-box">
+        <input id="searchInput" class="search-input" type="text" placeholder="キーワードを入力してください"
+               autocapitalize="off" onfocus="this.select()">
+        <button id="search" class="btn btn-primary search-button">マニュアル検索</button>
+    </div>
+    <div id="searchResultBox" class="search-resulut-box">
+        <h3 id="searchResultHeader" class="search-result-header"><span id="searchInfo" class="search-info"></span></h3>
+        <ul id="searchResult" class="search-result">
+        </ul>
+    </div>
+    <div style="display:flex;justify-content: space-around;">
+        <div style="width: 30%">
+            <section class="clearfix" style="border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+                <h3><a href="for-novices/movies.html">INTER-Mediator紹介ビデオ(2025)</a></h3>
+                <p>ショートビデオによりINTER-Mediatorを解説するシリーズのリンクを集めてあります。2025年11月より公開を始めています。</p>
+            </section>
+            <section class="clearfix">
+                <h3>トレーニングコース<br><a href="tutorial/index.html">HTML版目次</a>|<a
+                        href="tutorial/im-textbook-newgen_v1.epub">EPub版</a></h3>
+                <p>
+                    INTER-Mediatorの基礎から応用までをチュートリアル形式で学習できるコンテンツです。
+                    前半は最新版に合わせて改訂済みで、後半はVer.5の内容になっています。
+                <p>
+                <ul>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-01.html" target="_blank">Chapter
+                        1　INTER-Mediatorの概要と演習の準備</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-02.html" target="_blank">Chapter
+                        2　データベースへのクエリーと一覧表示</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-03.html" target="_blank">Chapter
+                        3　データベースの更新を行うページ</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-04.html" target="_blank">Chapter
+                        4　コンテキストに対する理解を深める</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-05.html" target="_blank">Chapter
+                        5　さまざまなユーザーインターフェース構築</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-06.html" target="_blank">Chapter
+                        6　JavaScriptでのプログラミング</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-07.html" target="_blank">Chapter
+                        7　セキュリティと認証・アクセス権</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-08.html" target="_blank">Chapter
+                        8　サーバーサイドでのプログラミング</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/proof-09.html" target="_blank">Chapter
+                        9　INTER-Mediatorの実環境での展開</a></li>
+                    <li><a href="https://inter-mediator.info/ja/tutorial/idx.html" target="_blank">索引</a></li>
+                </ul>
                 <p>Ver.5のTutorialは、<a href="tutorial_v5" target="_blank">こちら</a>よりご覧いただけます。</p>
             </section>
-           <h3>INTER-Mediatorをはじめよう</h3>
-           <section class="clearfix">
-                <h4><a href="for-novices/movies.html">ビデオで始めるINTER-Mediator</a></h4>
-                <p>INTER-MediatorのVMを準備する手順や、ハンズオンでの作業を行なった様子をビデオでご覧いただけます。</p>
+            <h3>INTER-Mediatorをはじめよう</h3>
+            <section class="clearfix">
                 <h4><a href="for-novices/trial.html">トライアル版の利用方法</a></h4>
                 <p>INTER-Mediatorの試用や学習用途として利用できるトライアルWebアプリケーションの利用方法について説明しています。</p>
                 <h4><a href="for-novices/deploy6.html">ダウンロードとインストール(Ver.6以降)</a></h4>
                 <p>INTER-Mediatorの入手方法、開発時の利用法、運用時の利用方法をまとめました。</p>
-                <h4><a href="for-novices/startup.html">スタートアップガイド</a></h4>
-                <p>データベースの基本から、宣言的な記述で可能な範囲での開発手法をまとめた文書です。 データベースエンジンに絡む設定については解説はしていませんが、 ページファイルや定義ファイルをどのように記述すればいいのかということを実例とともに概念を含めた説明をしています。 2013年にINTER-Mediatorの学習可能性を調査したときに使ったテキストを加筆訂正したものです。</p>
-                <h4><a href="for-novices/handson.html">ハンズオンセッション手順書</a></h4>
-                <p>Virtual Machineを利用して、ハンズオンでINTER-Mediatorを学習するための手順書を作成しました。手順に従ってコードを入力して、どのような結果になるかを見ていただけます。</p>
-            </section>
+             </section>
             <h3>Ver.10以前の情報</h3>
-           <section class="clearfix">
-                 <h4><a href="for-novices/deploy.html">ダウンロードとインストール(Ver.5まで)</a></h4>
+            <section class="clearfix">
+                <h4><a href="for-novices/movies.html">ビデオで始めるINTER-Mediator</a></h4>
+                <p>INTER-MediatorのVMを準備する手順や、ハンズオンでの作業を行なった様子をビデオでご覧いただけます。</p>
+                <h4><a href="for-novices/startup.html">スタートアップガイド</a></h4>
+                <p>データベースの基本から、宣言的な記述で可能な範囲での開発手法をまとめた文書です。
+                    データベースエンジンに絡む設定については解説はしていませんが、
+                    ページファイルや定義ファイルをどのように記述すればいいのかということを実例とともに概念を含めた説明をしています。
+                    2013年にINTER-Mediatorの学習可能性を調査したときに使ったテキストを加筆訂正したものです。</p>
+                <h4><a href="for-novices/handson.html">ハンズオンセッション手順書</a></h4>
+                <p>Virtual
+                    Machineを利用して、ハンズオンでINTER-Mediatorを学習するための手順書を作成しました。手順に従ってコードを入力して、どのような結果になるかを見ていただけます。</p>
+                <h4><a href="for-novices/deploy.html">ダウンロードとインストール(Ver.5まで)</a></h4>
                 <p>INTER-Mediatorの入手方法、開発時の利用法、運用時の利用方法をまとめました。</p>
-               <h4><a href="for-novices/vm.html">バーチャルマシンの利用(Ver.8まで)</a></h4>
-                <p>INTER-Mediatorの試用や学習用途として利用できるバーチャルマシンの利用方法について説明しています。Ver.10以降はDockerでの試用を想定しています。<a href="for-novices/trial.html">トライアル版の利用方法</a>をご覧ください</p>
-                  <h4><a href="for-developers/sendmail.html">メール送信(Ver.5)</a></h4>
-                         <h4><a href="for-developers/sendmail6.html">メール送信(Ver.6以降)</a></h4>
-        <p>データベース処理を行ったときにメールを送る事ができます。</p>
+                <h4><a href="for-novices/vm.html">バーチャルマシンの利用(Ver.8まで)</a></h4>
+                <p>INTER-Mediatorの試用や学習用途として利用できるバーチャルマシンの利用方法について説明しています。Ver.10以降はDockerでの試用を想定しています。<a
+                        href="for-novices/trial.html">トライアル版の利用方法</a>をご覧ください</p>
+                <h4><a href="for-developers/sendmail.html">メール送信(Ver.5)</a></h4>
+                <h4><a href="for-developers/sendmail6.html">メール送信(Ver.6以降)</a></h4>
+                <p>データベース処理を行ったときにメールを送る事ができます。</p>
                 <h4><a href="for-developers/docker.html">Dockerの利用</a></h4>
-                <p>Dockerを利用してINTER-Mediatorを稼働させるための方法を解説します。（内容はVer.5時代のものです。Ver.10現在、トライアル版（<a href="for-novices/trial.html">トライアル版の利用方法</a>）としてDocker環境を用意しています）</p>
-                 <h4><a href="for-developers/sharing5.html">変更結果の即時更新をマルチクライアントで実現する(Ver.5)</a></h4>
-                <p>同一のエンティティを複数のクライアントで開いたとき、あるユーザの変更結果を即時に他のクライアントに反映する仕組みです。</p>
-               <h4><a href="for-programmers/serverextending53.html">サーバーサイドの拡張（Ver.5.3まで）</a></h4>
-              <h4><a href="for-programmers/serverextending54.html">サーバーサイドの拡張（Ver.5.4以降のVer.5）</a></h4>
+                <p>Dockerを利用してINTER-Mediatorを稼働させるための方法を解説します。（内容はVer.5時代のものです。Ver.10現在、トライアル版（<a
+                        href="for-novices/trial.html">トライアル版の利用方法</a>）としてDocker環境を用意しています）</p>
+                <h4><a href="for-developers/sharing5.html">変更結果の即時更新をマルチクライアントで実現する(Ver.5)</a>
+                </h4>
+                <p>
+                    同一のエンティティを複数のクライアントで開いたとき、あるユーザの変更結果を即時に他のクライアントに反映する仕組みです。</p>
+                <h4><a href="for-programmers/serverextending53.html">サーバーサイドの拡張（Ver.5.3まで）</a></h4>
+                <h4><a href="for-programmers/serverextending54.html">サーバーサイドの拡張（Ver.5.4以降のVer.5）</a></h4>
                 <p>サーバーサイドの処理をPHPを利用して機能を拡張する方法とAPI</p>
-           </section>
-            </div>
-            <div style="width: 30%">
-           <h3>開発者向けドキュメント</h3>
+            </section>
+        </div>
+        <div style="width: 30%">
+            <h3>開発者向けドキュメント</h3>
             <section>
-               <h4><a href="for-developers/manual.html">INTER-MediatorによるWebアプリケーションの概要</a></h4>
+                <h4><a href="for-developers/manual.html">INTER-MediatorによるWebアプリケーションの概要</a></h4>
                 <p>定義ファイルやページファイルの作成方法に加えて、以下の文書に含まれていないことがこちらにあります。</p>
                 <h4><a href="for-developers/deffile.html">定義ファイルの詳細</a></h4>
                 <p>定義ファイルの記述方法を説明しています。</p>
                 <h4><a href="for-developers/reference.html">定義ファイルの記述方法</a></h4>
                 <p>定義ファイルの記述方法を説明したリファレンスです。</p>
                 <h4><a href="for-developers/migration.html">バージョン移行ガイド</a></h4>
-                <p>INTER-Mediatorのバージョンを移行する際にアプリケーション側を書き換える必要がある箇所を説明しています。</p>
+                <p>
+                    INTER-Mediatorのバージョンを移行する際にアプリケーション側を書き換える必要がある箇所を説明しています。</p>
                 <h4><a href="for-developers/format.html">HTMLの属性に記述する書式を適用する機能</a></h4>
                 <p>data-im-format属性などを利用した書式設定に関するリファレンスです。</p>
                 <h4><a href="for-developers/db.html">データベース特有の設定</a></h4>
@@ -127,38 +157,49 @@
                 <p>配布ファイルに含まれているサンプルファイルについて説明します。</p>
                 <h4><a href="for-developers/bindingfunc.html">検索ページを作成するための機能</a></h4>
                 <p>検索ページを一切JavaScriptのプログラムを書かないでもできる手法を説明します。</p>
-                <h4><a href="for-developers/sharing7.html">変更結果の即時更新をマルチクライアントで実現する(Ver.7以降)</a></h4>
-                <p>同一のエンティティを複数のクライアントで開いたとき、あるユーザの変更結果を即時に他のクライアントに反映する仕組みです。</p>
+                <h4>
+                    <a href="for-developers/sharing7.html">変更結果の即時更新をマルチクライアントで実現する(Ver.7以降)</a>
+                </h4>
+                <p>
+                    同一のエンティティを複数のクライアントで開いたとき、あるユーザの変更結果を即時に他のクライアントに反映する仕組みです。</p>
                 <h4><a href="for-developers/localizing.html">ローカライズ</a></h4>
                 <p>ページ上のメッセージやデータベースから得た値をブラウザの言語に応じて切り替える仕組みです。</p>
                 <h4><a href="for-programmers/logging.html">データベース処理のログ記録</a></h4>
-                <p>クライアントから送られたデータベース処理をテーブルに記録しておき、監査情報を取り出すなどの処理ができます。</p>
+                <p>
+                    クライアントから送られたデータベース処理をテーブルに記録しておき、監査情報を取り出すなどの処理ができます。</p>
             </section>
-            </div>
-            <div style="width: 30%">
+        </div>
+        <div style="width: 30%">
             <h3>プラクティス</h3>
-                        <section>
-                <h4><a href="practices/practice-searchnp.html">検索をしてその結果を一覧表示する（プログラムなし版）</a></h4>
+            <section>
+                <h4><a href="practices/practice-searchnp.html">検索をしてその結果を一覧表示する（プログラムなし版）</a>
+                </h4>
                 <h4><a href="practices/practice-search.html">検索をしてその結果を一覧表示する（JavaScript版）</a></h4>
                 <p>
-                    検索条件を与えて一覧に表示するという仕組みは多くのアプリケーションで見られます。 一覧と検索を連動させる手法を解説します。いちばん手軽に実装できるのは、プログラムなし版の方です。 もし、細かなユーザーインタフェースの機能の組み込みが必要なら、同様なページをJavaScriptで実装することもできます。
+                    検索条件を与えて一覧に表示するという仕組みは多くのアプリケーションで見られます。
+                    一覧と検索を連動させる手法を解説します。いちばん手軽に実装できるのは、プログラムなし版の方です。
+                    もし、細かなユーザーインタフェースの機能の組み込みが必要なら、同様なページをJavaScriptで実装することもできます。
                 </p>
                 <h4><a href="practices/practice-masterdetail.html">一覧と詳細</a></h4>
                 <p>
-                    一覧を表示し、その中の選択した項目の詳細情報を表示したり編集ページを表示するという手法はよく利用されます。「マスター/ディテール」方式とも呼ばれます。 INTER-Mediatorでは定義ファイルにキーワードで指定するだけで、2つのコンテキストの一方をマスター、もう一方をディテール領域として稼働できます。
+                    一覧を表示し、その中の選択した項目の詳細情報を表示したり編集ページを表示するという手法はよく利用されます。「マスター/ディテール」方式とも呼ばれます。
+                    INTER-Mediatorでは定義ファイルにキーワードで指定するだけで、2つのコンテキストの一方をマスター、もう一方をディテール領域として稼働できます。
                 </p>
                 <h4><a href="practices/practice-step.html">モバイルでよく見られるステップ動作のサイト</a></h4>
-                <p>モバイルアプリケーションでは、画面全体を使って選択肢を提示し、選択すると次の画面に以降するという「ステップ動作」のユーザーインタフェースがよく見られます。INTER-Mediatorでそうしたサイトを作成する方法を説明します。</p>
+                <p>
+                    モバイルアプリケーションでは、画面全体を使って選択肢を提示し、選択すると次の画面に以降するという「ステップ動作」のユーザーインタフェースがよく見られます。INTER-Mediatorでそうしたサイトを作成する方法を説明します。</p>
                 <h4><a href="practices/practice-tips.html">ティップス集</a></h4>
-                <p>スタイルの値にフィールドの値を設定する、一覧ページから詳細ページに移動するボタンを設置する、URLの検索パラメータの値を検索条件にする、ページ移動時に「保存されない」場合の対処、「クリックを受け付けない場合がある」と感じた時の対処、条件に応じてページ生成を行わないようにする、Bootstrapのクラス名を自動生成されるボタンに適用する、デバッグ情報をページ上に出さない、検索機能をANDにする、マスター/ディテールページで新規レコード作成時に詳細ページに移動する、一覧と詳細が別々のページである場合に新規レコード作成時に詳細ページに移動する、一覧と詳細ページが別々の場合、詳細ページで新規レコードを作成する、disabled属性を条件に応じて設定する、サーバーに応じて設定を変える、「勝手にログインパネルが表示される」と思った場合</p>               
-           </section>
+                <p>
+                    スタイルの値にフィールドの値を設定する、一覧ページから詳細ページに移動するボタンを設置する、URLの検索パラメータの値を検索条件にする、ページ移動時に「保存されない」場合の対処、「クリックを受け付けない場合がある」と感じた時の対処、条件に応じてページ生成を行わないようにする、Bootstrapのクラス名を自動生成されるボタンに適用する、デバッグ情報をページ上に出さない、検索機能をANDにする、マスター/ディテールページで新規レコード作成時に詳細ページに移動する、一覧と詳細が別々のページである場合に新規レコード作成時に詳細ページに移動する、一覧と詳細ページが別々の場合、詳細ページで新規レコードを作成する、disabled属性を条件に応じて設定する、サーバーに応じて設定を変える、「勝手にログインパネルが表示される」と思った場合</p>
+            </section>
 
-           <h3>プログラマ向けドキュメント</h3>
-                <section>
+            <h3>プログラマ向けドキュメント</h3>
+            <section>
                 <h4><a href="for-programmers/api.html">JavaScriptのインタフェース</a></h4>
                 <p>INTER-MediatorにおけるJavaScript向けのAPIを紹介します。</p>
                 <h4><a href="for-programmers/jscomponent.html">JavaScriptコンポーネントの使い方</a></h4>
-                <p>ファイルのアップロード用コンポーネントの使用方法と、既存のJavaScriptのライブラリを元にしたコンポーネントを作る方法を説明しています。</p>
+                <p>
+                    ファイルのアップロード用コンポーネントの使用方法と、既存のJavaScriptのライブラリを元にしたコンポーネントを作る方法を説明しています。</p>
                 <h4><a href="for-programmers/media.html">MediaAccessクラスとその拡張点</a></h4>
                 <p>画像やPDF生成などのHTMLの外部にデータがある場合の処理について説明しています。</p>
                 <h4><a href="for-programmers/exporting.html">エクスポート</a></h4>
@@ -166,11 +207,12 @@
                 <h4><a href="for-programmers/serverextending.html">サーバーサイドの拡張（Ver.6.0以降）</a></h4>
                 <p>サーバーサイドの処理をPHPを利用して機能を拡張する方法とAPIをまとめておきました。</p>
                 <h4><a href="for-programmers/commitcode.html">ソースコードの投稿</a></h4>
-                <p>INTER-Mediatorへのソースコードを投稿する場合の手順です。INTER-Mediatorのコミッターや、あるいはバグレポートの1つの方法として、ソースコードの投稿を歓迎しています。</p>
+                <p>
+                    INTER-Mediatorへのソースコードを投稿する場合の手順です。INTER-Mediatorのコミッターや、あるいはバグレポートの1つの方法として、ソースコードの投稿を歓迎しています。</p>
             </section>
-            </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

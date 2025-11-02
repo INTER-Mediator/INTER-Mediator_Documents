@@ -363,10 +363,17 @@
     "title": "サーバーサイドでのプログラミング",
     "breadcrumb": "chapter 8"
 },
-{
+  {
     "id": 1009,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-09.html",
     "title": "INTER-Mediatorの実環境での展開",
     "breadcrumb": "chapter 9"
-}]
+  },
+  {
+    "id": 44,
+    "parent": "/ja/for-programmers/",
+    "path": "/ja/videos2025.html",
+    "title": "INTER-Mediator紹介ビデオ(2025)",
+    "breadcrumb": "紹介ビデオ(2025)"
+  }]
