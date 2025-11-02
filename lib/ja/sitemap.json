@@ -1,312 +1,312 @@
 [
-{
+  {
     "id": 1,
     "parent": null,
     "path": "/ja/",
     "title": "マニュアルトップページ",
     "breadcrumb": "トップ"
-},
-{
+  },
+  {
     "id": 2,
     "parent": "/ja/",
     "path": "/ja/for-novices/",
     "title": "INTER-Mediatorをはじめよう",
     "breadcrumb": "はじめよう"
-},
-{
+  },
+  {
     "id": 3,
     "parent": "/ja/",
     "path": "/ja/practices/",
     "title": "プラクティス",
     "breadcrumb": "プラクティス"
-},
-{
+  },
+  {
     "id": 4,
     "parent": "/ja/",
     "path": "/ja/for-developers/",
     "title": "開発ガイド",
     "breadcrumb": "開発ガイド"
-},
-{
+  },
+  {
     "id": 5,
     "parent": "/ja/",
     "path": "/ja/for-programmers/",
     "title": "プログラミングガイド",
     "breadcrumb": "プログラミングガイド"
-},
-{
+  },
+  {
     "id": 6,
     "parent": "/ja/",
     "path": "/ja/developers-blog/",
     "title": "開発者、コミッター、利用者によるブログ",
     "breadcrumb": "ブログ"
-},
-{
+  },
+  {
     "id": 7,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/deploy.html",
     "title": "ダウンロードとインストール(Ver.5まで)",
     "breadcrumb": "ダウンロードとインストール(Ver.5まで)"
-},
-{
+  },
+  {
     "id": 32,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/deploy6.html",
     "title": "ダウンロードとインストール(Ver.6以降)",
     "breadcrumb": "ダウンロードとインストール(Ver.6以降)"
-},
-{
+  },
+  {
     "id": 8,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/vm.html",
     "title": "バーチャルマシンの利用",
     "breadcrumb": "バーチャルマシンの利用"
-},
-{
+  },
+  {
     "id": 9,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/startup.html",
     "title": "スタートアップガイド",
     "breadcrumb": "スタートアップガイド"
-},
-{
+  },
+  {
     "id": 10,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/handson.html",
     "title": "ハンズオンセッション手順書",
     "breadcrumb": "ハンズオンセッション手順書"
-},
-{
+  },
+  {
     "id": 11,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/movies.html",
     "title": "ビデオで始めるINTER-Mediator",
     "breadcrumb": "ビデオで始めるINTER-Mediator"
-},
-{
+  },
+  {
     "id": 12,
     "parent": "/ja/practices/",
     "path": "/ja/practices/practice-searchnp.html",
     "title": "検索をしてその結果を一覧表示する（プログラムなし版）",
     "breadcrumb": "検索結果の一覧表示（プログラムなし版）"
-},
-{
+  },
+  {
     "id": 13,
     "parent": "/ja/practices/",
     "path": "/ja/practices/practice-search.html",
     "title": "検索をしてその結果を一覧表示する（JavaScript版）",
     "breadcrumb": "検索結果の一覧表示（JavaScript版）"
-},
-{
+  },
+  {
     "id": 14,
     "parent": "/ja/practices/",
     "path": "/ja/practices/practice-masterdetail.html",
     "title": "一覧と詳細",
     "breadcrumb": "一覧と詳細"
-},
-{
+  },
+  {
     "id": 33,
     "parent": "/ja/practices/",
     "path": "/ja/practices/practice-step.html",
     "title": "モバイルでよく見られるステップ動作のサイト",
     "breadcrumb": "ステップ"
-},
-{
+  },
+  {
     "id": 15,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/manual.html",
     "title": "INTER-MediatorによるWebアプリケーションの概要",
     "breadcrumb": "INTER-MediatorによるWebアプリの概要"
-},
-{
+  },
+  {
     "id": 16,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/reference.html",
     "title": "定義ファイルの記述方法",
     "breadcrumb": "定義ファイルの記述方法"
-},
-{
+  },
+  {
     "id": 17,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/migration.html",
     "title": "バージョン移行ガイド",
     "breadcrumb": "バージョン移行ガイド"
-},
-{
+  },
+  {
     "id": 18,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/docker.html",
     "title": "Dockerの利用",
     "breadcrumb": "Dockerの利用"
-},
-{
+  },
+  {
     "id": 19,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/db.html",
     "title": "データベース特有の設定",
     "breadcrumb": "データベース特有の設定"
-},
-{
+  },
+  {
     "id": 20,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/exp.html",
     "title": "計算式",
     "breadcrumb": "計算式"
-},
-{
+  },
+  {
     "id": 21,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/sendmail.html",
     "title": "メール送信(Ver.5)",
     "breadcrumb": "メール送信(Ver.5)"
-},
-{
+  },
+  {
     "id": 34,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/sendmail6.html",
     "title": "メール送信(Ver.6)",
     "breadcrumb": "メール送信(Ver.6)"
-},
-{
+  },
+  {
     "id": 35,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/slack.html",
     "title": "Slackにメッセージを送信する",
     "breadcrumb": "Slackにメッセージを送信する"
-},
-{
+  },
+  {
     "id": 22,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/auth.html",
     "title": "ユーザー認証とアクセス権",
     "breadcrumb": "ユーザー認証とアクセス権"
-},
-{
+  },
+  {
     "id": 23,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/samples.html",
     "title": "サンプルファイル",
     "breadcrumb": "サンプルファイル"
-},
-{
+  },
+  {
     "id": 24,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/bindingfunc.html",
     "title": "検索ページを作成するための機能",
     "breadcrumb": "検索ページを作成するための機能"
-},
-{
+  },
+  {
     "id": 25,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/sharing5.html",
     "title": "変更結果の即時更新をマルチクライアントで実現する(Ver.5)",
     "breadcrumb": "変更結果の即時更新をマルチクライアントで実現"
-},
-{
+  },
+  {
     "id": 25,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/sharing7.html",
     "title": "変更結果の即時更新をマルチクライアントで実現する(Ver.7以降)",
     "breadcrumb": "変更結果の即時更新をマルチクライアントで実現"
-},
-{
+  },
+  {
     "id": 26,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/format.html",
     "title": "HTMLの属性に記述する書式を適用する機能",
     "breadcrumb": "HTMLの属性に記述する書式を適用する機能"
-},
-{
+  },
+  {
     "id": 27,
     "parent": "/ja/for-programmers/",
     "path": "/ja/for-programmers/api.html",
     "title": "JavaScriptのインタフェース",
     "breadcrumb": "JavaScriptのインタフェース"
-},
-{
+  },
+  {
     "id": 28,
     "parent": "/ja/for-programmers/",
     "path": "/ja/for-programmers/jscomponent.html",
     "title": "JavaScriptコンポーネントの使い方",
     "breadcrumb": "JavaScriptコンポーネントの使い方"
-},
-{
+  },
+  {
     "id": 29,
     "parent": "/ja/for-programmers/",
     "path": "/ja/for-programmers/media.html",
     "title": "MediaAccessクラスとその拡張点",
     "breadcrumb": "MediaAccessクラスとその拡張点"
-},
-{
+  },
+  {
     "id": 30,
     "parent": "/ja/for-programmers/",
     "path": "/ja/for-programmers/serverextending.html",
     "title": "サーバーサイドの拡張（Ver.5.4以降）",
     "breadcrumb": "サーバーサイドの拡張（Ver.5.4以降）"
-},
-{
+  },
+  {
     "id": 31,
     "parent": "/ja/for-programmers/",
     "path": "/ja/for-programmers/commitcode.html",
     "title": "ソースコードの投稿",
     "breadcrumb": "ソースコードの投稿"
-},
-{
+  },
+  {
     "id": 36,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/lookup.html",
     "title": "値をコピーするルックアップ",
     "breadcrumb": "値をコピーするルックアップ"
-},
-{
+  },
+  {
     "id": 37,
     "parent": "/ja/practices/",
     "path": "/ja/practices/practice-tips.html",
     "title": "ティップス集",
     "breadcrumb": "ティップス集"
-},
-{
+  },
+  {
     "id": 38,
     "parent": "/ja/for-novices/",
     "path": "/ja/for-novices/trial.html",
     "title": "トライアル版の利用方法",
     "breadcrumb": "トライアル版の利用方法"
-},
-{
+  },
+  {
     "id": 39,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/sendmail10.html",
     "title": "メール送信(Ver.10)",
     "breadcrumb": "メール送信"
-},
-{
+  },
+  {
     "id": 40,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/deffile.html",
     "title": "定義ファイルの詳細",
     "breadcrumb": "定義ファイルの詳細"
-},
-{
+  },
+  {
     "id": 41,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-developers/localizing.html",
     "title": "ローカライズ",
     "breadcrumb": "ローカライズ"
-},
-{
+  },
+  {
     "id": 42,
     "parent": "/ja/for-developers/",
     "path": "/ja/for-programmers/exporting.html",
     "title": "テーブル内容のエクスポート",
     "breadcrumb": "エクスポート"
-},
-{
+  },
+  {
     "id": 43,
     "parent": "/ja/for-programmers/",
     "path": "/ja/for-programmers/logging.html",
-    "title": "ローカライズ",
+    "title": "データベース処理のログ記録",
     "breadcrumb": "データベース処理のログ記録"
-},
+  },
   {
     "id": 44,
     "parent": "/ja/for-novices/",
@@ -314,66 +314,67 @@
     "title": "INTER-Mediator紹介ビデオ(2025)",
     "breadcrumb": "紹介ビデオ(2025)"
   },
-{
+  {
     "id": 1001,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-01.html",
     "title": "INTER-Mediatorの概要と演習の準備",
     "breadcrumb": "chapter 1"
-},
-{
+  },
+  {
     "id": 1002,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-02.html",
     "title": "データベースへのクエリーと一覧表示",
     "breadcrumb": "chapter 2"
-},
-{
+  },
+  {
     "id": 1003,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-03.html",
     "title": "データベースの更新を行うページ",
     "breadcrumb": "chapter 3"
-},
-{
+  },
+  {
     "id": 1004,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-04.html",
     "title": "コンテキストに対する理解を深める",
     "breadcrumb": "chapter 4"
-},
-{
+  },
+  {
     "id": 1005,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-05.html",
     "title": "さまざまなユーザーインターフェース構築",
     "breadcrumb": "chapter 5"
-},
-{
+  },
+  {
     "id": 1006,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-06.html",
     "title": "JavaScriptでのプログラミング",
     "breadcrumb": "chapter 6"
-},
-{
+  },
+  {
     "id": 1007,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-07.html",
     "title": "セキュリティと認証・アクセス権",
     "breadcrumb": "chapter 7"
-},
-{
+  },
+  {
     "id": 1008,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-08.html",
     "title": "サーバーサイドでのプログラミング",
     "breadcrumb": "chapter 8"
-},
+  },
   {
     "id": 1009,
     "parent": "/ja/tutorial/",
     "path": "/ja/tutorial/proof-09.html",
     "title": "INTER-Mediatorの実環境での展開",
     "breadcrumb": "chapter 9"
-  }]
+  }
+]
