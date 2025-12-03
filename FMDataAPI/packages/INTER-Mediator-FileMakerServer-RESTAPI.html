@@ -125,7 +125,7 @@
 
     </h4>
     <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\FMDataAPI">FMDataAPI</abbr></a></dt><dd>Class FMDataAPI is the wrapper of The REST API in Claris FileMaker Server and FileMaker Cloud for AWS.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\CommunicationProvider">CommunicationProvider</abbr></a></dt><dd>Class CommunicationProvider is for internal use to communicate with FileMaker Server.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a></dt><dd>Class FileMakerLayout is the proxy of layout in FileMaker database.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a></dt><dd>Class FileMakerRelation is the record set of queried data. This class implements Iterator interface.</dd>    </dl>
+                    <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\FMDataAPI">FMDataAPI</abbr></a></dt><dd>Class FMDataAPI is the wrapper of The REST API in Claris FileMaker Server and FileMaker Cloud for AWS.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\CommunicationProvider">CommunicationProvider</abbr></a></dt><dd>Class CommunicationProvider is for internal use to communicate with FileMaker Server.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a></dt><dd>Class FileMakerLayout is the proxy of layout in the FileMaker database.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation">FileMakerRelation</abbr></a></dt><dd>Class FileMakerRelation is the record set of queried data. This class implements the Iterator interface.</dd>    </dl>
 
 
 
@@ -173,6 +173,8 @@
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 

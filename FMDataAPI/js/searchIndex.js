@@ -13,7 +13,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003Alayout\u0028\u0029",
             "name": "layout",
-            "summary": "Refers\u0020the\u0020FileMakerLayout\u0020object\u0020as\u0020the\u0020proxy\u0020of\u0020the\u0020layout.",
+            "summary": "Refers\u0020to\u0020the\u0020FileMakerLayout\u0020object\u0020as\u0020the\u0020proxy\u0020of\u0020the\u0020layout.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_layout"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetDebug\u0028\u0029",
@@ -28,7 +28,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AuseOAuth\u0028\u0029",
             "name": "useOAuth",
-            "summary": "On\u0020the\u0020authentication\u0020session,\u0020username\u0020and\u0020password\u0020are\u0020handled\u0020as\u0020OAuth\u0020parameters.",
+            "summary": "In\u0020the\u0020authentication\u0020session,\u0020username\u0020and\u0020password\u0020are\u0020handled\u0020as\u0020OAuth\u0020parameters.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_useOAuth"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetAPIVersion\u0028\u0029",
@@ -38,7 +38,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetCertValidating\u0028\u0029",
             "name": "setCertValidating",
-            "summary": "Set\u0020to\u0020verify\u0020the\u0020server\u0020certificate.\u0020The\u0020default\u0020is\u0020to\u0020handle\u0020as\u0020self\u002Dsigned\u0020certificate\u0020and\u0020doesn\u0027t\u0020verify.",
+            "summary": "Set\u0020to\u0020verify\u0020the\u0020server\u0020certificate.\u0020The\u0020default\u0020is\u0020to\u0020handle\u0020as\u0020a\u0020self\u002Dsigned\u0020certificate\u0020and\u0020doesn\u0027t\u0020verify.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setCertValidating"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetFieldHTMLEncoding\u0028\u0029",
@@ -113,7 +113,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetDatabaseNames\u0028\u0029",
             "name": "getDatabaseNames",
-            "summary": "Get\u0020the\u0020information\u0020about\u0020hosting\u0020database.\u0020It\u0020includes\u0020the\u0020target\u0020database\u0020and\u0020others\u0020in\u0020FileMaker\u0020Server.",
+            "summary": "Get\u0020the\u0020information\u0020about\u0020a\u0020hosting\u0020database.\u0020It\u0020includes\u0020the\u0020target\u0020database\u0020and\u0020others\u0020in\u0020FileMaker\u0020Server.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getDatabaseNames"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetLayoutNames\u0028\u0029",
@@ -123,7 +123,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetScriptNames\u0028\u0029",
             "name": "getScriptNames",
-            "summary": "Get\u0020the\u0020list\u0020of\u0020script\u0020name\u0020in\u0020database.",
+            "summary": "Get\u0020the\u0020list\u0020of\u0020script\u0020name\u0020in\u0020a\u0020database.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getScriptNames"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetTargetTable\u0028\u0029",
@@ -148,7 +148,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AgetContainerData\u0028\u0029",
             "name": "getContainerData",
-            "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020container\u0020field\u0020with\u0020streaming\u0020url.",
+            "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020the\u0020container\u0020field\u0020with\u0020streaming\u0020url.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getContainerData"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider",
@@ -163,7 +163,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout",
             "name": "FileMakerLayout",
-            "summary": "Class\u0020FileMakerLayout\u0020is\u0020the\u0020proxy\u0020of\u0020layout\u0020in\u0020FileMaker\u0020database.",
+            "summary": "Class\u0020FileMakerLayout\u0020is\u0020the\u0020proxy\u0020of\u0020layout\u0020in\u0020the\u0020FileMaker\u0020database.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003AstartCommunication\u0028\u0029",
@@ -183,7 +183,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003AgetRecord\u0028\u0029",
             "name": "getRecord",
-            "summary": "Query\u0020to\u0020the\u0020FileMaker\u0020Database\u0020with\u0020recordId\u0020special\u0020field\u0020and\u0020returns\u0020the\u0020result\u0020as\u0020FileMakerRelation\u0020object.",
+            "summary": "Query\u0020to\u0020the\u0020FileMaker\u0020Database\u0020with\u0020a\u0020recordId\u0020special\u0020field\u0020and\u0020returns\u0020the\u0020result\u0020as\u0020a\u0020FileMakerRelation\u0020object.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_getRecord"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003Acreate\u0028\u0029",
@@ -258,12 +258,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003AgetScriptResultPresort\u0028\u0029",
             "name": "getScriptResultPresort",
-            "summary": "Get\u0020the\u0020return\u0020value\u0020from\u0020the\u0020presort\u0020script.",
+            "summary": "Get\u0020the\u0020return\u0020value\u0020from\u0020the\u0020presorted\u0020script.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_getScriptResultPresort"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation",
             "name": "FileMakerRelation",
-            "summary": "Class\u0020FileMakerRelation\u0020is\u0020the\u0020record\u0020set\u0020of\u0020queried\u0020data.\u0020This\u0020class\u0020implements\u0020Iterator\u0020interface.",
+            "summary": "Class\u0020FileMakerRelation\u0020is\u0020the\u0020record\u0020set\u0020of\u0020queried\u0020data.\u0020This\u0020class\u0020implements\u0020the\u0020Iterator\u0020interface.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetTargetTable\u0028\u0029",
@@ -293,12 +293,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Aprevious\u0028\u0029",
             "name": "previous",
-            "summary": "The\u0020record\u0020pointer\u0020goes\u0020back\u0020to\u0020the\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
+            "summary": "The\u0020record\u0020pointer\u0020goes\u0020back\u0020to\u0020the\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020about\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_previous"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Anext\u0028\u0029",
             "name": "next",
-            "summary": "The\u0020record\u0020pointer\u0020goes\u0020forward\u0020to\u0020the\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
+            "summary": "The\u0020record\u0020pointer\u0020goes\u0020forward\u0020to\u0020the\u0020previous\u0020record.\u0020This\u0020does\u0020not\u0020care\u0020about\u0020the\u0020range\u0020of\u0020pointer\u0020value.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_next"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Alast\u0028\u0029",
@@ -358,12 +358,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetModId\u0028\u0029",
             "name": "getModId",
-            "summary": "Return\u0020the\u0020value\u0020of\u0020special\u0020field\u0020modId\u0020in\u0020the\u0020current\u0020pointing\u0020record.",
+            "summary": "Return\u0020the\u0020value\u0020of\u0020a\u0020special\u0020field\u0020modId\u0020in\u0020the\u0020current\u0020pointing\u0020record.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getModId"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003AgetContainerData\u0028\u0029",
             "name": "getContainerData",
-            "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020container\u0020field\u0020with\u0020streaming\u0020interface.\u0020The\u0020access\u0020with\nstreaming\u0020url\u0020depends\u0020on\u0020the\u0020setCertValidating\u0028_\u0029\u0020call,\u0020and\u0020it\u0020can\u0020work\u0020on\u0020self\u002Dsigned\u0020certificate\u0020as\u0020a\u0020default.",
+            "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020the\u0020container\u0020field\u0020with\u0020streaming\u0020interface.\u0020The\u0020access\u0020with\nstreaming\u0020url\u0020depends\u0020on\u0020the\u0020setCertValidating\u0028_\u0029\u0020call,\u0020and\u0020it\u0020can\u0020work\u0020on\u0020self\u002Dsigned\u0020certificate\u0020as\u0020a\u0020default.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_getContainerData"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Acurrent\u0028\u0029",
@@ -378,7 +378,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Avalid\u0028\u0029",
             "name": "valid",
-            "summary": "Checks\u0020if\u0020current\u0020position\u0020is\u0020valid.\u0020This\u0020method\u0020is\u0020implemented\u0020for\u0020Iterator\u0020interface.",
+            "summary": "Checks\u0020if\u0020the\u0020current\u0020position\u0020is\u0020valid.\u0020This\u0020method\u0020is\u0020implemented\u0020for\u0020Iterator\u0020interface.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerRelation.html#method_valid"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation\u003A\u003Arewind\u0028\u0029",

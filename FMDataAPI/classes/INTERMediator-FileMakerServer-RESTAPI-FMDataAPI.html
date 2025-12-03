@@ -156,20 +156,10 @@
                     
                                     </dd>
                                                 <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">@property-read</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>FileMakerLayout &lt;&lt;layout_name&gt;&gt; Returns the FileMakerLayout object from the layout named with the property.
-If the layout doesn't exist, no error arises here. Any errors might arise on methods of FileMakerLayout class.</p>
-</section>
-
-                                    </dd>
-                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">31</span>
+                                            <span class="phpdocumentor-tag-link">36</span>
                                                                                 
                                              
                                     </dd>
@@ -188,16 +178,14 @@ If the layout doesn't exist, no error arises here. Any errors might arise on met
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
                                                  <section class="phpdocumentor-description"><p>2017-2024 Masayuki Nii
-(Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
+(Claris FileMaker is a registered trademark of Claris International Inc. in the U.S. and other countries.)</p>
 </section>
 
                                     </dd>
                                             </dl>
 
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
     <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -212,6 +200,19 @@ If the layout doesn't exist, no error arises here. Any errors might arise on met
 
 
 
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#property_layout">$layout</a>
+    <span>
+                        &nbsp;: <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a>            </span>
+</dt>
+
+    </dl>
 
 <h4 id="toc-methods">
     Methods
@@ -267,14 +268,14 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Return the base64 encoded data in container field with streaming url.</dd>
+<dd>Return the base64 encoded data in the container field with streaming url.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getDatabaseNames">getDatabaseNames()</a>
     <span>
                                 &nbsp;: null|array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Get the information about hosting database. It includes the target database and others in FileMaker Server.</dd>
+<dd>Get the information about a hosting database. It includes the target database and others in FileMaker Server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getFieldHTMLEncoding">getFieldHTMLEncoding()</a>
@@ -316,12 +317,12 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
     <span>
                                 &nbsp;: null|array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Get the list of script name in database.</dd>
+<dd>Get the list of script name in a database.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getSessionToken">getSessionToken()</a>
     <span>
-                                &nbsp;: string    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>The session token earned after authentication.</dd>
 
@@ -351,7 +352,7 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
     <span>
                                 &nbsp;: <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a>    </span>
 </dt>
-<dd>Refers the FileMakerLayout object as the proxy of the layout.</dd>
+<dd>Refers to the FileMakerLayout object as the proxy of the layout.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setAPIVersion">setAPIVersion()</a>
@@ -365,7 +366,7 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Set to verify the server certificate. The default is to handle as self-signed certificate and doesn&#039;t verify.</dd>
+<dd>Set to verify the server certificate. The default is to handle as a self-signed certificate and doesn&#039;t verify.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setDebug">setDebug()</a>
@@ -421,7 +422,7 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>On the authentication session, username and password are handled as OAuth parameters.</dd>
+<dd>In the authentication session, username and password are handled as OAuth parameters.</dd>
 
     </dl>
 
@@ -430,6 +431,53 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
         
 
         
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                -read-only                    "
+>
+    <h4 class="phpdocumentor-element__name" id="property_layout">
+        $layout
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#property_layout" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                        <small class="phpdocumentor-element__modifier">read-only</small>                    </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/FMDataAPI.php"><a href="files/src-fmdataapi.html"><abbr title="src/FMDataAPI.php">FMDataAPI.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">0</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+        <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$layout</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>Returns the FileMakerLayout object from the layout named with the property.
+If the layout doesn't exist, no error arises here. Any errors might arise on methods of FileMakerLayout class.</p>
+</section>
+
+    
+    
+
+        
+        
+
+</article>
+            </section>
 
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
@@ -460,7 +508,7 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$solution</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$user</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$port</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$protocol</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fmDataSource</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isUnitTest</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$solution</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$user</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">int|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$port</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$protocol</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">array&lt;string|int, mixed&gt;|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fmDataSource</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$isUnitTest</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -469,8 +517,8 @@ oAuthRequestId and oAuthIdentifier. Moreover, call useOAuth method before access
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$solution</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$solution</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The database file name which is just hosting.
@@ -479,8 +527,8 @@ Every database must have the accessing privilege 'fmrest' including external dat
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$user</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$user</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The fmrest privilege accessible user to the database.
@@ -489,22 +537,22 @@ If you’re going to call useOAuth method, you have to specify the data for X-FM
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$password</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
+                <span class="phpdocumentor-argument-list__argument__name">$password</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string|null</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The password of the above user.
-This can be null for testing purpose only. Null data is going to replace the string &quot;password&quot;.
-This prevents to be detected as a security issue.
+This can be null for testing purposes only. Null data is going to replace the string &quot;password&quot;.
+This prevents to being detected as a security issue.
 On the real solutions, you have to set a valid password string.
 If you’re going to call useOAuth method, you have to specify the data for X-FM-Data-OAuth-Identifier.</p>
 </section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$host</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                <span class="phpdocumentor-argument-list__argument__name">$host</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string|null</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>FileMaker Server's host name or IP address. If omitted, 'localhost' is chosen.
 The value &quot;localserver&quot; tries to connect directory 127.0.0.1, and you don't have to set $port and $protocol.</p>
@@ -512,38 +560,38 @@ The value &quot;localserver&quot; tries to connect directory 127.0.0.1, and you 
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$port</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                <span class="phpdocumentor-argument-list__argument__name">$port</span>
+                : <span class="phpdocumentor-argument-list__argument__type">int|null</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>FileMaker Server's port number. If omitted, 443 is chosen.</p>
 </section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$protocol</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                <span class="phpdocumentor-argument-list__argument__name">$protocol</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string|null</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>FileMaker Server's protocol name. If omitted, 'https' is chosen.</p>
 </section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$fmDataSource</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                <span class="phpdocumentor-argument-list__argument__name">$fmDataSource</span>
+                : <span class="phpdocumentor-argument-list__argument__type">array&lt;string|int, mixed&gt;|null</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Authentication information for external data sources.
 Ex.  [{&quot;database&quot;=&gt;&quot;&lt;databaseName&gt;&quot;, &quot;username&quot;=&gt;&quot;<username>&quot;, &quot;password&quot;=&gt;&quot;<password>&quot;}].
-If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; keys have to be spedified.</p>
+If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; keys have to be specified.</p>
 </section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$isUnitTest</span>
-                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+                <span class="phpdocumentor-argument-list__argument__name">$isUnitTest</span>
+                : <span class="phpdocumentor-argument-list__argument__type">bool</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>If it's set to true, the communication provider just works locally.</p>
 </section>
@@ -553,8 +601,8 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -588,8 +636,8 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
     
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">int</span>
@@ -631,8 +679,8 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
     
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">string|null</span>
@@ -689,8 +737,8 @@ If you use OAuth, &quot;oAuthRequestId&quot; and &quot;oAuthIdentifier&quot; key
                                     </dd>
                                             </dl>
 
+        
     
-
     
 </article>
                     <article
@@ -727,8 +775,8 @@ This error code is associated with FileMaker's error code.</p>
     
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">int</span>
@@ -772,8 +820,8 @@ This error code is associated with FileMaker's error code.</p>
     
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">string|null</span>
@@ -802,11 +850,11 @@ This error code is associated with FileMaker's error code.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Return the base64 encoded data in container field with streaming url.</p>
+        <p class="phpdocumentor-summary">Return the base64 encoded data in the container field with streaming url.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getContainerData</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$url</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getContainerData</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$url</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -815,8 +863,8 @@ This error code is associated with FileMaker's error code.</p>
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$url</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$url</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The container data URL.</p>
@@ -844,13 +892,13 @@ This error code is associated with FileMaker's error code.</p>
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">string</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>The base64 encoded data in container field.</p>
+                <section class="phpdocumentor-description"><p>The base64 encoded data in the container field.</p>
 </section>
 
             </section>
@@ -874,7 +922,7 @@ This error code is associated with FileMaker's error code.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Get the information about hosting database. It includes the target database and others in FileMaker Server.</p>
+        <p class="phpdocumentor-summary">Get the information about a hosting database. It includes the target database and others in FileMaker Server.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -906,14 +954,14 @@ This error code is associated with FileMaker's error code.</p>
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|array&lt;string|int, mixed&gt;</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>The information of hosting databases. Every element is an object and just having 'name'
-property.Ex.: [{&quot;name&quot;: &quot;TestDB&quot;},{&quot;name&quot;: &quot;sample_db&quot;}]</p>
+                <section class="phpdocumentor-description"><p>The information of hosting databases. Every element is an object and just has 'name'
+property.Ex.: [{&quot;name&quot;: &quot;TestDB&quot;},{&quot;name&quot;: &quot;sample_db&quot; }]</p>
 </section>
 
             </section>
@@ -950,8 +998,8 @@ property.Ex.: [{&quot;name&quot;: &quot;TestDB&quot;},{&quot;name&quot;: &quot;s
     
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">bool</span>
@@ -1011,8 +1059,8 @@ property.Ex.: [{&quot;name&quot;: &quot;TestDB&quot;},{&quot;name&quot;: &quot;s
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|int</span>
@@ -1071,13 +1119,13 @@ property.Ex.: [{&quot;name&quot;: &quot;TestDB&quot;},{&quot;name&quot;: &quot;s
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|array&lt;string|int, mixed&gt;</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>The information of layouts in the target database. Every element is an object and just having 'name'
+                <section class="phpdocumentor-description"><p>The information of layouts in the target database. Every element is an object and just has 'name'
 property.
 Ex.: [{&quot;name&quot;: &quot;person_layout&quot;},{&quot;name&quot;: &quot;contact_to&quot;},{&quot;name&quot;: &quot;history_to&quot;}...]</p>
 </section>
@@ -1133,8 +1181,8 @@ Ex.: [{&quot;name&quot;: &quot;person_layout&quot;},{&quot;name&quot;: &quot;con
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|object</span>
@@ -1195,8 +1243,8 @@ Ex.: [{&quot;name&quot;: &quot;person_layout&quot;},{&quot;name&quot;: &quot;con
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|int</span>
@@ -1225,7 +1273,7 @@ Ex.: [{&quot;name&quot;: &quot;person_layout&quot;},{&quot;name&quot;: &quot;con
 
     </aside>
 
-        <p class="phpdocumentor-summary">Get the list of script name in database.</p>
+        <p class="phpdocumentor-summary">Get the list of script name in a database.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -1255,13 +1303,13 @@ Ex.: [{&quot;name&quot;: &quot;person_layout&quot;},{&quot;name&quot;: &quot;con
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|array&lt;string|int, mixed&gt;</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>The information of scripts in the target database. Every element is an object and having 'name' property.
+                <section class="phpdocumentor-description"><p>The information of scripts in the target database. Every element is an object and has a 'name' property.
 The 'isFolder' property is true if it's a folder item, and it has the 'folderScriptNames' property and includes
 an object with the same structure.
 Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&quot;name&quot;: &quot;TestScript2&quot;,&quot;isFolder&quot;: false},{&quot;name&quot;: &quot;Maintenance&quot;,
@@ -1293,7 +1341,7 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getSessionToken</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getSessionToken</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1302,11 +1350,11 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
     
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">string</span>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
                     &mdash;
                 <section class="phpdocumentor-description"><p>The session token.</p>
 </section>
@@ -1362,8 +1410,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|string</span>
@@ -1422,8 +1470,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
                                     </dd>
                                             </dl>
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">null|int</span>
@@ -1465,8 +1513,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
     
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">int|null</span>
@@ -1495,23 +1543,23 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     </aside>
 
-        <p class="phpdocumentor-summary">Refers the FileMakerLayout object as the proxy of the layout.</p>
+        <p class="phpdocumentor-summary">Refers to the FileMakerLayout object as the proxy of the layout.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">layout</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$layout_name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">layout</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$layout_name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a></span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
     
-        <section class="phpdocumentor-description"><p>If the layout doesn't exist, no error arises here. Any errors might arise on methods of FileMakerLayout class.</p>
+        <section class="phpdocumentor-description"><p>If the layout doesn't exist, no error arises here. Any errors might arise on methods of the FileMakerLayout class.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$layout_name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$layout_name</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Layout name.</p>
@@ -1522,13 +1570,13 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type"><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html"><abbr title="\INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerLayout">FileMakerLayout</abbr></a></span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>object which is proxy of FileMaker's layout.</p>
+                <section class="phpdocumentor-description"><p>object which is a proxy of FileMaker's layout.</p>
 </section>
 
             </section>
@@ -1556,7 +1604,7 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setAPIVersion</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$vNum</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setAPIVersion</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$vNum</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1567,8 +1615,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$vNum</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                <span class="phpdocumentor-argument-list__argument__name">$vNum</span>
+                : <span class="phpdocumentor-argument-list__argument__type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>FileMaker Data API's version number.</p>
@@ -1579,8 +1627,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -1601,11 +1649,11 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     </aside>
 
-        <p class="phpdocumentor-summary">Set to verify the server certificate. The default is to handle as self-signed certificate and doesn&#039;t verify.</p>
+        <p class="phpdocumentor-summary">Set to verify the server certificate. The default is to handle as a self-signed certificate and doesn&#039;t verify.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setCertValidating</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setCertValidating</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1614,8 +1662,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                <span class="phpdocumentor-argument-list__argument__name">$value</span>
+                : <span class="phpdocumentor-argument-list__argument__type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Turn on to verify the certificate if the value is true.</p>
@@ -1626,8 +1674,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -1652,7 +1700,7 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setDebug</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setDebug</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1661,8 +1709,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                <span class="phpdocumentor-argument-list__argument__name">$value</span>
+                : <span class="phpdocumentor-argument-list__argument__type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>set the debug mode if the value is true.</p>
@@ -1673,8 +1721,8 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -1699,7 +1747,7 @@ Ex.: [{&quot;name&quot;: &quot;TestScript1&quot;,&quot;isFolder&quot;: false},{&
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setFieldHTMLEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setFieldHTMLEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1710,15 +1758,15 @@ If we want to get the row field data, we had to call the getFieldUnencoded metho
 If this property is set to true,
 FileMakerRelation class's field method (including describing field name directly) returns the value processed
 with the htmlspecialchars.
-This means kind of compatible mode to FileMaker API for PHP.
+This means a kind of compatible mode to FileMaker API for PHP.
 This feature works whole the FMDataAPI library.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                <span class="phpdocumentor-argument-list__argument__name">$value</span>
+                : <span class="phpdocumentor-argument-list__argument__type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Turn on to verify the certificate if the value is true.</p>
@@ -1729,8 +1777,8 @@ This feature works whole the FMDataAPI library.</p>
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -1755,7 +1803,7 @@ This feature works whole the FMDataAPI library.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setGlobalField</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fields</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setGlobalField</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fields</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1764,12 +1812,12 @@ This feature works whole the FMDataAPI library.</p>
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$fields</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                <span class="phpdocumentor-argument-list__argument__name">$fields</span>
+                : <span class="phpdocumentor-argument-list__argument__type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Associated array contains the global field names (Field names must be Fully Qualified) and its values.
-Keys are global field names and values is these values.</p>
+Keys are global field names and values are these values.</p>
 </section>
 
             </dd>
@@ -1794,8 +1842,8 @@ Keys are global field names and values is these values.</p>
                                     </dd>
                                             </dl>
 
+        
     
-
     
 </article>
                     <article
@@ -1820,7 +1868,7 @@ Keys are global field names and values is these values.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setSessionToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setSessionToken</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1829,8 +1877,8 @@ Keys are global field names and values is these values.</p>
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$value</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The session token.</p>
@@ -1841,8 +1889,8 @@ Keys are global field names and values is these values.</p>
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -1867,7 +1915,7 @@ Keys are global field names and values is these values.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setThrowException</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setThrowException</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1878,8 +1926,8 @@ Keys are global field names and values is these values.</p>
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$value</span>
-                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                <span class="phpdocumentor-argument-list__argument__name">$value</span>
+                : <span class="phpdocumentor-argument-list__argument__type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Turn off to throw an exception in case of error if the value is false.</p>
@@ -1890,8 +1938,8 @@ Keys are global field names and values is these values.</p>
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -1916,7 +1964,7 @@ Keys are global field names and values is these values.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setTimeout</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">setTimeout</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1925,8 +1973,8 @@ Keys are global field names and values is these values.</p>
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$timeout</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                <span class="phpdocumentor-argument-list__argument__name">$timeout</span>
+                : <span class="phpdocumentor-argument-list__argument__type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -1935,8 +1983,8 @@ Keys are global field names and values is these values.</p>
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -1990,8 +2038,8 @@ it can expect faster operations.</p>
                                     </dd>
                                             </dl>
 
+        
     
-
     
 </article>
                     <article
@@ -2012,7 +2060,7 @@ it can expect faster operations.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">On the authentication session, username and password are handled as OAuth parameters.</p>
+        <p class="phpdocumentor-summary">In the authentication session, username and password are handled as OAuth parameters.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -2025,8 +2073,8 @@ it can expect faster operations.</p>
     
     
 
+        
     
-
     
 </article>
             </section>
@@ -2067,6 +2115,8 @@ it can expect faster operations.</p>
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 
@@ -2134,10 +2184,17 @@ it can expect faster operations.</p>
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                <li><a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#toc-methods">Methods</a></li>
+                                                            <li><a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#property_layout">$layout</a></li>
+                                            </ul>
+                </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
