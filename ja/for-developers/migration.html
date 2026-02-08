@@ -64,6 +64,32 @@
                 <p class="lead">INTER-Mediatorもバージョンを重ねてきており、以前の動作を引き継がなくなってしまった箇所が出てきています。Ver.3 (2012/12/10) 以降の大きな変更点、つまりアプリケーション側を書き換えないといけないような変更をここにまとめておきます。</p>
             </section>
             <section>
+                <h1>Ver.15での変更</h1>
+                <p>ソースコードのメンテナンス性を高めるために、INTERMediatorOnPageクラスから認証関連の機能を抜き出して、IMLibAuthentication、IMLibAuthenticationUIクラスを定義しました。JavaScriptで参照している場合、オブジェクトの参照先を切り替える必要があります。オブジェクト参照が変わるのは以下のプロパティ、メソッドです。</p>
+                <ul>
+                    <li>INTERMediatorOnPage.authCount　→　IMLibAuthentication.authCount()</li>
+                    <li>INTERMediatorOnPage.authCountLimit　→　IMLibAuthenticationUI.authCountLimit</li>
+                    <li>INTERMediatorOnPage.authCount　→　IMLibAuthenticationUI.authCount</li>
+                    <li>INTERMediatorOnPage.authUser()　→　IMLibAuthentication.authUser()</li>
+                    <li>INTERMediatorOnPage.requireAuthentication　→　IMLibAuthentication.requireAuthentication</li>
+                    <li>INTERMediatorOnPage.authStoring　→　IMLibAuthentication.authStoring</li>
+                    <li>INTERMediatorOnPage.authExpired　→　IMLibAuthentication.authExpired</li>
+                    <li>INTERMediatorOnPage.isNativeAuth　→　すでに廃止済み</li>
+                    <li>INTERMediatorOnPage.realm　→　IMLibAuthentication.realm</li>
+                    <li>INTERMediatorOnPage.isShowChangePassword　→　IMLibAuthenticationUI.isShowChangePassword</li>
+                    <li>INTERMediatorOnPage.isSetDefaultStyle　→　IMLibAuthenticationUI.isSetDefaultStyle</li>
+                    <li>INTERMediatorOnPage.authPanelTitle　→　IMLibAuthenticationUI.authPanelTitle</li>
+                    <li>INTERMediatorOnPage.isOAuthAvailable　→　IMLibAuthenticationUI.isOAuthAvailable</li>
+                    <li>INTERMediatorOnPage.passwordPolicy　→　IMLibAuthenticationUI.passwordPolicy</li>
+                    <li>INTERMediatorOnPage.isEmailAsUsername　→　IMLibAuthenticationUI.isEmailAsUsername</li>
+                    <li>INTERMediatorOnPage.doAfterLoginPanel　→　IMLibAuthenticationUI.doAfterLoginPanel</li>
+                    <li>INTERMediatorOnPage.logout(url, notMove)　→　IMLibAuthentication.logout(url, notMove)</li>
+                </ul>
+            </section>
+            <section>
+                <h1>Ver.14での変更</h1>
+            </section>
+            <section>
                 <h1>Ver.13での変更</h1>
             </section>
             <section>
