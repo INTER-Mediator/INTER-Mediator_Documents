@@ -28,38 +28,6 @@ def _read_nonempty_lines(path: Path) -> list[str]:
     return [line.strip() for line in text.splitlines() if line.strip()]
 
 
-def _read_title_blocks(path: Path) -> list[tuple[str, str]]:
-    try:
-        text = path.read_text(encoding="utf-8")
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"File not found: {path}") from e
-    except PermissionError as e:
-        raise PermissionError(f"Permission denied: {path}") from e
-
-    blocks: list[list[str]] = []
-    cur: list[str] = []
-    for raw in text.splitlines():
-        line = raw.strip()
-        if not line:
-            if cur:
-                blocks.append(cur)
-                cur = []
-            continue
-        cur.append(line)
-    if cur:
-        blocks.append(cur)
-
-    result: list[tuple[str, str]] = []
-    for b in blocks:
-        if len(b) != 2:
-            raise ValueError(
-                f"Invalid titles format (each entry must be 2 non-empty lines separated by a blank line): {path}"
-            )
-        result.append((b[0], b[1]))
-
-    return result
-
-
 def _parse_title_line(line: str) -> tuple[int, str]:
     m = re.match(r"^第(?P<num>\d+)回は、(?P<rest>.*)$", line)
     if not m:
@@ -92,14 +60,14 @@ def main(argv: list[str]) -> int:
     urls_path = Path(argv[2]).expanduser().resolve()
 
     try:
-        title_blocks = _read_title_blocks(titles_path)
+        title_lines = _read_nonempty_lines(titles_path)
         url_lines = _read_nonempty_lines(urls_path)
-    except (FileNotFoundError, PermissionError, ValueError) as e:
+    except (FileNotFoundError, PermissionError) as e:
         print(str(e), file=sys.stderr)
         return 2
 
     try:
-        parsed = [_parse_title_line(title_line) for (title_line, _detail_line) in title_blocks]
+        parsed = [_parse_title_line(line) for line in title_lines]
     except ValueError as e:
         print(str(e), file=sys.stderr)
         return 2
