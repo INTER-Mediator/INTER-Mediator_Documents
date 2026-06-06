@@ -163,7 +163,7 @@ and you shouldn't call the constructor of this class.</p>
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">36</span>
+                                            <span class="phpdocumentor-tag-link">37</span>
                                                                                 
                                              
                                     </dd>
@@ -181,7 +181,7 @@ and you shouldn't call the constructor of this class.</p>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>2017-2024 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
+                                                 <section class="phpdocumentor-description"><p>2017-2026 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
 </section>
 
                                     </dd>
@@ -236,7 +236,7 @@ and you shouldn't call the constructor of this class.</p>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Finish a transaction which is a serial calling of any database operations, and logout.</dd>
+<dd>Finish a communication scope.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_getDebugInfo">getDebugInfo()</a>
@@ -269,21 +269,21 @@ and you shouldn't call the constructor of this class.</p>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_getScriptError">getScriptError()</a>
     <span>
-                                &nbsp;: int|null    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Get the script error code.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_getScriptErrorPrerequest">getScriptErrorPrerequest()</a>
     <span>
-                                &nbsp;: int|null    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Get the prerequest script error code.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_getScriptErrorPresort">getScriptErrorPresort()</a>
     <span>
-                                &nbsp;: int|null    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Get the presort script error code.</dd>
 
@@ -327,8 +327,7 @@ and you shouldn't call the constructor of this class.</p>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Start a transaction which is a serial calling of any database operations,
-and login with the target layout.</dd>
+<dd>Start a communication scope with a shared authenticated session.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_update">update()</a>
@@ -372,7 +371,7 @@ and login with the target layout.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">293</span>
+    <span class="phpdocumentor-element-found-in__line">310</span>
 
     </aside>
 
@@ -474,7 +473,7 @@ If the returned value is an integer larger than 0, it shows one record was creat
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">352</span>
+    <span class="phpdocumentor-element-found-in__line">369</span>
 
     </aside>
 
@@ -547,7 +546,7 @@ If the returned value is an integer larger than 0, it shows one record was creat
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">327</span>
+    <span class="phpdocumentor-element-found-in__line">344</span>
 
     </aside>
 
@@ -620,11 +619,11 @@ If the returned value is an integer larger than 0, it shows one record was creat
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">78</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Finish a transaction which is a serial calling of any database operations, and logout.</p>
+        <p class="phpdocumentor-summary">Finish a communication scope.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -633,7 +632,14 @@ If the returned value is an integer larger than 0, it shows one record was creat
     <div class="phpdocumentor-label-line">
         </div>
     
-    
+        <section class="phpdocumentor-description"><p>Without a session cache, the authenticated session for the current communication
+scope is ended and the server session is logged out.</p>
+<p>With a session cache, the cached token's TTL is renewed if it still matches the
+token held by this instance. If another process has replaced the cached token in
+the meantime, only this instance's now-stale token is logged out, leaving the
+newer cached token intact.</p>
+</section>
+
     
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
@@ -670,7 +676,7 @@ If the returned value is an integer larger than 0, it shows one record was creat
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">550</span>
+    <span class="phpdocumentor-element-found-in__line">567</span>
 
     </aside>
 
@@ -709,7 +715,7 @@ If the returned value is an integer larger than 0, it shows one record was creat
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">530</span>
+    <span class="phpdocumentor-element-found-in__line">547</span>
 
     </aside>
 
@@ -777,7 +783,7 @@ Ex.: {&quot;fieldMetaData&quot;: [{&quot;name&quot;: &quot;id&quot;,&quot;type&q
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">501</span>
+    <span class="phpdocumentor-element-found-in__line">518</span>
 
     </aside>
 
@@ -821,7 +827,7 @@ Ex.: {&quot;fieldMetaData&quot;: [{&quot;name&quot;: &quot;id&quot;,&quot;type&q
 It has just 1 property 'metaData' the array of the field information is set under the 'metaData' property.
 There is no information about portals. Ex.:
 {&quot;metaData&quot;: [{&quot;name&quot;: &quot;id&quot;,&quot;type&quot;: &quot;normal&quot;,&quot;result&quot;: &quot;number&quot;,&quot;global&quot;: &quot;false&quot;,&quot;repetitions&quot;: 1,&quot;id&quot;: &quot;1&quot;},
-{&quot;name&quot;: &quot;name&quot;,&quot;type&quot;: &quot;normal&quot;,&quot;result&quot;: &quot;text&quot;,&quot;global&quot;: &quot;false&quot;,&quot;repetitions&quot;: 1,&quot;id&quot;: &quot;2&quot;},....,]}</p>
+{&quot;name&quot;: &quot;name&quot;,&quot;type&quot;: &quot;normal&quot;,&quot;result&quot;: &quot;text&quot;,&quot;global&quot;: &quot;false&quot;,&quot;repetitions&quot;: 1,&quot;id&quot;: &quot;2&quot;}, ....,]}</p>
 </section>
 
             </section>
@@ -841,7 +847,7 @@ There is no information about portals. Ex.:
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">240</span>
+    <span class="phpdocumentor-element-found-in__line">257</span>
 
     </aside>
 
@@ -940,7 +946,7 @@ There is no information about portals. Ex.:
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">560</span>
+    <span class="phpdocumentor-element-found-in__line">577</span>
 
     </aside>
 
@@ -948,7 +954,7 @@ There is no information about portals. Ex.:
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getScriptError</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int|null</span></code>
+                    <span class="phpdocumentor-signature__name">getScriptError</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -961,7 +967,7 @@ There is no information about portals. Ex.:
     
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">int|null</span>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
                     &mdash;
                 <section class="phpdocumentor-description"><p>The value of the error code.
 If any script wasn't called, it returns null.</p>
@@ -984,7 +990,7 @@ If any script wasn't called, it returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">580</span>
+    <span class="phpdocumentor-element-found-in__line">597</span>
 
     </aside>
 
@@ -992,7 +998,7 @@ If any script wasn't called, it returns null.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getScriptErrorPrerequest</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int|null</span></code>
+                    <span class="phpdocumentor-signature__name">getScriptErrorPrerequest</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1005,7 +1011,7 @@ If any script wasn't called, it returns null.</p>
     
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">int|null</span>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
                     &mdash;
                 <section class="phpdocumentor-description"><p>The value of the error code.
 If any script wasn't called, it returns null.</p>
@@ -1028,7 +1034,7 @@ If any script wasn't called, it returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">600</span>
+    <span class="phpdocumentor-element-found-in__line">617</span>
 
     </aside>
 
@@ -1036,7 +1042,7 @@ If any script wasn't called, it returns null.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getScriptErrorPresort</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int|null</span></code>
+                    <span class="phpdocumentor-signature__name">getScriptErrorPresort</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1049,7 +1055,7 @@ If any script wasn't called, it returns null.</p>
     
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">int|null</span>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
                     &mdash;
                 <section class="phpdocumentor-description"><p>The value of the error code.
 If any script wasn't called, it returns null.</p>
@@ -1072,7 +1078,7 @@ If any script wasn't called, it returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">570</span>
+    <span class="phpdocumentor-element-found-in__line">587</span>
 
     </aside>
 
@@ -1116,7 +1122,7 @@ If any script wasn't called, it returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">590</span>
+    <span class="phpdocumentor-element-found-in__line">607</span>
 
     </aside>
 
@@ -1160,7 +1166,7 @@ If any script wasn't called, it returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">610</span>
+    <span class="phpdocumentor-element-found-in__line">627</span>
 
     </aside>
 
@@ -1204,7 +1210,7 @@ If any script wasn't called, it returns null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">176</span>
+    <span class="phpdocumentor-element-found-in__line">193</span>
 
     </aside>
 
@@ -1231,7 +1237,7 @@ In this example of apply the AND operation for two fields,
 and &quot;FamilyName&quot; and &quot;Country&quot; are a field name. The value can contain the operator:
 =, ==, !, &lt;, ≤ or &lt;=, &gt;, ≥ or &gt;=, ..., //, ?, @, #, <em>, , &quot;&quot;, ~.
 If you want to apply the OR operation, describe array of array as like:
-array(array(&quot;FamilyName&quot;=&gt;&quot;Nii</em>&quot;), array(&quot;Country&quot;=&gt;&quot;Japan&quot;)).
+array (array(&quot;FamilyName&quot;=&gt;&quot;Nii</em>&quot;), array(&quot;Country&quot;=&gt;&quot;Japan&quot;)).
 If you want to omit a record match with a condition, set the &quot;omit&quot; element as like:
 array(&quot;FamilyName&quot;=&gt;&quot;Nii*&quot;, &quot;omit&quot;=&gt;&quot;true&quot;).
 If you want to query all records in the layout, set the first parameter to null.</p>
@@ -1355,7 +1361,7 @@ If it's four elements, these are &quot;script.prerequest&quot;, &quot;script.pre
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">429</span>
+    <span class="phpdocumentor-element-found-in__line">446</span>
 
     </aside>
 
@@ -1420,12 +1426,11 @@ Keys are global field names and values are these values.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Start a transaction which is a serial calling of any database operations,
-and login with the target layout.</p>
+        <p class="phpdocumentor-summary">Start a communication scope with a shared authenticated session.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -1434,7 +1439,16 @@ and login with the target layout.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
-    
+        <section class="phpdocumentor-description"><p>Usually most methods login and logout before and after each database operation.
+By calling startCommunication() and endCommunication(), methods between them don't
+log in and out every time, and it can expect faster operations.</p>
+<p>Without a session cache, one authenticated session is kept for the duration of
+the current communication scope and discarded when endCommunication() is called.</p>
+<p>With a session cache, the session token is persisted beyond the current communication
+scope and reused across requests. If no cached token is available, a new session is
+created and stored for future reuse.</p>
+</section>
+
     
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
@@ -1471,7 +1485,7 @@ and login with the target layout.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">386</span>
+    <span class="phpdocumentor-element-found-in__line">403</span>
 
     </aside>
 
@@ -1585,7 +1599,7 @@ The recordId key specifies the record to edit in the portal.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/FileMakerLayout.php"><a href="files/src-supporting-filemakerlayout.html"><abbr title="src/Supporting/FileMakerLayout.php">FileMakerLayout.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">457</span>
+    <span class="phpdocumentor-element-found-in__line">474</span>
 
     </aside>
 

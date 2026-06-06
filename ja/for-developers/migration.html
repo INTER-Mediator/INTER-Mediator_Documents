@@ -109,6 +109,49 @@
                 8.4でエラーが出るからです。</p>
         </section>
         <section>
+            <h1>Ver.16での変更</h1>
+            <h2>インストール方法の変更</h2>
+            <p>
+                PHPのインストールはComposerを使う点は従来と変わりません。JavaScriptのライブラリをインストールする方法は、Ver.15まではnpmを使っていましたが、Ver.16よりpnpmを使うようになりました。
+                そして、Composerのプラグインを開発し、それにより従来とおり、composer install/updateによるインストール作業の延長でJavaScriptのライブラリのインストールも行います。
+                具体的には、プラグインで、pnpmをダウンロードして、pnpm-lock.yamlに従ってインストールを行う「pnpm ci」によるインストールを行います。よって、package-lock.jsonファイルはなくなり、
+                pnpm-lock.yaml、pnpm-workspace.yamlファイルがJavaScriptライブラリのインストールで使われるファイルとなります。
+                さらに、INTER-Mediatorをライブラリの1つとして入れる場合（つまり、INTER-Mediatorを利用するアプリケーションなど）、composerでのインストールやアップデート後に、
+                JavaScriptコードをミニファイし、さらにアプリケーションのプロジェクトにあるlib/doafterinstall.sh、lib/doafterupdate.sh（Windowsでは.ps1ファイル）をスクリプトとして実行します。
+            </p>
+            <h2>JavaScriptライブラリの参照の変更</h2>
+            <p>
+                前述のように、JavaScriptライブラリのインストールをnpmで行っていましたが、Ver.16よりpnpmへと変更しました。
+                その結果、一部のJavaScriptライブラリのインストール先のパスが変わってしまいまいまいた。
+                jQuery-FileUploadを使ったプラグインを利用する場合、ページファイルの冒頭でのライブラリ読み込みは例えば次のようになります。
+                この例では、jQueryやBootstrapはCDNによるURLを使って直接ダウンロードしていますが、jQuery UI FileUploadのコンポーネントはnode_modules以下にインストールされたものを利用しています。
+                inter-mediator-plugin-jqueryfileuploadについては、これまでとパスは変わりありません。
+            </p>
+            <div class="code">
+<pre><code>&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+    &lt;title&gt;INTER-Mediator - Sample - Auth/MySQL&lt;/title&gt;
+    &lt;!-- Loading JQuery --&gt;
+    &lt;script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"&gt;&lt;/script&gt; &lt;!-- Don't use 'slim' --&gt;
+    &lt;!-- Loading Bootstrap --&gt;
+    &lt;link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"&gt;
+    &lt;script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+    &lt;!-- Loading JQuery UI FileUpload --&gt;
+    &lt;link rel="stylesheet" href="../../vendor/inter-mediator/inter-mediator/node_modules/.pnpm/blueimp-file-upload@10.32.0_jquery@4.0.0/node_modules/blueimp-file-upload/css/jquery.fileupload.css"&gt;
+    &lt;script src="../../vendor/inter-mediator/inter-mediator/node_modules/.pnpm/jquery-ui@1.14.2/node_modules/jquery-ui/dist/jquery-ui.min.js"&gt;&lt;/script&gt;
+    &lt;script src="../../vendor/inter-mediator/inter-mediator/node_modules/.pnpm/blueimp-file-upload@10.32.0_jquery@4.0.0/node_modules/blueimp-file-upload/js/jquery.fileupload.js"&gt;&lt;/script&gt;
+    &lt;!-- Loading INTER-Mediator --&gt;
+    &lt;script type="text/javascript" src="../../vendor/inter-mediator/inter-mediator/index.php"&gt;&lt;/script&gt;
+    &lt;script src="../../vendor/inter-mediator/inter-mediator/node_modules/inter-mediator-plugin-jqueryfileupload/index.js"&gt;&lt;/script&gt;
+</code></pre>
+            </div>
+        </section>
+        <section>
             <h1>Ver.13での変更</h1>
         </section>
         <section>

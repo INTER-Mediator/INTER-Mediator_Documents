@@ -93,12 +93,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AstartCommunication\u0028\u0029",
             "name": "startCommunication",
-            "summary": "Start\u0020a\u0020transaction\u0020which\u0020is\u0020a\u0020serial\u0020calling\u0020of\u0020multiple\u0020database\u0020operations\u0020before\u0020the\u0020single\u0020authentication.",
+            "summary": "Start\u0020a\u0020communication\u0020scope\u0020with\u0020a\u0020shared\u0020authenticated\u0020session.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_startCommunication"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AendCommunication\u0028\u0029",
             "name": "endCommunication",
-            "summary": "Finish\u0020a\u0020transaction\u0020which\u0020is\u0020a\u0020serial\u0020calling\u0020of\u0020any\u0020database\u0020operations,\u0020and\u0020logout.",
+            "summary": "Finish\u0020a\u0020communication\u0020scope.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_endCommunication"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetGlobalField\u0028\u0029",
@@ -151,15 +151,130 @@ Search.appendIndex(
             "summary": "Return\u0020the\u0020base64\u0020encoded\u0020data\u0020in\u0020the\u0020container\u0020field\u0020with\u0020streaming\u0020url.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_getContainerData"
         },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetExcludeTimeStampInException\u0028\u0029",
+            "name": "setExcludeTimeStampInException",
+            "summary": "Set\u0020the\u0020property\u0020of\u0020the\u0020communication\u0020provider\u0020for\u0020excluding\u0020the\u0020timestamp\u0020from\u0020the\u0020exception\u0020message.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setExcludeTimeStampInException"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetRetryOnAccessTokenInvalidation\u0028\u0029",
+            "name": "setRetryOnAccessTokenInvalidation",
+            "summary": "Controls\u0020whether\u0020failed\u0020Data\u0020API\u0020calls\u0020are\u0020automatically\u0020retried\u0020after\u0020session\u0020invalidation.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setRetryOnAccessTokenInvalidation"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\FMDataAPI\u003A\u003AsetSessionCacheTtl\u0028\u0029",
+            "name": "setSessionCacheTtl",
+            "summary": "Overrides\u0020the\u0020time\u002Dto\u002Dlive\u0020\u0028TTL\u0029\u0020of\u0020the\u0020cached\u0020FileMaker\u0020Data\u0020API\u0020session\u0020token.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-FMDataAPI.html#method_setSessionCacheTtl"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\AbstractSessionCache",
+            "name": "AbstractSessionCache",
+            "summary": "Base\u0020class\u0020for\u0020session\u0020cache\u0020implementations.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-AbstractSessionCache.html"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\AbstractSessionCache\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-AbstractSessionCache.html#method___construct"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\AbstractSessionCache\u003A\u003AsetKey\u0028\u0029",
+            "name": "setKey",
+            "summary": "Sets\u0020the\u0020cache\u0020key\u0020for\u0020the\u0020current\u0020session.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-AbstractSessionCache.html#method_setKey"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\AbstractSessionCache\u003A\u003AsetTtl\u0028\u0029",
+            "name": "setTtl",
+            "summary": "Sets\u0020the\u0020time\u002Dto\u002Dlive\u0020for\u0020cached\u0020session\u0020tokens.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-AbstractSessionCache.html#method_setTtl"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\AbstractSessionCache\u003A\u003A\u0024key",
+            "name": "key",
+            "summary": "The\u0020cache\u0020key\u0020for\u0020the\u0020current\u0020session.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-AbstractSessionCache.html#property_key"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\AbstractSessionCache\u003A\u003A\u0024ttl",
+            "name": "ttl",
+            "summary": "The\u0020time\u002Dto\u002Dlive\u0020in\u0020seconds\u0020for\u0020cached\u0020session\u0020tokens.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-AbstractSessionCache.html#property_ttl"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\ApcuSessionCache",
+            "name": "ApcuSessionCache",
+            "summary": "APCu\u002Dbased\u0020session\u0020cache\u0020implementation.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-ApcuSessionCache.html"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\ApcuSessionCache\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "ApcuSessionCache\u0020constructor.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-ApcuSessionCache.html#method___construct"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\ApcuSessionCache\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "Retrieves\u0020the\u0020cached\u0020FileMaker\u0020Data\u0020API\u0020session\u0020token\u0020for\u0020the\u0020current\u0020session.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-ApcuSessionCache.html#method_get"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\ApcuSessionCache\u003A\u003Aset\u0028\u0029",
+            "name": "set",
+            "summary": "Persists\u0020a\u0020FileMaker\u0020Data\u0020API\u0020session\u0020token\u0020in\u0020APCu.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-ApcuSessionCache.html#method_set"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\ApcuSessionCache\u003A\u003Adelete\u0028\u0029",
+            "name": "delete",
+            "summary": "Deletes\u0020the\u0020cached\u0020FileMaker\u0020Data\u0020API\u0020session\u0020token.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-ApcuSessionCache.html#method_delete"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\SessionCacheInterface",
+            "name": "SessionCacheInterface",
+            "summary": "Interface\u0020for\u0020session\u0020cache\u0020implementations.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-SessionCacheInterface.html"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\SessionCacheInterface\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "Retrieves\u0020the\u0020cached\u0020FileMaker\u0020Data\u0020API\u0020session\u0020token\u0020for\u0020the\u0020current\u0020session.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-SessionCacheInterface.html#method_get"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\SessionCacheInterface\u003A\u003Aset\u0028\u0029",
+            "name": "set",
+            "summary": "Persists\u0020a\u0020FileMaker\u0020Data\u0020API\u0020session\u0020token\u0020in\u0020the\u0020cache.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-SessionCacheInterface.html#method_set"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\SessionCacheInterface\u003A\u003Adelete\u0028\u0029",
+            "name": "delete",
+            "summary": "Deletes\u0020the\u0020cached\u0020FileMaker\u0020Data\u0020API\u0020session\u0020token\u0020for\u0020the\u0020current\u0020session.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-SessionCacheInterface.html#method_delete"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\SessionCacheInterface\u003A\u003AsetKey\u0028\u0029",
+            "name": "setKey",
+            "summary": "Sets\u0020the\u0020cache\u0020key\u0020for\u0020the\u0020current\u0020session.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-SessionCacheInterface.html#method_setKey"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache\\SessionCacheInterface\u003A\u003AsetTtl\u0028\u0029",
+            "name": "setTtl",
+            "summary": "Sets\u0020the\u0020time\u002Dto\u002Dlive\u0020for\u0020cached\u0020session\u0020tokens.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-SessionCache-SessionCacheInterface.html#method_setTtl"
+        },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider",
             "name": "CommunicationProvider",
             "summary": "Class\u0020CommunicationProvider\u0020is\u0020for\u0020internal\u0020use\u0020to\u0020communicate\u0020with\u0020FileMaker\u0020Server.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html"
         },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003AstartCommunication\u0028\u0029",
+            "name": "startCommunication",
+            "summary": "Start\u0020a\u0020communication\u0020scope\u0020with\u0020a\u0020shared\u0020authenticated\u0020session.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_startCommunication"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003AendCommunication\u0028\u0029",
+            "name": "endCommunication",
+            "summary": "Finish\u0020a\u0020communication\u0020scope.",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_endCommunication"
+        },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003A_createCurlHandle\u0028\u0029",
             "name": "_createCurlHandle",
             "summary": "To\u0020create\u0020and\u0020configure\u0020cURL\u0020at\u0020a\u0020single\u0020place,\u0020avoiding\u0020code\u0020redundancy.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method__createCurlHandle"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\CommunicationProvider\u003A\u003AcacheKey\u0028\u0029",
+            "name": "cacheKey",
+            "summary": "",
+            "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_cacheKey"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout",
             "name": "FileMakerLayout",
@@ -168,12 +283,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003AstartCommunication\u0028\u0029",
             "name": "startCommunication",
-            "summary": "Start\u0020a\u0020transaction\u0020which\u0020is\u0020a\u0020serial\u0020calling\u0020of\u0020any\u0020database\u0020operations,\nand\u0020login\u0020with\u0020the\u0020target\u0020layout.",
+            "summary": "Start\u0020a\u0020communication\u0020scope\u0020with\u0020a\u0020shared\u0020authenticated\u0020session.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_startCommunication"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003AendCommunication\u0028\u0029",
             "name": "endCommunication",
-            "summary": "Finish\u0020a\u0020transaction\u0020which\u0020is\u0020a\u0020serial\u0020calling\u0020of\u0020any\u0020database\u0020operations,\u0020and\u0020logout.",
+            "summary": "Finish\u0020a\u0020communication\u0020scope.",
             "url": "classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-FileMakerLayout.html#method_endCommunication"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerLayout\u003A\u003Aquery\u0028\u0029",
@@ -405,6 +520,11 @@ Search.appendIndex(
             "name": "INTERMediator",
             "summary": "",
             "url": "namespaces/intermediator.html"
+        },                {
+            "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\SessionCache",
+            "name": "SessionCache",
+            "summary": "",
+            "url": "namespaces/intermediator-filemakerserver-restapi-sessioncache.html"
         },                {
             "fqsen": "\\INTERMediator\\FileMakerServer\\RESTAPI\\Supporting",
             "name": "Supporting",

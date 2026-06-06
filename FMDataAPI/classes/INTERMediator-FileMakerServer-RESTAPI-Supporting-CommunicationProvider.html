@@ -133,7 +133,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">17</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
@@ -160,7 +160,7 @@
                     <span class="phpdocumentor-tag__name">version</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                            <span class="phpdocumentor-tag-link">36</span>
+                                            <span class="phpdocumentor-tag-link">37</span>
                                                                                 
                                              
                                     </dd>
@@ -178,7 +178,7 @@
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>2017-2024 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
+                                                 <section class="phpdocumentor-description"><p>2017-2026 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)</p>
 </section>
 
                                     </dd>
@@ -207,12 +207,32 @@
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_endCommunication">endCommunication()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Finish a communication scope.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_startCommunication">startCommunication()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Start a communication scope with a shared authenticated session.</dd>
+
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method__createCurlHandle">_createCurlHandle()</a>
     <span>
                                 &nbsp;: <abbr title="\CurlHandle">CurlHandle</abbr>    </span>
 </dt>
 <dd>To create and configure cURL at a single place, avoiding code redundancy.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a class="" href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_cacheKey">cacheKey()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
 
     </dl>
 
@@ -231,6 +251,124 @@
                     <article
         class="phpdocumentor-element
             -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_endCommunication">
+        endCommunication()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_endCommunication" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">325</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Finish a communication scope.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">endCommunication</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>Without a session cache, the authenticated session is ended and the server
+session is logged out.</p>
+<p>With a session cache, if the token currently held by this instance matches
+the one in the cache, its TTL is renewed and the session is left alive.
+If another process has replaced the cached token in the meantime, this
+instance's now-stale token is considered orphaned and logged out at the
+server, leaving the newer cached token intact.</p>
+</section>
+
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_endCommunication#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>In case of any error, an exception arises.</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+        
+    
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_startCommunication">
+        startCommunication()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_startCommunication" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">301</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Start a communication scope with a shared authenticated session.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">startCommunication</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>Without a session cache, a new authenticated session is created and kept
+for the duration of the current communication scope.</p>
+<p>With a session cache, the cached session token is reused if available,
+avoiding a new login against the FileMaker Server. If no cached token is
+found, a new session is created and stored in the cache for future reuse.</p>
+</section>
+
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_startCommunication#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>In case of any error, an exception arises.</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+        
+    
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
             -private
                                                         "
 >
@@ -242,7 +380,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">884</span>
+    <span class="phpdocumentor-element-found-in__line">1104</span>
 
     </aside>
 
@@ -276,6 +414,44 @@
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type"><abbr title="\CurlHandle">CurlHandle</abbr></span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_cacheKey">
+        cacheKey()
+        <a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_cacheKey" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Supporting/CommunicationProvider.php"><a href="files/src-supporting-communicationprovider.html"><abbr title="src/Supporting/CommunicationProvider.php">CommunicationProvider.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1131</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">cacheKey</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
             </section>
 
 </article>
@@ -394,7 +570,10 @@
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_endCommunication">endCommunication()</a></li>
+                                            <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_startCommunication">startCommunication()</a></li>
                                             <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method__createCurlHandle">_createCurlHandle()</a></li>
+                                            <li class=""><a href="classes/INTERMediator-FileMakerServer-RESTAPI-Supporting-CommunicationProvider.html#method_cacheKey">cacheKey()</a></li>
                                     </ul>
             </li>
                     </ul>
