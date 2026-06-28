@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--
+/*
+ * INTER-Mediator Ver.@@@@2@@@@ Released @@@@1@@@@
+ *
+ *   Copyright (c) 2010-2021 INTER-Mediator Directive Committee, All rights reserved.
+ *
+ *   This project started at the end of 2009 by Masayuki Nii  msyk@msyk.net.
+ *   INTER-Mediator is supplied under MIT License.
+ */
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../lib/css/normalize.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/style.min.css" rel="stylesheet" media="screen">
+    <link href="../../lib/css/nav.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../../lib/css/styles/tomorrow-night.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../lib/js/pagebuilder-r2.js"></script>
+    <script src="../../lib/pagebuilder-r2.php"></script>
+    <script src="../../lib/highlight.pack.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad()
+    </script>
+</head>
+
+<body class="docs" data-page-title="for-novices">
+<div class="container clearfix">
+    <div class="page-title">
+        <h1 id="pageTitle"></h1>
+    </div>
+    <ol id="breadcrumb" class="breadcrumb clearfix">
+    </ol>
+    <div class="docs-sidebar sticky clearfix">
+        <nav>
+            <ul id="pageIndex">
+            </ul>
+        </nav>
+    </div>
+    <article>
+        <section>
+            <h1>はじめに</h1>
+            <p class="lead">
+                この文書では、INTER-Mediatorを利用したアプリケーションを作成する方法を説明します。INTER-MediatorはPHPのパッケージ管理ツールであるcomposerを利用してインストールしていますが、加えて、INTER-Mediator内部で使うJavaScriptのライブラリ管理をnpmpで行うことを想定しています。アプリケーションの作成の中で、「INTER-Mediatorを使えるようにする」という意味でのインストール方法をこの文書で説明します。</p>
+            <h1>インストール対象について</h1>
+            <p>
+                INTER-Mediatorを利用する状況に応じて、次の3つに大別できます。この文書では、主に1つ目の用途についての説明になります。</p>
+            <ol>
+                <li>INTER-Mediatorをアプリケーション内でライブラリとして利用する場合</li>
+                <li>INTER-Mediatorの試用をしたい</li>
+                <li>INTER-Mediator自体の開発をしたい</li>
+            </ol>
+            <p>2つ目の「試用」すなわち、INTER-Mediatorが動いている環境を手元に作って検討したいという場合には、トライアル版として、Docker環境でサンプルファイルなどが稼働する状況を用意する素材があります。<a
+                    href="trial.html">トライアル版の利用方法</a>にその記載があるので、そちらをご利用いただくのが良いでしょう。
+            </p>
+            <p>INTER-Mediator自体の開発を行うなどの「単独利用」は、INTER-Mediatorのレポジトリをクローンして、そのルートで「composer
+                update」コマンドを稼働させるのが基本です。サンプルファイルは別途<a
+                        href="https://github.com/INTER-Mediator/INTER-Mediator_Samples.git">こちらのレポジトリ</a>で公開しているものをダウンロードするかクローンするなどして、利用すれば良いでしょう。なお、この場合は色々な目的があるかと思われますので、INTER-Mediatorのコミュニティ等で開発者と相談されることをお勧めします。
+            </p>
+        </section>
+        <section>
+            <h1>INTER-Mediatorを稼働する準備</h1>
+            <p>INTER-Mediator Ver.16を利用したアプリケーションを稼働するコンピューターに必要なものは、以下の通りです。</p>
+            <ul>
+                <li>PHP Ver.8.1以上が稼働するWebサーバー（apache2）など</li>
+                <li>データベース（MySQL、PostgreSQL、SQLiteのいずれか）</li>
+                <li>git：ソースコードの取得に必要です</li>
+                <li>composer：ライブラリの取得や稼働環境を整えるのに必要です</li>
+            </ul>
+            <p>
+                一部の機能（クライアント間での編集処理の同期）では、nodeを使います。nodeについてはINTER-Mediatorと一緒にインストールされます。また、外部の認証サーバ（OAuth2対応、あるいはSAML対応）の利用も可能です。これらは使用しない場合は特に何もしなくても構いません。</p>
+            <p>Ubuntuを利用したINTER-Mediatorが稼働する環境へのセットアップについては、<a
+                    href="https://blog.msyk.net/?p=1560">Ubuntu 22</a>、<a href="https://blog.msyk.net/?p=1680">Ubuntu
+                24</a>あるいは<a href="https://blog.msyk.net/?p=1856">Ubuntu 26</a>に関しての記事を参考にしてください。最低限必要なPHPのライブラリなどがこれでわかると思いますが、INTER-Mediatorのアプリケーションでクライアント間同期を動かすには、Webサーバ（UbuntuではApache2）のプロセスのユーザ（具体的にはwww-data）のホームディレクトリが書き込み可能になっていないと行けません。Ubuntuであれば、/var/wwwがホームなのですが、ここはwww-dataにとっては読み出しのみとなっています。このディレクトリおよびそれ以下を書き込みもできるようにしておくのがポイントになります。これは、Ubuntu以外でも同様ですが、macOSやWindowsでは多くの場合、Webサーバーのプロセスは書き込み可能になっているとおもれます
+            </p>
+            <p>なお、以前のバージョン向けに記述した文書<a
+                    href="for-novices/deploy6.html">ダウンロードとインストール(Ver.6以降)</a>では、macOSやWindowsでのWebサーバーの運用などについてはそこそこ詳しく説明しているので、必要ならその文書もチェックしてください。
+            </p>
+        </section>
+        <section>
+            <h1>INTER-Mediatorを使ったアプリケーションを作成する</h1>
+            <p>アプリケーションを作る場合に、アプリケーションのテンプレートとなるプロジェクト「<a href="https://github.com/INTER-Mediator/IMApp-template.git">IMApp-template</a>」があるので、それを元に作成することを基本とします。テンプレートのファイルのポイントについても説明します。このレポジトリは文字通りテンプレートとなっていて、この内容を元にした新しいレポジトリ（＝プロジェクト）を作成できます。クローンをするのではなく、GitHubの画面で言えば、右上の緑色のボタン「Use
+                thes template」をクリックして、「Create a new
+                repository」を選択して、複製かつ独立したレポジトリを作り、それを手元にクローンするなどして、ページファイルや定義ファイルを追加してゆきます。以下、このIMApp-templateの中身を見ていきます。</p>
+            <h3>設定ファイルparams.phpの場所</h3>
+            <p>
+                設定ファイルのparams.phpファイルは、レポジトリのルートからはlib/params.phpにあるものが利用されます。INTER-Mediatorはvendorディレクトリの奥深くにインストールされますが、composerでインストールした場合は、params.phpファイルはINTER-Mediatorの外にあるlib/paramas.phpを利用します。テンプレートとしてファイルはありますが、もちろん、必要に応じて記述を変更してご利用ください。</p>
+            <h3>INTER-Mediatorをライブラリとしてインストールする</h3>
+            <p>テンプレートのルートにcomposer.jsonファイルがあり、ファイル内のJSONの記述では、"require"に対応するオブジェクトで、"inter-mediator/inter-mediator":
+                "dev-master"という記述があります。これにより、テンプレートから作ったレポジトリのルートで、「composer
+                install」というコマンドを打ち込むことで、composerによってINTER-Mediatorに加え、追加したライブラリなどのインストールが可能です。INTER-Mediator自体もさまざまなライブラリをインストールしますが、インストールやアップデート終了時に稼働するスクリプト（PHPで記述）も組み込まれています。自動的にスクリプトを動かすために、composer.jsonの"config"の"allow-plugins"において、"inter-mediator/inter-mediator":
+                true, という記述があります。これにより、プラグインまでが自動的に稼働します。</p>
+            <h3>アプリケーション独自のスクリプト</h3>
+            <p>INTER-Mediatorのcomposer対応プラグインでは、pnpmを自動的にダウンロードしてインストールし、INTER-Mediatorのルートにおいて、pnpm
+                ciコマンドを実行します。これにより、INTER-Mediatorのルート、つまりvendor/inter-mediator/inter-mediatorに、node_modulesディレクトリを作成して、INTER-Mediatorが使うJavaScriptのライブラリをインストールします。さらに、INTER-Mediatorをcomposer.jsonのrequireキー以下に指定してインストールした場合は、その後に、メインのレポジトリにあるlib/doafterinstall.shあるいはlib/doafterupdate.shというスクリプトも起動します。Windowsでは同名の.ps1ファイルが起動します。不要ならこのファイルはなくても問題はありませんが、テンプレートではそこにサンプルのデータベースをインストールするようなスクリプトを記述しています。キー操作が必要ですが、プロンプトに対してYESと答えればデータベースのインストールやアップデートを行い、単にリターンキーを押すと何もせずスクリプトを終えます。このlib以下のスクリプトについては、利用する方がご自由に改変されることを想定していますが、composerコマンドを打ち込むたびに実行するということを想定したものとなっています。</p>
+            <h3>テンプレートにあるデータベーススキーマ</h3>
+            <p>
+                テンプレートのlib以下には、MySQLとPostgreSQLのスキーマが用意されています。中身は、認証のためのテーブルなど、INTER-Mediatorの機能を使うためのものですので、アプリケーションに応じてスキーマの定義は変更あるいは追加は必要でしょう。スキーマは4つのファイルに別れています。schema_basic.sql、schema_initial_data.sql、schema_views.sql、schema_updates.sqlとなっていますが、それぞれ、テーブル定義、初期データ、ビューの定義、変更のためのコマンドを意図します。composer
+                installの場合はschema_basic.sql、schema_initial_data.sql、schema_views.sqlが適用されます。composer
+                updateではschema_views.sql、schema_updates.sqlが適用されます。テーブル定義や初期データは、最初のinstallの時のみです。もし、テーブルのフィールドが増えたら、schema_updates.sqlにALTER
+                TABLEコマンド等を記述して次のcomposer
+                installで変更を適用します。これであらゆる場合に対処というわけにはいかないですが、このようにスキーマを分解しておくことでも、そこそこ便利なので、このような形式で提供しています。</p>
+        </section>
+        <section>
+            <h1>インストールのトラブルシューティング</h1>
+            <p>
+                以上のように、composerによって基本的は「すべて賄う」という方針でさまざまな素材が用意されていますが、それでも、うまくいかない場合もあります。composerはライブラリのインストールだけでなく、動作環境の確認や、前述のインストール後の処理などさまざまな処理を行っています。例えば、PHPにモジュールが追加されない場合、composerコマンド直後にエラーとなって止まってしまいます。また、インストールやアップデート後の処理についても、いろんな理由でエラーが出ます。以下は、エラーが出ない場合の最後の方の例になりますが、実際に出てくるエラーの内容をよくチェックして、ここで紹介しているトラブルシューティングを行ってください。出力中の
+                ##以降は、解説です</p>
+            <div class="code">
+<pre><code>% composer update  ## コマンド入力した
+Loading composer repositories with package information  ##ここからcomposerのライブラリのインストールメッセージ
+Updating dependencies
+Lock file operations: 31 installs, 14 updates, 1 removal
+  - Removing mouf/nodejs-installer (v1.0.14)
+  - Upgrading aws/aws-sdk-php (3.384.4 => 3.386.1)
+  - Locking composer/ca-bundle (1.5.12)
+        ## 途中省略
+  - Upgrading web-token/jwt-framework (4.1.6 => 4.1.7)
+  - Upgrading webmozart/assert (2.4.0 => 2.4.1)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 31 installs, 14 updates, 1 removal
+  - Downloading tecnickcom/tc-lib-unicode-data (2.6.1)
+  - Downloading tecnickcom/tc-lib-unicode (2.10.1)
+        ## 途中省略
+  - Installing inter-mediator/inter-mediator (dev-master 60a5c76): Extracting archive
+  - Upgrading symfony/polyfill-php83 (v1.38.1 => v1.38.2): Extracting archive
+  - Upgrading webmozart/assert (2.4.0 => 2.4.1): Extracting archive
+  - Upgrading gettext/translator (v1.2.1 => v1.2.3): Extracting archive
+  - Upgrading spatie/dropbox-api (1.24.0 => 1.24.1): Extracting archive
+1 package suggestions were added by new dependencies, use `composer suggest` to see details.
+Generating autoload files
+102 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+INTER-Mediator: Running post-update tasks (dependency mode)...  ## ここからINTER-Mediatorのcomposerプラグインによる後処理
+  > Downloading and verifying https://raw.githubusercontent.com/pnpm/get.pnpm.io/87bc637b6daf3e72ee61eb81c7d34460242f7357/install.sh
+INTER-Mediator: Verified install.sh (SHA-256 matches the pinned checksum).
+  > sh '/private/var/folders/19/_y61zdrd1gzf4kcb345rpnbw0000gn/T/im_pnpm_qbah2m8f0alveT3DSLc'  ## pnpmをダウンロードしてインストール
+==> Downloading pnpm binaries 11.9.0
+        ## 途中省略
+Done in 3.8s using pnpm v11.9.0
+No changes to the environment were made. Everything is already up to date.
+
+  > cd ./vendor/inter-mediator/inter-mediator && '/Users/msyk/Library/pnpm/bin/pnpm' ci  ## ここから、INTER-Mediatorのルートでpnpm ciを実行
+✓ Lockfile passes supply-chain policies (verified 2d ago)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+Progress: resolved 1, reused 0, downloaded 0, added 0
+        ## 途中省略
++ power-assert 1.6.1
++ ws 8.20.0
+
+  > ./vendor/inter-mediator/inter-mediator/dist-docs/generateminifyjshere.sh  ## INTER-MediatorのJavaScriptコードをミニファイ
+ Path of minifyer (installed by composer): /Users/msyk/Code/IMApp-template/vendor/matthiasmullie/minify
+PROCESSING: Merging JS files
+MINIFYING.
+
+  > sh lib/doafterupdate.sh   ## プロジェクト側の後処理スクリプトを自動的に起動
+Do you want to update database, type 'YES'. -->  ## データベースのインストールとアップデートを行うかどうかをたずねている。エンターキーで何もしない
+INTER-Mediator: Post-install tasks completed.     ## composerプラグインの処理が問題なく終わった
+No security vulnerability advisories found.  ## 最後の2行は緑色の文字になっている</code></pre>
+            </div>
+
+            <h3>PHP 8.3以下の場合</h3>
+            <p>INTER-Mediatorが利用するライブラリのバージョンは、対象PHPバージョンや組み合わせ等複雑な状況になっており、結果的に、Ver.8.4,
+                Ver.8.5については、INTER-Mediatorのレポジトリのルートにあるものでインストール可能なのですが、Ver.8.3以前はcomposer.jsonの内容を変更しなければなりません。PHPのバージョンごとにcomposer.jsonとcomposer.lockファイルを作ってあり、dist-docs/composer-seedというディレクトリに入れています。しかしながら、それを手で入れ替えてというのは、ライブラリとしてのハンドリングがいきなり面倒かつ不安定になります。</p>
+            <p>
+                そこで、PHPのバージョンごとに、ルートのcomposer.*ファイルを入れ替えたブランチを作り、それに対してタグを割り当てて、指定のバージョンのINTER-Mediatorを利用できるようにしました。INTER-Mediator
+                Ver.16では、PHPのVer.8.1以降8.5まで対応していますが、PHP8.1向けのタグは「16-8.1」です。また、ブランチは「Ver.16-PHP8.1」となっています。つまり、アプリケーションのcomposer.jsonにおいて、ターゲットとなるPHPがVer.8.1なら、require以下を次のように記述します。いずれも、INTER-MediatorのバージョンとPHPのバージョンを合成した文字列です。INTER-Mediatorでは、Ver.16以降でこの対応を行っています。</p>
+            <div class="code">
+<pre><code>"require": {
+  "php": "~8.1.0",
+  "inter-mediator/inter-mediator": "16-PHP8.1"
+},</code></pre>
+            </div>
+
+            <h3>Dockerの場合</h3>
+            <p>
+                Dockerコンテナ内部にアプリケーションをデプロイする場合、INTER-Mediatorのcomposerプラグインの途中でどうしてもエラーが出てしまいます。pnpmのインストール方法が、通常の場合と若干違うからです。この場合は、以下の「composerプラグインを利用しない方法」を参照してください。最初に紹介したINTER-Mediatorの試用を行う「IMApp_Trial」は、この方法をDockerfileのスクリプトとして展開しています。</p>
+
+            <h3>composerプラグインを利用しない方法</h3>
+            <p>
+                composerのプラグイン内でエラーが出ても、同じ処理を手作業で行うことでうまくいく場合があります。INTER-Mediatorのプラグイン処理をスルーする方法は、composer.jsonファイルの、config/allow-pluginsにあるinter-mediator/intor-mediatorの値をfalseとして、以下のようにコマンドを入力します。途中のpnpmコマンドのインストール（curlコマンドで始まる行）は、Dockerコンテナにインストールする場合の手順です。lib/doafterinstall.shなどは必要なら手作業で稼働させてください。</p>
+            <div class="code">
+<pre><code>composer update --no-plugins --no-scripts
+composer install
+curl -fsSL https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
+cd /var/www/html/vendor/inter-mediator/inter-mediator;
+"$HOME/.local/share/pnpm/bin/pnpm" ci
+./dist-docs/generateminifyjshere.sh</code></pre>
+            </div>
+        </section>
+    </article>
+</div>
+</body>
+</html>
