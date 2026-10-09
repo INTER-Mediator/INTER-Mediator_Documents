@@ -70,18 +70,26 @@
             <h2>インストール方法の変更</h2>
             <p>
                 PHPのインストールはComposerを使う点は従来と変わりません。JavaScriptのライブラリをインストールする方法は、Ver.15まではnpmを使っていましたが、Ver.16よりpnpmを使うようになりました。
-                そして、Composerのプラグインを開発し、それにより従来とおり、composer install/updateによるインストール作業の延長でJavaScriptのライブラリのインストールも行います。
-                具体的には、プラグインで、pnpmをダウンロードして、pnpm-lock.yamlに従ってインストールを行う「pnpm ci」によるインストールを行います。よって、package-lock.jsonファイルはなくなり、
+                そして、Composerのプラグインを開発し、それにより従来とおり、composer
+                install/updateによるインストール作業の延長でJavaScriptのライブラリのインストールも行います。
+                具体的には、プラグインで、pnpmをダウンロードして、pnpm-lock.yamlに従ってインストールを行う「pnpm
+                ci」によるインストールを行います。よって、package-lock.jsonファイルはなくなり、
                 pnpm-lock.yaml、pnpm-workspace.yamlファイルがJavaScriptライブラリのインストールで使われるファイルとなります。
                 さらに、INTER-Mediatorをライブラリの1つとして入れる場合（つまり、INTER-Mediatorを利用するアプリケーションなど）、composerでのインストールやアップデート後に、
                 JavaScriptコードをミニファイし、さらにアプリケーションのプロジェクトにあるlib/doafterinstall.sh、lib/doafterupdate.sh（Windowsでは.ps1ファイル）をスクリプトとして実行します。
+            </p>
+            <p>
+                PHP Ver.8.1を利用している場合は、composer.jsonで、inter-mediator/inter-mediatorに対するバージョンを、
+                "dev-Ver.16-PHP8.1"として利用してください。PHP 8.2, 8.3も同様に、"dev-Ver.16-PHP8.2", "dev-Ver.16-PHP8.3"を
+                利用してください。PHP Ver.8.4以降はそのままご利用できると思われます。
             </p>
             <h2>JavaScriptライブラリの参照の変更</h2>
             <p>
                 前述のように、JavaScriptライブラリのインストールをnpmで行っていましたが、Ver.16よりpnpmへと変更しました。
                 その結果、一部のJavaScriptライブラリのインストール先のパスが変わってしまいまいまいた。
                 jQuery-FileUploadを使ったプラグインを利用する場合、ページファイルの冒頭でのライブラリ読み込みは例えば次のようになります。
-                この例では、jQueryやBootstrapはCDNによるURLを使って直接ダウンロードしていますが、jQuery UI FileUploadのコンポーネントはnode_modules以下にインストールされたものを利用しています。
+                この例では、jQueryやBootstrapはCDNによるURLを使って直接ダウンロードしていますが、jQuery UI
+                FileUploadのコンポーネントはnode_modules以下にインストールされたものを利用しています。
                 inter-mediator-plugin-jqueryfileuploadについては、これまでとパスは変わりありません。
             </p>
             <div class="code">
@@ -107,6 +115,20 @@
     &lt;script src="../../vendor/inter-mediator/inter-mediator/node_modules/inter-mediator-plugin-jqueryfileupload/index.js"&gt;&lt;/script&gt;
 </code></pre>
             </div>
+            <h2>セキュリティの強化について</h2>
+            <p>params.phpファイルに$allowedMediaFileRootDirs変数を記述できるようにしました。この変数には配列を指定でき、
+                各要素はfile:///形式のパス（fileURL）で利用できるルートからのパスを指定します。この変数の導入により、
+                任意のパスをURLに指定することができなくなります。</p>
+            <p>params.phpファイルに$uploadAllowedExtensions変数を記述できるようにしました。この変数には配列を指定でき、
+                各要素はアップロード可能なファイルの拡張子を示します。指定がない場合は例外を除いてアップロード可能です。
+                以下の拡張子のファイルはアップロードできなくなりました。</p>
+            <p>'php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phtml', 'pht', 'phps', 'phar', 'inc',
+                'cgi', 'pl', 'py', 'rb', 'sh', 'asp', 'aspx', 'jsp', 'shtml', 'htaccess', 'htpasswd'</p>
+            <p>params.phpファイルに$mediaClassAllowed変数を記述できるようにしました。この変数には配列を指定でき、
+                各要素はclass::/プロトコルで指定するクラス名を示します。INTER-Mediatorの内部クラスでCSV等でのエクスポートを
+                行う「INTERMediator\DB\Export」については、この変数での指定にかかわらず利用できます。</p>
+
+
         </section>
         <section>
             <h1>Ver.15での変更</h1>
@@ -144,7 +166,8 @@
                 <li>INTERMediatorOnPage.enrollPageURL　→　IMLibAuthenticationUI.enrollPageURL</li>
                 <li>INTERMediatorOnPage.resetPageURL　→　IMLibAuthenticationUI.resetPageURL</li>
             </ul>
-            <p>data-im属性の中でターゲット指定を複数行うときに、|を区切り文字に使えていましたが、使えなくしました。縦棒の代わりに空白を使ってください。</p>
+            <p>
+                data-im属性の中でターゲット指定を複数行うときに、|を区切り文字に使えていましたが、使えなくしました。縦棒の代わりに空白を使ってください。</p>
             <div class="code">
                 <pre><code>❌ &lt;option data-im="groupname@id@value|groupname@groupname"&gt;&lt;/option&gt;
 ⭕️ &lt;option data-im="groupname@id@value groupname@groupname"&gt;&lt;/option&gt;</code></pre>
