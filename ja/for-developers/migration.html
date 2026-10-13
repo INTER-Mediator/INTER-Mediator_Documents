@@ -120,15 +120,15 @@
                 各要素はfile:///形式のパス（fileURL）で利用できるルートからのパスを指定します。この変数の導入により、
                 任意のパスをURLに指定することができなくなります。</p>
             <p>params.phpファイルに$uploadAllowedExtensions変数を記述できるようにしました。この変数には配列を指定でき、
-                各要素はアップロード可能なファイルの拡張子を示します。指定がない場合は例外を除いてアップロード可能です。
+                各要素はアップロード可能なファイルの拡張子を示します。同様な指定をIM_Entry関数の3つ目の引数の配列にも、
+                'upload-allowed-extensions'キーで指定できます。指定がない場合は以下の例外を除いてアップロード可能です。
                 以下の拡張子のファイルはアップロードできなくなりました。</p>
             <p>'php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phtml', 'pht', 'phps', 'phar', 'inc',
                 'cgi', 'pl', 'py', 'rb', 'sh', 'asp', 'aspx', 'jsp', 'shtml', 'htaccess', 'htpasswd'</p>
             <p>params.phpファイルに$mediaClassAllowed変数を記述できるようにしました。この変数には配列を指定でき、
                 各要素はclass::/プロトコルで指定するクラス名を示します。INTER-Mediatorの内部クラスでCSV等でのエクスポートを
-                行う「INTERMediator\DB\Export」については、この変数での指定にかかわらず利用できます。</p>
-
-
+                行う「INTERMediator\DB\Export」については、この変数での指定にかかわらず利用できます。同様にIM_Entry関数の3つ目の引数で指定する配列で
+                'media-class-allowed'キーで指定する配列でも許可するクラス名を指定できます。</p>
         </section>
         <section>
             <h1>Ver.15での変更</h1>
